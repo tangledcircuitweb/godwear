@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
     return {
       build: {
         rollupOptions: {
-          input: ['/app/client.ts'],
+          input: ['./app/client.ts'],
           output: {
             entryFileNames: 'static/client.[hash].js',
             chunkFileNames: 'static/assets/[name].[hash].js',
@@ -19,5 +19,19 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [honox()],
+    ssr: {
+      target: 'webworker',
+      noExternal: true,
+    },
+    build: {
+      ssr: true,
+      rollupOptions: {
+        input: './app/entry.server.ts',
+        output: {
+          entryFileNames: '_worker.js',
+          format: 'es',
+        },
+      },
+    },
   };
 });
