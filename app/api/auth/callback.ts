@@ -186,6 +186,35 @@ app.get('/', async (c) => {
       );
     }
     
+    // Send welcome email for new users
+    try {
+      // Check if this is a new user (you might want to store this in your database)
+      const isNewUser = true; // For now, assume all OAuth logins are new users
+      
+      if (isNewUser && c.env.SENDGRID_API_KEY) {
+        // Send welcome email
+        const emailResponse = await fetch(`${new URL(c.req.url).origin}/api/email/sendgrid/welcome`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: userInfo.email,
+            name: userInfo.given_name || userInfo.name,
+          }),
+        });
+        
+        if (emailResponse.ok) {
+          console.log('Welcome email sent to:', userInfo.email);
+        } else {
+          console.error('Failed to send welcome email to:', userInfo.email);
+        }
+      }
+    } catch (emailError) {
+      console.error('Welcome email error:', emailError);
+      // Don't fail the authentication if email fails
+    }
+
     // Log successful authentication (remove sensitive data in production)
     console.log('User authenticated successfully:', {
       userId: userInfo.id,
