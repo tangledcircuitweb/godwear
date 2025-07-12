@@ -5,6 +5,19 @@ declare namespace Cloudflare {
 	interface Env {
 		GODWEAR_KV: KVNamespace;
 		DB: D1Database;
+		// OAuth Configuration
+		GOOGLE_CLIENT_ID: string;
+		GOOGLE_CLIENT_SECRET: string;
+		// JWT Secret
+		JWT_SECRET: string;
+		// SendGrid Configuration
+		SENDGRID_API_KEY: string;
+		// Environment
+		NODE_ENV: string;
+		// Domain Configuration
+		PRODUCTION_DOMAIN: string;
+		STAGING_DOMAIN: string;
+		DEVELOPMENT_DOMAIN: string;
 	}
 }
 interface CloudflareBindings extends Cloudflare.Env {}
