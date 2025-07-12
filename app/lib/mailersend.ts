@@ -1,22 +1,15 @@
-import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend';
-
 export class MailerSendService {
-  private mailerSend: MailerSend;
+  private apiKey: string;
   private fromEmail: string;
   private fromName: string;
 
   constructor(apiKey: string, fromEmail: string = 'noreply@godwear.ca', fromName: string = 'GodWear') {
-    this.mailerSend = new MailerSend({
-      apiKey: apiKey,
-    });
+    this.apiKey = apiKey;
     this.fromEmail = fromEmail;
     this.fromName = fromName;
   }
 
   async sendWelcomeEmail(to: string, userName: string): Promise<void> {
-    const sentFrom = new Sender(this.fromEmail, this.fromName);
-    const recipients = [new Recipient(to, userName)];
-
     const htmlContent = `
       <!DOCTYPE html>
       <html>
@@ -90,21 +83,13 @@ GodWear - Faith Meets Fashion
 Visit us at https://godwear.ca
     `;
 
-    const emailParams = new EmailParams()
-      .setFrom(sentFrom)
-      .setTo(recipients)
-      .setReplyTo(sentFrom)
-      .setSubject('Welcome to GodWear - Your Faith Journey Begins! 🙏')
-      .setHtml(htmlContent)
-      .setText(textContent);
-
-    try {
-      const response = await this.mailerSend.email.send(emailParams);
-      console.log('Welcome email sent successfully via MailerSend:', response);
-    } catch (error) {
-      console.error('Failed to send welcome email via MailerSend:', error);
-      throw error;
-    }
+    await this.sendEmail(
+      to,
+      'Welcome to GodWear - Your Faith Journey Begins! 🙏',
+      htmlContent,
+      textContent,
+      userName
+    );
   }
 
   async sendEmail(
@@ -114,23 +99,42 @@ Visit us at https://godwear.ca
     textContent?: string,
     recipientName?: string
   ): Promise<void> {
-    const sentFrom = new Sender(this.fromEmail, this.fromName);
-    const recipients = [new Recipient(to, recipientName || to)];
-
-    const emailParams = new EmailParams()
-      .setFrom(sentFrom)
-      .setTo(recipients)
-      .setReplyTo(sentFrom)
-      .setSubject(subject)
-      .setHtml(htmlContent);
-
-    if (textContent) {
-      emailParams.setText(textContent);
-    }
+    const payload = {
+      from: {
+        email: this.fromEmail,
+        name: this.fromName
+      },
+      to: [
+        {
+          email: to,
+          name: recipientName || to
+        }
+      ],
+      subject: subject,
+      html: htmlContent,
+      text: textContent || htmlContent.replace(/<[^>]*>/g, ''),
+      reply_to: {
+        email: this.fromEmail,
+        name: this.fromName
+      }
+    };
 
     try {
-      const response = await this.mailerSend.email.send(emailParams);
-      console.log('Email sent successfully via MailerSend:', response);
+      const response = await fetch('https://api.mailersend.com/v1/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`MailerSend API error: ${response.status} - ${errorText}`);
+      }
+
+      console.log('Email sent successfully via MailerSend API');
     } catch (error) {
       console.error('Failed to send email via MailerSend:', error);
       throw error;

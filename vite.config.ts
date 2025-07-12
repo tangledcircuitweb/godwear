@@ -19,10 +19,6 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [honox()],
-    ssr: {
-      target: 'webworker',
-      noExternal: true,
-    },
     build: {
       ssr: true,
       rollupOptions: {
