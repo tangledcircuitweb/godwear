@@ -3,5 +3,27 @@
   "name": "godwear",
   "compatibility_date": "2024-04-01",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": "./dist"
+  "pages_build_output_dir": "./dist",
+  "kv_namespaces": [
+    {
+      "binding": "GODWEAR_KV",
+      "id": "3337a52b4f64450ea27fd5065d8f7da2"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "godwear-db",
+      "database_id": "c25066df-2b13-4f53-89e4-59ca96cc9084"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "GODWEAR_SESSION",
+        "class_name": "GodWearSession",
+        "script_name": "godwear"
+      }
+    ]
+  }
 }
