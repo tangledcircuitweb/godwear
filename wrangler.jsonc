@@ -16,14 +16,5 @@
       "database_name": "godwear-db",
       "database_id": "c25066df-2b13-4f53-89e4-59ca96cc9084"
     }
-  ],
-  "durable_objects": {
-    "bindings": [
-      {
-        "name": "GODWEAR_SESSION",
-        "class_name": "GodWearSession",
-        "script_name": "godwear"
-      }
-    ]
-  }
+  ]
 }
