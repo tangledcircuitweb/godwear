@@ -10,8 +10,11 @@ declare namespace Cloudflare {
 		GOOGLE_CLIENT_SECRET: string;
 		// JWT Secret
 		JWT_SECRET: string;
-		// SendGrid Configuration
+		// Email Service Configuration
+		// SendGrid Configuration (legacy - being replaced by MailerSend)
 		SENDGRID_API_KEY: string;
+		// MailerSend Configuration (current email service)
+		MAILERSEND_API_KEY: string;
 		// Environment
 		NODE_ENV: string;
 		// Domain Configuration

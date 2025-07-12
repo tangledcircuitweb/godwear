@@ -191,9 +191,9 @@ app.get('/', async (c) => {
       // Check if this is a new user (you might want to store this in your database)
       const isNewUser = true; // For now, assume all OAuth logins are new users
       
-      if (isNewUser && c.env.SENDGRID_API_KEY) {
-        // Send welcome email
-        const emailResponse = await fetch(`${new URL(c.req.url).origin}/api/email/sendgrid/welcome`, {
+      if (isNewUser && c.env.MAILERSEND_API_KEY) {
+        // Send welcome email using MailerSend
+        const emailResponse = await fetch(`${new URL(c.req.url).origin}/api/email/mailersend/welcome`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -205,9 +205,9 @@ app.get('/', async (c) => {
         });
         
         if (emailResponse.ok) {
-          console.log('Welcome email sent to:', userInfo.email);
+          console.log('Welcome email sent via MailerSend to:', userInfo.email);
         } else {
-          console.error('Failed to send welcome email to:', userInfo.email);
+          console.error('Failed to send welcome email via MailerSend to:', userInfo.email);
         }
       }
     } catch (emailError) {
