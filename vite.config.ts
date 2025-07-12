@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import honox from 'honox/vite';
-import { cloudflare } from '@cloudflare/vite-plugin';
 
 export default defineConfig(({ mode }) => {
   if (mode === 'client') {
@@ -18,14 +17,7 @@ export default defineConfig(({ mode }) => {
     };
   }
 
-  const plugins = [honox()];
-  
-  // Only add Cloudflare plugin for production builds
-  if (process.env.NODE_ENV === 'production') {
-    plugins.push(cloudflare());
-  }
-
   return {
-    plugins,
+    plugins: [honox()],
   };
 });

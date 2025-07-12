@@ -2,6 +2,6 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "godwear",
   "compatibility_date": "2024-04-01",
-  "main": "./app/server.ts",
+  "compatibility_flags": ["nodejs_compat"],
   "pages_build_output_dir": "./dist"
 }
