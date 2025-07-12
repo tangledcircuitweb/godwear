@@ -2,7 +2,7 @@
 // Run with: node test-sendgrid.js
 
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || 'your-sendgrid-api-key-here';
-const TEST_EMAIL = 'your-email@example.com'; // Replace with your email
+const TEST_EMAIL = 'your-email@example.com'; // ⚠️ REPLACE WITH YOUR ACTUAL EMAIL
 
 async function testSendGrid() {
   console.log('🧪 Testing SendGrid integration...');
