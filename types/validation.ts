@@ -106,6 +106,12 @@ export const EmailRequestSchema = z.object({
   type: z.enum(["welcome", "notification", "marketing"]).default("notification"),
 });
 
+// Welcome email specific schema
+export const WelcomeEmailRequestSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  name: z.string().min(1, "Name is required").max(100, "Name too long"),
+});
+
 export const EmailResponseSchema = z.object({
   messageId: z.string(),
   status: z.enum(["sent", "queued", "failed"]),
@@ -136,6 +142,7 @@ export type GoogleTokenResponse = z.infer<typeof GoogleTokenResponseSchema>;
 export type GoogleUserInfo = z.infer<typeof GoogleUserInfoSchema>;
 export type JWTPayload = z.infer<typeof JWTPayloadSchema>;
 export type EmailRequest = z.infer<typeof EmailRequestSchema>;
+export type WelcomeEmailRequest = z.infer<typeof WelcomeEmailRequestSchema>;
 export type EmailResponse = z.infer<typeof EmailResponseSchema>;
 export type PaginationParams = z.infer<typeof PaginationParamsSchema>;
 

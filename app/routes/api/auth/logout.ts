@@ -2,6 +2,11 @@ import { Hono } from "hono";
 import { deleteCookie, getCookie } from "hono/cookie";
 import type { JWTPayload } from "../../../../types/auth";
 import type { CloudflareBindings } from "../../../../types/cloudflare";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+  ErrorCodes,
+} from "../../../../types/api-responses";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -35,7 +40,13 @@ app.post("/", async (c) => {
   try {
     // Check for JWT secret
     if (!c.env.JWT_SECRET) {
-      return c.json({ error: "Configuration error" }, 500);
+      const errorResponse = createErrorResponse(
+        ErrorCodes.SERVICE_CONFIGURATION_ERROR,
+        "Authentication service not configured",
+        undefined,
+        "auth-logout"
+      );
+      return c.json(errorResponse, 500);
     }
 
     // Get session token
@@ -62,18 +73,29 @@ app.post("/", async (c) => {
     deleteCookie(c, "oauth_state", { path: "/api/auth" });
     deleteCookie(c, "oauth_code_verifier", { path: "/api/auth" });
 
-    return c.json({
-      success: true,
-      message: "Logged out successfully",
-    });
-  } catch (error) {
-    return c.json(
+    const successResponse = createSuccessResponse(
       {
-        error: "Logout failed",
-        message: error instanceof Error ? error.message : "Unknown error",
+        message: "Logged out successfully",
+        cleared: ["session", "oauth_state", "oauth_code_verifier"],
       },
-      500
+      {
+        service: "auth-logout",
+        version: "1.0.0",
+      }
     );
+
+    return c.json(successResponse);
+  } catch (error) {
+    const errorResponse = createErrorResponse(
+      ErrorCodes.INTERNAL_SERVER_ERROR,
+      "Logout failed",
+      {
+        originalError: error instanceof Error ? error.message : "Unknown error",
+      },
+      "auth-logout"
+    );
+
+    return c.json(errorResponse, 500);
   }
 });
 
@@ -118,12 +140,22 @@ app.get("/", async (c) => {
 
 // Health check endpoint
 app.get("/health", (c) => {
-  return c.json({
-    status: "ok",
-    service: "oauth-logout",
+  const dependencies = {
+    jwt: !!c.env.JWT_SECRET ? 'healthy' as const : 'unhealthy' as const,
+    kv: !!c.env.GODWEAR_KV ? 'healthy' as const : 'degraded' as const,
+  };
+
+  const status = dependencies.jwt === 'healthy' ? 'healthy' as const : 'degraded' as const;
+
+  const healthResponse = {
+    status,
+    service: "auth-logout",
     timestamp: new Date().toISOString(),
-    hasJwtSecret: !!c.env.JWT_SECRET,
-  });
+    version: "1.0.0",
+    dependencies,
+  };
+
+  return c.json(healthResponse);
 });
 
 export default app;

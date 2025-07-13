@@ -2,6 +2,13 @@ import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
 import type { JWTPayload } from "../../../../types/auth";
 import type { CloudflareBindings } from "../../../../types/cloudflare";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+  ErrorCodes,
+  type AuthUserResponse,
+  type ErrorCode,
+} from "../../../../types/api-responses";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -34,86 +41,131 @@ app.get("/", async (c) => {
   try {
     // Check for JWT secret
     if (!c.env.JWT_SECRET) {
-      return c.json(
-        {
-          authenticated: false,
-          error: "Configuration error",
-        },
-        500
+      const errorResponse = createErrorResponse(
+        ErrorCodes.SERVICE_CONFIGURATION_ERROR,
+        "Authentication service not configured",
+        undefined,
+        "auth-user"
       );
+      return c.json(errorResponse, 500);
     }
 
     // Get session token from cookie
     const sessionToken = getCookie(c, "session");
 
     if (!sessionToken) {
-      return c.json(
-        {
-          authenticated: false,
-          message: "No session token found",
-        },
-        401
-      );
+      const responseData: AuthUserResponse = {
+        authenticated: false,
+      };
+
+      const successResponse = createSuccessResponse(responseData, {
+        service: "auth-user",
+        version: "1.0.0",
+      });
+
+      return c.json(successResponse, 401);
     }
 
     // Verify JWT token using environment variable
     const payload = await verifyJWT(sessionToken, c.env.JWT_SECRET);
 
     // Get additional user data from KV if available
-    let userData = {
+    const userData: AuthUserResponse['user'] = {
       id: payload.sub, // Use sub instead of userId
       email: payload.email,
       name: payload.name,
-      picture: payload.picture,
-      loginTime: payload.iat ? new Date(payload.iat * 1000).toISOString() : null,
-      expiresAt: payload.exp ? new Date(payload.exp * 1000).toISOString() : null,
     };
+
+    // Only add optional fields if they exist
+    if (payload.picture) {
+      userData.picture = payload.picture;
+    }
+
+    if (payload.iat) {
+      userData.loginTime = new Date(payload.iat * 1000).toISOString();
+    }
+
+    if (payload.exp) {
+      userData.expiresAt = new Date(payload.exp * 1000).toISOString();
+    }
 
     if (c.env.GODWEAR_KV && payload.sub) {
       try {
         const kvData = await c.env.GODWEAR_KV.get(`user:${payload.sub}`);
         if (kvData) {
           const kvUserData = JSON.parse(kvData);
-          userData = { ...userData, ...kvUserData };
+          Object.assign(userData, kvUserData);
         }
-      } catch (_error) {}
+      } catch (_error) {
+        // KV error doesn't fail the request
+      }
     }
 
-    return c.json({
+    const responseData: AuthUserResponse = {
       authenticated: true,
       user: userData,
+    };
+
+    const successResponse = createSuccessResponse(responseData, {
+      service: "auth-user",
+      version: "1.0.0",
     });
+
+    return c.json(successResponse);
   } catch (error) {
-    return c.json(
+    let errorCode: ErrorCode = ErrorCodes.AUTH_INVALID_TOKEN;
+    let errorMessage = "Invalid session";
+
+    if (error instanceof Error) {
+      if (error.message.includes("expired")) {
+        errorCode = ErrorCodes.AUTH_TOKEN_EXPIRED;
+        errorMessage = "Session expired";
+      }
+    }
+
+    const errorResponse = createErrorResponse(
+      errorCode,
+      errorMessage,
       {
-        authenticated: false,
-        error: "Invalid session",
-        message: error instanceof Error ? error.message : "Unknown error",
+        originalError: error instanceof Error ? error.message : "Unknown error",
       },
-      401
+      "auth-user"
     );
+
+    return c.json(errorResponse, 401);
   }
 });
 
 // POST endpoint for token refresh (future enhancement)
 app.post("/refresh", (c) => {
-  return c.json(
-    {
-      error: "Token refresh not implemented yet",
-      message: "Please log in again",
-    },
-    501
+  const errorResponse = createErrorResponse(
+    ErrorCodes.SERVICE_UNAVAILABLE,
+    "Token refresh not implemented yet - please log in again",
+    undefined,
+    "auth-user"
   );
+
+  return c.json(errorResponse, 501);
 });
 
 // Health check endpoint
 app.get("/health", (c) => {
-  return c.json({
-    status: "ok",
-    service: "oauth-user",
+  const dependencies = {
+    jwt: !!c.env.JWT_SECRET ? 'healthy' as const : 'unhealthy' as const,
+    kv: !!c.env.GODWEAR_KV ? 'healthy' as const : 'degraded' as const,
+  };
+
+  const status = dependencies.jwt === 'healthy' ? 'healthy' as const : 'degraded' as const;
+
+  const healthResponse = {
+    status,
+    service: "auth-user",
     timestamp: new Date().toISOString(),
-    hasJwtSecret: !!c.env.JWT_SECRET,
-  });
+    version: "1.0.0",
+    dependencies,
+  };
+
+  return c.json(healthResponse);
 });
 
 export default app;

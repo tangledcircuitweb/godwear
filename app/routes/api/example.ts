@@ -1,13 +1,32 @@
 import { createRoute } from "honox/factory";
 import type { CloudflareBindings } from "../../../types/cloudflare";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+  ErrorCodes,
+  type ApiResponse,
+  type DatabaseResponse,
+} from "../../../types/api-responses";
 
-// Example route demonstrating KV and D1 usage with proper types
+interface ExampleData {
+  kv: unknown;
+  db: unknown;
+  message: string;
+}
+
+// Example route demonstrating KV and D1 usage with standardized responses
 export default createRoute(async (c) => {
   // Type assertion for environment bindings
   const env = c.env as CloudflareBindings;
 
   if (!env) {
-    return c.json({ error: "Environment not available" }, 500);
+    const errorResponse = createErrorResponse(
+      ErrorCodes.SERVICE_CONFIGURATION_ERROR,
+      "Environment configuration not available",
+      undefined,
+      "example-api"
+    );
+    return c.json(errorResponse, 500);
   }
 
   const { GODWEAR_KV, DB } = env;
@@ -25,21 +44,30 @@ export default createRoute(async (c) => {
     const kvValue = await GODWEAR_KV.get("example-key", "json");
 
     // Example D1 operations
-    const result = await DB.prepare("SELECT 1 as test").first();
+    const dbResult = await DB.prepare("SELECT 1 as test").first();
 
-    return c.json({
-      success: true,
+    const responseData: ExampleData = {
       kv: kvValue,
-      db: result,
+      db: dbResult,
       message: "Example API working with KV and D1",
+    };
+
+    const successResponse = createSuccessResponse(responseData, {
+      service: "example-api",
+      version: "1.0.0",
     });
+
+    return c.json(successResponse);
   } catch (error) {
-    return c.json(
+    const errorResponse = createErrorResponse(
+      ErrorCodes.DATABASE_QUERY_ERROR,
+      "Database operation failed",
       {
-        error: "Database operation failed",
-        message: error instanceof Error ? error.message : "Unknown error",
+        originalError: error instanceof Error ? error.message : "Unknown error",
       },
-      500
+      "example-api"
     );
+
+    return c.json(errorResponse, 500);
   }
 });

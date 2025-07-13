@@ -1,6 +1,11 @@
 import { Hono } from "hono";
 import { setCookie } from "hono/cookie";
 import type { CloudflareBindings } from "../../../../types/cloudflare";
+import {
+  createErrorResponse,
+  createHealthResponse,
+  ErrorCodes,
+} from "../../../../types/api-responses";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -51,7 +56,13 @@ app.get("/", async (c) => {
   try {
     // Check for required environment variables
     if (!c.env.GOOGLE_CLIENT_ID) {
-      return c.json({ error: "OAuth configuration error" }, 500);
+      const errorResponse = createErrorResponse(
+        ErrorCodes.SERVICE_CONFIGURATION_ERROR,
+        "OAuth configuration error - Google Client ID missing",
+        undefined,
+        "auth-login"
+      );
+      return c.json(errorResponse, 500);
     }
 
     // Generate PKCE parameters
@@ -94,24 +105,35 @@ app.get("/", async (c) => {
     // Redirect to Google OAuth
     return c.redirect(authUrl.toString());
   } catch (error) {
-    return c.json(
+    const errorResponse = createErrorResponse(
+      ErrorCodes.AUTH_OAUTH_ERROR,
+      "Failed to initiate OAuth login",
       {
-        error: "Failed to initiate OAuth login",
-        message: error instanceof Error ? error.message : "Unknown error",
+        originalError: error instanceof Error ? error.message : "Unknown error",
       },
-      500
+      "auth-login"
     );
+
+    return c.json(errorResponse, 500);
   }
 });
 
 // Health check endpoint
 app.get("/health", (c) => {
-  return c.json({
-    status: "ok",
-    service: "oauth-login",
-    timestamp: new Date().toISOString(),
-    hasClientId: !!c.env.GOOGLE_CLIENT_ID,
-  });
+  const dependencies = {
+    google_oauth: !!c.env.GOOGLE_CLIENT_ID ? 'healthy' as const : 'unhealthy' as const,
+  };
+
+  const status = dependencies.google_oauth === 'healthy' ? 'healthy' as const : 'degraded' as const;
+
+  const healthResponse = createHealthResponse(
+    "auth-login",
+    status,
+    dependencies,
+    "1.0.0"
+  );
+
+  return c.json(healthResponse);
 });
 
 export default app;

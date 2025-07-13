@@ -1,118 +1,135 @@
 import { Hono } from "hono";
+import { zValidator } from "@hono/zod-validator";
 import type { CloudflareBindings } from "../../../../../types/cloudflare";
-import type { EmailRequest } from "../../../../../types/email";
+import { WelcomeEmailRequestSchema, type WelcomeEmailRequest } from "../../../../../types/validation";
+import {
+  createSuccessResponse,
+  createErrorResponse,
+  createHealthResponse,
+  ErrorCodes,
+  type ApiResponse,
+  type EmailSuccessResponse,
+  type HealthCheckResponse,
+  type ErrorCode,
+} from "../../../../../types/api-responses";
 import { MailerSendService } from "../../../../lib/mailersend";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
-app.post("/", async (c) => {
-  try {
-    // Check for required environment variables
-    if (!c.env.MAILERSEND_API_KEY) {
-      return c.json(
-        {
-          error: "Email service not configured",
-          message: "MailerSend API key is missing",
-        },
-        500
-      );
-    }
-
-    // Parse request body
-    const body: EmailRequest = await c.req.json();
-
-    // Validate required fields
-    if (!(body.email && body.name)) {
-      return c.json(
-        {
-          error: "Missing required fields",
-          message: "Email and name are required",
-        },
-        400
-      );
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(body.email)) {
-      return c.json(
-        {
-          error: "Invalid email format",
-          message: "Please provide a valid email address",
-        },
-        400
-      );
-    }
-
-    // Initialize MailerSend service
-    const mailerSendService = new MailerSendService(c.env.MAILERSEND_API_KEY);
-
-    // Send welcome email
-    await mailerSendService.sendWelcomeEmail(body.email, body.name);
-
-    return c.json({
-      success: true,
-      message: "Welcome email sent successfully",
-      recipient: body.email,
-      service: "MailerSend",
-    });
-  } catch (error) {
-    // Handle specific MailerSend errors
-    let errorMessage = "Failed to send welcome email";
-    let statusCode = 500;
-
-    if (error instanceof Error) {
-      if (error.message.includes("API key")) {
-        errorMessage = "Invalid MailerSend API key";
-        statusCode = 401;
-      } else if (error.message.includes("rate limit")) {
-        errorMessage = "Rate limit exceeded";
-        statusCode = 429;
-      } else if (error.message.includes("quota")) {
-        errorMessage = "Email quota exceeded";
-        statusCode = 429;
+app.post("/", 
+  zValidator("json", WelcomeEmailRequestSchema),
+  async (c) => {
+    try {
+      // Check for required environment variables
+      if (!c.env.MAILERSEND_API_KEY) {
+        const errorResponse = createErrorResponse(
+          ErrorCodes.SERVICE_CONFIGURATION_ERROR,
+          "Email service not configured - MailerSend API key is missing",
+          undefined,
+          "mailersend-welcome"
+        );
+        return c.json(errorResponse, 500);
       }
-    }
 
-    return c.json(
-      {
-        error: "Email sending failed",
-        message: errorMessage,
+      // Get validated request body
+      const body = c.req.valid("json");
+
+      // Initialize MailerSend service
+      const mailerSendService = new MailerSendService(c.env.MAILERSEND_API_KEY);
+
+      // Send welcome email
+      await mailerSendService.sendWelcomeEmail(body.email, body.name);
+
+      const responseData: EmailSuccessResponse = {
+        recipient: body.email,
         service: "MailerSend",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
-      statusCode as 401 | 429 | 500
-    );
+        status: "sent",
+      };
+
+      const successResponse = createSuccessResponse(responseData, {
+        service: "mailersend-welcome",
+        version: "1.0.0",
+      });
+
+      return c.json(successResponse);
+    } catch (error) {
+      // Handle specific MailerSend errors
+      let errorCode: ErrorCode = ErrorCodes.INTERNAL_SERVER_ERROR;
+      let errorMessage = "Failed to send welcome email";
+      let statusCode = 500;
+
+      if (error instanceof Error) {
+        if (error.message.includes("API key")) {
+          errorCode = ErrorCodes.SERVICE_CONFIGURATION_ERROR;
+          errorMessage = "Invalid MailerSend API key";
+          statusCode = 401;
+        } else if (error.message.includes("rate limit")) {
+          errorCode = ErrorCodes.SERVICE_RATE_LIMITED;
+          errorMessage = "Rate limit exceeded";
+          statusCode = 429;
+        } else if (error.message.includes("quota")) {
+          errorCode = ErrorCodes.SERVICE_QUOTA_EXCEEDED;
+          errorMessage = "Email quota exceeded";
+          statusCode = 429;
+        }
+      }
+
+      const errorResponse = createErrorResponse(
+        errorCode,
+        errorMessage,
+        {
+          originalError: error instanceof Error ? error.message : "Unknown error",
+        },
+        "mailersend-welcome"
+      );
+
+      return c.json(errorResponse, statusCode as 401 | 429 | 500);
+    }
   }
-});
+);
 
-// Health check endpoint
+// Health check endpoint with standardized response
 app.get("/health", (c) => {
-  return c.json({
-    status: "ok",
-    service: "mailersend-welcome-email",
-    timestamp: new Date().toISOString(),
-    hasApiKey: !!c.env.MAILERSEND_API_KEY,
-  });
+  const dependencies = {
+    mailersend: c.env.MAILERSEND_API_KEY ? 'healthy' as const : 'unhealthy' as const,
+  };
+
+  const status = dependencies.mailersend === 'healthy' ? 'healthy' as const : 'degraded' as const;
+
+  const healthResponse = createHealthResponse(
+    "mailersend-welcome-email",
+    status,
+    dependencies,
+    "1.0.0"
+  );
+
+  return c.json(healthResponse);
 });
 
-// Test endpoint for development
+// Test endpoint with standardized response
 app.get("/test", (c) => {
   if (!c.env.MAILERSEND_API_KEY) {
-    return c.json(
-      {
-        error: "MailerSend API key not configured",
-        configured: false,
-      },
-      500
+    const errorResponse = createErrorResponse(
+      ErrorCodes.SERVICE_CONFIGURATION_ERROR,
+      "MailerSend API key not configured",
+      { configured: false },
+      "mailersend-welcome"
     );
+    return c.json(errorResponse, 500);
   }
 
-  return c.json({
-    message: "MailerSend welcome email service is ready",
-    configured: true,
-    timestamp: new Date().toISOString(),
-  });
+  const successResponse = createSuccessResponse(
+    {
+      message: "MailerSend welcome email service is ready",
+      configured: true,
+    },
+    {
+      service: "mailersend-welcome",
+      version: "1.0.0",
+    }
+  );
+
+  return c.json(successResponse);
 });
 
 export default app;
