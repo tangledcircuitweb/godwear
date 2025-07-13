@@ -100,12 +100,19 @@ export class AuditLogRepository extends BaseRepository<AuditLogRecord> {
     logsByAction: Array<{ action: string; count: number }>;
     logsByResource: Array<{ resource_type: string; count: number }>;
   }> {
-    const [totalResult, uniqueUsersResult, actionStatsResult, resourceStatsResult] = await Promise.all([
-      this.rawOne<{ count: number }>(`SELECT COUNT(*) as count FROM ${this.tableName}`),
-      this.rawOne<{ count: number }>(`SELECT COUNT(DISTINCT user_id) as count FROM ${this.tableName} WHERE user_id IS NOT NULL`),
-      this.raw<{ action: string; count: number }>(`SELECT action, COUNT(*) as count FROM ${this.tableName} GROUP BY action ORDER BY count DESC`),
-      this.raw<{ resource_type: string; count: number }>(`SELECT resource_type, COUNT(*) as count FROM ${this.tableName} GROUP BY resource_type ORDER BY count DESC`),
-    ]);
+    const [totalResult, uniqueUsersResult, actionStatsResult, resourceStatsResult] =
+      await Promise.all([
+        this.rawOne<{ count: number }>(`SELECT COUNT(*) as count FROM ${this.tableName}`),
+        this.rawOne<{ count: number }>(
+          `SELECT COUNT(DISTINCT user_id) as count FROM ${this.tableName} WHERE user_id IS NOT NULL`
+        ),
+        this.raw<{ action: string; count: number }>(
+          `SELECT action, COUNT(*) as count FROM ${this.tableName} GROUP BY action ORDER BY count DESC`
+        ),
+        this.raw<{ resource_type: string; count: number }>(
+          `SELECT resource_type, COUNT(*) as count FROM ${this.tableName} GROUP BY resource_type ORDER BY count DESC`
+        ),
+      ]);
 
     return {
       totalLogs: totalResult?.count || 0,
@@ -132,7 +139,10 @@ export class AuditLogRepository extends BaseRepository<AuditLogRecord> {
   /**
    * Get user activity summary
    */
-  async getUserActivitySummary(userId: string, days = 30): Promise<{
+  async getUserActivitySummary(
+    userId: string,
+    days = 30
+  ): Promise<{
     totalActions: number;
     actionsByType: Array<{ action: string; count: number }>;
     resourcesByType: Array<{ resource_type: string; count: number }>;
@@ -141,30 +151,31 @@ export class AuditLogRepository extends BaseRepository<AuditLogRecord> {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
-    const [totalResult, actionStatsResult, resourceStatsResult, dailyActivityResult] = await Promise.all([
-      this.rawOne<{ count: number }>(
-        `SELECT COUNT(*) as count FROM ${this.tableName} WHERE user_id = ? AND created_at >= ?`,
-        [userId, cutoffDate.toISOString()]
-      ),
-      this.raw<{ action: string; count: number }>(
-        `SELECT action, COUNT(*) as count FROM ${this.tableName} 
+    const [totalResult, actionStatsResult, resourceStatsResult, dailyActivityResult] =
+      await Promise.all([
+        this.rawOne<{ count: number }>(
+          `SELECT COUNT(*) as count FROM ${this.tableName} WHERE user_id = ? AND created_at >= ?`,
+          [userId, cutoffDate.toISOString()]
+        ),
+        this.raw<{ action: string; count: number }>(
+          `SELECT action, COUNT(*) as count FROM ${this.tableName} 
          WHERE user_id = ? AND created_at >= ?
          GROUP BY action ORDER BY count DESC`,
-        [userId, cutoffDate.toISOString()]
-      ),
-      this.raw<{ resource_type: string; count: number }>(
-        `SELECT resource_type, COUNT(*) as count FROM ${this.tableName}
+          [userId, cutoffDate.toISOString()]
+        ),
+        this.raw<{ resource_type: string; count: number }>(
+          `SELECT resource_type, COUNT(*) as count FROM ${this.tableName}
          WHERE user_id = ? AND created_at >= ?
          GROUP BY resource_type ORDER BY count DESC`,
-        [userId, cutoffDate.toISOString()]
-      ),
-      this.raw<{ date: string; count: number }>(
-        `SELECT DATE(created_at) as date, COUNT(*) as count FROM ${this.tableName}
+          [userId, cutoffDate.toISOString()]
+        ),
+        this.raw<{ date: string; count: number }>(
+          `SELECT DATE(created_at) as date, COUNT(*) as count FROM ${this.tableName}
          WHERE user_id = ? AND created_at >= ?
          GROUP BY DATE(created_at) ORDER BY date DESC`,
-        [userId, cutoffDate.toISOString()]
-      ),
-    ]);
+          [userId, cutoffDate.toISOString()]
+        ),
+      ]);
 
     return {
       totalActions: totalResult?.count || 0,

@@ -35,7 +35,7 @@ export default createRoute(async (c) => {
     const systemHealth = await services.health.getSystemHealth();
 
     // Get all services health status
-    const servicesHealth = await services.getHealthStatus();
+    const _servicesHealth = await services.getHealthStatus();
 
     // Create health response
     const healthResponse = createHealthResponse(

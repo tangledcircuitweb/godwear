@@ -1,6 +1,10 @@
 import type { CloudflareBindings } from "../../../types/cloudflare";
-import { MailerSendService, type ContactData, type EmailDeliveryResult, type ContactManagementResult } from "../../lib/mailersend";
-import type { MarketingEmailData, EmailCampaignResult, EmailDeliveryStats } from "../../../types/email";
+import type { EmailCampaignResult, EmailDeliveryStats } from "../../../types/email";
+import {
+  type ContactData,
+  type ContactManagementResult,
+  MailerSendService,
+} from "../../lib/mailersend";
 import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../base";
 
 export interface EmailNotification {
@@ -320,12 +324,16 @@ export class NotificationService implements BaseService {
             
             <div class="order-details">
               <h3>Order #${orderData.orderId}</h3>
-              ${orderData.items.map(item => `
+              ${orderData.items
+                .map(
+                  (item) => `
                 <div class="item">
                   <span>${item.name} (x${item.quantity})</span>
                   <span>$${item.price.toFixed(2)}</span>
                 </div>
-              `).join('')}
+              `
+                )
+                .join("")}
               <div class="item total">
                 <span>Total</span>
                 <span>$${orderData.total.toFixed(2)}</span>
@@ -359,12 +367,16 @@ export class NotificationService implements BaseService {
   /**
    * Send password reset email (enhanced implementation)
    */
-  async sendPasswordResetEmail(email: string, resetToken: string, userName?: string): Promise<NotificationResult> {
+  async sendPasswordResetEmail(
+    email: string,
+    resetToken: string,
+    userName?: string
+  ): Promise<NotificationResult> {
     if (!this.mailerSendService) {
       return { success: false, error: "MailerSend service not configured" };
     }
 
-    const resetUrl = `${this.env.PRODUCTION_DOMAIN || 'https://godwear.ca'}/reset-password?token=${resetToken}`;
+    const resetUrl = `${this.env.PRODUCTION_DOMAIN || "https://godwear.ca"}/reset-password?token=${resetToken}`;
 
     const htmlContent = `
       <!DOCTYPE html>
@@ -388,7 +400,7 @@ export class NotificationService implements BaseService {
             <h1>Password Reset Request</h1>
           </div>
           <div class="content">
-            <h2>Hello ${userName || 'there'}!</h2>
+            <h2>Hello ${userName || "there"}!</h2>
             <p>We received a request to reset your password for your GodWear account.</p>
             
             <p>Click the button below to reset your password:</p>
@@ -527,7 +539,7 @@ export class NotificationService implements BaseService {
     if (this.mailerSendService) {
       try {
         const connectionTest = await this.mailerSendService.testConnection();
-        
+
         if (!connectionTest.success) {
           return {
             status: "degraded",

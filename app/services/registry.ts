@@ -21,13 +21,15 @@ export class ServiceRegistry {
     this.container = new ServiceContainer(dependencies);
 
     // Initialize database service first (other services may depend on it)
-    this.database = this.container.register(new D1DatabaseService({
-      enableQueryLogging: dependencies.env.NODE_ENV !== "production",
-      enableMetrics: true,
-      maxRetries: 3,
-      retryDelay: 1000,
-      queryTimeout: 30000,
-    }));
+    this.database = this.container.register(
+      new D1DatabaseService({
+        enableQueryLogging: dependencies.env.NODE_ENV !== "production",
+        enableMetrics: true,
+        maxRetries: 3,
+        retryDelay: 1000,
+        queryTimeout: 30000,
+      })
+    );
 
     // Initialize repository registry
     this.repositories = new RepositoryRegistry(this.database);
@@ -70,18 +72,11 @@ export class ServiceRegistry {
    * Initialize all services and run database migrations
    */
   async initializeAll(): Promise<void> {
-    try {
-      // Run database migrations
-      await this.database.runMigrations();
+    // Run database migrations
+    await this.database.runMigrations();
 
-      // Initialize repositories
-      await this.repositories.initialize();
-
-      // Any additional service initialization can go here
-    } catch (error) {
-      console.error("Service initialization failed:", error);
-      throw error;
-    }
+    // Initialize repositories
+    await this.repositories.initialize();
   }
 
   /**

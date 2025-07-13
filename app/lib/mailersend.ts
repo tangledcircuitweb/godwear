@@ -1,4 +1,9 @@
-import type { MailerSendPayload, MailerSendContact, MailerSendContactResponse, MailerSendListResponse } from "../../types/email";
+import type {
+  MailerSendContact,
+  MailerSendContactResponse,
+  MailerSendListResponse,
+  MailerSendPayload,
+} from "../../types/email";
 
 export interface ContactData {
   email: string;
@@ -36,7 +41,11 @@ export class MailerSendService {
   /**
    * Send welcome email to new user and add them to marketing contacts
    */
-  async sendWelcomeEmail(to: string, userName: string, addToContacts = true): Promise<EmailDeliveryResult> {
+  async sendWelcomeEmail(
+    to: string,
+    userName: string,
+    addToContacts = true
+  ): Promise<EmailDeliveryResult> {
     try {
       // Add user to contacts first if requested
       if (addToContacts) {
@@ -215,7 +224,7 @@ Unsubscribe: https://godwear.ca/unsubscribe?email=${encodeURIComponent(to)}
         throw new Error(`MailerSend API error: ${response.status} - ${errorText}`);
       }
 
-      const result = await response.json() as { message_id?: string; id?: string };
+      const result = (await response.json()) as { message_id?: string; id?: string };
       return {
         success: true,
         messageId: result.message_id || result.id,
@@ -253,7 +262,7 @@ Unsubscribe: https://godwear.ca/unsubscribe?email=${encodeURIComponent(to)}
         throw new Error(`MailerSend Contact API error: ${response.status} - ${errorText}`);
       }
 
-      const result = await response.json() as MailerSendContactResponse;
+      const result = (await response.json()) as MailerSendContactResponse;
       return {
         success: true,
         contactId: result.data?.id,
@@ -269,22 +278,27 @@ Unsubscribe: https://godwear.ca/unsubscribe?email=${encodeURIComponent(to)}
   /**
    * Find contact by email address
    */
-  async findContactByEmail(email: string): Promise<ContactManagementResult & { contact?: MailerSendContact }> {
+  async findContactByEmail(
+    email: string
+  ): Promise<ContactManagementResult & { contact?: MailerSendContact }> {
     try {
-      const response = await fetch(`${this.baseUrl}/recipients?email=${encodeURIComponent(email)}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${this.apiKey}`,
-        },
-      });
+      const response = await fetch(
+        `${this.baseUrl}/recipients?email=${encodeURIComponent(email)}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.apiKey}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`MailerSend Find Contact API error: ${response.status} - ${errorText}`);
       }
 
-      const result = await response.json() as MailerSendListResponse<MailerSendContact>;
-      const contact = result.data?.find(c => c.email === email);
+      const result = (await response.json()) as MailerSendListResponse<MailerSendContact>;
+      const contact = result.data?.find((c) => c.email === email);
 
       if (contact) {
         return {
@@ -318,7 +332,7 @@ Unsubscribe: https://godwear.ca/unsubscribe?email=${encodeURIComponent(to)}
           email: this.fromEmail,
           name: this.fromName,
         },
-        to: recipients.map(recipient => ({
+        to: recipients.map((recipient) => ({
           email: recipient.email,
           name: recipient.name || recipient.email,
         })),
@@ -347,7 +361,7 @@ Unsubscribe: https://godwear.ca/unsubscribe?email=${encodeURIComponent(to)}
         throw new Error(`MailerSend Bulk Email API error: ${response.status} - ${errorText}`);
       }
 
-      const result = await response.json() as { bulk_email_id?: string; id?: string };
+      const result = (await response.json()) as { bulk_email_id?: string; id?: string };
       return {
         success: true,
         messageId: result.bulk_email_id || result.id,
@@ -387,7 +401,7 @@ Unsubscribe: https://godwear.ca/unsubscribe?email=${encodeURIComponent(to)}
         throw new Error(`MailerSend Stats API error: ${response.status} - ${errorText}`);
       }
 
-      const result = await response.json() as {
+      const result = (await response.json()) as {
         delivered?: number;
         opened?: number;
         clicked?: number;

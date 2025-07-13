@@ -101,7 +101,7 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
   async cleanupExpiredSessions(): Promise<number> {
     const result = await this.db.execute(
       `DELETE FROM ${this.tableName}
-       WHERE expires_at < datetime('now') OR is_active = FALSE`,
+       WHERE expires_at < datetime('now') OR is_active = FALSE`
     );
 
     return result.meta?.changes || 0;
@@ -221,10 +221,10 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
    */
   async updateSessionActivity(sessionId: string): Promise<SessionRecord> {
     // Use raw SQL since updated_at is not part of the updatable fields
-    await this.db.execute(
-      `UPDATE ${this.tableName} SET updated_at = ? WHERE id = ?`,
-      [new Date().toISOString(), sessionId]
-    );
+    await this.db.execute(`UPDATE ${this.tableName} SET updated_at = ? WHERE id = ?`, [
+      new Date().toISOString(),
+      sessionId,
+    ]);
 
     const updated = await this.findById(sessionId);
     if (!updated) {

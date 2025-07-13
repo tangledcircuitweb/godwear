@@ -9,11 +9,7 @@ import {
   ErrorCodes,
 } from "../../../../types/api-responses";
 import type { CloudflareBindings } from "../../../../types/cloudflare";
-import {
-  type OAuthCallback,
-  OAuthCallbackSchema,
-  OAuthErrorSchema,
-} from "../../../../types/validation";
+import { OAuthCallbackSchema, OAuthErrorSchema } from "../../../../types/validation";
 import { createServiceRegistry } from "../../../services";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
@@ -21,7 +17,7 @@ const app = new Hono<{ Bindings: CloudflareBindings }>();
 /**
  * Enhanced OAuth callback handler with comprehensive database integration
  * GET /api/auth/callback
- * 
+ *
  * Features:
  * - OAuth provider response handling (success/error)
  * - State parameter validation for CSRF protection
@@ -194,9 +190,6 @@ app.get("/", zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)), asyn
           user_agent: userAgent,
         });
       } catch (emailError) {
-        // Log email error but don't fail the authentication
-        console.error("Welcome email failed:", emailError);
-        
         await services.repositories.getAuditLogRepository().create({
           user_id: authResult.user.id,
           action: "welcome_email_failed",
@@ -266,7 +259,7 @@ app.get("/", zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)), asyn
         errorDetails = { step: "jwt_generation" };
       }
 
-      errorDetails["originalError"] = error.message;
+      errorDetails.originalError = error.message;
     }
 
     // Log authentication failure for security monitoring
@@ -286,10 +279,7 @@ app.get("/", zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)), asyn
         ip_address: clientIp,
         user_agent: userAgent,
       });
-    } catch (auditError) {
-      // If audit logging fails, at least log to console
-      console.error("Failed to log authentication error:", auditError);
-    }
+    } catch (_auditError) {}
 
     const errorResponse = createErrorResponse(
       errorCode,
@@ -310,7 +300,7 @@ async function hashToken(token: string): Promise<string> {
   const data = encoder.encode(token);
   const hashBuffer = await crypto.subtle.digest("SHA-256", data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 export default app;

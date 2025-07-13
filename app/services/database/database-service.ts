@@ -2,7 +2,6 @@ import type { CloudflareBindings } from "../../../types/cloudflare";
 import type {
   DatabaseConfig,
   DatabaseConnection,
-  DatabaseError,
   DatabaseMetrics,
   DatabaseService,
   DatabaseTransaction,
@@ -155,7 +154,10 @@ export class D1DatabaseService implements BaseService, DatabaseService {
         };
       } catch (error) {
         lastError = error as Error;
-        this.logger?.error(`Single query attempt ${attempt} failed`, error as Error, { sql, params });
+        this.logger?.error(`Single query attempt ${attempt} failed`, error as Error, {
+          sql,
+          params,
+        });
 
         if (attempt < this.config.maxRetries) {
           await this.delay(this.config.retryDelay * attempt);
@@ -168,7 +170,9 @@ export class D1DatabaseService implements BaseService, DatabaseService {
     this.metrics.lastError = lastError?.message || "Unknown error";
     this.metrics.lastErrorTime = new Date().toISOString();
 
-    throw new Error(`Single query failed after ${this.config.maxRetries} attempts: ${lastError?.message}`);
+    throw new Error(
+      `Single query failed after ${this.config.maxRetries} attempts: ${lastError?.message}`
+    );
   }
 
   /**
@@ -209,7 +213,9 @@ export class D1DatabaseService implements BaseService, DatabaseService {
     this.metrics.lastError = lastError?.message || "Unknown error";
     this.metrics.lastErrorTime = new Date().toISOString();
 
-    throw new Error(`Execute failed after ${this.config.maxRetries} attempts: ${lastError?.message}`);
+    throw new Error(
+      `Execute failed after ${this.config.maxRetries} attempts: ${lastError?.message}`
+    );
   }
 
   /**
@@ -248,7 +254,7 @@ export class D1DatabaseService implements BaseService, DatabaseService {
    */
   async transaction<T>(callback: (tx: DatabaseTransaction) => Promise<T>): Promise<T> {
     const db = this.getConnection();
-    
+
     // D1 doesn't have explicit transactions, but we can simulate with batch operations
     // For now, we'll pass the database connection as the transaction
     const tx: DatabaseTransaction = {
@@ -506,7 +512,7 @@ export class D1DatabaseService implements BaseService, DatabaseService {
     for (let i = 0; i < content.length; i++) {
       const char = content.charCodeAt(i);
       hash = (hash << 5) - hash + char;
-      hash = hash & hash; // Convert to 32-bit integer
+      hash &= hash; // Convert to 32-bit integer
     }
     return hash.toString(16);
   }
@@ -514,7 +520,7 @@ export class D1DatabaseService implements BaseService, DatabaseService {
   /**
    * Rollback a migration
    */
-  async rollbackMigration(migrationId: string): Promise<void> {
+  async rollbackMigration(_migrationId: string): Promise<void> {
     // Implementation would load and execute the down migration
     throw new Error("Migration rollback not implemented");
   }
@@ -532,7 +538,7 @@ export class D1DatabaseService implements BaseService, DatabaseService {
   /**
    * Get table schema
    */
-  async getTableSchema(tableName: string): Promise<TableSchema> {
+  async getTableSchema(_tableName: string): Promise<TableSchema> {
     // Implementation would query SQLite schema tables
     throw new Error("Schema introspection not implemented");
   }
@@ -546,10 +552,9 @@ export class D1DatabaseService implements BaseService, DatabaseService {
       const tables = ["users", "sessions", "audit_logs", "config", "migrations"];
 
       for (const table of tables) {
-        await this.queryOne(
-          "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
-          [table]
-        );
+        await this.queryOne("SELECT name FROM sqlite_master WHERE type='table' AND name=?", [
+          table,
+        ]);
       }
 
       return true;
@@ -615,7 +620,9 @@ export class D1DatabaseService implements BaseService, DatabaseService {
    * Update metrics after query execution
    */
   private updateMetrics(success: boolean, duration: number): void {
-    if (!this.config.enableMetrics) return;
+    if (!this.config.enableMetrics) {
+      return;
+    }
 
     if (success) {
       this.metrics.successfulQueries++;

@@ -19,10 +19,7 @@ export abstract class BaseRepository<T extends BaseRecord> implements Repository
    * Find record by ID
    */
   async findById(id: string): Promise<T | null> {
-    const result = await this.db.queryOne<T>(
-      `SELECT * FROM ${this.tableName} WHERE id = ?`,
-      [id]
-    );
+    const result = await this.db.queryOne<T>(`SELECT * FROM ${this.tableName} WHERE id = ?`, [id]);
     return result.result;
   }
 
@@ -50,7 +47,7 @@ export abstract class BaseRepository<T extends BaseRecord> implements Repository
   async create(data: Omit<T, keyof BaseRecord>): Promise<T> {
     const id = crypto.randomUUID();
     const now = new Date().toISOString();
-    
+
     const fullData = {
       id,
       created_at: now,
@@ -83,10 +80,7 @@ export abstract class BaseRepository<T extends BaseRecord> implements Repository
     const setClause = columns.map((col) => `${col} = ?`).join(", ");
     const values = [...Object.values(updateData), id] as QueryParams;
 
-    await this.db.execute(
-      `UPDATE ${this.tableName} SET ${setClause} WHERE id = ?`,
-      values
-    );
+    await this.db.execute(`UPDATE ${this.tableName} SET ${setClause} WHERE id = ?`, values);
 
     const updated = await this.findById(id);
     if (!updated) {
@@ -100,10 +94,7 @@ export abstract class BaseRepository<T extends BaseRecord> implements Repository
    * Delete record by ID
    */
   async delete(id: string): Promise<boolean> {
-    const result = await this.db.execute(
-      `DELETE FROM ${this.tableName} WHERE id = ?`,
-      [id]
-    );
+    const result = await this.db.execute(`DELETE FROM ${this.tableName} WHERE id = ?`, [id]);
 
     return (result.meta?.changes || 0) > 0;
   }
@@ -114,7 +105,7 @@ export abstract class BaseRepository<T extends BaseRecord> implements Repository
   async count(options: QueryOptions = {}): Promise<number> {
     const { clause, params } = this.buildWhereClause(options.where || []);
     const sql = `SELECT COUNT(*) as count FROM ${this.tableName} ${clause}`;
-    
+
     const result = await this.db.queryOne<{ count: number }>(sql, params);
     return result.result?.count || 0;
   }
@@ -134,10 +125,9 @@ export abstract class BaseRepository<T extends BaseRecord> implements Repository
    * Find records by specific column value
    */
   async findBy(column: string, value: string | number | boolean | null): Promise<T[]> {
-    const result = await this.db.query<T>(
-      `SELECT * FROM ${this.tableName} WHERE ${column} = ?`,
-      [value]
-    );
+    const result = await this.db.query<T>(`SELECT * FROM ${this.tableName} WHERE ${column} = ?`, [
+      value,
+    ]);
     return result.results;
   }
 
@@ -162,7 +152,7 @@ export abstract class BaseRepository<T extends BaseRecord> implements Repository
         [id]
       );
       return (result.meta?.changes || 0) > 0;
-    } catch (error) {
+    } catch (_error) {
       // If soft delete fails (no deleted_at column), fall back to hard delete
       return this.delete(id);
     }
@@ -184,7 +174,7 @@ export abstract class BaseRepository<T extends BaseRecord> implements Repository
    */
   protected buildSelectQuery(options: QueryOptions): { sql: string; params: QueryParams } {
     let sql = `SELECT * FROM ${this.tableName}`;
-    let params: QueryParams = [];
+    const params: QueryParams = [];
 
     // WHERE clause
     if (options.where && options.where.length > 0) {
@@ -216,7 +206,10 @@ export abstract class BaseRepository<T extends BaseRecord> implements Repository
   /**
    * Build WHERE clause from conditions
    */
-  protected buildWhereClause(conditions: WhereCondition[]): { clause: string; params: QueryParams } {
+  protected buildWhereClause(conditions: WhereCondition[]): {
+    clause: string;
+    params: QueryParams;
+  } {
     if (conditions.length === 0) {
       return { clause: "", params: [] };
     }

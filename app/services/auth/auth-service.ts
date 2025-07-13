@@ -231,7 +231,7 @@ export class AuthService implements BaseService {
 
     // Get repository registry from service dependencies
     const repositories = this.getRepositories();
-    
+
     // Check if user exists in database using repository
     const existingUser = await repositories.user.findByEmail(userInfo.email);
     const isNewUser = !existingUser;
@@ -272,14 +272,20 @@ export class AuthService implements BaseService {
   private getRepositories() {
     // Import here to avoid circular dependencies
     const { createServiceRegistry } = require("../registry");
-    const services = createServiceRegistry({ env: this.env, request: new Request("http://localhost") });
+    const services = createServiceRegistry({
+      env: this.env,
+      request: new Request("http://localhost"),
+    });
     return services.database.repositories;
   }
 
   /**
    * Create new user using repository pattern
    */
-  private async createUserWithRepository(userInfo: GoogleUserInfo, repositories: any): Promise<AuthUser> {
+  private async createUserWithRepository(
+    userInfo: GoogleUserInfo,
+    repositories: any
+  ): Promise<AuthUser> {
     try {
       const userId = crypto.randomUUID();
       const now = new Date().toISOString();
@@ -311,10 +317,14 @@ export class AuthService implements BaseService {
   /**
    * Update existing user using repository pattern
    */
-  private async updateUserWithRepository(userId: string, userInfo: GoogleUserInfo, repositories: any): Promise<AuthUser> {
+  private async updateUserWithRepository(
+    userId: string,
+    userInfo: GoogleUserInfo,
+    repositories: any
+  ): Promise<AuthUser> {
     try {
       const now = new Date().toISOString();
-      
+
       const userRecord = await repositories.user.update(userId, {
         name: userInfo.name,
         picture: userInfo.picture ?? null,
@@ -343,8 +353,10 @@ export class AuthService implements BaseService {
     try {
       const repositories = this.getRepositories();
       const userRecord = await repositories.user.findById(userId);
-      
-      if (!userRecord) return null;
+
+      if (!userRecord) {
+        return null;
+      }
 
       return {
         id: userRecord.id,
@@ -366,16 +378,16 @@ export class AuthService implements BaseService {
     try {
       // Verify JWT token
       const payload = await this.verifyJWT(token);
-      
+
       // If session ID is provided, validate it in database
       if (sessionId) {
         const repositories = this.getRepositories();
         const session = await repositories.session.findById(sessionId);
-        
-        if (!session || !session.is_active || new Date(session.expires_at) < new Date()) {
+
+        if (!session?.is_active || new Date(session.expires_at) < new Date()) {
           return null;
         }
-        
+
         // Verify token hash matches
         const tokenHash = await this.hashToken(token);
         if (session.token_hash !== tokenHash) {
@@ -415,7 +427,7 @@ export class AuthService implements BaseService {
     const data = encoder.encode(token);
     const hashBuffer = await crypto.subtle.digest("SHA-256", data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
   }
 
   /**

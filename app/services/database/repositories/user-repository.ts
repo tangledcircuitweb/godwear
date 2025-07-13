@@ -79,11 +79,13 @@ export class UserRepository extends BaseRepository<UserRecord> {
    */
   async getMetadata(userId: string): Promise<Record<string, unknown> | null> {
     const user = await this.findById(userId);
-    if (!user?.metadata) return null;
+    if (!user?.metadata) {
+      return null;
+    }
 
     try {
       return JSON.parse(user.metadata);
-    } catch (error) {
+    } catch (_error) {
       return null;
     }
   }
@@ -140,13 +142,20 @@ export class UserRepository extends BaseRepository<UserRecord> {
       result.total += stat.count;
 
       // Count by status
-      if (stat.status === "active") result.active += stat.count;
-      else if (stat.status === "inactive") result.inactive += stat.count;
-      else if (stat.status === "suspended") result.suspended += stat.count;
+      if (stat.status === "active") {
+        result.active += stat.count;
+      } else if (stat.status === "inactive") {
+        result.inactive += stat.count;
+      } else if (stat.status === "suspended") {
+        result.suspended += stat.count;
+      }
 
       // Count by verification
-      if (stat.verified_email) result.verified += stat.count;
-      else result.unverified += stat.count;
+      if (stat.verified_email) {
+        result.verified += stat.count;
+      } else {
+        result.unverified += stat.count;
+      }
     }
 
     return result;
@@ -189,7 +198,9 @@ export class UserRepository extends BaseRepository<UserRecord> {
    * Bulk update user status
    */
   async bulkUpdateStatus(userIds: string[], status: UserRecord["status"]): Promise<number> {
-    if (userIds.length === 0) return 0;
+    if (userIds.length === 0) {
+      return 0;
+    }
 
     const placeholders = userIds.map(() => "?").join(", ");
     const result = await this.db.execute(

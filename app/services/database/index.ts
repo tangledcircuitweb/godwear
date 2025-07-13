@@ -1,39 +1,38 @@
 // Database service exports
-export { D1DatabaseService } from "./database-service";
-export { RepositoryRegistry } from "./repository-registry";
-
-// Repository exports
-export { BaseRepository } from "./repositories/base-repository";
-export { UserRepository } from "./repositories/user-repository";
-export { SessionRepository } from "./repositories/session-repository";
-export { AuditLogRepository } from "./repositories/audit-log-repository";
 
 // Re-export database types
 export type {
-  DatabaseService,
+  AuditLogRecord,
+  BaseRecord,
+  ColumnSchema,
+  ConfigRecord,
+  ConnectionError,
+  ConstraintSchema,
   DatabaseConfig,
+  DatabaseError,
   DatabaseMetrics,
+  DatabaseService,
+  IndexSchema,
+  JoinClause,
+  Migration,
+  MigrationError,
+  MigrationRecord,
+  OrderByClause,
   QueryOptions,
   QueryParams,
   QueryResult,
-  SingleQueryResult,
-  Repository,
-  BaseRecord,
-  UserRecord,
-  SessionRecord,
-  AuditLogRecord,
-  ConfigRecord,
-  Migration,
-  MigrationRecord,
-  WhereCondition,
-  OrderByClause,
-  JoinClause,
-  TableSchema,
-  ColumnSchema,
-  IndexSchema,
-  ConstraintSchema,
-  DatabaseError,
   QueryTimeoutError,
-  ConnectionError,
-  MigrationError,
+  Repository,
+  SessionRecord,
+  SingleQueryResult,
+  TableSchema,
+  UserRecord,
+  WhereCondition,
 } from "../../../types/database";
+export { D1DatabaseService } from "./database-service";
+export { AuditLogRepository } from "./repositories/audit-log-repository";
+// Repository exports
+export { BaseRepository } from "./repositories/base-repository";
+export { SessionRepository } from "./repositories/session-repository";
+export { UserRepository } from "./repositories/user-repository";
+export { RepositoryRegistry } from "./repository-registry";
