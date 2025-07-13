@@ -1,14 +1,13 @@
 // Base service types and utilities
-export * from "./base";
+
+export type {
+  AuthResult,
+  AuthTokens,
+  AuthUser,
+} from "./auth/auth-service";
 
 // Service implementations
 export * from "./auth/auth-service";
-export * from "./health/health-service";
-export * from "./notifications/notification-service";
-
-// Service registry
-export * from "./registry";
-
 // Re-export commonly used types
 export type {
   BaseService,
@@ -16,22 +15,18 @@ export type {
   ServiceHealthStatus,
   ServiceLogger,
 } from "./base";
-
+export * from "./base";
 export type {
-  AuthUser,
-  AuthTokens,
-  AuthResult,
-} from "./auth/auth-service";
-
-export type {
-  SystemHealthStatus,
   DetailedHealthCheck,
+  SystemHealthStatus,
 } from "./health/health-service";
-
+export * from "./health/health-service";
 export type {
   EmailNotification,
-  WelcomeEmailData,
   NotificationResult,
+  WelcomeEmailData,
 } from "./notifications/notification-service";
-
+export * from "./notifications/notification-service";
 export type { Services } from "./registry";
+// Service registry
+export * from "./registry";

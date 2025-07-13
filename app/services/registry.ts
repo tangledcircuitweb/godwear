@@ -1,5 +1,5 @@
-import { ServiceContainer, type ServiceDependencies, type BaseService } from "./base";
 import { AuthService } from "./auth/auth-service";
+import { type BaseService, ServiceContainer, type ServiceDependencies } from "./base";
 import { HealthService } from "./health/health-service";
 import { NotificationService } from "./notifications/notification-service";
 
@@ -8,7 +8,7 @@ import { NotificationService } from "./notifications/notification-service";
  */
 export class ServiceRegistry {
   private container: ServiceContainer;
-  
+
   // Service instances
   public readonly auth: AuthService;
   public readonly health: HealthService;
@@ -16,7 +16,7 @@ export class ServiceRegistry {
 
   constructor(dependencies: ServiceDependencies) {
     this.container = new ServiceContainer(dependencies);
-    
+
     // Initialize services
     this.auth = this.container.register(new AuthService());
     this.health = this.container.register(new HealthService());

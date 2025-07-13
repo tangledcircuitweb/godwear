@@ -1,15 +1,15 @@
-import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
-import type { CloudflareBindings } from "../../../../types/cloudflare";
-import { WelcomeEmailRequestSchema } from "../../../../types/validation";
+import { Hono } from "hono";
 import {
-  createSuccessResponse,
   createErrorResponse,
   createHealthResponse,
-  ErrorCodes,
+  createSuccessResponse,
   type EmailSuccessResponse,
   type ErrorCode,
+  ErrorCodes,
 } from "../../../../types/api-responses";
+import type { CloudflareBindings } from "../../../../types/cloudflare";
+import { WelcomeEmailRequestSchema } from "../../../../types/validation";
 import { createServiceRegistry } from "../../../services";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
@@ -18,79 +18,76 @@ const app = new Hono<{ Bindings: CloudflareBindings }>();
  * Send welcome email notification
  * POST /api/notifications/welcome
  */
-app.post("/", 
-  zValidator("json", WelcomeEmailRequestSchema),
-  async (c) => {
-    const env = c.env as CloudflareBindings;
+app.post("/", zValidator("json", WelcomeEmailRequestSchema), async (c) => {
+  const env = c.env as CloudflareBindings;
 
-    // Initialize services
-    const services = createServiceRegistry({
-      env,
-      request: c.req.raw,
+  // Initialize services
+  const services = createServiceRegistry({
+    env,
+    request: c.req.raw,
+  });
+
+  try {
+    // Get validated request body
+    const body = c.req.valid("json");
+
+    // Send welcome email using service layer
+    const result = await services.notifications.sendWelcomeEmail({
+      email: body.email,
+      name: body.name,
     });
 
-    try {
-      // Get validated request body
-      const body = c.req.valid("json");
+    if (!result.success) {
+      // Handle specific email service errors
+      let errorCode: ErrorCode = ErrorCodes.INTERNAL_SERVER_ERROR;
+      let statusCode = 500;
 
-      // Send welcome email using service layer
-      const result = await services.notifications.sendWelcomeEmail({
-        email: body.email,
-        name: body.name,
-      });
-
-      if (!result.success) {
-        // Handle specific email service errors
-        let errorCode: ErrorCode = ErrorCodes.INTERNAL_SERVER_ERROR;
-        let statusCode = 500;
-
-        if (result.error?.includes("API key")) {
-          errorCode = ErrorCodes.SERVICE_CONFIGURATION_ERROR;
-          statusCode = 401;
-        } else if (result.error?.includes("rate limit")) {
-          errorCode = ErrorCodes.SERVICE_RATE_LIMITED;
-          statusCode = 429;
-        } else if (result.error?.includes("quota")) {
-          errorCode = ErrorCodes.SERVICE_QUOTA_EXCEEDED;
-          statusCode = 429;
-        }
-
-        const errorResponse = createErrorResponse(
-          errorCode,
-          result.error || "Failed to send welcome email",
-          undefined,
-          "notifications-welcome"
-        );
-
-        return c.json(errorResponse, statusCode as 401 | 429 | 500);
+      if (result.error?.includes("API key")) {
+        errorCode = ErrorCodes.SERVICE_CONFIGURATION_ERROR;
+        statusCode = 401;
+      } else if (result.error?.includes("rate limit")) {
+        errorCode = ErrorCodes.SERVICE_RATE_LIMITED;
+        statusCode = 429;
+      } else if (result.error?.includes("quota")) {
+        errorCode = ErrorCodes.SERVICE_QUOTA_EXCEEDED;
+        statusCode = 429;
       }
 
-      const responseData: EmailSuccessResponse = {
-        recipient: body.email,
-        service: "MailerSend",
-        status: "sent",
-      };
-
-      const successResponse = createSuccessResponse(responseData, {
-        service: "notifications-welcome",
-        version: "1.0.0",
-      });
-
-      return c.json(successResponse);
-    } catch (error) {
       const errorResponse = createErrorResponse(
-        ErrorCodes.INTERNAL_SERVER_ERROR,
-        "Failed to send welcome email",
-        {
-          originalError: error instanceof Error ? error.message : "Unknown error",
-        },
+        errorCode,
+        result.error || "Failed to send welcome email",
+        undefined,
         "notifications-welcome"
       );
 
-      return c.json(errorResponse, 500);
+      return c.json(errorResponse, statusCode as 401 | 429 | 500);
     }
+
+    const responseData: EmailSuccessResponse = {
+      recipient: body.email,
+      service: "MailerSend",
+      status: "sent",
+    };
+
+    const successResponse = createSuccessResponse(responseData, {
+      service: "notifications-welcome",
+      version: "1.0.0",
+    });
+
+    return c.json(successResponse);
+  } catch (error) {
+    const errorResponse = createErrorResponse(
+      ErrorCodes.INTERNAL_SERVER_ERROR,
+      "Failed to send welcome email",
+      {
+        originalError: error instanceof Error ? error.message : "Unknown error",
+      },
+      "notifications-welcome"
+    );
+
+    return c.json(errorResponse, 500);
   }
-);
+});
 
 /**
  * Health check for welcome email service
@@ -112,12 +109,12 @@ app.get("/health", async (c) => {
     const healthResponse = createHealthResponse(
       "notifications-welcome",
       healthStatus.status,
-      healthStatus.details as Record<string, 'healthy' | 'degraded' | 'unhealthy'> || {},
+      (healthStatus.details as Record<string, "healthy" | "degraded" | "unhealthy">) || {},
       "1.0.0"
     );
 
-    const httpStatus = healthStatus.status === 'healthy' ? 200 : 
-                      healthStatus.status === 'degraded' ? 200 : 503;
+    const httpStatus =
+      healthStatus.status === "healthy" ? 200 : healthStatus.status === "degraded" ? 200 : 503;
 
     return c.json(healthResponse, httpStatus);
   } catch (error) {

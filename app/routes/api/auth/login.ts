@@ -1,12 +1,12 @@
-import { createRoute } from "honox/factory";
 import { setCookie } from "hono/cookie";
-import type { CloudflareBindings } from "../../../../types/cloudflare";
+import { createRoute } from "honox/factory";
 import {
-  createSuccessResponse,
   createErrorResponse,
+  createSuccessResponse,
   ErrorCodes,
   type LoginResponse,
 } from "../../../../types/api-responses";
+import type { CloudflareBindings } from "../../../../types/cloudflare";
 import { createServiceRegistry } from "../../../services";
 
 /**
@@ -24,7 +24,7 @@ export default createRoute(async (c) => {
 
   try {
     // Check if required OAuth configuration is available
-    if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
+    if (!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET)) {
       const errorResponse = createErrorResponse(
         ErrorCodes.SERVICE_CONFIGURATION_ERROR,
         "OAuth configuration not available",
@@ -36,7 +36,7 @@ export default createRoute(async (c) => {
 
     // Generate state parameter for CSRF protection
     const state = crypto.randomUUID();
-    
+
     // Set state cookie
     setCookie(c, "oauth_state", state, {
       httpOnly: true,

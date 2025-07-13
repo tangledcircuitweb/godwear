@@ -1,10 +1,10 @@
 import { createRoute } from "honox/factory";
-import type { CloudflareBindings } from "../../../../types/cloudflare";
 import {
-  createHealthResponse,
   createErrorResponse,
+  createHealthResponse,
   ErrorCodes,
 } from "../../../../types/api-responses";
+import type { CloudflareBindings } from "../../../../types/cloudflare";
 import { createServiceRegistry } from "../../../services";
 
 /**
@@ -33,7 +33,7 @@ export default createRoute(async (c) => {
 
     // Get system health using service layer
     const systemHealth = await services.health.getSystemHealth();
-    
+
     // Get all services health status
     const servicesHealth = await services.getHealthStatus();
 
@@ -46,8 +46,8 @@ export default createRoute(async (c) => {
     );
 
     // Return appropriate HTTP status code
-    const httpStatus = systemHealth.overall === 'healthy' ? 200 : 
-                      systemHealth.overall === 'degraded' ? 200 : 503;
+    const httpStatus =
+      systemHealth.overall === "healthy" ? 200 : systemHealth.overall === "degraded" ? 200 : 503;
 
     return c.json(healthResponse, httpStatus);
   } catch (error) {

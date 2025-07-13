@@ -8,12 +8,12 @@ export interface BaseService {
    * Service name for logging and debugging
    */
   readonly serviceName: string;
-  
+
   /**
    * Initialize the service with dependencies
    */
   initialize?(dependencies: ServiceDependencies): Promise<void> | void;
-  
+
   /**
    * Health check for the service
    */
@@ -24,7 +24,7 @@ export interface BaseService {
  * Service health status
  */
 export interface ServiceHealthStatus {
-  status: 'healthy' | 'degraded' | 'unhealthy';
+  status: "healthy" | "degraded" | "unhealthy";
   message?: string;
   details?: Record<string, unknown>;
 }
@@ -53,19 +53,19 @@ export interface ServiceLogger {
  */
 export class ConsoleLogger implements ServiceLogger {
   info(message: string, meta?: Record<string, unknown>): void {
-    console.log(`[INFO] ${message}`, meta ? JSON.stringify(meta) : '');
+    console.log(`[INFO] ${message}`, meta ? JSON.stringify(meta) : "");
   }
 
   warn(message: string, meta?: Record<string, unknown>): void {
-    console.warn(`[WARN] ${message}`, meta ? JSON.stringify(meta) : '');
+    console.warn(`[WARN] ${message}`, meta ? JSON.stringify(meta) : "");
   }
 
   error(message: string, error?: Error, meta?: Record<string, unknown>): void {
-    console.error(`[ERROR] ${message}`, error?.message || '', meta ? JSON.stringify(meta) : '');
+    console.error(`[ERROR] ${message}`, error?.message || "", meta ? JSON.stringify(meta) : "");
   }
 
   debug(message: string, meta?: Record<string, unknown>): void {
-    console.debug(`[DEBUG] ${message}`, meta ? JSON.stringify(meta) : '');
+    console.debug(`[DEBUG] ${message}`, meta ? JSON.stringify(meta) : "");
   }
 }
 
@@ -88,12 +88,12 @@ export class ServiceContainer {
    */
   register<T extends BaseService>(service: T): T {
     this.services.set(service.serviceName, service);
-    
+
     // Initialize service if it has an initialize method
     if (service.initialize) {
       service.initialize(this.dependencies);
     }
-    
+
     return service;
   }
 
@@ -116,7 +116,7 @@ export class ServiceContainer {
    */
   async healthCheck(): Promise<Record<string, ServiceHealthStatus>> {
     const results: Record<string, ServiceHealthStatus> = {};
-    
+
     const serviceEntries = Array.from(this.services.entries());
     for (const [name, service] of serviceEntries) {
       try {
@@ -124,16 +124,16 @@ export class ServiceContainer {
           const status = await service.healthCheck();
           results[name] = status;
         } else {
-          results[name] = { status: 'healthy', message: 'No health check implemented' };
+          results[name] = { status: "healthy", message: "No health check implemented" };
         }
       } catch (error) {
         results[name] = {
-          status: 'unhealthy',
-          message: error instanceof Error ? error.message : 'Unknown error',
+          status: "unhealthy",
+          message: error instanceof Error ? error.message : "Unknown error",
         };
       }
     }
-    
+
     return results;
   }
 }

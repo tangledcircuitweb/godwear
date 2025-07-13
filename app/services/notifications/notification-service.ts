@@ -1,6 +1,6 @@
-import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../base";
 import type { CloudflareBindings } from "../../../types/cloudflare";
 import { MailerSendService } from "../../lib/mailersend";
+import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../base";
 
 export interface EmailNotification {
   to: string;
@@ -25,8 +25,8 @@ export interface NotificationResult {
  * Notification service handling email and other notification types
  */
 export class NotificationService implements BaseService {
-  readonly serviceName = 'notification-service';
-  
+  readonly serviceName = "notification-service";
+
   private env!: CloudflareBindings;
   private logger?: any;
   private mailerSendService?: MailerSendService;
@@ -34,7 +34,7 @@ export class NotificationService implements BaseService {
   initialize(dependencies: ServiceDependencies): void {
     this.env = dependencies.env;
     this.logger = dependencies.logger;
-    
+
     // Initialize MailerSend service if API key is available
     if (this.env.MAILERSEND_API_KEY) {
       this.mailerSendService = new MailerSendService(this.env.MAILERSEND_API_KEY);
@@ -46,23 +46,23 @@ export class NotificationService implements BaseService {
    */
   async sendWelcomeEmail(data: WelcomeEmailData): Promise<NotificationResult> {
     if (!this.mailerSendService) {
-      const error = 'MailerSend service not configured';
+      const error = "MailerSend service not configured";
       this.logger?.error(error);
       return { success: false, error };
     }
 
     try {
       await this.mailerSendService.sendWelcomeEmail(data.email, data.name);
-      
-      this.logger?.info('Welcome email sent successfully', {
+
+      this.logger?.info("Welcome email sent successfully", {
         recipient: data.email,
         name: data.name,
       });
 
       return { success: true };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      this.logger?.error('Welcome email failed', error as Error, {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      this.logger?.error("Welcome email failed", error as Error, {
         recipient: data.email,
         name: data.name,
       });
@@ -76,7 +76,7 @@ export class NotificationService implements BaseService {
    */
   async sendEmail(notification: EmailNotification): Promise<NotificationResult> {
     if (!this.mailerSendService) {
-      const error = 'MailerSend service not configured';
+      const error = "MailerSend service not configured";
       this.logger?.error(error);
       return { success: false, error };
     }
@@ -90,15 +90,15 @@ export class NotificationService implements BaseService {
         notification.recipientName
       );
 
-      this.logger?.info('Email sent successfully', {
+      this.logger?.info("Email sent successfully", {
         recipient: notification.to,
         subject: notification.subject,
       });
 
       return { success: true };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      this.logger?.error('Email sending failed', error as Error, {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      this.logger?.error("Email sending failed", error as Error, {
         recipient: notification.to,
         subject: notification.subject,
       });
@@ -112,11 +112,11 @@ export class NotificationService implements BaseService {
    */
   async sendPasswordResetEmail(email: string, resetToken: string): Promise<NotificationResult> {
     // This would be implemented when password reset functionality is added
-    this.logger?.info('Password reset email requested', { email });
-    
+    this.logger?.info("Password reset email requested", { email });
+
     return {
       success: false,
-      error: 'Password reset functionality not yet implemented',
+      error: "Password reset functionality not yet implemented",
     };
   }
 
@@ -125,11 +125,11 @@ export class NotificationService implements BaseService {
    */
   async sendOrderConfirmationEmail(email: string, orderData: any): Promise<NotificationResult> {
     // This would be implemented when order functionality is added
-    this.logger?.info('Order confirmation email requested', { email });
-    
+    this.logger?.info("Order confirmation email requested", { email });
+
     return {
       success: false,
-      error: 'Order confirmation functionality not yet implemented',
+      error: "Order confirmation functionality not yet implemented",
     };
   }
 
@@ -142,7 +142,7 @@ export class NotificationService implements BaseService {
     recentActivity: Array<{
       type: string;
       recipient: string;
-      status: 'sent' | 'failed';
+      status: "sent" | "failed";
       timestamp: string;
     }>;
   }> {
@@ -159,16 +159,16 @@ export class NotificationService implements BaseService {
    */
   async testEmailConfiguration(): Promise<NotificationResult> {
     if (!this.mailerSendService) {
-      return { success: false, error: 'MailerSend service not configured' };
+      return { success: false, error: "MailerSend service not configured" };
     }
 
     try {
       // Send a test email to a test address (if configured)
-      const testEmail = (this.env as any).TEST_EMAIL || 'test@godwear.ca';
-      
+      const testEmail = (this.env as any).TEST_EMAIL || "test@godwear.ca";
+
       await this.sendEmail({
         to: testEmail,
-        subject: 'GodWear Email Configuration Test',
+        subject: "GodWear Email Configuration Test",
         htmlContent: `
           <h1>Email Configuration Test</h1>
           <p>This is a test email to verify that the email configuration is working correctly.</p>
@@ -186,7 +186,7 @@ export class NotificationService implements BaseService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -206,8 +206,8 @@ export class NotificationService implements BaseService {
 
     if (unhealthyChecks.length > 0) {
       return {
-        status: 'unhealthy',
-        message: `Notification service configuration issues: ${unhealthyChecks.join(', ')}`,
+        status: "unhealthy",
+        message: `Notification service configuration issues: ${unhealthyChecks.join(", ")}`,
         details: checks,
       };
     }
@@ -215,25 +215,25 @@ export class NotificationService implements BaseService {
     // Test email configuration if possible
     try {
       const testResult = await this.testEmailConfiguration();
-      
+
       if (!testResult.success) {
         return {
-          status: 'degraded',
-          message: 'Email configuration test failed',
+          status: "degraded",
+          message: "Email configuration test failed",
           details: { error: testResult.error },
         };
       }
     } catch (error) {
       return {
-        status: 'degraded',
-        message: 'Email configuration test failed',
-        details: { error: error instanceof Error ? error.message : 'Unknown error' },
+        status: "degraded",
+        message: "Email configuration test failed",
+        details: { error: error instanceof Error ? error.message : "Unknown error" },
       };
     }
 
     return {
-      status: 'healthy',
-      message: 'Notification service is operational',
+      status: "healthy",
+      message: "Notification service is operational",
       details: checks,
     };
   }

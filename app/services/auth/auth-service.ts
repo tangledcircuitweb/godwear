@@ -1,7 +1,7 @@
-import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../base";
 import type { JWTHeader, JWTPayload } from "../../../types/auth";
 import type { CloudflareBindings } from "../../../types/cloudflare";
 import type { GoogleTokenResponse, GoogleUserInfo } from "../../../types/validation";
+import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../base";
 
 export interface AuthUser {
   id: string;
@@ -27,8 +27,8 @@ export interface AuthResult {
  * Authentication service handling OAuth flows and JWT operations
  */
 export class AuthService implements BaseService {
-  readonly serviceName = 'auth-service';
-  
+  readonly serviceName = "auth-service";
+
   private env!: CloudflareBindings;
   private logger?: any;
 
@@ -62,21 +62,21 @@ export class AuthService implements BaseService {
    */
   generateGoogleOAuthUrl(request: Request, state?: string): string {
     if (!this.env.GOOGLE_CLIENT_ID) {
-      throw new Error('Google Client ID not configured');
+      throw new Error("Google Client ID not configured");
     }
-    
+
     const redirectUri = this.getRedirectUri(request);
     const params = new URLSearchParams();
-    
-    params.set('client_id', this.env.GOOGLE_CLIENT_ID);
-    params.set('redirect_uri', redirectUri);
-    params.set('response_type', 'code');
-    params.set('scope', 'openid email profile');
-    params.set('access_type', 'offline');
-    params.set('prompt', 'consent');
+
+    params.set("client_id", this.env.GOOGLE_CLIENT_ID);
+    params.set("redirect_uri", redirectUri);
+    params.set("response_type", "code");
+    params.set("scope", "openid email profile");
+    params.set("access_type", "offline");
+    params.set("prompt", "consent");
 
     if (state) {
-      params.set('state', state);
+      params.set("state", state);
     }
 
     return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
@@ -86,41 +86,41 @@ export class AuthService implements BaseService {
    * Exchange authorization code for tokens
    */
   async exchangeCodeForTokens(code: string, request: Request): Promise<GoogleTokenResponse> {
-    if (!this.env.GOOGLE_CLIENT_ID || !this.env.GOOGLE_CLIENT_SECRET) {
-      throw new Error('Google OAuth credentials not configured');
+    if (!(this.env.GOOGLE_CLIENT_ID && this.env.GOOGLE_CLIENT_SECRET)) {
+      throw new Error("Google OAuth credentials not configured");
     }
-    
+
     const redirectUri = this.getRedirectUri(request);
-    
+
     const params = new URLSearchParams();
-    params.set('client_id', this.env.GOOGLE_CLIENT_ID);
-    params.set('client_secret', this.env.GOOGLE_CLIENT_SECRET);
-    params.set('code', code);
-    params.set('grant_type', 'authorization_code');
-    params.set('redirect_uri', redirectUri);
-    
-    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-      method: 'POST',
+    params.set("client_id", this.env.GOOGLE_CLIENT_ID);
+    params.set("client_secret", this.env.GOOGLE_CLIENT_SECRET);
+    params.set("code", code);
+    params.set("grant_type", "authorization_code");
+    params.set("redirect_uri", redirectUri);
+
+    const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
       },
       body: params.toString(),
     });
 
     if (!tokenResponse.ok) {
       const errorText = await tokenResponse.text();
-      this.logger?.error('Token exchange failed', new Error(errorText));
+      this.logger?.error("Token exchange failed", new Error(errorText));
       throw new Error(`Token exchange failed: ${tokenResponse.status}`);
     }
 
-    return await tokenResponse.json() as GoogleTokenResponse;
+    return (await tokenResponse.json()) as GoogleTokenResponse;
   }
 
   /**
    * Get user info from Google
    */
   async getUserInfo(accessToken: string): Promise<GoogleUserInfo> {
-    const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+    const userResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -128,11 +128,11 @@ export class AuthService implements BaseService {
 
     if (!userResponse.ok) {
       const errorText = await userResponse.text();
-      this.logger?.error('User info fetch failed', new Error(errorText));
+      this.logger?.error("User info fetch failed", new Error(errorText));
       throw new Error(`User info fetch failed: ${userResponse.status}`);
     }
 
-    return await userResponse.json() as GoogleUserInfo;
+    return (await userResponse.json()) as GoogleUserInfo;
   }
 
   /**
@@ -140,9 +140,9 @@ export class AuthService implements BaseService {
    */
   async generateJWT(payload: JWTPayload): Promise<string> {
     if (!this.env.JWT_SECRET) {
-      throw new Error('JWT secret not configured');
+      throw new Error("JWT secret not configured");
     }
-    
+
     const header: JWTHeader = {
       alg: "HS256",
       typ: "JWT",
@@ -173,18 +173,18 @@ export class AuthService implements BaseService {
    */
   async verifyJWT(token: string): Promise<JWTPayload> {
     if (!this.env.JWT_SECRET) {
-      throw new Error('JWT secret not configured');
+      throw new Error("JWT secret not configured");
     }
-    
-    const parts = token.split('.');
+
+    const parts = token.split(".");
     if (parts.length !== 3) {
-      throw new Error('Invalid JWT format');
+      throw new Error("Invalid JWT format");
     }
 
     const encodedHeader = parts[0]!;
     const encodedPayload = parts[1]!;
     const encodedSignature = parts[2]!;
-    
+
     // Verify signature
     const data = `${encodedHeader}.${encodedPayload}`;
     const encoder = new TextEncoder();
@@ -198,27 +198,22 @@ export class AuthService implements BaseService {
 
     const signature = new Uint8Array(
       atob(encodedSignature)
-        .split('')
-        .map(char => char.charCodeAt(0))
+        .split("")
+        .map((char) => char.charCodeAt(0))
     );
 
-    const isValid = await crypto.subtle.verify(
-      "HMAC",
-      key,
-      signature,
-      encoder.encode(data)
-    );
+    const isValid = await crypto.subtle.verify("HMAC", key, signature, encoder.encode(data));
 
     if (!isValid) {
-      throw new Error('Invalid JWT signature');
+      throw new Error("Invalid JWT signature");
     }
 
     // Parse payload
     const payload = JSON.parse(atob(encodedPayload)) as JWTPayload;
-    
+
     // Check expiration
     if (payload.exp && Date.now() / 1000 > payload.exp) {
-      throw new Error('JWT token expired');
+      throw new Error("JWT token expired");
     }
 
     return payload;
@@ -230,25 +225,25 @@ export class AuthService implements BaseService {
   async processOAuthCallback(code: string, request: Request): Promise<AuthResult> {
     // Exchange code for tokens
     const tokens = await this.exchangeCodeForTokens(code, request);
-    
+
     // Get user info
     const userInfo = await this.getUserInfo(tokens.access_token);
-    
+
     // Check if user exists in database
     const existingUser = await this.findUserByEmail(userInfo.email);
     const isNewUser = !existingUser;
-    
+
     // Create or update user
-    const user = isNewUser 
+    const user = isNewUser
       ? await this.createUser(userInfo)
       : await this.updateUser(existingUser.id, userInfo);
 
     // Generate JWT
     const jwtPayload: JWTPayload = {
       sub: user.id,
-      iss: 'godwear-auth',
-      aud: 'godwear-app',
-      exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60), // 24 hours
+      iss: "godwear-auth",
+      aud: "godwear-app",
+      exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours
       iat: Math.floor(Date.now() / 1000),
       email: user.email,
       name: user.name,
@@ -273,21 +268,23 @@ export class AuthService implements BaseService {
   private async findUserByEmail(email: string): Promise<AuthUser | null> {
     try {
       const result = await this.env.DB.prepare(
-        'SELECT id, email, name, picture, verified_email FROM users WHERE email = ?'
-      ).bind(email).first();
+        "SELECT id, email, name, picture, verified_email FROM users WHERE email = ?"
+      )
+        .bind(email)
+        .first();
 
       if (!result) return null;
 
       return {
-        id: result['id'] as string,
-        email: result['email'] as string,
-        name: result['name'] as string,
-        picture: result['picture'] as string | undefined,
-        verified_email: result['verified_email'] as boolean | undefined,
+        id: result["id"] as string,
+        email: result["email"] as string,
+        name: result["name"] as string,
+        picture: result["picture"] as string | undefined,
+        verified_email: result["verified_email"] as boolean | undefined,
       };
     } catch (error) {
-      this.logger?.error('Database query failed', error as Error);
-      throw new Error('Database query failed');
+      this.logger?.error("Database query failed", error as Error);
+      throw new Error("Database query failed");
     }
   }
 
@@ -297,17 +294,19 @@ export class AuthService implements BaseService {
   private async createUser(userInfo: GoogleUserInfo): Promise<AuthUser> {
     try {
       const userId = crypto.randomUUID();
-      
+
       await this.env.DB.prepare(`
         INSERT INTO users (id, email, name, picture, verified_email, created_at, updated_at)
         VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))
-      `).bind(
-        userId,
-        userInfo.email,
-        userInfo.name,
-        userInfo.picture ?? null,
-        userInfo.verified_email ?? false
-      ).run();
+      `)
+        .bind(
+          userId,
+          userInfo.email,
+          userInfo.name,
+          userInfo.picture ?? null,
+          userInfo.verified_email ?? false
+        )
+        .run();
 
       return {
         id: userId,
@@ -317,8 +316,8 @@ export class AuthService implements BaseService {
         verified_email: userInfo.verified_email,
       };
     } catch (error) {
-      this.logger?.error('User creation failed', error as Error);
-      throw new Error('User creation failed');
+      this.logger?.error("User creation failed", error as Error);
+      throw new Error("User creation failed");
     }
   }
 
@@ -331,12 +330,9 @@ export class AuthService implements BaseService {
         UPDATE users 
         SET name = ?, picture = ?, verified_email = ?, updated_at = datetime('now')
         WHERE id = ?
-      `).bind(
-        userInfo.name,
-        userInfo.picture ?? null,
-        userInfo.verified_email ?? false,
-        userId
-      ).run();
+      `)
+        .bind(userInfo.name, userInfo.picture ?? null, userInfo.verified_email ?? false, userId)
+        .run();
 
       return {
         id: userId,
@@ -346,8 +342,8 @@ export class AuthService implements BaseService {
         verified_email: userInfo.verified_email,
       };
     } catch (error) {
-      this.logger?.error('User update failed', error as Error);
-      throw new Error('User update failed');
+      this.logger?.error("User update failed", error as Error);
+      throw new Error("User update failed");
     }
   }
 
@@ -355,7 +351,7 @@ export class AuthService implements BaseService {
    * Get user by ID
    */
   async getUserById(userId: string): Promise<AuthUser | null> {
-    return this.findUserByEmail(''); // This would need to be implemented properly
+    return this.findUserByEmail(""); // This would need to be implemented properly
   }
 
   /**
@@ -364,7 +360,7 @@ export class AuthService implements BaseService {
   async logout(userId: string): Promise<void> {
     // In a more complex system, you might want to maintain a blacklist of tokens
     // For now, we rely on client-side token removal
-    this.logger?.info('User logged out', { userId });
+    this.logger?.info("User logged out", { userId });
   }
 
   /**
@@ -384,26 +380,26 @@ export class AuthService implements BaseService {
 
     if (unhealthyChecks.length > 0) {
       return {
-        status: 'unhealthy',
-        message: `Missing configuration: ${unhealthyChecks.join(', ')}`,
+        status: "unhealthy",
+        message: `Missing configuration: ${unhealthyChecks.join(", ")}`,
         details: checks,
       };
     }
 
     // Test database connection
     try {
-      await this.env.DB.prepare('SELECT 1').first();
+      await this.env.DB.prepare("SELECT 1").first();
     } catch (error) {
       return {
-        status: 'unhealthy',
-        message: 'Database connection failed',
-        details: { error: error instanceof Error ? error.message : 'Unknown error' },
+        status: "unhealthy",
+        message: "Database connection failed",
+        details: { error: error instanceof Error ? error.message : "Unknown error" },
       };
     }
 
     return {
-      status: 'healthy',
-      message: 'Authentication service is operational',
+      status: "healthy",
+      message: "Authentication service is operational",
       details: checks,
     };
   }

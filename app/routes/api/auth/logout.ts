@@ -1,12 +1,12 @@
 import { Hono } from "hono";
 import { deleteCookie, getCookie } from "hono/cookie";
-import type { JWTPayload } from "../../../../types/auth";
-import type { CloudflareBindings } from "../../../../types/cloudflare";
 import {
-  createSuccessResponse,
   createErrorResponse,
+  createSuccessResponse,
   ErrorCodes,
 } from "../../../../types/api-responses";
+import type { JWTPayload } from "../../../../types/auth";
+import type { CloudflareBindings } from "../../../../types/cloudflare";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -141,11 +141,11 @@ app.get("/", async (c) => {
 // Health check endpoint
 app.get("/health", (c) => {
   const dependencies = {
-    jwt: !!c.env.JWT_SECRET ? 'healthy' as const : 'unhealthy' as const,
-    kv: !!c.env.GODWEAR_KV ? 'healthy' as const : 'degraded' as const,
+    jwt: c.env.JWT_SECRET ? ("healthy" as const) : ("unhealthy" as const),
+    kv: c.env.GODWEAR_KV ? ("healthy" as const) : ("degraded" as const),
   };
 
-  const status = dependencies.jwt === 'healthy' ? 'healthy' as const : 'degraded' as const;
+  const status = dependencies.jwt === "healthy" ? ("healthy" as const) : ("degraded" as const);
 
   const healthResponse = {
     status,

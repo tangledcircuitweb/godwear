@@ -1,10 +1,10 @@
 import { createRoute } from "honox/factory";
-import type { CloudflareBindings } from "../../../../types/cloudflare";
 import {
-  createSuccessResponse,
   createErrorResponse,
+  createSuccessResponse,
   ErrorCodes,
 } from "../../../../types/api-responses";
+import type { CloudflareBindings } from "../../../../types/cloudflare";
 import { createServiceRegistry } from "../../../services";
 
 /**
@@ -35,7 +35,8 @@ export default createRoute(async (c) => {
     const healthStatus = await services.health.getDetailedHealthStatus();
 
     // Check if there are any errors
-    const hasErrors = healthStatus.kv.status === 'error' || healthStatus.database.status === 'error';
+    const hasErrors =
+      healthStatus.kv.status === "error" || healthStatus.database.status === "error";
 
     if (hasErrors) {
       const errorResponse = createErrorResponse(
