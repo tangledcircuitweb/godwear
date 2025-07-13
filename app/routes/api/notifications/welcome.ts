@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
-import type { CloudflareBindings } from "../../../../../types/cloudflare";
-import { WelcomeEmailRequestSchema, type WelcomeEmailRequest } from "../../../../../types/validation";
+import type { CloudflareBindings } from "../../../../types/cloudflare";
+import { WelcomeEmailRequestSchema, type WelcomeEmailRequest } from "../../../../types/validation";
 import {
   createSuccessResponse,
   createErrorResponse,
@@ -11,11 +11,15 @@ import {
   type EmailSuccessResponse,
   type HealthCheckResponse,
   type ErrorCode,
-} from "../../../../../types/api-responses";
-import { MailerSendService } from "../../../../lib/mailersend";
+} from "../../../../types/api-responses";
+import { MailerSendService } from "../../../lib/mailersend";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
+/**
+ * Send welcome email notification
+ * POST /api/notifications/welcome
+ */
 app.post("/", 
   zValidator("json", WelcomeEmailRequestSchema),
   async (c) => {
@@ -26,7 +30,7 @@ app.post("/",
           ErrorCodes.SERVICE_CONFIGURATION_ERROR,
           "Email service not configured - MailerSend API key is missing",
           undefined,
-          "mailersend-welcome"
+          "notifications-welcome"
         );
         return c.json(errorResponse, 500);
       }
@@ -47,7 +51,7 @@ app.post("/",
       };
 
       const successResponse = createSuccessResponse(responseData, {
-        service: "mailersend-welcome",
+        service: "notifications-welcome",
         version: "1.0.0",
       });
 
@@ -80,7 +84,7 @@ app.post("/",
         {
           originalError: error instanceof Error ? error.message : "Unknown error",
         },
-        "mailersend-welcome"
+        "notifications-welcome"
       );
 
       return c.json(errorResponse, statusCode as 401 | 429 | 500);
@@ -88,7 +92,10 @@ app.post("/",
   }
 );
 
-// Health check endpoint with standardized response
+/**
+ * Health check for welcome email service
+ * GET /api/notifications/welcome/health
+ */
 app.get("/health", (c) => {
   const dependencies = {
     mailersend: c.env.MAILERSEND_API_KEY ? 'healthy' as const : 'unhealthy' as const,
@@ -97,7 +104,7 @@ app.get("/health", (c) => {
   const status = dependencies.mailersend === 'healthy' ? 'healthy' as const : 'degraded' as const;
 
   const healthResponse = createHealthResponse(
-    "mailersend-welcome-email",
+    "notifications-welcome",
     status,
     dependencies,
     "1.0.0"
@@ -106,25 +113,28 @@ app.get("/health", (c) => {
   return c.json(healthResponse);
 });
 
-// Test endpoint with standardized response
+/**
+ * Test endpoint for welcome email service
+ * GET /api/notifications/welcome/test
+ */
 app.get("/test", (c) => {
   if (!c.env.MAILERSEND_API_KEY) {
     const errorResponse = createErrorResponse(
       ErrorCodes.SERVICE_CONFIGURATION_ERROR,
       "MailerSend API key not configured",
       { configured: false },
-      "mailersend-welcome"
+      "notifications-welcome"
     );
     return c.json(errorResponse, 500);
   }
 
   const successResponse = createSuccessResponse(
     {
-      message: "MailerSend welcome email service is ready",
+      message: "Welcome email notification service is ready",
       configured: true,
     },
     {
-      service: "mailersend-welcome",
+      service: "notifications-welcome",
       version: "1.0.0",
     }
   );
