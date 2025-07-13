@@ -1,11 +1,8 @@
 // Test environment constants
 export const TEST_ENV = {
   JWT_SECRET: 'test-jwt-secret-key-for-testing-only',
-  MAILERSEND_API_KEY: 'test-mailersend-api-key',
   GOOGLE_CLIENT_ID: 'test-google-client-id',
   GOOGLE_CLIENT_SECRET: 'test-google-client-secret',
-  GITHUB_CLIENT_ID: 'test-github-client-id',
-  GITHUB_CLIENT_SECRET: 'test-github-client-secret',
   BASE_URL: 'http://localhost:3000',
   OAUTH_REDIRECT_URI: 'http://localhost:3000/api/auth/callback',
 } as const;
@@ -43,17 +40,6 @@ export const TEST_USERS = {
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z',
   },
-  GITHUB_USER: {
-    id: 'github-123',
-    email: 'github@godwear.com',
-    name: 'GitHub User',
-    role: 'USER' as const,
-    provider: 'github' as const,
-    providerId: 'github-provider-123',
-    emailVerified: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
   UNVERIFIED_USER: {
     id: 'unverified-123',
     email: 'unverified@godwear.com',
@@ -74,7 +60,6 @@ export const TEST_ENDPOINTS = {
     REGISTER: '/api/auth/register',
     CALLBACK: '/api/auth/callback',
     GOOGLE: '/api/auth/google',
-    GITHUB: '/api/auth/github',
     VERIFY_EMAIL: '/api/auth/verify-email',
     RESET_PASSWORD: '/api/auth/reset-password',
     CHANGE_PASSWORD: '/api/auth/change-password',
@@ -178,22 +163,6 @@ export const TEST_DB_SCHEMAS = {
 
 // Mock external API responses
 export const MOCK_API_RESPONSES = {
-  MAILERSEND: {
-    SEND_SUCCESS: {
-      status: 202,
-      data: {
-        message: 'Email sent successfully',
-        message_id: 'test-message-id-123',
-      },
-    },
-    SEND_ERROR: {
-      status: 400,
-      data: {
-        message: 'Invalid email address',
-        errors: ['Invalid recipient email'],
-      },
-    },
-  },
   GOOGLE_OAUTH: {
     TOKEN_SUCCESS: {
       access_token: 'test-google-access-token',
@@ -208,20 +177,6 @@ export const MOCK_API_RESPONSES = {
       name: 'Google User',
       picture: 'https://example.com/avatar.jpg',
       verified_email: true,
-    },
-  },
-  GITHUB_OAUTH: {
-    TOKEN_SUCCESS: {
-      access_token: 'test-github-access-token',
-      token_type: 'bearer',
-      scope: 'user:email',
-    },
-    USER_INFO: {
-      id: 123456,
-      login: 'githubuser',
-      name: 'GitHub User',
-      email: 'github@godwear.com',
-      avatar_url: 'https://example.com/avatar.jpg',
     },
   },
 } as const;

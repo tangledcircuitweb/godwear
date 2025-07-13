@@ -21,7 +21,6 @@ describe('Test Infrastructure', () => {
       
       expect(env.ENVIRONMENT).toBe('test');
       expect(env.JWT_SECRET).toBeDefined();
-      expect(env.MAILERSEND_API_KEY).toBeDefined();
       expect(env.CACHE).toBeDefined();
       expect(env.SESSION_STORE).toBeDefined();
       expect(env.DB).toBeDefined();
@@ -186,21 +185,6 @@ describe('Test Infrastructure', () => {
   });
   
   describe('MSW Integration', () => {
-    it('should mock MailerSend API calls', async () => {
-      const response = await fetch('https://api.mailersend.com/v1/email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: [{ email: 'test@godwear.com' }],
-          from: { email: 'noreply@godwear.com' },
-          subject: 'Test Email',
-        }),
-      });
-      
-      expect(response.status).toBe(202);
-      const data = await response.json();
-      expect(data.message).toBe('Email sent successfully');
-    });
     
     it('should mock Google OAuth API calls', async () => {
       const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {

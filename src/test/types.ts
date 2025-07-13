@@ -1,12 +1,15 @@
 import type { D1Database, KVNamespace, R2Bucket } from '@cloudflare/workers-types';
 import type { Hono } from 'hono';
+import type { DatabaseService } from '../../types/database';
 
 // Test environment types
 export interface TestEnv {
   CACHE: KVNamespace;
   SESSION_STORE: KVNamespace;
   USER_SESSIONS: KVNamespace;
+  GODWEAR_KV: KVNamespace; // Add this for AuthService
   DB: D1Database;
+  DATABASE_SERVICE: DatabaseService; // Add this for repository tests
   ASSETS: R2Bucket;
   USER_UPLOADS: R2Bucket;
   ENVIRONMENT: 'test';
@@ -14,8 +17,6 @@ export interface TestEnv {
   MAILERSEND_API_KEY: string;
   GOOGLE_CLIENT_ID: string;
   GOOGLE_CLIENT_SECRET: string;
-  GITHUB_CLIENT_ID: string;
-  GITHUB_CLIENT_SECRET: string;
   BASE_URL: string;
   OAUTH_REDIRECT_URI: string;
 }
@@ -29,7 +30,7 @@ export interface TestUser {
   email: string;
   name: string;
   role: 'USER' | 'ADMIN';
-  provider: 'google' | 'github' | 'email';
+  provider: 'google' | 'email';
   providerId?: string;
   emailVerified: boolean;
   createdAt: string;

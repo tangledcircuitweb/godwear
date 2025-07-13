@@ -11,7 +11,6 @@ export const userFixtures = {
   
   // OAuth users
   googleUser: TEST_USERS.GOOGLE_USER,
-  githubUser: TEST_USERS.GITHUB_USER,
   
   // Dynamic users for testing
   newUser: () => createTestUser({
@@ -74,12 +73,6 @@ export const authFixtures = {
   // OAuth states
   validGoogleState: () => btoa(JSON.stringify({
     provider: 'google',
-    timestamp: Date.now(),
-    nonce: Math.random().toString(36).substr(2, 16),
-  })),
-  
-  validGitHubState: () => btoa(JSON.stringify({
-    provider: 'github',
     timestamp: Date.now(),
     nonce: Math.random().toString(36).substr(2, 16),
   })),

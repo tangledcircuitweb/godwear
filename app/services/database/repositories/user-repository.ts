@@ -2,15 +2,104 @@ import type { UserRecord } from "../../../../types/database";
 import { BaseRepository } from "./base-repository";
 
 /**
- * User repository with user-specific operations
+ * User repository with user-specific operations and validation
  */
 export class UserRepository extends BaseRepository<UserRecord> {
   protected tableName = "users";
 
   /**
-   * Find user by email
+   * Validate email format
+   */
+  private validateEmail(email: string): void {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new Error(`Invalid email format: ${email}`);
+    }
+  }
+
+  /**
+   * Validate user data before create/update
+   */
+  private validateUserData(data: Partial<UserRecord>): void {
+    // Validate email if provided
+    if (data.email) {
+      this.validateEmail(data.email);
+    }
+
+    // Validate required fields for create
+    if (data.name !== undefined && (!data.name || data.name.trim().length === 0)) {
+      throw new Error("Name is required");
+    }
+
+    // Validate role
+    if (data.role && !['USER', 'ADMIN', 'MODERATOR'].includes(data.role)) {
+      throw new Error(`Invalid role: ${data.role}`);
+    }
+
+    // Validate provider
+    if (data.provider && !['email', 'google', 'github'].includes(data.provider)) {
+      throw new Error(`Invalid provider: ${data.provider}`);
+    }
+
+    // Validate status
+    if (data.status && !['active', 'inactive', 'suspended'].includes(data.status)) {
+      throw new Error(`Invalid status: ${data.status}`);
+    }
+  }
+
+  /**
+   * Create user with validation
+   */
+  async create(data: Omit<UserRecord, keyof BaseRecord>): Promise<UserRecord> {
+    // Validate required fields
+    if (!data.email) {
+      throw new Error("Email is required");
+    }
+    if (!data.name) {
+      throw new Error("Name is required");
+    }
+
+    // Validate data
+    this.validateUserData(data);
+
+    // Check for duplicate email
+    const existingUser = await this.findByEmail(data.email);
+    if (existingUser) {
+      throw new Error("UNIQUE constraint failed: users.email");
+    }
+
+    return super.create(data);
+  }
+
+  /**
+   * Update user with validation
+   */
+  async update(id: string, data: Partial<Omit<UserRecord, keyof BaseRecord>>): Promise<UserRecord> {
+    // Validate data
+    this.validateUserData(data);
+
+    // Check for duplicate email if email is being updated
+    if (data.email) {
+      const existingUser = await this.findByEmail(data.email);
+      if (existingUser && existingUser.id !== id) {
+        throw new Error("UNIQUE constraint failed: users.email");
+      }
+    }
+
+    return super.update(id, data);
+  }
+
+  /**
+   * Find user by email with validation
    */
   async findByEmail(email: string): Promise<UserRecord | null> {
+    // Validate email format
+    try {
+      this.validateEmail(email);
+    } catch (error) {
+      throw error; // Re-throw validation errors
+    }
+
     return this.findOneBy("email", email);
   }
 

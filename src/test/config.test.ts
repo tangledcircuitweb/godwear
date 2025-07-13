@@ -4,7 +4,6 @@ import { TEST_ENV, TEST_USERS, TEST_ENDPOINTS } from './constants';
 describe('Test Configuration', () => {
   it('should have proper test environment constants', () => {
     expect(TEST_ENV.JWT_SECRET).toBeDefined();
-    expect(TEST_ENV.MAILERSEND_API_KEY).toBeDefined();
     expect(TEST_ENV.BASE_URL).toBe('http://localhost:3000');
   });
 

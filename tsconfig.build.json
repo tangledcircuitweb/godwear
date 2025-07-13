@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "dist",
+    "dist-server",
+    ".wrangler",
+    "coverage",
+    "test-results",
+    "src/test/**/*",
+    "tests/**/*",
+    "e2e/**/*",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "playwright.config.ts",
+    "vitest.config.ts"
+  ]
+}

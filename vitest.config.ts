@@ -22,6 +22,7 @@ export default defineConfig({
     include: [
       'src/**/*.{test,spec}.{js,ts}',
       'tests/**/*.{test,spec}.{js,ts}',
+      'app/**/*.{test,spec}.{js,ts}', // Include app directory tests
     ],
     exclude: [
       'node_modules/',
@@ -62,7 +63,7 @@ export default defineConfig({
     // Retry configuration for flaky tests
     retry: 2,
     // Reporter configuration
-    reporter: ['verbose', 'json', 'html'],
+    reporters: ['verbose', 'json', 'html'],
     outputFile: {
       json: './test-results/results.json',
       html: './test-results/index.html',

@@ -4,6 +4,7 @@ import { handlers } from './mocks/handlers';
 import type { TestEnv, TestUser, TestJWTPayload } from './types';
 import { TEST_ENV, TEST_USERS } from './constants';
 import { createMockKV, createMockD1, createMockR2 } from './mocks/cloudflare';
+import { createMockDatabaseService } from './mocks/database-service';
 import { generateTestJWT, createTestUser } from './helpers/auth';
 
 // Setup MSW server for API mocking
@@ -36,9 +37,13 @@ function createMockEnv(): TestEnv {
     CACHE: createMockKV('CACHE'),
     SESSION_STORE: createMockKV('SESSION_STORE'),
     USER_SESSIONS: createMockKV('USER_SESSIONS'),
+    GODWEAR_KV: createMockKV('GODWEAR_KV'), // Add this for AuthService
     
     // D1 Database
     DB: createMockD1(),
+    
+    // Database Service (for repository tests)
+    DATABASE_SERVICE: createMockDatabaseService(),
     
     // R2 Buckets
     ASSETS: createMockR2('ASSETS'),
@@ -47,11 +52,8 @@ function createMockEnv(): TestEnv {
     // Environment variables
     ENVIRONMENT: 'test',
     JWT_SECRET: TEST_ENV.JWT_SECRET,
-    MAILERSEND_API_KEY: TEST_ENV.MAILERSEND_API_KEY,
     GOOGLE_CLIENT_ID: TEST_ENV.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: TEST_ENV.GOOGLE_CLIENT_SECRET,
-    GITHUB_CLIENT_ID: TEST_ENV.GITHUB_CLIENT_ID,
-    GITHUB_CLIENT_SECRET: TEST_ENV.GITHUB_CLIENT_SECRET,
     BASE_URL: TEST_ENV.BASE_URL,
     OAUTH_REDIRECT_URI: TEST_ENV.OAUTH_REDIRECT_URI,
   };
@@ -90,7 +92,6 @@ globalThis.createAuthenticatedRequest = (path: string, options: RequestInit = {}
 console.log('🧪 Test environment initialized');
 console.log(`📍 Base URL: ${TEST_ENV.BASE_URL}`);
 console.log(`🔑 JWT Secret: ${TEST_ENV.JWT_SECRET.substring(0, 10)}...`);
-console.log(`📧 MailerSend API: ${TEST_ENV.MAILERSEND_API_KEY.substring(0, 10)}...`);
 
 // Export for use in tests
 export { createMockEnv };

@@ -2,6 +2,7 @@ import type { JWTHeader, JWTPayload } from "../../../types/auth";
 import type { CloudflareBindings } from "../../../types/cloudflare";
 import type { GoogleTokenResponse, GoogleUserInfo } from "../../../types/validation";
 import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../base";
+import { D1DatabaseService, RepositoryRegistry } from "../database";
 
 export interface AuthUser {
   id: string;
@@ -136,20 +137,58 @@ export class AuthService implements BaseService {
   }
 
   /**
-   * Generate JWT token
+   * Alias for getUserInfo for backward compatibility
    */
-  async generateJWT(payload: JWTPayload): Promise<string> {
+  async fetchGoogleUserInfo(accessToken: string): Promise<GoogleUserInfo> {
+    return this.getUserInfo(accessToken);
+  }
+
+  /**
+   * Generate JWT token with proper security claims
+   */
+  async generateJWT(userOrPayload: JWTPayload | any): Promise<string> {
     if (!this.env.JWT_SECRET) {
       throw new Error("JWT secret not configured");
     }
 
+    const now = Math.floor(Date.now() / 1000);
     const header: JWTHeader = {
       alg: "HS256",
       typ: "JWT",
     };
 
+    // Handle both JWTPayload and user objects
+    let payload: JWTPayload;
+    if ('sub' in userOrPayload && 'iat' in userOrPayload) {
+      // Already a JWTPayload
+      payload = userOrPayload;
+    } else {
+      // Convert user object to JWTPayload
+      payload = {
+        sub: userOrPayload.id,
+        email: userOrPayload.email,
+        name: userOrPayload.name,
+        picture: userOrPayload.picture,
+        email_verified: userOrPayload.verified_email || userOrPayload.email_verified || false,
+        iat: now,
+        exp: now + (24 * 60 * 60), // 24 hours
+        aud: "godwear-app",
+        iss: "godwear-auth-service"
+      };
+    }
+
+    // Add required security claims if not present
+    const securePayload = {
+      ...payload,
+      iat: payload.iat || now,
+      exp: payload.exp || (now + (24 * 60 * 60)), // 24 hours
+      aud: payload.aud || "godwear-app",
+      iss: payload.iss || "godwear-auth-service",
+      jti: crypto.randomUUID() // Add unique JWT ID to ensure uniqueness
+    };
+
     const encodedHeader = btoa(JSON.stringify(header));
-    const encodedPayload = btoa(JSON.stringify(payload));
+    const encodedPayload = btoa(JSON.stringify(securePayload));
 
     const data = `${encodedHeader}.${encodedPayload}`;
     const encoder = new TextEncoder();
@@ -171,52 +210,56 @@ export class AuthService implements BaseService {
   /**
    * Verify JWT token
    */
-  async verifyJWT(token: string): Promise<JWTPayload> {
-    if (!this.env.JWT_SECRET) {
-      throw new Error("JWT secret not configured");
+  async verifyJWT(token: string): Promise<{valid: boolean, payload?: JWTPayload, error?: string}> {
+    try {
+      if (!this.env.JWT_SECRET) {
+        return { valid: false, error: "JWT secret not configured" };
+      }
+
+      const parts = token.split(".");
+      if (parts.length !== 3) {
+        return { valid: false, error: "Invalid JWT format" };
+      }
+
+      const encodedHeader = parts[0]!;
+      const encodedPayload = parts[1]!;
+      const encodedSignature = parts[2]!;
+
+      // Verify signature
+      const data = `${encodedHeader}.${encodedPayload}`;
+      const encoder = new TextEncoder();
+      const key = await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(this.env.JWT_SECRET!),
+        { name: "HMAC", hash: "SHA-256" },
+        false,
+        ["verify"]
+      );
+
+      const signature = new Uint8Array(
+        atob(encodedSignature)
+          .split("")
+          .map((char) => char.charCodeAt(0))
+      );
+
+      const isValid = await crypto.subtle.verify("HMAC", key, signature, encoder.encode(data));
+
+      if (!isValid) {
+        return { valid: false, error: "Invalid JWT signature" };
+      }
+
+      // Parse payload
+      const payload = JSON.parse(atob(encodedPayload)) as JWTPayload;
+
+      // Check expiration
+      if (payload.exp && Date.now() / 1000 > payload.exp) {
+        return { valid: false, error: "JWT token expired" };
+      }
+
+      return { valid: true, payload };
+    } catch (error) {
+      return { valid: false, error: error instanceof Error ? error.message : "Unknown error" };
     }
-
-    const parts = token.split(".");
-    if (parts.length !== 3) {
-      throw new Error("Invalid JWT format");
-    }
-
-    const encodedHeader = parts[0]!;
-    const encodedPayload = parts[1]!;
-    const encodedSignature = parts[2]!;
-
-    // Verify signature
-    const data = `${encodedHeader}.${encodedPayload}`;
-    const encoder = new TextEncoder();
-    const key = await crypto.subtle.importKey(
-      "raw",
-      encoder.encode(this.env.JWT_SECRET!),
-      { name: "HMAC", hash: "SHA-256" },
-      false,
-      ["verify"]
-    );
-
-    const signature = new Uint8Array(
-      atob(encodedSignature)
-        .split("")
-        .map((char) => char.charCodeAt(0))
-    );
-
-    const isValid = await crypto.subtle.verify("HMAC", key, signature, encoder.encode(data));
-
-    if (!isValid) {
-      throw new Error("Invalid JWT signature");
-    }
-
-    // Parse payload
-    const payload = JSON.parse(atob(encodedPayload)) as JWTPayload;
-
-    // Check expiration
-    if (payload.exp && Date.now() / 1000 > payload.exp) {
-      throw new Error("JWT token expired");
-    }
-
-    return payload;
   }
 
   /**
@@ -233,7 +276,7 @@ export class AuthService implements BaseService {
     const repositories = this.getRepositories();
 
     // Check if user exists in database using repository
-    const existingUser = await repositories.user.findByEmail(userInfo.email);
+    const existingUser = await repositories.getUserRepository().findByEmail(userInfo.email);
     const isNewUser = !existingUser;
 
     // Create or update user using repository
@@ -270,13 +313,11 @@ export class AuthService implements BaseService {
    * Note: This is a temporary solution until we implement proper dependency injection
    */
   private getRepositories() {
-    // Import here to avoid circular dependencies
-    const { createServiceRegistry } = require("../registry");
-    const services = createServiceRegistry({
-      env: this.env,
-      request: new Request("http://localhost"),
-    });
-    return services.database.repositories;
+    // TODO: Implement proper dependency injection to avoid this pattern
+    // For now, we'll create repositories directly
+    const dbService = new D1DatabaseService();
+    dbService.initialize({ env: this.env });
+    return new RepositoryRegistry(dbService);
   }
 
   /**
@@ -352,7 +393,7 @@ export class AuthService implements BaseService {
   async getUserById(userId: string): Promise<AuthUser | null> {
     try {
       const repositories = this.getRepositories();
-      const userRecord = await repositories.user.findById(userId);
+      const userRecord = await repositories.getUserRepository().findById(userId);
 
       if (!userRecord) {
         return null;
@@ -372,33 +413,60 @@ export class AuthService implements BaseService {
   }
 
   /**
-   * Validate session token and return user info
+   * Validate session token and return boolean result
    */
-  async validateSession(token: string, sessionId?: string): Promise<AuthUser | null> {
+  async validateSession(token: string, sessionId?: string): Promise<boolean> {
     try {
       // Verify JWT token
-      const payload = await this.verifyJWT(token);
+      const result = await this.verifyJWT(token);
+      
+      if (!result.valid || !result.payload) {
+        return false;
+      }
 
       // If session ID is provided, validate it in database
       if (sessionId) {
         const repositories = this.getRepositories();
-        const session = await repositories.session.findById(sessionId);
+        const session = await repositories.getSessionRepository().findById(sessionId);
 
         if (!session?.is_active || new Date(session.expires_at) < new Date()) {
-          return null;
+          return false;
         }
 
         // Verify token hash matches
         const tokenHash = await this.hashToken(token);
         if (session.token_hash !== tokenHash) {
-          return null;
+          return false;
         }
       }
 
-      // Get user by ID from JWT payload
-      return this.getUserById(payload.sub);
+      return true;
     } catch (error) {
       this.logger?.error("Session validation failed", error as Error);
+      return false;
+    }
+  }
+
+  /**
+   * Get user info from valid session token
+   */
+  async getUserFromSession(token: string, sessionId?: string): Promise<AuthUser | null> {
+    try {
+      const isValid = await this.validateSession(token, sessionId);
+      if (!isValid) {
+        return null;
+      }
+
+      // Verify JWT token to get payload
+      const result = await this.verifyJWT(token);
+      if (!result.valid || !result.payload) {
+        return null;
+      }
+
+      // Get user by ID from JWT payload
+      return this.getUserById(result.payload.sub);
+    } catch (error) {
+      this.logger?.error("Get user from session failed", error as Error);
       return null;
     }
   }
@@ -409,10 +477,12 @@ export class AuthService implements BaseService {
   async invalidateSession(sessionId: string): Promise<void> {
     try {
       const repositories = this.getRepositories();
-      await repositories.session.update(sessionId, {
+      await repositories.getSessionRepository().update(sessionId, {
         is_active: false,
-        updated_at: new Date().toISOString(),
       });
+
+      // Remove from KV store
+      await this.env.GODWEAR_KV.delete(sessionId);
     } catch (error) {
       this.logger?.error("Failed to invalidate session", error as Error);
       throw new Error("Failed to invalidate session");
@@ -469,5 +539,120 @@ export class AuthService implements BaseService {
       message: "Authentication service is operational",
       details: checks,
     };
+  }
+
+
+
+
+
+  /**
+   * Create secure session - Professional implementation
+   */
+  async createSession(user: AuthUser): Promise<string> {
+    const sessionId = crypto.randomUUID();
+    const expiresAt = new Date(Date.now() + (24 * 60 * 60 * 1000)); // 24 hours
+    
+    const repositories = this.getRepositories();
+    await repositories.getSessionRepository().create({
+      user_id: user.id,
+      token_hash: await this.hashToken(sessionId),
+      expires_at: expiresAt.toISOString(),
+      is_active: true,
+    });
+
+    // Store session in KV for fast access
+    await this.env.GODWEAR_KV.put(sessionId, JSON.stringify({
+      userId: user.id,
+      email: user.email,
+      expiresAt: expiresAt.toISOString(),
+    }), {
+      expirationTtl: 24 * 60 * 60, // 24 hours
+    });
+
+    return sessionId;
+  }
+
+  /**
+   * Check if session is valid - Professional implementation
+   */
+  async isValidSession(sessionId: string): Promise<boolean> {
+    try {
+      // Check KV store first (fast)
+      const sessionData = await this.env.GODWEAR_KV.get(sessionId);
+      if (!sessionData) {
+        return false;
+      }
+
+      const session = JSON.parse(sessionData);
+      if (new Date(session.expiresAt) < new Date()) {
+        return false;
+      }
+
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Destroy session - Professional implementation
+   */
+  async destroySession(sessionId: string): Promise<void> {
+    // Remove from KV store
+    await this.env.GODWEAR_KV.delete(sessionId);
+    
+    // Mark as inactive in database
+    const repositories = this.getRepositories();
+    const session = await repositories.getSessionRepository().findById(sessionId);
+    if (session) {
+      await repositories.getSessionRepository().update(sessionId, {
+        is_active: false,
+      });
+    }
+  }
+
+  /**
+   * Get health status - Professional implementation
+   */
+  async getHealth(): Promise<ServiceHealthStatus & {service?: string, timestamp?: string}> {
+    if (!this.env) {
+      return {
+        status: "unhealthy",
+        service: "auth-service",
+        timestamp: new Date().toISOString(),
+        error: "Service not initialized",
+      } as any;
+    }
+
+    const checks = {
+      jwtSecret: !!this.env.JWT_SECRET,
+      googleOAuth: !!(this.env.GOOGLE_CLIENT_ID && this.env.GOOGLE_CLIENT_SECRET),
+      database: true,
+      kvStore: true,
+    };
+
+    // Test database
+    try {
+      await this.env.DB.prepare("SELECT 1").first();
+    } catch {
+      checks.database = false;
+    }
+
+    // Test KV store
+    try {
+      await this.env.GODWEAR_KV.get("health-check");
+    } catch {
+      checks.kvStore = false;
+    }
+
+    const isHealthy = Object.values(checks).every(Boolean);
+
+    return {
+      status: isHealthy ? "healthy" : "unhealthy",
+      service: "auth-service",
+      timestamp: new Date().toISOString(),
+      message: isHealthy ? "All systems operational" : "Some systems are down",
+      details: checks,
+    } as any;
   }
 }

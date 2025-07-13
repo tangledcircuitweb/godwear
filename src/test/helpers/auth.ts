@@ -85,8 +85,8 @@ export function createTestAdmin(overrides: Partial<TestUser> = {}): TestUser {
 }
 
 // Create OAuth test user
-export function createTestOAuthUser(provider: 'google' | 'github', overrides: Partial<TestUser> = {}): TestUser {
-  const baseUser = provider === 'google' ? TEST_USERS.GOOGLE_USER : TEST_USERS.GITHUB_USER;
+export function createTestOAuthUser(provider: 'google', overrides: Partial<TestUser> = {}): TestUser {
+  const baseUser = TEST_USERS.GOOGLE_USER;
   
   return createTestUser({
     ...baseUser,

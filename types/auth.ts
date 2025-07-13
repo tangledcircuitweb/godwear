@@ -3,6 +3,7 @@ export interface JWTPayload {
   email: string;
   name: string;
   picture?: string;
+  email_verified?: boolean;
   iat: number;
   exp: number;
   iss: string; // Issuer

@@ -43,7 +43,7 @@ export class UserBuilder extends BaseDataBuilder<TestUser> {
     return this;
   }
   
-  withProvider(provider: 'email' | 'google' | 'github'): this {
+  withProvider(provider: 'email' | 'google'): this {
     this.data.provider = provider;
     if (provider !== 'email') {
       this.data.providerId = `${provider}-${Date.now()}`;
@@ -62,10 +62,6 @@ export class UserBuilder extends BaseDataBuilder<TestUser> {
   
   asGoogleUser(): this {
     return this.withProvider('google');
-  }
-  
-  asGitHubUser(): this {
-    return this.withProvider('github');
   }
   
   build(): TestUser {
