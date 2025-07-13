@@ -1,113 +1,69 @@
-import { Hono } from "hono";
+import { createRoute } from "honox/factory";
 import { setCookie } from "hono/cookie";
 import type { CloudflareBindings } from "../../../../types/cloudflare";
 import {
+  createSuccessResponse,
   createErrorResponse,
-  createHealthResponse,
   ErrorCodes,
+  type LoginResponse,
 } from "../../../../types/api-responses";
+import { createServiceRegistry } from "../../../services";
 
-const app = new Hono<{ Bindings: CloudflareBindings }>();
+/**
+ * Initiate OAuth login
+ * GET /api/auth/login
+ */
+export default createRoute(async (c) => {
+  const env = c.env as CloudflareBindings;
 
-// PKCE helper functions
-function generateCodeVerifier(): string {
-  const array = new Uint8Array(32);
-  crypto.getRandomValues(array);
-  return btoa(String.fromCharCode(...array))
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=/g, "");
-}
+  // Initialize services
+  const services = createServiceRegistry({
+    env,
+    request: c.req.raw,
+  });
 
-async function generateCodeChallenge(verifier: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(verifier);
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return btoa(String.fromCharCode(...new Uint8Array(digest)))
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=/g, "");
-}
-
-function generateState(): string {
-  const array = new Uint8Array(16);
-  crypto.getRandomValues(array);
-  return btoa(String.fromCharCode(...array))
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=/g, "");
-}
-
-// Determine environment and redirect URI
-function getRedirectUri(request: Request, env: CloudflareBindings): string {
-  const url = new URL(request.url);
-  const hostname = url.hostname;
-
-  if (hostname === "godwear.ca") {
-    return `${env.PRODUCTION_DOMAIN || "https://godwear.ca"}/api/auth/callback`;
-  }
-  if (hostname.includes("godwear.pages.dev")) {
-    return `${env.STAGING_DOMAIN || "https://63e4fecd.godwear.pages.dev"}/api/auth/callback`;
-  }
-  return `${env.DEVELOPMENT_DOMAIN || "http://localhost:5173"}/api/auth/callback`;
-}
-
-app.get("/", async (c) => {
   try {
-    // Check for required environment variables
-    if (!c.env.GOOGLE_CLIENT_ID) {
+    // Check if required OAuth configuration is available
+    if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
       const errorResponse = createErrorResponse(
         ErrorCodes.SERVICE_CONFIGURATION_ERROR,
-        "OAuth configuration error - Google Client ID missing",
+        "OAuth configuration not available",
         undefined,
         "auth-login"
       );
       return c.json(errorResponse, 500);
     }
 
-    // Generate PKCE parameters
-    const codeVerifier = generateCodeVerifier();
-    const codeChallenge = await generateCodeChallenge(codeVerifier);
-    const state = generateState();
-
-    // Get appropriate redirect URI based on environment
-    const redirectUri = getRedirectUri(c.req.raw, c.env);
-
-    // Store PKCE verifier and state in secure cookies
-    setCookie(c, "oauth_code_verifier", codeVerifier, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Lax",
-      maxAge: 600, // 10 minutes
-      path: "/api/auth",
-    });
-
+    // Generate state parameter for CSRF protection
+    const state = crypto.randomUUID();
+    
+    // Set state cookie
     setCookie(c, "oauth_state", state, {
       httpOnly: true,
-      secure: true,
+      secure: env.NODE_ENV === "production",
       sameSite: "Lax",
-      maxAge: 600, // 10 minutes
-      path: "/api/auth",
+      maxAge: 10 * 60, // 10 minutes
+      path: "/",
     });
 
-    // Build authorization URL
-    const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
-    authUrl.searchParams.set("client_id", c.env.GOOGLE_CLIENT_ID);
-    authUrl.searchParams.set("redirect_uri", redirectUri);
-    authUrl.searchParams.set("response_type", "code");
-    authUrl.searchParams.set("scope", "openid email profile");
-    authUrl.searchParams.set("state", state);
-    authUrl.searchParams.set("code_challenge", codeChallenge);
-    authUrl.searchParams.set("code_challenge_method", "S256");
-    authUrl.searchParams.set("access_type", "offline");
-    authUrl.searchParams.set("prompt", "consent");
+    // Generate OAuth URL using service layer
+    const oauthUrl = services.auth.generateGoogleOAuthUrl(c.req.raw, state);
 
-    // Redirect to Google OAuth
-    return c.redirect(authUrl.toString());
+    const responseData: LoginResponse = {
+      redirectUrl: oauthUrl,
+      provider: "google",
+    };
+
+    const successResponse = createSuccessResponse(responseData, {
+      service: "auth-login",
+      version: "1.0.0",
+    });
+
+    return c.json(successResponse);
   } catch (error) {
     const errorResponse = createErrorResponse(
-      ErrorCodes.AUTH_OAUTH_ERROR,
-      "Failed to initiate OAuth login",
+      ErrorCodes.INTERNAL_SERVER_ERROR,
+      "Failed to initiate login",
       {
         originalError: error instanceof Error ? error.message : "Unknown error",
       },
@@ -117,23 +73,3 @@ app.get("/", async (c) => {
     return c.json(errorResponse, 500);
   }
 });
-
-// Health check endpoint
-app.get("/health", (c) => {
-  const dependencies = {
-    google_oauth: !!c.env.GOOGLE_CLIENT_ID ? 'healthy' as const : 'unhealthy' as const,
-  };
-
-  const status = dependencies.google_oauth === 'healthy' ? 'healthy' as const : 'degraded' as const;
-
-  const healthResponse = createHealthResponse(
-    "auth-login",
-    status,
-    dependencies,
-    "1.0.0"
-  );
-
-  return c.json(healthResponse);
-});
-
-export default app;

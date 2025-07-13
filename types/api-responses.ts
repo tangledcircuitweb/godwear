@@ -83,8 +83,12 @@ export interface AuthSuccessResponse {
     name: string;
     picture?: string;
   };
-  sessionToken?: string;
-  expiresAt?: string;
+  isNewUser: boolean;
+}
+
+export interface LoginResponse {
+  redirectUrl: string;
+  provider: string;
 }
 
 export interface AuthUserResponse {
@@ -130,6 +134,9 @@ export const ErrorCodes = {
   AUTH_MISSING_TOKEN: 'AUTH_MISSING_TOKEN',
   AUTH_OAUTH_ERROR: 'AUTH_OAUTH_ERROR',
   AUTH_STATE_MISMATCH: 'AUTH_STATE_MISMATCH',
+  AUTH_INVALID_STATE: 'AUTH_INVALID_STATE',
+  AUTH_TOKEN_EXCHANGE_FAILED: 'AUTH_TOKEN_EXCHANGE_FAILED',
+  AUTH_USER_INFO_FAILED: 'AUTH_USER_INFO_FAILED',
   
   // Validation errors
   VALIDATION_FAILED: 'VALIDATION_FAILED',

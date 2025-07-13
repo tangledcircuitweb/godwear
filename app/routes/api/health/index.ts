@@ -5,6 +5,7 @@ import {
   createErrorResponse,
   ErrorCodes,
 } from "../../../../types/api-responses";
+import { createServiceRegistry } from "../../../services";
 
 /**
  * Main health check endpoint
@@ -23,29 +24,42 @@ export default createRoute(async (c) => {
     return c.json(errorResponse, 500);
   }
 
-  // Check basic service dependencies
-  const dependencies = {
-    kv: env.GODWEAR_KV ? 'healthy' as const : 'unhealthy' as const,
-    database: env.DB ? 'healthy' as const : 'unhealthy' as const,
-    mailersend: env.MAILERSEND_API_KEY ? 'healthy' as const : 'unhealthy' as const,
-    google_oauth: (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) ? 'healthy' as const : 'unhealthy' as const,
-  };
+  try {
+    // Initialize services
+    const services = createServiceRegistry({
+      env,
+      request: c.req.raw,
+    });
 
-  // Determine overall status
-  const unhealthyServices = Object.values(dependencies).filter(status => status === 'unhealthy');
-  const status = unhealthyServices.length === 0 ? 'healthy' as const : 
-                 unhealthyServices.length < Object.keys(dependencies).length ? 'degraded' as const : 
-                 'unhealthy' as const;
+    // Get system health using service layer
+    const systemHealth = await services.health.getSystemHealth();
+    
+    // Get all services health status
+    const servicesHealth = await services.getHealthStatus();
 
-  const healthResponse = createHealthResponse(
-    "godwear-api",
-    status,
-    dependencies,
-    "1.0.0"
-  );
+    // Create health response
+    const healthResponse = createHealthResponse(
+      "godwear-api",
+      systemHealth.overall,
+      systemHealth.dependencies,
+      "1.0.0"
+    );
 
-  // Return appropriate HTTP status code
-  const httpStatus = status === 'healthy' ? 200 : status === 'degraded' ? 200 : 503;
+    // Return appropriate HTTP status code
+    const httpStatus = systemHealth.overall === 'healthy' ? 200 : 
+                      systemHealth.overall === 'degraded' ? 200 : 503;
 
-  return c.json(healthResponse, httpStatus);
+    return c.json(healthResponse, httpStatus);
+  } catch (error) {
+    const errorResponse = createErrorResponse(
+      ErrorCodes.INTERNAL_SERVER_ERROR,
+      "Health check failed",
+      {
+        originalError: error instanceof Error ? error.message : "Unknown error",
+      },
+      "health-api"
+    );
+
+    return c.json(errorResponse, 500);
+  }
 });
