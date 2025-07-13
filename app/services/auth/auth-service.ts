@@ -220,7 +220,7 @@ export class AuthService implements BaseService {
   }
 
   /**
-   * Process OAuth callback and create/update user
+   * Process OAuth callback and create/update user using repository pattern
    */
   async processOAuthCallback(code: string, request: Request): Promise<AuthResult> {
     // Exchange code for tokens
@@ -229,14 +229,17 @@ export class AuthService implements BaseService {
     // Get user info
     const userInfo = await this.getUserInfo(tokens.access_token);
 
-    // Check if user exists in database
-    const existingUser = await this.findUserByEmail(userInfo.email);
+    // Get repository registry from service dependencies
+    const repositories = this.getRepositories();
+    
+    // Check if user exists in database using repository
+    const existingUser = await repositories.user.findByEmail(userInfo.email);
     const isNewUser = !existingUser;
 
-    // Create or update user
+    // Create or update user using repository
     const user = isNewUser
-      ? await this.createUser(userInfo)
-      : await this.updateUser(existingUser.id, userInfo);
+      ? await this.createUserWithRepository(userInfo, repositories)
+      : await this.updateUserWithRepository(existingUser.id, userInfo, repositories);
 
     // Generate JWT
     const jwtPayload: JWTPayload = {
@@ -263,62 +266,41 @@ export class AuthService implements BaseService {
   }
 
   /**
-   * Find user by email in database
+   * Get repository registry from service dependencies
+   * Note: This is a temporary solution until we implement proper dependency injection
    */
-  private async findUserByEmail(email: string): Promise<AuthUser | null> {
-    try {
-      // Note: This would ideally use the repository registry, but we need to avoid circular dependencies
-      // In a real implementation, we'd inject the repository or get it from a service locator
-      const result = await this.env.DB.prepare(
-        "SELECT id, email, name, picture, verified_email FROM users WHERE email = ?"
-      )
-        .bind(email)
-        .first();
-
-      if (!result) return null;
-
-      return {
-        id: result["id"] as string,
-        email: result["email"] as string,
-        name: result["name"] as string,
-        picture: result["picture"] as string | undefined,
-        verified_email: result["verified_email"] as boolean | undefined,
-      };
-    } catch (error) {
-      this.logger?.error("Database query failed", error as Error);
-      throw new Error("Database query failed");
-    }
+  private getRepositories() {
+    // Import here to avoid circular dependencies
+    const { createServiceRegistry } = require("../registry");
+    const services = createServiceRegistry({ env: this.env, request: new Request("http://localhost") });
+    return services.database.repositories;
   }
 
   /**
-   * Create new user in database
+   * Create new user using repository pattern
    */
-  private async createUser(userInfo: GoogleUserInfo): Promise<AuthUser> {
+  private async createUserWithRepository(userInfo: GoogleUserInfo, repositories: any): Promise<AuthUser> {
     try {
       const userId = crypto.randomUUID();
       const now = new Date().toISOString();
 
-      await this.env.DB.prepare(`
-        INSERT INTO users (id, email, name, picture, verified_email, status, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, 'active', ?, ?)
-      `)
-        .bind(
-          userId,
-          userInfo.email,
-          userInfo.name,
-          userInfo.picture ?? null,
-          userInfo.verified_email ?? false,
-          now,
-          now
-        )
-        .run();
-
-      return {
+      const userRecord = await repositories.user.create({
         id: userId,
         email: userInfo.email,
         name: userInfo.name,
-        picture: userInfo.picture,
-        verified_email: userInfo.verified_email,
+        picture: userInfo.picture ?? null,
+        verified_email: userInfo.verified_email ?? false,
+        status: "active",
+        created_at: now,
+        updated_at: now,
+      });
+
+      return {
+        id: userRecord.id,
+        email: userRecord.email,
+        name: userRecord.name,
+        picture: userRecord.picture ?? undefined,
+        verified_email: userRecord.verified_email ?? undefined,
       };
     } catch (error) {
       this.logger?.error("User creation failed", error as Error);
@@ -327,31 +309,26 @@ export class AuthService implements BaseService {
   }
 
   /**
-   * Update existing user in database
+   * Update existing user using repository pattern
    */
-  private async updateUser(userId: string, userInfo: GoogleUserInfo): Promise<AuthUser> {
+  private async updateUserWithRepository(userId: string, userInfo: GoogleUserInfo, repositories: any): Promise<AuthUser> {
     try {
-      await this.env.DB.prepare(`
-        UPDATE users 
-        SET name = ?, picture = ?, verified_email = ?, last_login_at = ?, updated_at = ?
-        WHERE id = ?
-      `)
-        .bind(
-          userInfo.name, 
-          userInfo.picture ?? null, 
-          userInfo.verified_email ?? false, 
-          new Date().toISOString(),
-          new Date().toISOString(),
-          userId
-        )
-        .run();
+      const now = new Date().toISOString();
+      
+      const userRecord = await repositories.user.update(userId, {
+        name: userInfo.name,
+        picture: userInfo.picture ?? null,
+        verified_email: userInfo.verified_email ?? false,
+        last_login_at: now,
+        updated_at: now,
+      });
 
       return {
-        id: userId,
-        email: userInfo.email,
-        name: userInfo.name,
-        picture: userInfo.picture,
-        verified_email: userInfo.verified_email,
+        id: userRecord.id,
+        email: userRecord.email,
+        name: userRecord.name,
+        picture: userRecord.picture ?? undefined,
+        verified_email: userRecord.verified_email ?? undefined,
       };
     } catch (error) {
       this.logger?.error("User update failed", error as Error);
@@ -360,19 +337,85 @@ export class AuthService implements BaseService {
   }
 
   /**
-   * Get user by ID
+   * Get user by ID using repository pattern
    */
   async getUserById(userId: string): Promise<AuthUser | null> {
-    return this.findUserByEmail(""); // This would need to be implemented properly
+    try {
+      const repositories = this.getRepositories();
+      const userRecord = await repositories.user.findById(userId);
+      
+      if (!userRecord) return null;
+
+      return {
+        id: userRecord.id,
+        email: userRecord.email,
+        name: userRecord.name,
+        picture: userRecord.picture ?? undefined,
+        verified_email: userRecord.verified_email ?? undefined,
+      };
+    } catch (error) {
+      this.logger?.error("Failed to get user by ID", error as Error);
+      throw new Error("Failed to get user by ID");
+    }
   }
 
   /**
-   * Logout user (invalidate tokens)
+   * Validate session token and return user info
    */
-  async logout(userId: string): Promise<void> {
-    // In a more complex system, you might want to maintain a blacklist of tokens
-    // For now, we rely on client-side token removal
-    this.logger?.info("User logged out", { userId });
+  async validateSession(token: string, sessionId?: string): Promise<AuthUser | null> {
+    try {
+      // Verify JWT token
+      const payload = await this.verifyJWT(token);
+      
+      // If session ID is provided, validate it in database
+      if (sessionId) {
+        const repositories = this.getRepositories();
+        const session = await repositories.session.findById(sessionId);
+        
+        if (!session || !session.is_active || new Date(session.expires_at) < new Date()) {
+          return null;
+        }
+        
+        // Verify token hash matches
+        const tokenHash = await this.hashToken(token);
+        if (session.token_hash !== tokenHash) {
+          return null;
+        }
+      }
+
+      // Get user by ID from JWT payload
+      return this.getUserById(payload.sub);
+    } catch (error) {
+      this.logger?.error("Session validation failed", error as Error);
+      return null;
+    }
+  }
+
+  /**
+   * Invalidate session (logout)
+   */
+  async invalidateSession(sessionId: string): Promise<void> {
+    try {
+      const repositories = this.getRepositories();
+      await repositories.session.update(sessionId, {
+        is_active: false,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (error) {
+      this.logger?.error("Failed to invalidate session", error as Error);
+      throw new Error("Failed to invalidate session");
+    }
+  }
+
+  /**
+   * Hash token for secure storage
+   */
+  private async hashToken(token: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(token);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
   }
 
   /**
