@@ -1,0 +1,65 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+dist-server/
+.wrangler/
+
+# Coverage reports
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary folders
+.tmp/
+.temp/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Minified files
+*.min.js
+*.min.css
+*.bundle.js
+
+# Generated type files
+*.d.ts
+!src/**/*.d.ts
+!app/**/*.d.ts
+
+# Test files (if you want to exclude them from regular checks)
+# **/*.test.{js,ts,tsx}
+# **/*.spec.{js,ts,tsx}
+
+# Config files that don't need strict linting
+wrangler.toml

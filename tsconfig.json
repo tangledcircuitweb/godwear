@@ -4,12 +4,67 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "lib": [
-      "ESNext"
+      "ESNext",
+      "DOM",
+      "DOM.Iterable"
     ],
-    "types": ["vite/client"],
+    "types": [
+      "vite/client",
+      "@cloudflare/workers-types"
+    ],
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
+    "jsxImportSource": "hono/jsx",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": false,
+    "importHelpers": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
+    "experimentalDecorators": false,
+    "emitDecoratorMetadata": false,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./app/*"],
+      "@/*": ["./src/*"],
+      "@types/*": ["./types/*"]
+    }
   },
+  "include": [
+    "app/**/*",
+    "src/**/*",
+    "types/**/*",
+    "*.ts",
+    "*.tsx",
+    "*.js",
+    "*.jsx",
+    "vite.config.ts",
+    "wrangler.jsonc"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "dist-server",
+    ".wrangler",
+    "coverage",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ]
 }

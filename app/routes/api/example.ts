@@ -1,32 +1,45 @@
-import { createRoute } from 'honox/factory'
+import { createRoute } from "honox/factory";
+import type { CloudflareBindings } from "../../../types/cloudflare";
 
 // Example route demonstrating KV and D1 usage with proper types
 export default createRoute(async (c) => {
-  const { GODWEAR_KV, DB } = c.env
+  // Type assertion for environment bindings
+  const env = c.env as CloudflareBindings;
+
+  if (!env) {
+    return c.json({ error: "Environment not available" }, 500);
+  }
+
+  const { GODWEAR_KV, DB } = env;
 
   try {
     // Example KV operations
-    await GODWEAR_KV.put('example-key', JSON.stringify({
-      message: 'Hello from GodWear!',
-      timestamp: new Date().toISOString()
-    }))
+    await GODWEAR_KV.put(
+      "example-key",
+      JSON.stringify({
+        message: "Hello from KV!",
+        timestamp: new Date().toISOString(),
+      })
+    );
 
-    const kvValue = await GODWEAR_KV.get('example-key', 'json')
+    const kvValue = await GODWEAR_KV.get("example-key", "json");
 
     // Example D1 operations
-    const stmt = DB.prepare('SELECT 1 as test_value')
-    const result = await stmt.first()
+    const result = await DB.prepare("SELECT 1 as test").first();
 
     return c.json({
       success: true,
       kv: kvValue,
       db: result,
-      message: 'Cloudflare bindings are working!'
-    })
+      message: "Example API working with KV and D1",
+    });
   } catch (error) {
-    return c.json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
-    }, 500)
+    return c.json(
+      {
+        error: "Database operation failed",
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
+      500
+    );
   }
-})
+});

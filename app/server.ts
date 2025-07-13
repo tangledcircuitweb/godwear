@@ -1,4 +1,4 @@
-import { createApp } from 'honox/server';
+import { createApp } from "honox/server";
 
 const app = createApp();
 

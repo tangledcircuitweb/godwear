@@ -4,10 +4,21 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --mode client && vite build --outDir dist-server && cp dist-server/_worker.js dist/ && rm -rf dist-server",
+    "build": "npm run type-check && vite build --mode client && vite build --outDir dist-server && cp dist-server/_worker.js dist/ && rm -rf dist-server",
+    "build:check": "npm run lint:check && npm run format:check && npm run build",
     "preview": "wrangler pages dev dist",
     "deploy": "npm run build && wrangler pages deploy dist",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "lint": "biome lint --write .",
+    "lint:check": "biome lint .",
+    "lint:fix": "biome lint --write --unsafe .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "check": "biome check .",
+    "check:write": "biome check --write .",
+    "check:unsafe": "biome check --write --unsafe .",
+    "ci": "biome ci .",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.5",
@@ -16,6 +27,7 @@
     "honox": "^0.1.43"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.1.1",
     "@cloudflare/vite-plugin": "^1.2.3",
     "@cloudflare/workers-types": "^4.20240311.0",
     "@types/node": "^20.11.24",

@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 // Load environment variables
 dotenv.config();
@@ -6,18 +6,14 @@ dotenv.config();
 const MAILERSEND_API_KEY = process.env.MAILERSEND_API_KEY;
 
 if (!MAILERSEND_API_KEY) {
-    console.error('❌ MAILERSEND_API_KEY not found in environment variables');
-    process.exit(1);
+  process.exit(1);
 }
-
-console.log('🚀 Testing MailerSend Direct HTTP API integration...');
-console.log('📧 API Key found:', MAILERSEND_API_KEY.substring(0, 10) + '...');
 
 // Test email configuration - using administrator email for trial account
 const testEmail = {
-    to: 'njordrenterprises@gmail.com', // This should be your MailerSend account admin email
-    name: 'Test User',
-    subject: 'GodWear MailerSend Direct API Test 🙏'
+  to: "njordrenterprises@gmail.com", // This should be your MailerSend account admin email
+  name: "Test User",
+  subject: "GodWear MailerSend Direct API Test 🙏",
 };
 
 const htmlContent = `
@@ -91,59 +87,46 @@ This is a test email from your MailerSend Direct API integration
 `;
 
 async function sendTestEmail() {
-    const payload = {
-        from: {
-            email: 'noreply@godwear.ca',
-            name: 'GodWear Test'
-        },
-        to: [
-            {
-                email: testEmail.to,
-                name: testEmail.name
-            }
-        ],
-        subject: testEmail.subject,
-        html: htmlContent,
-        text: textContent,
-        reply_to: {
-            email: 'noreply@godwear.ca',
-            name: 'GodWear Test'
-        }
-    };
+  const payload = {
+    from: {
+      email: "noreply@godwear.ca",
+      name: "GodWear Test",
+    },
+    to: [
+      {
+        email: testEmail.to,
+        name: testEmail.name,
+      },
+    ],
+    subject: testEmail.subject,
+    html: htmlContent,
+    text: textContent,
+    reply_to: {
+      email: "noreply@godwear.ca",
+      name: "GodWear Test",
+    },
+  };
 
-    try {
-        console.log('📤 Sending test email to:', testEmail.to);
-        console.log('🔗 Using direct HTTP API call to MailerSend...');
-        
-        const response = await fetch('https://api.mailersend.com/v1/email', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${MAILERSEND_API_KEY}`
-            },
-            body: JSON.stringify(payload)
-        });
+  try {
+    const response = await fetch("https://api.mailersend.com/v1/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${MAILERSEND_API_KEY}`,
+      },
+      body: JSON.stringify(payload),
+    });
 
-        console.log('📊 Response status:', response.status);
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('❌ API Error Response:', errorText);
-            throw new Error(`MailerSend API error: ${response.status} - ${errorText}`);
-        }
-
-        const responseData = await response.text();
-        console.log('📋 Response data:', responseData || 'Empty response (normal for 202)');
-        
-        console.log('✅ Test email sent successfully via Direct HTTP API!');
-        console.log('🎉 MailerSend Direct API integration is working perfectly!');
-        console.log('💡 No SDK dependencies needed - clean implementation!');
-        
-    } catch (error) {
-        console.error('❌ Failed to send test email:', error);
-        process.exit(1);
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`MailerSend API error: ${response.status} - ${errorText}`);
     }
+
+    const _responseData = await response.text();
+  } catch (_error) {
+    process.exit(1);
+  }
 }
 
 // Run the test
-sendTestEmail();
+void sendTestEmail();

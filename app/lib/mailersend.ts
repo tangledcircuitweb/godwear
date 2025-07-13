@@ -1,9 +1,11 @@
+import type { MailerSendPayload } from "../../types/email";
+
 export class MailerSendService {
   private apiKey: string;
   private fromEmail: string;
   private fromName: string;
 
-  constructor(apiKey: string, fromEmail: string = 'noreply@godwear.ca', fromName: string = 'GodWear') {
+  constructor(apiKey: string, fromEmail = "noreply@godwear.ca", fromName = "GodWear") {
     this.apiKey = apiKey;
     this.fromEmail = fromEmail;
     this.fromName = fromName;
@@ -85,7 +87,7 @@ Visit us at https://godwear.ca
 
     await this.sendEmail(
       to,
-      'Welcome to GodWear - Your Faith Journey Begins! 🙏',
+      "Welcome to GodWear - Your Faith Journey Begins! 🙏",
       htmlContent,
       textContent,
       userName
@@ -99,45 +101,37 @@ Visit us at https://godwear.ca
     textContent?: string,
     recipientName?: string
   ): Promise<void> {
-    const payload = {
+    const payload: MailerSendPayload = {
       from: {
         email: this.fromEmail,
-        name: this.fromName
+        name: this.fromName,
       },
       to: [
         {
           email: to,
-          name: recipientName || to
-        }
+          name: recipientName || to,
+        },
       ],
       subject: subject,
       html: htmlContent,
-      text: textContent || htmlContent.replace(/<[^>]*>/g, ''),
+      text: textContent || htmlContent.replace(/<[^>]*>/g, ""),
       reply_to: {
         email: this.fromEmail,
-        name: this.fromName
-      }
+        name: this.fromName,
+      },
     };
+    const response = await fetch("https://api.mailersend.com/v1/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.apiKey}`,
+      },
+      body: JSON.stringify(payload),
+    });
 
-    try {
-      const response = await fetch('https://api.mailersend.com/v1/email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.apiKey}`
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`MailerSend API error: ${response.status} - ${errorText}`);
-      }
-
-      console.log('Email sent successfully via MailerSend API');
-    } catch (error) {
-      console.error('Failed to send email via MailerSend:', error);
-      throw error;
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`MailerSend API error: ${response.status} - ${errorText}`);
     }
   }
 }
