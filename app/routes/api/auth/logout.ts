@@ -47,8 +47,8 @@ app.post("/", async (c) => {
         const payload = verifyJWT(sessionToken, c.env.JWT_SECRET);
 
         // Remove user from KV store
-        if (c.env.GODWEAR_KV && payload.userId) {
-          await c.env.GODWEAR_KV.delete(`user:${payload.userId}`);
+        if (c.env.GODWEAR_KV && payload.sub) {
+          await c.env.GODWEAR_KV.delete(`user:${payload.sub}`);
         }
       } catch (_error) {
         // Ignore verification errors during logout
@@ -94,8 +94,8 @@ app.get("/", async (c) => {
         const payload = verifyJWT(sessionToken, c.env.JWT_SECRET);
 
         // Remove user from KV store
-        if (c.env.GODWEAR_KV && payload.userId) {
-          await c.env.GODWEAR_KV.delete(`user:${payload.userId}`);
+        if (c.env.GODWEAR_KV && payload.sub) {
+          await c.env.GODWEAR_KV.delete(`user:${payload.sub}`);
         }
       } catch (_error) {
         // Ignore verification errors during logout

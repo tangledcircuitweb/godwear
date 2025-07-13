@@ -1,28 +1,20 @@
 import { Hono } from "hono";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
+import { zValidator } from "@hono/zod-validator";
 import type { JWTHeader, JWTPayload } from "../../../../types/auth";
 import type { CloudflareBindings } from "../../../../types/cloudflare";
+import {
+  OAuthCallbackSchema,
+  OAuthErrorSchema,
+  GoogleTokenResponseSchema,
+  GoogleUserInfoSchema,
+  type GoogleTokenResponse,
+  type GoogleUserInfo,
+  type OAuthCallback,
+  type ApiResponse,
+} from "../../../../types/validation";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
-
-interface GoogleTokenResponse {
-  access_token: string;
-  expires_in: number;
-  refresh_token?: string;
-  scope: string;
-  token_type: string;
-}
-
-interface GoogleUserInfo {
-  id: string;
-  email: string;
-  verified_email: boolean;
-  name: string;
-  given_name: string;
-  family_name: string;
-  picture: string;
-  locale: string;
-}
 
 // Helper function to determine redirect URI based on environment
 function getRedirectUri(request: Request, env: CloudflareBindings): string {
@@ -68,26 +60,6 @@ async function generateJWT(payload: JWTPayload, secret: string): Promise<string>
   return `${data}.${encodedSignature}`;
 }
 
-// Helper function to validate OAuth parameters
-function validateOAuthParams(
-  code: string | undefined,
-  state: string | undefined,
-  error: string | undefined
-) {
-  if (error) {
-    return {
-      valid: false,
-      redirectUrl: `/?error=oauth_error&message=${encodeURIComponent(error)}`,
-    };
-  }
-
-  if (!(code && state)) {
-    return { valid: false, redirectUrl: "/?error=missing_parameters" };
-  }
-
-  return { valid: true };
-}
-
 // Helper function to verify state parameter
 function verifyState(storedState: string | undefined, receivedState: string) {
   if (!storedState || storedState !== receivedState) {
@@ -103,62 +75,96 @@ async function exchangeCodeForTokens(
   redirectUri: string,
   env: CloudflareBindings
 ): Promise<{ success: boolean; tokens?: GoogleTokenResponse; redirectUrl?: string }> {
-  const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      client_id: env.GOOGLE_CLIENT_ID,
-      client_secret: env.GOOGLE_CLIENT_SECRET,
-      code,
-      grant_type: "authorization_code",
-      redirect_uri: redirectUri,
-      code_verifier: codeVerifier,
-    }),
-  });
+  try {
+    const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        client_id: env.GOOGLE_CLIENT_ID,
+        client_secret: env.GOOGLE_CLIENT_SECRET,
+        code,
+        grant_type: "authorization_code",
+        redirect_uri: redirectUri,
+        code_verifier: codeVerifier,
+      }),
+    });
 
-  if (!tokenResponse.ok) {
+    if (!tokenResponse.ok) {
+      return { success: false, redirectUrl: "/?error=token_exchange_failed" };
+    }
+
+    const rawTokens = await tokenResponse.json();
+    
+    // Validate token response with Zod
+    const validationResult = GoogleTokenResponseSchema.safeParse(rawTokens);
+    if (!validationResult.success) {
+      console.error("Invalid token response:", validationResult.error);
+      return { success: false, redirectUrl: "/?error=invalid_token_response" };
+    }
+
+    return { success: true, tokens: validationResult.data };
+  } catch (error) {
+    console.error("Token exchange error:", error);
     return { success: false, redirectUrl: "/?error=token_exchange_failed" };
   }
-
-  const tokens: GoogleTokenResponse = await tokenResponse.json();
-  return { success: true, tokens };
 }
 
 // Helper function to get user info from Google
 async function getUserInfo(
   accessToken: string
 ): Promise<{ success: boolean; userInfo?: GoogleUserInfo; redirectUrl?: string }> {
-  const userResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  try {
+    const userResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
-  if (!userResponse.ok) {
+    if (!userResponse.ok) {
+      return { success: false, redirectUrl: "/?error=user_info_failed" };
+    }
+
+    const rawUserInfo = await userResponse.json();
+    
+    // Validate user info response with Zod
+    const validationResult = GoogleUserInfoSchema.safeParse(rawUserInfo);
+    if (!validationResult.success) {
+      console.error("Invalid user info response:", validationResult.error);
+      return { success: false, redirectUrl: "/?error=invalid_user_info" };
+    }
+
+    const userInfo = validationResult.data;
+
+    if (!userInfo.verified_email) {
+      return { success: false, redirectUrl: "/?error=email_not_verified" };
+    }
+
+    return { success: true, userInfo };
+  } catch (error) {
+    console.error("User info fetch error:", error);
     return { success: false, redirectUrl: "/?error=user_info_failed" };
   }
-
-  const userInfo: GoogleUserInfo = await userResponse.json();
-
-  if (!userInfo.verified_email) {
-    return { success: false, redirectUrl: "/?error=email_not_verified" };
-  }
-
-  return { success: true, userInfo };
 }
 
 // Helper function to store user session
-async function storeUserSession(userInfo: GoogleUserInfo, env: CloudflareBindings) {
-  const sessionPayload = {
-    userId: userInfo.id,
+async function storeUserSession(userInfo: GoogleUserInfo, env: CloudflareBindings, origin: string) {
+  const now = Math.floor(Date.now() / 1000);
+  const sessionPayload: JWTPayload = {
+    sub: userInfo.id, // Standard JWT subject claim
     email: userInfo.email,
     name: userInfo.name,
-    picture: userInfo.picture,
-    iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 7 days
+    iat: now,
+    exp: now + 7 * 24 * 60 * 60, // 7 days
+    iss: origin, // Issuer
+    aud: "godwear-app", // Audience
   };
+
+  // Only add picture if it exists
+  if (userInfo.picture) {
+    sessionPayload.picture = userInfo.picture;
+  }
 
   const sessionToken = await generateJWT(sessionPayload, env.JWT_SECRET);
 
@@ -200,25 +206,27 @@ async function sendWelcomeEmail(userInfo: GoogleUserInfo, origin: string, env: C
   }
 }
 
-app.get("/", async (c) => {
-  try {
-    // Check for required environment variables
-    if (!(c.env.GOOGLE_CLIENT_ID && c.env.GOOGLE_CLIENT_SECRET && c.env.JWT_SECRET)) {
-      return c.redirect("/?error=configuration_error");
-    }
+app.get("/", 
+  zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)),
+  async (c) => {
+    try {
+      // Check for required environment variables
+      if (!(c.env.GOOGLE_CLIENT_ID && c.env.GOOGLE_CLIENT_SECRET && c.env.JWT_SECRET)) {
+        return c.redirect("/?error=configuration_error");
+      }
 
-    // Get query parameters
-    const code = c.req.query("code");
-    const state = c.req.query("state");
-    const error = c.req.query("error");
+      const queryParams = c.req.valid("query");
 
-    // Validate OAuth parameters
-    const paramValidation = validateOAuthParams(code, state, error);
-    if (!paramValidation.valid) {
-      return c.redirect(paramValidation.redirectUrl || "/?error=validation_failed");
-    }
+      // Handle OAuth error responses
+      if ("error" in queryParams) {
+        console.error("OAuth error:", queryParams.error, queryParams.error_description);
+        return c.redirect(`/?error=${queryParams.error}`);
+      }
 
-    // Verify state parameter
+      // At this point, we know we have a valid OAuth callback
+      const { code, state } = queryParams as OAuthCallback;
+
+      // Verify state parameter
     const storedState = getCookie(c, "oauth_state");
     if (!state) {
       return c.redirect("/?error=missing_state");
@@ -261,7 +269,8 @@ app.get("/", async (c) => {
     if (!userResult.userInfo) {
       return c.redirect("/?error=missing_user_info");
     }
-    const sessionToken = await storeUserSession(userResult.userInfo, c.env);
+    const origin = new URL(c.req.url).origin;
+    const sessionToken = await storeUserSession(userResult.userInfo, c.env, origin);
 
     // Set secure session cookie
     setCookie(c, "session", sessionToken, {
@@ -273,7 +282,7 @@ app.get("/", async (c) => {
     });
 
     // Send welcome email for new users
-    await sendWelcomeEmail(userResult.userInfo, new URL(c.req.url).origin, c.env);
+    await sendWelcomeEmail(userResult.userInfo, origin, c.env);
 
     // Redirect to success page or dashboard
     const welcomeName = userResult.userInfo.given_name || userResult.userInfo.name || "User";

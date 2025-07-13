@@ -1,10 +1,12 @@
 export interface JWTPayload {
-  userId: string;
+  sub: string; // User ID (standard JWT claim)
   email: string;
-  name?: string;
+  name: string;
   picture?: string;
-  iat?: number;
-  exp?: number;
+  iat: number;
+  exp: number;
+  iss: string; // Issuer
+  aud: string; // Audience
 }
 
 export interface JWTHeader {

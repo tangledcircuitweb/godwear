@@ -61,7 +61,7 @@ app.get("/", async (c) => {
 
     // Get additional user data from KV if available
     let userData = {
-      id: payload.userId,
+      id: payload.sub, // Use sub instead of userId
       email: payload.email,
       name: payload.name,
       picture: payload.picture,
@@ -69,9 +69,9 @@ app.get("/", async (c) => {
       expiresAt: payload.exp ? new Date(payload.exp * 1000).toISOString() : null,
     };
 
-    if (c.env.GODWEAR_KV && payload.userId) {
+    if (c.env.GODWEAR_KV && payload.sub) {
       try {
-        const kvData = await c.env.GODWEAR_KV.get(`user:${payload.userId}`);
+        const kvData = await c.env.GODWEAR_KV.get(`user:${payload.sub}`);
         if (kvData) {
           const kvUserData = JSON.parse(kvData);
           userData = { ...userData, ...kvUserData };
