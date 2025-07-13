@@ -259,7 +259,7 @@ app.get("/", zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)), asyn
         errorDetails = { step: "jwt_generation" };
       }
 
-      errorDetails.originalError = error.message;
+      errorDetails["originalError"] = error.message;
     }
 
     // Log authentication failure for security monitoring
