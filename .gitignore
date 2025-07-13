@@ -30,5 +30,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# testing
+coverage/
+test-results/
+playwright-report/
+test-results-*/
+vitest.config.js.timestamp-*
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 # misc
 .DS_Store
