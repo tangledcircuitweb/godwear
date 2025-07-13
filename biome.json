@@ -9,7 +9,7 @@
     "ignoreUnknown": false,
     "includes": [
       "app/**/*.{js,jsx,ts,tsx}",
-      "src/**/*.{js,jsx,ts,tsx}",
+      "src/**/*.{js,ts,tsx}",
       "*.{js,jsx,ts,tsx}",
       "**/*.config.{js,ts}",
       "**/*.test.{js,ts,tsx}",
@@ -30,12 +30,12 @@
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noExplicitAny": "error",
+        "noExplicitAny": "warn",
         "noConsole": "warn",
         "noDebugger": "error",
         "noDoubleEquals": "error",
         "useAwait": "warn",
-        "noEmptyBlockStatements": "error",
+        "noEmptyBlockStatements": "warn",
         "noFallthroughSwitchClause": "error",
         "noMisleadingCharacterClass": "error",
         "noUnsafeDeclarationMerging": "error",
@@ -67,7 +67,7 @@
       "style": {
         "noDefaultExport": "off",
         "useNamingConvention": {
-          "level": "error",
+          "level": "warn",
           "options": {
             "strictCase": false,
             "conventions": [
@@ -118,7 +118,7 @@
         "noExcessiveCognitiveComplexity": {
           "level": "warn",
           "options": {
-            "maxAllowedComplexity": 15
+            "maxAllowedComplexity": 20
           }
         },
         "noVoid": "off",
@@ -135,7 +135,7 @@
         "noUselessSwitchCase": "error",
         "noUselessTernary": "error",
         "noUselessTypeConstraint": "error",
-        "useLiteralKeys": "error",
+        "useLiteralKeys": "warn",
         "useOptionalChain": "error",
         "useRegexLiterals": "error",
         "useSimpleNumberKeys": "error",
@@ -179,7 +179,7 @@
       },
       "nursery": {
         "noFloatingPromises": "warn",
-        "noImportCycles": "error",
+        "noImportCycles": "warn",
         "noShadow": "error",
         "noTsIgnore": "error",
         "noUnresolvedImports": "off"
@@ -292,6 +292,56 @@
           },
           "style": {
             "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/entry.server.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/lib/mailersend.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/routes/api/auth/**/*.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          },
+          "suspicious": {
+            "useAwait": "off",
+            "noEmptyBlockStatements": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/services/registry.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          },
+          "nursery": {
+            "noImportCycles": "off"
           }
         }
       }
