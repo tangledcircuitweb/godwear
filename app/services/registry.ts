@@ -1,5 +1,6 @@
 import { AuthService } from "./auth/auth-service";
 import { type BaseService, ServiceContainer, type ServiceDependencies } from "./base";
+import { D1DatabaseService, RepositoryRegistry } from "./database";
 import { HealthService } from "./health/health-service";
 import { NotificationService } from "./notifications/notification-service";
 
@@ -10,6 +11,8 @@ export class ServiceRegistry {
   private container: ServiceContainer;
 
   // Service instances
+  public readonly database: D1DatabaseService;
+  public readonly repositories: RepositoryRegistry;
   public readonly auth: AuthService;
   public readonly health: HealthService;
   public readonly notifications: NotificationService;
@@ -17,7 +20,19 @@ export class ServiceRegistry {
   constructor(dependencies: ServiceDependencies) {
     this.container = new ServiceContainer(dependencies);
 
-    // Initialize services
+    // Initialize database service first (other services may depend on it)
+    this.database = this.container.register(new D1DatabaseService({
+      enableQueryLogging: dependencies.env.NODE_ENV !== "production",
+      enableMetrics: true,
+      maxRetries: 3,
+      retryDelay: 1000,
+      queryTimeout: 30000,
+    }));
+
+    // Initialize repository registry
+    this.repositories = new RepositoryRegistry(this.database);
+
+    // Initialize other services
     this.auth = this.container.register(new AuthService());
     this.health = this.container.register(new HealthService());
     this.notifications = this.container.register(new NotificationService());
@@ -34,7 +49,14 @@ export class ServiceRegistry {
    * Get all services health status
    */
   async getHealthStatus() {
-    return await this.container.healthCheck();
+    const serviceHealth = await this.container.healthCheck();
+    const repositoryHealth = await this.repositories.healthCheck();
+
+    return {
+      services: serviceHealth,
+      repositories: repositoryHealth,
+      overall: this.determineOverallHealth(serviceHealth, repositoryHealth),
+    };
   }
 
   /**
@@ -45,11 +67,59 @@ export class ServiceRegistry {
   }
 
   /**
-   * Initialize all services (if they have initialization logic)
+   * Initialize all services and run database migrations
    */
   async initializeAll(): Promise<void> {
-    // Services are already initialized in the constructor
-    // This method is for any additional async initialization if needed
+    try {
+      // Run database migrations
+      await this.database.runMigrations();
+
+      // Initialize repositories
+      await this.repositories.initialize();
+
+      // Any additional service initialization can go here
+    } catch (error) {
+      console.error("Service initialization failed:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get database metrics
+   */
+  getDatabaseMetrics() {
+    return this.database.getMetrics();
+  }
+
+  /**
+   * Reset database metrics
+   */
+  resetDatabaseMetrics(): void {
+    this.database.resetMetrics();
+  }
+
+  /**
+   * Determine overall health status
+   */
+  private determineOverallHealth(
+    serviceHealth: Record<string, any>,
+    repositoryHealth: { status: string }
+  ): "healthy" | "degraded" | "unhealthy" {
+    const serviceStatuses = Object.values(serviceHealth).map((s: any) => s.status);
+    const allStatuses = [...serviceStatuses, repositoryHealth.status];
+
+    const unhealthyCount = allStatuses.filter((s) => s === "unhealthy").length;
+    const degradedCount = allStatuses.filter((s) => s === "degraded").length;
+
+    if (unhealthyCount > 0) {
+      return unhealthyCount >= allStatuses.length / 2 ? "unhealthy" : "degraded";
+    }
+
+    if (degradedCount > 0) {
+      return "degraded";
+    }
+
+    return "healthy";
   }
 }
 
@@ -64,6 +134,8 @@ export function createServiceRegistry(dependencies: ServiceDependencies): Servic
  * Type for accessing services from the registry
  */
 export type Services = {
+  database: D1DatabaseService;
+  repositories: RepositoryRegistry;
   auth: AuthService;
   health: HealthService;
   notifications: NotificationService;

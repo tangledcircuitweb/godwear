@@ -267,6 +267,8 @@ export class AuthService implements BaseService {
    */
   private async findUserByEmail(email: string): Promise<AuthUser | null> {
     try {
+      // Note: This would ideally use the repository registry, but we need to avoid circular dependencies
+      // In a real implementation, we'd inject the repository or get it from a service locator
       const result = await this.env.DB.prepare(
         "SELECT id, email, name, picture, verified_email FROM users WHERE email = ?"
       )
@@ -294,17 +296,20 @@ export class AuthService implements BaseService {
   private async createUser(userInfo: GoogleUserInfo): Promise<AuthUser> {
     try {
       const userId = crypto.randomUUID();
+      const now = new Date().toISOString();
 
       await this.env.DB.prepare(`
-        INSERT INTO users (id, email, name, picture, verified_email, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))
+        INSERT INTO users (id, email, name, picture, verified_email, status, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, 'active', ?, ?)
       `)
         .bind(
           userId,
           userInfo.email,
           userInfo.name,
           userInfo.picture ?? null,
-          userInfo.verified_email ?? false
+          userInfo.verified_email ?? false,
+          now,
+          now
         )
         .run();
 
@@ -328,10 +333,17 @@ export class AuthService implements BaseService {
     try {
       await this.env.DB.prepare(`
         UPDATE users 
-        SET name = ?, picture = ?, verified_email = ?, updated_at = datetime('now')
+        SET name = ?, picture = ?, verified_email = ?, last_login_at = ?, updated_at = ?
         WHERE id = ?
       `)
-        .bind(userInfo.name, userInfo.picture ?? null, userInfo.verified_email ?? false, userId)
+        .bind(
+          userInfo.name, 
+          userInfo.picture ?? null, 
+          userInfo.verified_email ?? false, 
+          new Date().toISOString(),
+          new Date().toISOString(),
+          userId
+        )
         .run();
 
       return {
