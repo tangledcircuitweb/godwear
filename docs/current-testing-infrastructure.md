@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a comprehensive overview of our current testing infrastructure, what works, what doesn't, and what needs to be implemented for Task 51: Implement Unit Tests for Core Services.
+This document provides a comprehensive overview of our current testing infrastructure, including the **comprehensive test cleanup system** implemented for live Cloudflare resource management.
 
 ## Current Testing Architecture
 
@@ -15,13 +15,15 @@ This document provides a comprehensive overview of our current testing infrastru
 - **Timeout**: 10s test timeout, 10s hook timeout
 - **Retry**: 2 retries for flaky tests
 - **Reporters**: verbose, json, html
+- **Global Teardown**: `./tests/global-teardown.js`
 
 #### **vitest.live.config.ts** - Live Testing Configuration  
 - **Purpose**: Testing against real Cloudflare infrastructure
 - **Environment**: Live Cloudflare services (KV, D1, R2)
-- **Timeout**: 30s test timeout, 30s hook timeout  
+- **Timeout**: **60s test timeout, 45s hook timeout** (increased for R2 operations)
 - **Retry**: 3 retries for network issues
 - **Pool**: Single fork to avoid conflicts with live resources
+- **Global Teardown**: `./tests/global-teardown.js` (automatic cleanup)
 - **Service IDs**: 
   - KV: `3337a52b4f64450ea27fd5065d8f7da2`
   - D1: `c25066df-2b13-4f53-89e4-59ca96cc9084`
@@ -42,9 +44,171 @@ This document provides a comprehensive overview of our current testing infrastru
   "test:e2e": "playwright test",
   "test:coverage": "vitest run --coverage",
   "test:live": "vitest --config vitest.live.config.ts",
-  "test:live:run": "vitest run --config vitest.live.config.ts"
+  "test:live:run": "vitest run --config vitest.live.config.ts",
+  "test:live:kv": "vitest run --config vitest.live.config.ts app/services/auth/auth-service.test.ts",
+  "cleanup-tests": "node scripts/cleanup-test-resources.js"
 }
 ```
+
+## 🧹 **COMPREHENSIVE TEST CLEANUP SYSTEM**
+
+### Overview
+Implemented July 15, 2025 to solve resource conflicts and ensure no test data accumulates in live Cloudflare services.
+
+### Problem Solved
+- **Original Error**: `wrangler r2 bucket create godwear-assets` failed because bucket already existed
+- **Root Cause**: Test resources accumulating from debugging sessions
+- **Impact**: Tests failing due to resource conflicts, cost accumulation
+
+### Solution Components
+
+#### 1. **Global Teardown System** (`tests/global-teardown.js`)
+```javascript
+// Automatically runs after all tests complete
+export default async function globalTeardown() {
+  await Promise.all([
+    cleanupTestR2Buckets(),
+    cleanupTestKVNamespaces(), 
+    cleanupTestD1Databases(),
+  ]);
+}
+```
+
+**Features:**
+- Pattern-based detection of test resources vs production resources
+- Automatic cleanup of R2 buckets, KV namespaces, D1 databases
+- Integrated with both `vitest.config.ts` and `vitest.live.config.ts`
+- Graceful error handling and logging
+
+#### 2. **Test Resource Utilities** (`tests/live/utils/test-resources.ts`)
+```typescript
+// Create unique test resources
+export async function createTestR2Bucket(baseName: string): Promise<string>
+export async function deleteTestR2Bucket(bucketName: string): Promise<void>
+export function generateTestResourceName(prefix: string): string
+
+// Resource tracking for cleanup
+const testResources = new Map<string, Set<string>>();
+```
+
+**Features:**
+- **Unique naming**: `godwear-assets-test-1-1752622315177-abc123`
+- **Resource tracking**: Automatic tracking for cleanup
+- **Worker isolation**: Uses worker ID and timestamps
+- **Cleanup utilities**: Manual and automatic cleanup functions
+
+#### 3. **Updated Live Tests** (`tests/live/live-kv.test.ts`)
+```typescript
+describe("Live KV Tests", () => {
+  const testKeys: string[] = [];
+  
+  afterEach(async () => {
+    // Clean up all keys used in this test
+    for (const key of testKeys) {
+      await globalThis.testKV.delete(key);
+    }
+  });
+  
+  const trackKey = (key: string) => {
+    testKeys.push(key);
+    return key;
+  };
+});
+```
+
+**Features:**
+- **Individual test cleanup**: `afterEach` hooks with resource tracking
+- **Unique key names**: Timestamped keys prevent conflicts
+- **Automatic tracking**: `trackKey()` helper for cleanup
+- **Verified working**: 4/4 tests passing with cleanup
+
+#### 4. **Manual Cleanup Script** (`scripts/cleanup-test-resources.js`)
+```bash
+npm run cleanup-tests
+```
+
+**Features:**
+- Emergency cleanup if tests are interrupted
+- Uses same logic as global teardown
+- ES modules compatible
+- Pattern-based resource detection
+
+### Test Resource Naming Patterns
+
+#### **Test Resource Detection Patterns:**
+```javascript
+// R2 Buckets
+/^godwear-.*-test-/     // godwear-assets-test-123
+/^test-bucket-/         // test-bucket-123
+/-test-\d+/            // any-name-test-123
+
+// KV Namespaces  
+/^TEST_/               // TEST_SESSION_STORE
+/_TEST$/               // SESSION_STORE_TEST
+/^test-/               // test-namespace
+
+// D1 Databases
+/^test-/               // test-database
+/-test$/               // database-test
+/^godwear-test/        // godwear-test-db
+```
+
+### Verification Results
+
+#### **Live Test Results:**
+```
+✓ tests/live/live-kv.test.ts (4 tests) 25087ms
+  ✓ Live KV Connectivity Test (4)
+    ✓ should be able to write and read from live KV  4760ms
+    ✓ should handle JSON data in live KV  5989ms  
+    ✓ should return null for non-existent keys  2231ms
+    ✓ should be able to list keys with prefix  9510ms
+```
+
+#### **Cleanup Verification:**
+- **R2 Buckets**: Only production buckets remain (`godwear-assets`, `godwear-uploads`)
+- **KV Namespaces**: All empty `[]` - no test keys remaining
+- **D1 Database**: Only production tables (`users`, `sessions`, `audit_logs`)
+- **Manual cleanup**: Removed leftover `test_table`, `test-file.txt`
+
+### Usage Guidelines
+
+#### **Running Tests with Cleanup:**
+```bash
+# Live tests with automatic cleanup
+npm run test:live:run
+
+# Specific live KV tests
+npm run test:live:kv
+
+# Manual cleanup if needed
+npm run cleanup-tests
+```
+
+#### **Test Development Best Practices:**
+```typescript
+// ✅ Good - Use unique resource names
+const testKey = trackKey(`test_connectivity_${Date.now()}`);
+
+// ✅ Good - Clean up in afterEach
+afterEach(async () => {
+  for (const key of testKeys) {
+    await globalThis.testKV.delete(key);
+  }
+});
+
+// ❌ Bad - Hardcoded resource names
+const testKey = "test_connectivity"; // Will conflict!
+```
+
+### Benefits Achieved
+
+1. **✅ No Resource Conflicts**: Each test gets unique resource names
+2. **✅ Automatic Cleanup**: Resources cleaned up after each test and globally
+3. **✅ Cost Control**: No accumulation of test data in Cloudflare account
+4. **✅ Reliable Testing**: Tests can run repeatedly without conflicts
+5. **✅ Emergency Recovery**: Manual cleanup script for interrupted tests
+6. **✅ Production Safety**: Pattern-based detection protects production resources
 
 ### 3. Current Test Files Status
 

@@ -1,5 +1,21 @@
 For testing your HonoX Cloudflare Workers API, I'll provide you with a comprehensive testing strategy that scales from early development to production. Let me break this down into a complete testing system that grows with your project.
 
+## 🧹 **IMPORTANT: Test Cleanup System**
+
+**GodWear now includes a comprehensive test cleanup system** to prevent resource conflicts and cost accumulation when testing against live Cloudflare services. See [`test-cleanup-system.md`](./test-cleanup-system.md) for complete documentation.
+
+**Key Features:**
+- ✅ Automatic cleanup of test resources (R2, KV, D1)
+- ✅ Unique resource naming prevents conflicts
+- ✅ Manual cleanup script for emergencies
+- ✅ Production resource protection
+
+**Usage:**
+```bash
+npm run test:live:run    # Live tests with automatic cleanup
+npm run cleanup-tests    # Manual cleanup if needed
+```
+
 #### **Testing Stack Overview**
 
 For a HonoX + Cloudflare Workers project, I recommend this testing stack:
@@ -8,6 +24,7 @@ For a HonoX + Cloudflare Workers project, I recommend this testing stack:
 - **Zod** - For schema validation testing
 - **Miniflare** - Local Cloudflare Workers environment
 - **Playwright** - For E2E testing
+- **Test Cleanup System** - Automatic resource management for live testing
 
 Let's set up a comprehensive testing system:
 
