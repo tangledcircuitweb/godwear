@@ -298,7 +298,6 @@ export const databaseFixtures = {
     name: user.name,
     role: user.role,
     provider: user.provider,
-    provider_id: user.providerId || null,
     email_verified: user.emailVerified ? 1 : 0,
     created_at: user.createdAt,
     updated_at: user.updatedAt,
@@ -307,6 +306,7 @@ export const databaseFixtures = {
   sessionRecord: (userId: string) => ({
     id: `session-${userId}-${Date.now()}`,
     user_id: userId,
+    token_hash: `hash-${userId}-${Date.now()}`,
     expires_at: new Date(Date.now() + 3600000).toISOString(),
     created_at: new Date().toISOString(),
   }),

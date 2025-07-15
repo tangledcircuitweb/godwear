@@ -22,9 +22,15 @@ export class UserBuilder extends BaseDataBuilder<TestUser> {
   constructor() {
     super();
     this.data = {
+      id: `user-${Date.now()}`,
+      email: `test-${Date.now()}@godwear.com`,
+      name: `Test User ${Date.now()}`,
+      verified_email: true,
+      status: 'active',
       role: 'USER',
       provider: 'email',
-      emailVerified: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
   }
   
@@ -38,16 +44,28 @@ export class UserBuilder extends BaseDataBuilder<TestUser> {
     return this;
   }
   
-  withRole(role: 'USER' | 'ADMIN'): this {
+  withRole(role: 'USER' | 'ADMIN' | 'MODERATOR'): this {
     this.data.role = role;
     return this;
   }
   
-  withProvider(provider: 'email' | 'google'): this {
+  withProvider(provider: 'email' | 'google' | 'github'): this {
     this.data.provider = provider;
-    if (provider !== 'email') {
-      this.data.providerId = `${provider}-${Date.now()}`;
-    }
+    return this;
+  }
+  
+  withStatus(status: 'active' | 'inactive' | 'suspended'): this {
+    this.data.status = status;
+    return this;
+  }
+  
+  verified(): this {
+    this.data.verified_email = true;
+    return this;
+  }
+  
+  unverified(): this {
+    this.data.verified_email = false;
     return this;
   }
   

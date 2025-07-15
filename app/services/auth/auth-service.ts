@@ -36,6 +36,23 @@ export class AuthService implements BaseService {
   initialize(dependencies: ServiceDependencies): void {
     this.env = dependencies.env;
     this.logger = dependencies.logger;
+
+    // Validate required environment variables
+    if (!this.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is required for AuthService");
+    }
+
+    if (!this.env.GOOGLE_CLIENT_ID || !this.env.GOOGLE_CLIENT_SECRET) {
+      throw new Error("Google OAuth credentials (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET) are required for AuthService");
+    }
+
+    if (!this.env.DB) {
+      throw new Error("Database connection (DB) is required for AuthService");
+    }
+
+    if (!this.env.SESSION_STORE) {
+      throw new Error("Session store (SESSION_STORE) is required for AuthService");
+    }
   }
 
   /**
@@ -100,40 +117,75 @@ export class AuthService implements BaseService {
     params.set("grant_type", "authorization_code");
     params.set("redirect_uri", redirectUri);
 
-    const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: params.toString(),
-    });
+    try {
+      const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: params.toString(),
+      });
 
-    if (!tokenResponse.ok) {
-      const errorText = await tokenResponse.text();
-      this.logger?.error("Token exchange failed", new Error(errorText));
-      throw new Error(`Token exchange failed: ${tokenResponse.status}`);
+      if (!tokenResponse.ok) {
+        try {
+          const errorData = await tokenResponse.json();
+          this.logger?.error("Token exchange failed", new Error(JSON.stringify(errorData)));
+          if (errorData.error) {
+            throw new Error(errorData.error);
+          }
+          throw new Error(`Token exchange failed: ${tokenResponse.status}`);
+        } catch (parseError) {
+          // If it's already a thrown error from above, re-throw it
+          if (parseError instanceof Error && parseError.message !== 'Unexpected token') {
+            throw parseError;
+          }
+          // If JSON parsing fails, use generic error
+          this.logger?.error("Token exchange failed", new Error(`HTTP ${tokenResponse.status}`));
+          throw new Error(`Token exchange failed: ${tokenResponse.status}`);
+        }
+      }
+
+      return (await tokenResponse.json()) as GoogleTokenResponse;
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("Failed to fetch")) {
+        this.logger?.error("Network error during token exchange", error);
+        throw new Error("Network error during token exchange");
+      }
+      throw error;
     }
-
-    return (await tokenResponse.json()) as GoogleTokenResponse;
   }
 
   /**
    * Get user info from Google
    */
   async getUserInfo(accessToken: string): Promise<GoogleUserInfo> {
-    const userResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    try {
+      const userResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-    if (!userResponse.ok) {
-      const errorText = await userResponse.text();
-      this.logger?.error("User info fetch failed", new Error(errorText));
-      throw new Error(`User info fetch failed: ${userResponse.status}`);
+      if (!userResponse.ok) {
+        const errorText = await userResponse.text();
+        this.logger?.error("User info fetch failed", new Error(errorText));
+        throw new Error("Failed to fetch user info");
+      }
+
+      const responseText = await userResponse.text();
+      try {
+        return JSON.parse(responseText) as GoogleUserInfo;
+      } catch (parseError) {
+        this.logger?.error("Failed to parse user info JSON", parseError as Error);
+        throw new Error("Failed to parse user info response");
+      }
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("Failed to fetch")) {
+        this.logger?.error("Network error during user info fetch", error);
+        throw new Error("Failed to fetch user info");
+      }
+      throw error;
     }
-
-    return (await userResponse.json()) as GoogleUserInfo;
   }
 
   /**
@@ -159,7 +211,7 @@ export class AuthService implements BaseService {
 
     // Handle both JWTPayload and user objects
     let payload: JWTPayload;
-    if ('sub' in userOrPayload && 'iat' in userOrPayload) {
+    if ("sub" in userOrPayload && "iat" in userOrPayload) {
       // Already a JWTPayload
       payload = userOrPayload;
     } else {
@@ -169,11 +221,11 @@ export class AuthService implements BaseService {
         email: userOrPayload.email,
         name: userOrPayload.name,
         picture: userOrPayload.picture,
-        email_verified: userOrPayload.verified_email || userOrPayload.email_verified || false,
+        email_verified: userOrPayload.verified_email || userOrPayload.email_verified,
         iat: now,
-        exp: now + (24 * 60 * 60), // 24 hours
+        exp: now + 24 * 60 * 60, // 24 hours
         aud: "godwear-app",
-        iss: "godwear-auth-service"
+        iss: "godwear-auth-service",
       };
     }
 
@@ -181,10 +233,10 @@ export class AuthService implements BaseService {
     const securePayload = {
       ...payload,
       iat: payload.iat || now,
-      exp: payload.exp || (now + (24 * 60 * 60)), // 24 hours
+      exp: payload.exp || now + 24 * 60 * 60, // 24 hours
       aud: payload.aud || "godwear-app",
       iss: payload.iss || "godwear-auth-service",
-      jti: crypto.randomUUID() // Add unique JWT ID to ensure uniqueness
+      jti: crypto.randomUUID(), // Add unique JWT ID to ensure uniqueness
     };
 
     const encodedHeader = btoa(JSON.stringify(header));
@@ -210,7 +262,9 @@ export class AuthService implements BaseService {
   /**
    * Verify JWT token
    */
-  async verifyJWT(token: string): Promise<{valid: boolean, payload?: JWTPayload, error?: string}> {
+  async verifyJWT(
+    token: string
+  ): Promise<{ valid: boolean; payload?: JWTPayload; error?: string }> {
     try {
       if (!this.env.JWT_SECRET) {
         return { valid: false, error: "JWT secret not configured" };
@@ -265,47 +319,55 @@ export class AuthService implements BaseService {
   /**
    * Process OAuth callback and create/update user using repository pattern
    */
-  async processOAuthCallback(code: string, request: Request): Promise<AuthResult> {
-    // Exchange code for tokens
-    const tokens = await this.exchangeCodeForTokens(code, request);
+  async processOAuthCallback(code: string, request: Request): Promise<{ success: boolean; user?: AuthUser; tokens?: AuthTokens; error?: string }> {
+    try {
+      // Exchange code for tokens
+      const tokens = await this.exchangeCodeForTokens(code, request);
 
-    // Get user info
-    const userInfo = await this.getUserInfo(tokens.access_token);
+      // Get user info
+      const userInfo = await this.getUserInfo(tokens.access_token);
 
-    // Get repository registry from service dependencies
-    const repositories = this.getRepositories();
+      // Get repository registry from service dependencies
+      const repositories = this.getRepositories();
 
-    // Check if user exists in database using repository
-    const existingUser = await repositories.getUserRepository().findByEmail(userInfo.email);
-    const isNewUser = !existingUser;
+      // Check if user exists in database using repository
+      const existingUser = await repositories.getUserRepository().findByEmail(userInfo.email);
+      const isNewUser = !existingUser;
 
-    // Create or update user using repository
-    const user = isNewUser
-      ? await this.createUserWithRepository(userInfo, repositories)
-      : await this.updateUserWithRepository(existingUser.id, userInfo, repositories);
+      // Create or update user using repository
+      const user = isNewUser
+        ? await this.createUserWithRepository(userInfo, repositories)
+        : await this.updateUserWithRepository(existingUser.id, userInfo, repositories);
 
-    // Generate JWT
-    const jwtPayload: JWTPayload = {
-      sub: user.id,
-      iss: "godwear-auth",
-      aud: "godwear-app",
-      exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours
-      iat: Math.floor(Date.now() / 1000),
-      email: user.email,
-      name: user.name,
-    };
+      // Generate JWT
+      const jwtPayload: JWTPayload = {
+        sub: user.id,
+        iss: "godwear-auth",
+        aud: "godwear-app",
+        exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours
+        iat: Math.floor(Date.now() / 1000),
+        email: user.email,
+        name: user.name,
+      };
 
-    const accessToken = await this.generateJWT(jwtPayload);
+      const accessToken = await this.generateJWT(jwtPayload);
 
-    return {
-      user,
-      tokens: {
-        accessToken,
-        refreshToken: tokens.refresh_token,
-        expiresIn: 24 * 60 * 60, // 24 hours
-      },
-      isNewUser,
-    };
+      return {
+        success: true,
+        user,
+        tokens: {
+          accessToken,
+          refreshToken: tokens.refresh_token,
+          expiresIn: 24 * 60 * 60, // 24 hours
+        },
+      };
+    } catch (error) {
+      this.logger?.error("OAuth callback processing failed", error as Error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "OAuth callback processing failed",
+      };
+    }
   }
 
   /**
@@ -316,7 +378,10 @@ export class AuthService implements BaseService {
     // TODO: Implement proper dependency injection to avoid this pattern
     // For now, we'll create repositories directly
     const dbService = new D1DatabaseService();
-    dbService.initialize({ env: this.env });
+    dbService.initialize({ 
+      env: this.env,
+      logger: this.logger 
+    });
     return new RepositoryRegistry(dbService);
   }
 
@@ -325,29 +390,28 @@ export class AuthService implements BaseService {
    */
   private async createUserWithRepository(
     userInfo: GoogleUserInfo,
-    repositories: any
+    repositories: RepositoryRegistry
   ): Promise<AuthUser> {
     try {
-      const userId = crypto.randomUUID();
-      const now = new Date().toISOString();
-
-      const userRecord = await repositories.user.create({
-        id: userId,
+      const userData = {
         email: userInfo.email,
         name: userInfo.name,
         picture: userInfo.picture ?? null,
-        verified_email: userInfo.verified_email ?? false,
-        status: "active",
-        created_at: now,
-        updated_at: now,
-      });
+        email_verified: userInfo.verified_email ? 1 : 0,
+        provider: "google" as const,
+        provider_id: userInfo.id,
+        role: "USER" as const,
+        status: "active" as const,
+      };
+
+      const userRecord = await repositories.getUserRepository().create(userData);
 
       return {
         id: userRecord.id,
         email: userRecord.email,
         name: userRecord.name,
         picture: userRecord.picture ?? undefined,
-        verified_email: userRecord.verified_email ?? undefined,
+        verified_email: Boolean(userRecord.email_verified),
       };
     } catch (error) {
       this.logger?.error("User creation failed", error as Error);
@@ -361,25 +425,24 @@ export class AuthService implements BaseService {
   private async updateUserWithRepository(
     userId: string,
     userInfo: GoogleUserInfo,
-    repositories: any
+    repositories: RepositoryRegistry
   ): Promise<AuthUser> {
     try {
-      const now = new Date().toISOString();
-
-      const userRecord = await repositories.user.update(userId, {
+      const updateData = {
         name: userInfo.name,
         picture: userInfo.picture ?? null,
-        verified_email: userInfo.verified_email ?? false,
-        last_login_at: now,
-        updated_at: now,
-      });
+        email_verified: userInfo.verified_email ? 1 : 0,
+        last_login_at: new Date().toISOString(),
+      };
+
+      const userRecord = await repositories.getUserRepository().update(userId, updateData);
 
       return {
         id: userRecord.id,
         email: userRecord.email,
         name: userRecord.name,
         picture: userRecord.picture ?? undefined,
-        verified_email: userRecord.verified_email ?? undefined,
+        verified_email: Boolean(userRecord.email_verified),
       };
     } catch (error) {
       this.logger?.error("User update failed", error as Error);
@@ -417,27 +480,32 @@ export class AuthService implements BaseService {
    */
   async validateSession(token: string, sessionId?: string): Promise<boolean> {
     try {
-      // Verify JWT token
-      const result = await this.verifyJWT(token);
-      
-      if (!result.valid || !result.payload) {
+      // If no sessionId provided, just verify JWT token
+      if (!sessionId) {
+        const result = await this.verifyJWT(token);
+        return result.valid;
+      }
+
+      // Check KV store first for fast validation
+      const sessionData = await this.env.SESSION_STORE.get(sessionId);
+      if (!sessionData) {
         return false;
       }
 
-      // If session ID is provided, validate it in database
-      if (sessionId) {
-        const repositories = this.getRepositories();
-        const session = await repositories.getSessionRepository().findById(sessionId);
+      const session = JSON.parse(sessionData);
+      if (new Date(session.expiresAt) < new Date()) {
+        return false;
+      }
 
-        if (!session?.is_active || new Date(session.expires_at) < new Date()) {
-          return false;
-        }
+      // Verify JWT token
+      const result = await this.verifyJWT(token);
+      if (!(result.valid && result.payload)) {
+        return false;
+      }
 
-        // Verify token hash matches
-        const tokenHash = await this.hashToken(token);
-        if (session.token_hash !== tokenHash) {
-          return false;
-        }
+      // Verify the session belongs to the user in the JWT
+      if (result.payload.sub !== session.userId) {
+        return false;
       }
 
       return true;
@@ -459,7 +527,7 @@ export class AuthService implements BaseService {
 
       // Verify JWT token to get payload
       const result = await this.verifyJWT(token);
-      if (!result.valid || !result.payload) {
+      if (!(result.valid && result.payload)) {
         return null;
       }
 
@@ -482,7 +550,7 @@ export class AuthService implements BaseService {
       });
 
       // Remove from KV store
-      await this.env.GODWEAR_KV.delete(sessionId);
+      await this.env.SESSION_STORE.delete(sessionId);
     } catch (error) {
       this.logger?.error("Failed to invalidate session", error as Error);
       throw new Error("Failed to invalidate session");
@@ -541,33 +609,36 @@ export class AuthService implements BaseService {
     };
   }
 
-
-
-
-
   /**
    * Create secure session - Professional implementation
    */
   async createSession(user: AuthUser): Promise<string> {
     const sessionId = crypto.randomUUID();
-    const expiresAt = new Date(Date.now() + (24 * 60 * 60 * 1000)); // 24 hours
-    
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
     const repositories = this.getRepositories();
     await repositories.getSessionRepository().create({
+      id: sessionId,
       user_id: user.id,
       token_hash: await this.hashToken(sessionId),
       expires_at: expiresAt.toISOString(),
-      is_active: true,
+      is_active: 1, // Use 1 for SQLite boolean
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     });
 
     // Store session in KV for fast access
-    await this.env.GODWEAR_KV.put(sessionId, JSON.stringify({
-      userId: user.id,
-      email: user.email,
-      expiresAt: expiresAt.toISOString(),
-    }), {
-      expirationTtl: 24 * 60 * 60, // 24 hours
-    });
+    await this.env.SESSION_STORE.put(
+      sessionId,
+      JSON.stringify({
+        userId: user.id,
+        email: user.email,
+        expiresAt: expiresAt.toISOString(),
+      }),
+      {
+        expirationTtl: 24 * 60 * 60, // 24 hours
+      }
+    );
 
     return sessionId;
   }
@@ -578,7 +649,7 @@ export class AuthService implements BaseService {
   async isValidSession(sessionId: string): Promise<boolean> {
     try {
       // Check KV store first (fast)
-      const sessionData = await this.env.GODWEAR_KV.get(sessionId);
+      const sessionData = await this.env.SESSION_STORE.get(sessionId);
       if (!sessionData) {
         return false;
       }
@@ -599,8 +670,8 @@ export class AuthService implements BaseService {
    */
   async destroySession(sessionId: string): Promise<void> {
     // Remove from KV store
-    await this.env.GODWEAR_KV.delete(sessionId);
-    
+    await this.env.SESSION_STORE.delete(sessionId);
+
     // Mark as inactive in database
     const repositories = this.getRepositories();
     const session = await repositories.getSessionRepository().findById(sessionId);
@@ -614,7 +685,7 @@ export class AuthService implements BaseService {
   /**
    * Get health status - Professional implementation
    */
-  async getHealth(): Promise<ServiceHealthStatus & {service?: string, timestamp?: string}> {
+  async getHealth(): Promise<ServiceHealthStatus & { service?: string; timestamp?: string }> {
     if (!this.env) {
       return {
         status: "unhealthy",
@@ -640,7 +711,7 @@ export class AuthService implements BaseService {
 
     // Test KV store
     try {
-      await this.env.GODWEAR_KV.get("health-check");
+      await this.env.SESSION_STORE.get("health-check");
     } catch {
       checks.kvStore = false;
     }

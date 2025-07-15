@@ -199,7 +199,7 @@
       "attributePosition": "auto"
     },
     "globals": [
-      "CloudflareBindings", 
+      "CloudflareBindings",
       "Env",
       "Request",
       "Response",

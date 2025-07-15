@@ -52,13 +52,21 @@ export interface ServiceLogger {
  * Simple console logger implementation
  */
 export class ConsoleLogger implements ServiceLogger {
-  info(_message: string, _meta?: Record<string, unknown>): void {}
+  info(_message: string, _meta?: Record<string, unknown>): void {
+    // No-op console logger for production
+  }
 
-  warn(_message: string, _meta?: Record<string, unknown>): void {}
+  warn(_message: string, _meta?: Record<string, unknown>): void {
+    // No-op console logger for production
+  }
 
-  error(_message: string, _error?: Error, _meta?: Record<string, unknown>): void {}
+  error(_message: string, _error?: Error, _meta?: Record<string, unknown>): void {
+    // No-op console logger for production
+  }
 
-  debug(_message: string, _meta?: Record<string, unknown>): void {}
+  debug(_message: string, _meta?: Record<string, unknown>): void {
+    // No-op console logger for production
+  }
 }
 
 /**

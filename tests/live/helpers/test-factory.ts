@@ -143,15 +143,14 @@ export class TestFactory {
     // Insert into mock database
     const userRecord = fixtures.database.userRecord(testUser);
     await this.env.DB.prepare(`
-      INSERT INTO users (id, email, name, role, provider, provider_id, email_verified, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO users (id, email, name, role, provider, email_verified, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `).bind(
       userRecord.id,
       userRecord.email,
       userRecord.name,
       userRecord.role,
       userRecord.provider,
-      userRecord.provider_id,
       userRecord.email_verified,
       userRecord.created_at,
       userRecord.updated_at
@@ -182,11 +181,12 @@ export class TestFactory {
     const sessionRecord = fixtures.database.sessionRecord(user.id);
     
     await this.env.DB.prepare(`
-      INSERT INTO sessions (id, user_id, expires_at, created_at)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO sessions (id, user_id, token_hash, expires_at, created_at)
+      VALUES (?, ?, ?, ?, ?)
     `).bind(
       sessionRecord.id,
       sessionRecord.user_id,
+      sessionRecord.token_hash,
       sessionRecord.expires_at,
       sessionRecord.created_at
     ).run();
@@ -223,9 +223,17 @@ export class TestFactory {
     const kvStores = [this.env.CACHE, this.env.SESSION_STORE, this.env.USER_SESSIONS];
     
     for (const store of kvStores) {
-      const { keys } = await store.list();
-      for (const key of keys) {
-        await store.delete(key.name);
+      try {
+        const result = await store.list();
+        // Handle both real KV (returns {keys: []}) and mock KV (returns [] directly)
+        const keys = Array.isArray(result) ? result : (result?.keys || []);
+        if (Array.isArray(keys)) {
+          for (const key of keys) {
+            await store.delete(key.name);
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to cleanup KV store:', error);
       }
     }
     

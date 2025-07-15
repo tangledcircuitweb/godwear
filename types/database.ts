@@ -19,6 +19,8 @@ export interface UserRecord extends BaseRecord {
   verified_email: boolean;
   last_login_at?: string | null;
   status: "active" | "inactive" | "suspended";
+  role: "USER" | "ADMIN" | "MODERATOR";
+  provider: "email" | "google" | "github";
   metadata?: string | null; // JSON string
 }
 

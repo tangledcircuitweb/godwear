@@ -38,6 +38,22 @@ const googleOAuthHandlers = [
   }),
 ];
 
+// API endpoint handlers
+const apiHandlers = [
+  // Health check endpoint
+  http.get('http://localhost:8787/api/health', () => {
+    return HttpResponse.json({
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      services: {
+        database: 'healthy',
+        kv: 'healthy',
+        r2: 'healthy'
+      }
+    });
+  }),
+];
+
 // Generic error handlers for unhandled requests
 const fallbackHandlers = [
   // Catch-all for unhandled external API calls
@@ -61,11 +77,13 @@ const fallbackHandlers = [
 // Export all handlers
 export const handlers = [
   ...googleOAuthHandlers,
+  ...apiHandlers,
   ...fallbackHandlers,
 ];
 
 // Export individual handler groups for selective testing
 export {
   googleOAuthHandlers,
+  apiHandlers,
   fallbackHandlers,
 };

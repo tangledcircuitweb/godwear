@@ -183,8 +183,8 @@ export const MOCK_API_RESPONSES = {
 
 // Test file paths
 export const TEST_PATHS = {
-  FIXTURES: './src/test/fixtures',
-  MOCKS: './src/test/mocks',
+  FIXTURES: './tests/live/fixtures',
+  MOCKS: './tests/live/mocks',
   COVERAGE: './coverage',
   RESULTS: './test-results',
 } as const;

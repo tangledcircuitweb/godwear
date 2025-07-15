@@ -33,10 +33,14 @@
     "test:coverage": "vitest run --coverage",
     "test:coverage:ui": "vitest --coverage --ui",
     "test:watch": "vitest watch",
+    "cleanup-tests": "node scripts/cleanup-test-resources.js",
     "test:ci": "vitest run --reporter=junit --reporter=default --coverage",
     "test:debug": "vitest --inspect-brk --no-coverage",
     "test:all": "npm run test:unit && npm run test:integration && npm run test:contracts && npm run test:e2e",
     "test:quick": "vitest run --changed",
+    "test:live": "vitest --config vitest.live.config.ts",
+    "test:live:run": "vitest run --config vitest.live.config.ts",
+    "test:live:kv": "vitest run --config vitest.live.config.ts app/services/auth/auth-service.test.ts",
     "playwright:install": "npx playwright install --with-deps"
   },
   "dependencies": {
@@ -61,6 +65,7 @@
     "msw": "^2.10.4",
     "playwright": "^1.54.1",
     "supertest": "^7.1.3",
+    "tsx": "^4.20.3",
     "typescript": "^5.3.3",
     "vite": "^6.3.5",
     "vitest": "^3.2.4",

@@ -1,4 +1,4 @@
-import type { UserRecord } from "../../../../types/database";
+import type { BaseRecord, UserRecord } from "../../../../types/database";
 import { BaseRepository } from "./base-repository";
 
 /**
@@ -32,17 +32,17 @@ export class UserRepository extends BaseRepository<UserRecord> {
     }
 
     // Validate role
-    if (data.role && !['USER', 'ADMIN', 'MODERATOR'].includes(data.role)) {
+    if (data.role && !["USER", "ADMIN", "MODERATOR"].includes(data.role)) {
       throw new Error(`Invalid role: ${data.role}`);
     }
 
     // Validate provider
-    if (data.provider && !['email', 'google', 'github'].includes(data.provider)) {
+    if (data.provider && !["email", "google", "github"].includes(data.provider)) {
       throw new Error(`Invalid provider: ${data.provider}`);
     }
 
     // Validate status
-    if (data.status && !['active', 'inactive', 'suspended'].includes(data.status)) {
+    if (data.status && !["active", "inactive", "suspended"].includes(data.status)) {
       throw new Error(`Invalid status: ${data.status}`);
     }
   }
@@ -50,7 +50,7 @@ export class UserRepository extends BaseRepository<UserRecord> {
   /**
    * Create user with validation
    */
-  async create(data: Omit<UserRecord, keyof BaseRecord>): Promise<UserRecord> {
+  override async create(data: Omit<UserRecord, keyof BaseRecord>): Promise<UserRecord> {
     // Validate required fields
     if (!data.email) {
       throw new Error("Email is required");
@@ -74,7 +74,10 @@ export class UserRepository extends BaseRepository<UserRecord> {
   /**
    * Update user with validation
    */
-  async update(id: string, data: Partial<Omit<UserRecord, keyof BaseRecord>>): Promise<UserRecord> {
+  override async update(
+    id: string,
+    data: Partial<Omit<UserRecord, keyof BaseRecord>>
+  ): Promise<UserRecord> {
     // Validate data
     this.validateUserData(data);
 
@@ -93,12 +96,7 @@ export class UserRepository extends BaseRepository<UserRecord> {
    * Find user by email with validation
    */
   async findByEmail(email: string): Promise<UserRecord | null> {
-    // Validate email format
-    try {
-      this.validateEmail(email);
-    } catch (error) {
-      throw error; // Re-throw validation errors
-    }
+    this.validateEmail(email);
 
     return this.findOneBy("email", email);
   }

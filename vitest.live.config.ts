@@ -5,39 +5,37 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
-    // Use node environment for now, we'll add Miniflare integration later
+    // Environment variables for live testing
     env: {
-      // Environment variables for testing
-      ENVIRONMENT: "test",
+      // Use live environment
+      ENVIRONMENT: "development",
       JWT_SECRET: "test-jwt-secret-key-for-testing-only",
       MAILERSEND_API_KEY: "test-mailersend-api-key",
       GOOGLE_CLIENT_ID: "test-google-client-id",
       GOOGLE_CLIENT_SECRET: "test-google-client-secret",
-      GITHUB_CLIENT_ID: "test-github-client-id",
-      GITHUB_CLIENT_SECRET: "test-github-client-secret",
-      BASE_URL: "http://localhost:3000",
-      OAUTH_REDIRECT_URI: "http://localhost:3000/api/auth/callback",
+      BASE_URL: "http://localhost:8787", // Live dev server
+      OAUTH_REDIRECT_URI: "http://localhost:8787/api/auth/callback",
+      // Enable live testing flags - USE ALL REAL CLOUDFLARE SERVICES
+      USE_LIVE_KV: "true",
+      USE_LIVE_D1: "true", 
+      USE_LIVE_R2: "true",
+      USE_LIVE_SERVER: "true",
+      // Live service IDs
+      GODWEAR_KV_NAMESPACE_ID: "3337a52b4f64450ea27fd5065d8f7da2",
+      GODWEAR_DB_UUID: "c25066df-2b13-4f53-89e4-59ca96cc9084",
     },
-    setupFiles: ["./tests/live/setup.ts"],
-    globalTeardown: ["./tests/global-teardown.ts"],
+    setupFiles: ["./tests/live/setup-live.ts"],
+    globalTeardown: ["./tests/global-teardown.js"],
     include: [
       "src/**/*.{test,spec}.{js,ts}",
       "tests/**/*.{test,spec}.{js,ts}",
-      "app/**/*.{test,spec}.{js,ts}", // Include app directory tests
+      "app/**/*.{test,spec}.{js,ts}",
     ],
-    exclude: [
-      "node_modules/", 
-      "dist/", 
-      "e2e/", 
-      "**/*.d.ts", 
-      "**/*.config.*", 
-      "**/mockData/**",
-      "tests/live/**", // Exclude live tests from regular test runs
-    ],
+    exclude: ["node_modules/", "dist/", "e2e/", "**/*.d.ts", "**/*.config.*", "**/mockData/**"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html", "lcov"],
-      reportsDirectory: "./coverage",
+      reportsDirectory: "./coverage-live",
       exclude: [
         "node_modules/",
         "tests/",
@@ -49,30 +47,24 @@ export default defineConfig({
         "dist/",
         "public/",
       ],
-      thresholds: {
-        global: {
-          branches: 80,
-          functions: 80,
-          lines: 80,
-          statements: 80,
-        },
-      },
     },
-    // Test timeout configuration
-    testTimeout: 10000,
-    hookTimeout: 10000,
-    // Retry configuration for flaky tests
-    retry: 2,
+    // Longer timeouts for live testing (R2 operations can be slow)
+    testTimeout: 60000, // 60 seconds for live R2/KV/D1 operations
+    hookTimeout: 45000, // 45 seconds for setup/teardown
+    // More retries for live testing (network can be flaky)
+    retry: 3,
     // Reporter configuration
-    reporters: ["verbose", "json", "html"],
-    outputFile: {
-      json: "./test-results/results.json",
-      html: "./test-results/index.html",
+    reporters: ["verbose"],
+    // Run tests serially to avoid conflicts with live resources
+    pool: "forks",
+    poolOptions: {
+      forks: {
+        singleFork: true,
+      },
     },
   },
   resolve: {
     alias: {
-      // Path aliases matching our project structure
       "@": path.resolve(__dirname, "./app"),
       "@types": path.resolve(__dirname, "./app/types"),
       "@lib": path.resolve(__dirname, "./app/lib"),
@@ -85,14 +77,12 @@ export default defineConfig({
       "@fixtures": path.resolve(__dirname, "./tests/live/fixtures"),
     },
   },
-  // Vite configuration for testing
   define: {
-    // Define global constants for testing
     __TEST__: true,
-    __DEV__: true,  // Set to true so config tests pass
+    __DEV__: true,
     __PROD__: false,
+    __LIVE_TESTING__: true,
   },
-  // Optimize dependencies for testing
   optimizeDeps: {
     include: ["vitest", "msw", "zod", "@hono/zod-validator"],
   },

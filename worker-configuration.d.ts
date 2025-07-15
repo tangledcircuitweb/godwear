@@ -1642,21 +1642,18 @@ interface KVNamespace<Key extends string = string> {
   ): Promise<ExpectedValue | null>;
   get(key: Key, options?: KVNamespaceGetOptions<"arrayBuffer">): Promise<ArrayBuffer | null>;
   get(key: Key, options?: KVNamespaceGetOptions<"stream">): Promise<ReadableStream | null>;
-  get(key: Array<Key>, type: "text"): Promise<Map<string, string | null>>;
+  get(key: Key[], type: "text"): Promise<Map<string, string | null>>;
   get<ExpectedValue = unknown>(
-    key: Array<Key>,
+    key: Key[],
     type: "json"
   ): Promise<Map<string, ExpectedValue | null>>;
   get(
-    key: Array<Key>,
+    key: Key[],
     options?: Partial<KVNamespaceGetOptions<undefined>>
   ): Promise<Map<string, string | null>>;
-  get(
-    key: Array<Key>,
-    options?: KVNamespaceGetOptions<"text">
-  ): Promise<Map<string, string | null>>;
+  get(key: Key[], options?: KVNamespaceGetOptions<"text">): Promise<Map<string, string | null>>;
   get<ExpectedValue = unknown>(
-    key: Array<Key>,
+    key: Key[],
     options?: KVNamespaceGetOptions<"json">
   ): Promise<Map<string, ExpectedValue | null>>;
   list<Metadata = unknown>(
@@ -1704,23 +1701,23 @@ interface KVNamespace<Key extends string = string> {
     options: KVNamespaceGetOptions<"stream">
   ): Promise<KVNamespaceGetWithMetadataResult<ReadableStream, Metadata>>;
   getWithMetadata<Metadata = unknown>(
-    key: Array<Key>,
+    key: Key[],
     type: "text"
   ): Promise<Map<string, KVNamespaceGetWithMetadataResult<string, Metadata>>>;
   getWithMetadata<ExpectedValue = unknown, Metadata = unknown>(
-    key: Array<Key>,
+    key: Key[],
     type: "json"
   ): Promise<Map<string, KVNamespaceGetWithMetadataResult<ExpectedValue, Metadata>>>;
   getWithMetadata<Metadata = unknown>(
-    key: Array<Key>,
+    key: Key[],
     options?: Partial<KVNamespaceGetOptions<undefined>>
   ): Promise<Map<string, KVNamespaceGetWithMetadataResult<string, Metadata>>>;
   getWithMetadata<Metadata = unknown>(
-    key: Array<Key>,
+    key: Key[],
     options?: KVNamespaceGetOptions<"text">
   ): Promise<Map<string, KVNamespaceGetWithMetadataResult<string, Metadata>>>;
   getWithMetadata<ExpectedValue = unknown, Metadata = unknown>(
-    key: Array<Key>,
+    key: Key[],
     options?: KVNamespaceGetOptions<"json">
   ): Promise<Map<string, KVNamespaceGetWithMetadataResult<ExpectedValue, Metadata>>>;
   delete(key: Key): Promise<void>;
@@ -7474,9 +7471,9 @@ declare namespace Rpc {
       : T extends Set<infer V>
         ? Set<Stubify<V>>
         : T extends Array<infer V>
-          ? Array<Stubify<V>>
+          ? Stubify<V>[]
           : T extends ReadonlyArray<infer V>
-            ? ReadonlyArray<Stubify<V>>
+            ? readonly Stubify<V>[]
             : T extends BaseType
               ? T
               : T extends {
@@ -7497,9 +7494,9 @@ declare namespace Rpc {
       : T extends Set<infer V>
         ? Set<Unstubify<V>>
         : T extends Array<infer V>
-          ? Array<Unstubify<V>>
+          ? Unstubify<V>[]
           : T extends ReadonlyArray<infer V>
-            ? ReadonlyArray<Unstubify<V>>
+            ? readonly Unstubify<V>[]
             : T extends BaseType
               ? T
               : T extends {

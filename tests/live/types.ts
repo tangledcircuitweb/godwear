@@ -29,12 +29,15 @@ export interface TestUser {
   id: string;
   email: string;
   name: string;
-  role: 'USER' | 'ADMIN';
-  provider: 'google' | 'email';
-  providerId?: string;
-  emailVerified: boolean;
-  createdAt: string;
-  updatedAt: string;
+  picture?: string | null;
+  verified_email: boolean; // Match UserRecord field name
+  last_login_at?: string | null;
+  status: "active" | "inactive" | "suspended";
+  role: "USER" | "ADMIN" | "MODERATOR";
+  provider: "email" | "google" | "github";
+  metadata?: string | null;
+  created_at: string; // Match UserRecord field name
+  updated_at: string; // Match UserRecord field name
 }
 
 // Test JWT payload
