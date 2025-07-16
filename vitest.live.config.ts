@@ -25,7 +25,7 @@ export default defineConfig({
       GODWEAR_DB_UUID: "c25066df-2b13-4f53-89e4-59ca96cc9084",
     },
     setupFiles: ["./tests/live/setup-live.ts"],
-    globalTeardown: ["./tests/global-teardown.js"],
+    // globalTeardown: "./tests/global-teardown.js", // TODO: Fix vitest config issue
     include: [
       "src/**/*.{test,spec}.{js,ts}",
       "tests/**/*.{test,spec}.{js,ts}",

@@ -115,6 +115,12 @@ app.get("/", zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)), asyn
     // Process OAuth callback with enhanced error handling
     const authResult = await services.auth.processOAuthCallback(query.code, c.req.raw);
 
+    // Check if authentication was successful
+    if (!authResult.success || !authResult.user || !authResult.tokens) {
+      console.error("Authentication failed:", authResult.error || "Unknown error");
+      return c.redirect("/auth/error?error=auth_failed");
+    }
+
     // Create or update session in database
     const sessionExpiry = new Date();
     sessionExpiry.setHours(sessionExpiry.getHours() + 24); // 24 hours
@@ -160,7 +166,7 @@ app.get("/", zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)), asyn
       new_values: JSON.stringify({
         provider: "google",
         session_id: sessionId,
-        is_new_user: authResult.isNewUser,
+        is_new_user: authResult.isNewUser || false,
         ip_address: clientIp,
         user_agent: userAgent,
       }),
@@ -214,7 +220,7 @@ app.get("/", zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)), asyn
         name: authResult.user.name,
         ...(authResult.user.picture && { picture: authResult.user.picture }),
       },
-      isNewUser: authResult.isNewUser,
+      isNewUser: authResult.isNewUser || false,
     };
 
     const successResponse = createSuccessResponse(responseData, {

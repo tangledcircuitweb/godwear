@@ -19,9 +19,11 @@ export interface AuthTokens {
 }
 
 export interface AuthResult {
-  user: AuthUser;
-  tokens: AuthTokens;
-  isNewUser: boolean;
+  success: boolean;
+  user?: AuthUser;
+  tokens?: AuthTokens;
+  isNewUser?: boolean;
+  error?: string;
 }
 
 /**
@@ -128,9 +130,9 @@ export class AuthService implements BaseService {
 
       if (!tokenResponse.ok) {
         try {
-          const errorData = await tokenResponse.json();
+          const errorData = await tokenResponse.json() as any;
           this.logger?.error("Token exchange failed", new Error(JSON.stringify(errorData)));
-          if (errorData.error) {
+          if (errorData && typeof errorData === 'object' && errorData.error) {
             throw new Error(errorData.error);
           }
           throw new Error(`Token exchange failed: ${tokenResponse.status}`);
@@ -319,7 +321,7 @@ export class AuthService implements BaseService {
   /**
    * Process OAuth callback and create/update user using repository pattern
    */
-  async processOAuthCallback(code: string, request: Request): Promise<{ success: boolean; user?: AuthUser; tokens?: AuthTokens; error?: string }> {
+  async processOAuthCallback(code: string, request: Request): Promise<{ success: boolean; user?: AuthUser; tokens?: AuthTokens; isNewUser?: boolean; error?: string }> {
     try {
       // Exchange code for tokens
       const tokens = await this.exchangeCodeForTokens(code, request);
@@ -360,6 +362,7 @@ export class AuthService implements BaseService {
           refreshToken: tokens.refresh_token,
           expiresIn: 24 * 60 * 60, // 24 hours
         },
+        isNewUser,
       };
     } catch (error) {
       this.logger?.error("OAuth callback processing failed", error as Error);
@@ -397,7 +400,7 @@ export class AuthService implements BaseService {
         email: userInfo.email,
         name: userInfo.name,
         picture: userInfo.picture ?? null,
-        email_verified: userInfo.verified_email ? 1 : 0,
+        verified_email: userInfo.verified_email,
         provider: "google" as const,
         provider_id: userInfo.id,
         role: "USER" as const,
@@ -411,7 +414,7 @@ export class AuthService implements BaseService {
         email: userRecord.email,
         name: userRecord.name,
         picture: userRecord.picture ?? undefined,
-        verified_email: Boolean(userRecord.email_verified),
+        verified_email: userRecord.verified_email,
       };
     } catch (error) {
       this.logger?.error("User creation failed", error as Error);
@@ -442,7 +445,7 @@ export class AuthService implements BaseService {
         email: userRecord.email,
         name: userRecord.name,
         picture: userRecord.picture ?? undefined,
-        verified_email: Boolean(userRecord.email_verified),
+        verified_email: userRecord.verified_email,
       };
     } catch (error) {
       this.logger?.error("User update failed", error as Error);
@@ -617,19 +620,18 @@ export class AuthService implements BaseService {
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
     const repositories = this.getRepositories();
-    await repositories.getSessionRepository().create({
-      id: sessionId,
+    const sessionRecord = await repositories.getSessionRepository().create({
       user_id: user.id,
       token_hash: await this.hashToken(sessionId),
       expires_at: expiresAt.toISOString(),
-      is_active: 1, // Use 1 for SQLite boolean
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      is_active: true,
     });
+
+    const actualSessionId = sessionRecord.id;
 
     // Store session in KV for fast access
     await this.env.SESSION_STORE.put(
-      sessionId,
+      actualSessionId,
       JSON.stringify({
         userId: user.id,
         email: user.email,
@@ -640,7 +642,7 @@ export class AuthService implements BaseService {
       }
     );
 
-    return sessionId;
+    return actualSessionId;
   }
 
   /**

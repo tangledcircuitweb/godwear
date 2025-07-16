@@ -2,6 +2,12 @@
 export interface CloudflareBindings {
   GODWEAR_KV: KVNamespace;
   DB: D1Database;
+  // Session and Cache KV Namespaces
+  SESSION_STORE: KVNamespace;
+  CACHE: KVNamespace;
+  USER_SESSIONS: KVNamespace;
+  // R2 Storage
+  ASSETS: R2Bucket;
   // OAuth Configuration
   GOOGLE_CLIENT_ID?: string;
   GOOGLE_CLIENT_SECRET?: string;
