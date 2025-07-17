@@ -17,7 +17,7 @@ export default defineConfig({
       OAUTH_REDIRECT_URI: "http://localhost:8787/api/auth/callback",
       // Enable live testing flags - USE ALL REAL CLOUDFLARE SERVICES
       USE_LIVE_KV: "true",
-      USE_LIVE_D1: "true", 
+      USE_LIVE_D1: "true",
       USE_LIVE_R2: "true",
       USE_LIVE_SERVER: "true",
       // Live service IDs

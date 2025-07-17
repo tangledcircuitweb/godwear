@@ -26,11 +26,11 @@ export default defineConfig({
       "app/**/*.{test,spec}.{js,ts}", // Include app directory tests
     ],
     exclude: [
-      "node_modules/", 
-      "dist/", 
-      "e2e/", 
-      "**/*.d.ts", 
-      "**/*.config.*", 
+      "node_modules/",
+      "dist/",
+      "e2e/",
+      "**/*.d.ts",
+      "**/*.config.*",
       "**/mockData/**",
       "tests/live/**", // Exclude live tests from regular test runs
     ],
@@ -89,7 +89,7 @@ export default defineConfig({
   define: {
     // Define global constants for testing
     __TEST__: true,
-    __DEV__: true,  // Set to true so config tests pass
+    __DEV__: true, // Set to true so config tests pass
     __PROD__: false,
   },
   // Optimize dependencies for testing

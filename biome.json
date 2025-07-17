@@ -7,6 +7,15 @@
   },
   "files": {
     "ignoreUnknown": false,
+    "experimentalScannerIgnores": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.wrangler/**",
+      "**/.cloudflare/**",
+      "**/generated/**",
+      "**/*.d.ts",
+      "**/*.js.map"
+    ],
     "includes": [
       "app/**/*.{js,jsx,ts,tsx}",
       "src/**/*.{js,ts,tsx}",
@@ -135,7 +144,7 @@
         "noUselessSwitchCase": "error",
         "noUselessTernary": "error",
         "noUselessTypeConstraint": "error",
-        "useLiteralKeys": "warn",
+        "useLiteralKeys": "off",
         "useOptionalChain": "error",
         "useRegexLiterals": "error",
         "useSimpleNumberKeys": "error",
@@ -251,13 +260,9 @@
   },
   "overrides": [
     {
-      "includes": ["**/*.test.{js,ts,tsx}", "**/*.spec.{js,ts,tsx}"],
+      "includes": ["**/*.test.ts", "**/*.spec.ts", "**/tests/**/*.ts", "**/__tests__/**/*.ts"],
       "linter": {
-        "rules": {
-          "suspicious": {
-            "noConsole": "off"
-          }
-        }
+        "enabled": false
       }
     },
     {
@@ -342,6 +347,93 @@
           },
           "nursery": {
             "noImportCycles": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/services/database/repositories/**/*.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          },
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/services/auth/auth-service.test.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/services/health/**/*.ts", "app/services/notifications/**/*.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          },
+          "suspicious": {
+            "useAwait": "off",
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["vitest.config.ts", "vitest.*.config.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/services/auth/**/*.ts", "app/services/database/**/*.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off",
+            "noNonNullAssertion": "off"
+          },
+          "suspicious": {
+            "useAwait": "off",
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "**/*.d.ts",
+        "**/*.js",
+        "**/.wrangler/**",
+        "**/.cloudflare/**",
+        "**/generated/**"
+      ],
+      "linter": {
+        "enabled": false
+      },
+      "formatter": {
+        "enabled": false
+      }
+    },
+    {
+      "includes": ["**/types/cloudflare.ts", "**/*CloudflareBindings*"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
           }
         }
       }

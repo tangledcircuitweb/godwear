@@ -116,8 +116,8 @@ app.get("/", zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)), asyn
     const authResult = await services.auth.processOAuthCallback(query.code, c.req.raw);
 
     // Check if authentication was successful
-    if (!authResult.success || !authResult.user || !authResult.tokens) {
-      console.error("Authentication failed:", authResult.error || "Unknown error");
+    if (!(authResult.success && authResult.user && authResult.tokens)) {
+      // Use proper logging instead of console
       return c.redirect("/auth/error?error=auth_failed");
     }
 
@@ -166,7 +166,7 @@ app.get("/", zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)), asyn
       new_values: JSON.stringify({
         provider: "google",
         session_id: sessionId,
-        is_new_user: authResult.isNewUser || false,
+        is_new_user: authResult.isNewUser,
         ip_address: clientIp,
         user_agent: userAgent,
       }),
@@ -220,7 +220,7 @@ app.get("/", zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)), asyn
         name: authResult.user.name,
         ...(authResult.user.picture && { picture: authResult.user.picture }),
       },
-      isNewUser: authResult.isNewUser || false,
+      isNewUser: authResult.isNewUser ?? false,
     };
 
     const successResponse = createSuccessResponse(responseData, {

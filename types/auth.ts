@@ -2,8 +2,8 @@ export interface JWTPayload {
   sub: string; // User ID (standard JWT claim)
   email: string;
   name: string;
-  picture?: string;
-  email_verified?: boolean;
+  picture?: string | undefined;
+  email_verified?: boolean | undefined;
   iat: number;
   exp: number;
   iss: string; // Issuer

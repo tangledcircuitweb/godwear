@@ -34,6 +34,7 @@ export const GoogleUserInfoSchema = z.object({
   id: z.string(),
   email: z.string().email(),
   verified_email: z.boolean(),
+  verifiedEmail: z.boolean().optional().default(false),
   name: z.string(),
   given_name: z.string().optional(),
   family_name: z.string().optional(),

@@ -34,8 +34,8 @@ export interface ServiceHealthStatus {
  */
 export interface ServiceDependencies {
   env: CloudflareBindings;
-  request?: Request;
-  logger?: ServiceLogger;
+  request?: Request | undefined;
+  logger?: ServiceLogger | undefined;
 }
 
 /**

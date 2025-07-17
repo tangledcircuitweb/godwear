@@ -1,7 +1,7 @@
 import type { JWTHeader, JWTPayload } from "../../../types/auth";
 import type { CloudflareBindings } from "../../../types/cloudflare";
 import type { GoogleTokenResponse, GoogleUserInfo } from "../../../types/validation";
-import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../base";
+import type { BaseService, ServiceDependencies, ServiceHealthStatus, ServiceLogger } from "../base";
 import { D1DatabaseService, RepositoryRegistry } from "../database";
 
 export interface AuthUser {
@@ -9,7 +9,7 @@ export interface AuthUser {
   email: string;
   name: string;
   picture?: string | undefined;
-  verified_email?: boolean | undefined;
+  verifiedEmail?: boolean | undefined;
 }
 
 export interface AuthTokens {
@@ -33,7 +33,7 @@ export class AuthService implements BaseService {
   readonly serviceName = "auth-service";
 
   private env!: CloudflareBindings;
-  private logger?: any;
+  private logger?: ServiceLogger | undefined;
 
   initialize(dependencies: ServiceDependencies): void {
     this.env = dependencies.env;
@@ -44,8 +44,10 @@ export class AuthService implements BaseService {
       throw new Error("JWT_SECRET is required for AuthService");
     }
 
-    if (!this.env.GOOGLE_CLIENT_ID || !this.env.GOOGLE_CLIENT_SECRET) {
-      throw new Error("Google OAuth credentials (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET) are required for AuthService");
+    if (!(this.env.GOOGLE_CLIENT_ID && this.env.GOOGLE_CLIENT_SECRET)) {
+      throw new Error(
+        "Google OAuth credentials (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET) are required for AuthService"
+      );
     }
 
     if (!this.env.DB) {
@@ -130,15 +132,15 @@ export class AuthService implements BaseService {
 
       if (!tokenResponse.ok) {
         try {
-          const errorData = await tokenResponse.json() as any;
+          const errorData = (await tokenResponse.json()) as Record<string, unknown>;
           this.logger?.error("Token exchange failed", new Error(JSON.stringify(errorData)));
-          if (errorData && typeof errorData === 'object' && errorData.error) {
-            throw new Error(errorData.error);
+          if (errorData && typeof errorData === "object" && "error" in errorData) {
+            throw new Error(String(errorData["error"]));
           }
           throw new Error(`Token exchange failed: ${tokenResponse.status}`);
         } catch (parseError) {
           // If it's already a thrown error from above, re-throw it
-          if (parseError instanceof Error && parseError.message !== 'Unexpected token') {
+          if (parseError instanceof Error && parseError.message !== "Unexpected token") {
             throw parseError;
           }
           // If JSON parsing fails, use generic error
@@ -193,14 +195,14 @@ export class AuthService implements BaseService {
   /**
    * Alias for getUserInfo for backward compatibility
    */
-  async fetchGoogleUserInfo(accessToken: string): Promise<GoogleUserInfo> {
+  fetchGoogleUserInfo(accessToken: string): Promise<GoogleUserInfo> {
     return this.getUserInfo(accessToken);
   }
 
   /**
    * Generate JWT token with proper security claims
    */
-  async generateJWT(userOrPayload: JWTPayload | any): Promise<string> {
+  async generateJWT(userOrPayload: JWTPayload | Record<string, unknown>): Promise<string> {
     if (!this.env.JWT_SECRET) {
       throw new Error("JWT secret not configured");
     }
@@ -215,15 +217,16 @@ export class AuthService implements BaseService {
     let payload: JWTPayload;
     if ("sub" in userOrPayload && "iat" in userOrPayload) {
       // Already a JWTPayload
-      payload = userOrPayload;
+      payload = userOrPayload as JWTPayload;
     } else {
+      const user = userOrPayload as Record<string, unknown>;
       // Convert user object to JWTPayload
       payload = {
-        sub: userOrPayload.id,
-        email: userOrPayload.email,
-        name: userOrPayload.name,
-        picture: userOrPayload.picture,
-        email_verified: userOrPayload.verified_email || userOrPayload.email_verified,
+        sub: String(user["id"] || ""),
+        email: String(user["email"] || ""),
+        name: String(user["name"] || ""),
+        picture: user["picture"] ? String(user["picture"]) : undefined,
+        email_verified: Boolean(user["verified_email"] || user["email_verified"]),
         iat: now,
         exp: now + 24 * 60 * 60, // 24 hours
         aud: "godwear-app",
@@ -246,9 +249,14 @@ export class AuthService implements BaseService {
 
     const data = `${encodedHeader}.${encodedPayload}`;
     const encoder = new TextEncoder();
+
+    if (!this.env.JWT_SECRET) {
+      throw new Error("JWT secret not configured");
+    }
+
     const key = await crypto.subtle.importKey(
       "raw",
-      encoder.encode(this.env.JWT_SECRET!),
+      encoder.encode(this.env.JWT_SECRET),
       { name: "HMAC", hash: "SHA-256" },
       false,
       ["sign"]
@@ -277,20 +285,29 @@ export class AuthService implements BaseService {
         return { valid: false, error: "Invalid JWT format" };
       }
 
-      const encodedHeader = parts[0]!;
-      const encodedPayload = parts[1]!;
-      const encodedSignature = parts[2]!;
+      const encodedHeader = parts[0];
+      const encodedPayload = parts[1];
+      const encodedSignature = parts[2];
 
       // Verify signature
       const data = `${encodedHeader}.${encodedPayload}`;
       const encoder = new TextEncoder();
+
+      if (!this.env.JWT_SECRET) {
+        return { valid: false, error: "JWT secret not configured" };
+      }
+
       const key = await crypto.subtle.importKey(
         "raw",
-        encoder.encode(this.env.JWT_SECRET!),
+        encoder.encode(this.env.JWT_SECRET),
         { name: "HMAC", hash: "SHA-256" },
         false,
         ["verify"]
       );
+
+      if (!encodedSignature) {
+        return { valid: false, error: "Invalid JWT signature format" };
+      }
 
       const signature = new Uint8Array(
         atob(encodedSignature)
@@ -305,6 +322,10 @@ export class AuthService implements BaseService {
       }
 
       // Parse payload
+      if (!encodedPayload) {
+        return { valid: false, error: "Invalid JWT payload format" };
+      }
+
       const payload = JSON.parse(atob(encodedPayload)) as JWTPayload;
 
       // Check expiration
@@ -321,7 +342,16 @@ export class AuthService implements BaseService {
   /**
    * Process OAuth callback and create/update user using repository pattern
    */
-  async processOAuthCallback(code: string, request: Request): Promise<{ success: boolean; user?: AuthUser; tokens?: AuthTokens; isNewUser?: boolean; error?: string }> {
+  async processOAuthCallback(
+    code: string,
+    request: Request
+  ): Promise<{
+    success: boolean;
+    user?: AuthUser;
+    tokens?: AuthTokens;
+    isNewUser?: boolean;
+    error?: string;
+  }> {
     try {
       // Exchange code for tokens
       const tokens = await this.exchangeCodeForTokens(code, request);
@@ -381,9 +411,9 @@ export class AuthService implements BaseService {
     // TODO: Implement proper dependency injection to avoid this pattern
     // For now, we'll create repositories directly
     const dbService = new D1DatabaseService();
-    dbService.initialize({ 
+    dbService.initialize({
       env: this.env,
-      logger: this.logger 
+      logger: this.logger,
     });
     return new RepositoryRegistry(dbService);
   }
@@ -400,7 +430,7 @@ export class AuthService implements BaseService {
         email: userInfo.email,
         name: userInfo.name,
         picture: userInfo.picture ?? null,
-        verified_email: userInfo.verified_email,
+        verified_email: userInfo.verifiedEmail || userInfo.verified_email,
         provider: "google" as const,
         provider_id: userInfo.id,
         role: "USER" as const,
@@ -414,7 +444,7 @@ export class AuthService implements BaseService {
         email: userRecord.email,
         name: userRecord.name,
         picture: userRecord.picture ?? undefined,
-        verified_email: userRecord.verified_email,
+        verifiedEmail: userRecord.verified_email,
       };
     } catch (error) {
       this.logger?.error("User creation failed", error as Error);
@@ -445,7 +475,7 @@ export class AuthService implements BaseService {
         email: userRecord.email,
         name: userRecord.name,
         picture: userRecord.picture ?? undefined,
-        verified_email: userRecord.verified_email,
+        verifiedEmail: userRecord.verified_email,
       };
     } catch (error) {
       this.logger?.error("User update failed", error as Error);
@@ -470,7 +500,7 @@ export class AuthService implements BaseService {
         email: userRecord.email,
         name: userRecord.name,
         picture: userRecord.picture ?? undefined,
-        verified_email: userRecord.verified_email ?? undefined,
+        verifiedEmail: userRecord.verified_email ?? undefined,
       };
     } catch (error) {
       this.logger?.error("Failed to get user by ID", error as Error);
@@ -690,11 +720,12 @@ export class AuthService implements BaseService {
   async getHealth(): Promise<ServiceHealthStatus & { service?: string; timestamp?: string }> {
     if (!this.env) {
       return {
-        status: "unhealthy",
+        status: "unhealthy" as const,
         service: "auth-service",
         timestamp: new Date().toISOString(),
-        error: "Service not initialized",
-      } as any;
+        message: "Service not initialized",
+        details: { initialized: false },
+      };
     }
 
     const checks = {
@@ -721,11 +752,11 @@ export class AuthService implements BaseService {
     const isHealthy = Object.values(checks).every(Boolean);
 
     return {
-      status: isHealthy ? "healthy" : "unhealthy",
+      status: isHealthy ? ("healthy" as const) : ("unhealthy" as const),
       service: "auth-service",
       timestamp: new Date().toISOString(),
       message: isHealthy ? "All systems operational" : "Some systems are down",
       details: checks,
-    } as any;
+    };
   }
 }

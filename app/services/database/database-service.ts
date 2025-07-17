@@ -14,7 +14,7 @@ import type {
   TableSchema,
   WhereCondition,
 } from "../../../types/database";
-import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../base";
+import type { BaseService, ServiceDependencies, ServiceHealthStatus, ServiceLogger } from "../base";
 
 /**
  * Comprehensive database service for D1 integration
@@ -23,7 +23,7 @@ export class D1DatabaseService implements BaseService, DatabaseService {
   readonly serviceName = "database-service";
 
   private env!: CloudflareBindings;
-  private logger?: any;
+  private logger?: ServiceLogger | undefined;
   private config: DatabaseConfig;
   private metrics: DatabaseMetrics;
 
@@ -520,7 +520,7 @@ export class D1DatabaseService implements BaseService, DatabaseService {
   /**
    * Rollback a migration
    */
-  async rollbackMigration(_migrationId: string): Promise<void> {
+  rollbackMigration(_migrationId: string): Promise<void> {
     // Implementation would load and execute the down migration
     throw new Error("Migration rollback not implemented");
   }
@@ -538,7 +538,7 @@ export class D1DatabaseService implements BaseService, DatabaseService {
   /**
    * Get table schema
    */
-  async getTableSchema(_tableName: string): Promise<TableSchema> {
+  getTableSchema(_tableName: string): Promise<TableSchema> {
     // Implementation would query SQLite schema tables
     throw new Error("Schema introspection not implemented");
   }

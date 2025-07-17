@@ -10,14 +10,14 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
   /**
    * Find session by token hash
    */
-  async findByTokenHash(tokenHash: string): Promise<SessionRecord | null> {
+  findByTokenHash(tokenHash: string): Promise<SessionRecord | null> {
     return this.findOneBy("token_hash", tokenHash);
   }
 
   /**
    * Find active sessions for user
    */
-  async findActiveSessionsForUser(userId: string): Promise<SessionRecord[]> {
+  findActiveSessionsForUser(userId: string): Promise<SessionRecord[]> {
     return this.raw<SessionRecord>(
       `SELECT * FROM ${this.tableName}
        WHERE user_id = ? AND is_active = TRUE AND expires_at > datetime('now')
@@ -29,14 +29,14 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
   /**
    * Find all sessions for user (active and inactive)
    */
-  async findAllSessionsForUser(userId: string): Promise<SessionRecord[]> {
+  findAllSessionsForUser(userId: string): Promise<SessionRecord[]> {
     return this.findBy("user_id", userId);
   }
 
   /**
    * Create new session
    */
-  async createSession(data: {
+  createSession(data: {
     userId: string;
     tokenHash: string;
     expiresAt: string;
@@ -56,7 +56,7 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
   /**
    * Deactivate session
    */
-  async deactivateSession(sessionId: string): Promise<SessionRecord> {
+  deactivateSession(sessionId: string): Promise<SessionRecord> {
     return this.update(sessionId, { is_active: false });
   }
 
@@ -91,7 +91,7 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
   /**
    * Extend session expiration
    */
-  async extendSession(sessionId: string, newExpiresAt: string): Promise<SessionRecord> {
+  extendSession(sessionId: string, newExpiresAt: string): Promise<SessionRecord> {
     return this.update(sessionId, { expires_at: newExpiresAt });
   }
 
@@ -149,7 +149,7 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
   /**
    * Get recent sessions for user
    */
-  async getRecentSessionsForUser(userId: string, limit = 10): Promise<SessionRecord[]> {
+  getRecentSessionsForUser(userId: string, limit = 10): Promise<SessionRecord[]> {
     return this.raw<SessionRecord>(
       `SELECT * FROM ${this.tableName}
        WHERE user_id = ?
@@ -162,14 +162,14 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
   /**
    * Find sessions by IP address
    */
-  async findSessionsByIP(ipAddress: string): Promise<SessionRecord[]> {
+  findSessionsByIP(ipAddress: string): Promise<SessionRecord[]> {
     return this.findBy("ip_address", ipAddress);
   }
 
   /**
    * Get sessions created in date range
    */
-  async getSessionsInDateRange(startDate: string, endDate: string): Promise<SessionRecord[]> {
+  getSessionsInDateRange(startDate: string, endDate: string): Promise<SessionRecord[]> {
     return this.raw<SessionRecord>(
       `SELECT * FROM ${this.tableName}
        WHERE created_at BETWEEN ? AND ?
@@ -181,7 +181,7 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
   /**
    * Get concurrent sessions (sessions active at the same time)
    */
-  async getConcurrentSessions(userId: string): Promise<SessionRecord[]> {
+  getConcurrentSessions(userId: string): Promise<SessionRecord[]> {
     return this.raw<SessionRecord>(
       `SELECT s1.* FROM ${this.tableName} s1
        WHERE s1.user_id = ? 
@@ -237,7 +237,7 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
   /**
    * Get sessions that will expire soon
    */
-  async getExpiringSessions(hoursFromNow = 24): Promise<SessionRecord[]> {
+  getExpiringSessions(hoursFromNow = 24): Promise<SessionRecord[]> {
     const expiryTime = new Date();
     expiryTime.setHours(expiryTime.getHours() + hoursFromNow);
 

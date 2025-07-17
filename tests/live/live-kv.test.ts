@@ -1,8 +1,8 @@
-import { beforeEach, afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("Live KV Connectivity Test", () => {
   const testKeys: string[] = [];
-  
+
   beforeEach(async () => {
     // Skip if not in live testing mode
     if (!globalThis.testKV) {
@@ -17,7 +17,7 @@ describe("Live KV Connectivity Test", () => {
     if (!globalThis.testKV) {
       return;
     }
-    
+
     // Clean up all keys used in this test
     console.log(`🧹 Cleaning up ${testKeys.length} test keys from KV...`);
     for (const key of testKeys) {
@@ -106,12 +106,12 @@ describe("Live KV Connectivity Test", () => {
 
     const timestamp = Date.now();
     const prefix = `test_list_${timestamp}_`;
-    
+
     // Set up test data with unique keys
     const key1 = trackKey(`${prefix}1`);
     const key2 = trackKey(`${prefix}2`);
     const otherKey = trackKey(`other_key_${timestamp}`);
-    
+
     await globalThis.testKV.put(key1, "value1");
     await globalThis.testKV.put(key2, "value2");
     await globalThis.testKV.put(otherKey, "other_value");

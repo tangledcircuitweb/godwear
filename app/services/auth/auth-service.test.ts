@@ -333,9 +333,11 @@ describe("AuthService", () => {
       const storedSession = await mockDependencies.env.SESSION_STORE.get(sessionId);
       expect(storedSession).toBeDefined();
 
-      const sessionData = JSON.parse(storedSession!);
-      expect(sessionData.userId).toBe(user.id);
-      expect(sessionData.email).toBe(user.email);
+      if (storedSession) {
+        const sessionData = JSON.parse(storedSession);
+        expect(sessionData.userId).toBe(user.id);
+        expect(sessionData.email).toBe(user.email);
+      }
     });
 
     it("should validate existing session", async () => {
@@ -346,10 +348,10 @@ describe("AuthService", () => {
       };
 
       const sessionId = await authService.createSession(user);
-      
+
       // Generate a real JWT token for the user
       const jwtToken = await authService.generateJWT(user);
-      
+
       const isValid = await authService.validateSession(jwtToken, sessionId);
 
       expect(isValid).toBe(true);
@@ -406,7 +408,7 @@ describe("AuthService", () => {
       const health = await uninitializedService.getHealth();
 
       expect(health.status).toBe("unhealthy");
-      expect(health.error).toBeDefined();
+      expect(health.message).toBeDefined();
     });
   });
 

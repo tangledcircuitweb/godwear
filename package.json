@@ -19,7 +19,7 @@
     "check:unsafe": "biome check --write --unsafe .",
     "ci": "biome ci .",
     "type-check": "tsc --noEmit",
-    "test": "vitest",
+    "test": "npm run type-check && npm run check && vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:unit": "vitest run --dir src/test/unit --dir tests/unit",

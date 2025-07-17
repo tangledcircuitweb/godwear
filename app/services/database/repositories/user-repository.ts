@@ -95,7 +95,7 @@ export class UserRepository extends BaseRepository<UserRecord> {
   /**
    * Find user by email with validation
    */
-  async findByEmail(email: string): Promise<UserRecord | null> {
+  findByEmail(email: string): Promise<UserRecord | null> {
     this.validateEmail(email);
 
     return this.findOneBy("email", email);
@@ -104,21 +104,21 @@ export class UserRepository extends BaseRepository<UserRecord> {
   /**
    * Find users by status
    */
-  async findByStatus(status: UserRecord["status"]): Promise<UserRecord[]> {
+  findByStatus(status: UserRecord["status"]): Promise<UserRecord[]> {
     return this.findBy("status", status);
   }
 
   /**
    * Find active users
    */
-  async findActiveUsers(): Promise<UserRecord[]> {
+  findActiveUsers(): Promise<UserRecord[]> {
     return this.findByStatus("active");
   }
 
   /**
    * Update user last login
    */
-  async updateLastLogin(userId: string): Promise<UserRecord> {
+  updateLastLogin(userId: string): Promise<UserRecord> {
     return this.update(userId, {
       last_login_at: new Date().toISOString(),
     });
@@ -127,35 +127,35 @@ export class UserRepository extends BaseRepository<UserRecord> {
   /**
    * Update user status
    */
-  async updateStatus(userId: string, status: UserRecord["status"]): Promise<UserRecord> {
+  updateStatus(userId: string, status: UserRecord["status"]): Promise<UserRecord> {
     return this.update(userId, { status });
   }
 
   /**
    * Suspend user
    */
-  async suspendUser(userId: string): Promise<UserRecord> {
+  suspendUser(userId: string): Promise<UserRecord> {
     return this.updateStatus(userId, "suspended");
   }
 
   /**
    * Activate user
    */
-  async activateUser(userId: string): Promise<UserRecord> {
+  activateUser(userId: string): Promise<UserRecord> {
     return this.updateStatus(userId, "active");
   }
 
   /**
    * Deactivate user
    */
-  async deactivateUser(userId: string): Promise<UserRecord> {
+  deactivateUser(userId: string): Promise<UserRecord> {
     return this.updateStatus(userId, "inactive");
   }
 
   /**
    * Update user metadata
    */
-  async updateMetadata(userId: string, metadata: Record<string, unknown>): Promise<UserRecord> {
+  updateMetadata(userId: string, metadata: Record<string, unknown>): Promise<UserRecord> {
     return this.update(userId, {
       metadata: JSON.stringify(metadata),
     });
@@ -180,7 +180,7 @@ export class UserRepository extends BaseRepository<UserRecord> {
   /**
    * Search users by name or email
    */
-  async searchUsers(query: string, limit = 10): Promise<UserRecord[]> {
+  searchUsers(query: string, limit = 10): Promise<UserRecord[]> {
     const searchQuery = `%${query.toLowerCase()}%`;
     return this.raw<UserRecord>(
       `SELECT * FROM ${this.tableName} 
@@ -251,7 +251,7 @@ export class UserRepository extends BaseRepository<UserRecord> {
   /**
    * Get recently registered users
    */
-  async getRecentUsers(days = 7, limit = 10): Promise<UserRecord[]> {
+  getRecentUsers(days = 7, limit = 10): Promise<UserRecord[]> {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
@@ -267,7 +267,7 @@ export class UserRepository extends BaseRepository<UserRecord> {
   /**
    * Get users who haven't logged in recently
    */
-  async getInactiveUsers(days = 30, limit = 10): Promise<UserRecord[]> {
+  getInactiveUsers(days = 30, limit = 10): Promise<UserRecord[]> {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
