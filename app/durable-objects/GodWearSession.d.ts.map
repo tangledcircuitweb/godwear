@@ -1,0 +1,1 @@
+{"version":3,"file":"GodWearSession.d.ts","sourceRoot":"","sources":["GodWearSession.ts"],"names":[],"mappings":"AAAA,qBAAa,cAAc;IACzB,OAAO,CAAC,KAAK,CAAqB;IAClC,OAAO,CAAC,GAAG,CAAqB;gBAEpB,KAAK,EAAE,kBAAkB,EAAE,GAAG,EAAE,kBAAkB;IAK9D,KAAK,CAAC,OAAO,EAAE,OAAO,GAAG,OAAO,CAAC,QAAQ,CAAC;YAe5B,SAAS;YAcT,SAAS;YAaT,YAAY;CAa3B"}
