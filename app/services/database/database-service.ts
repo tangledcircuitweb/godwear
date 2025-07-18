@@ -1,20 +1,256 @@
+import { z } from "zod";
 import type { CloudflareBindings } from "../../../types/cloudflare";
-import type {
-  DatabaseConfig,
-  DatabaseConnection,
-  DatabaseMetrics,
-  DatabaseService,
-  DatabaseTransaction,
-  Migration,
-  MigrationRecord,
-  QueryOptions,
-  QueryParams,
-  QueryResult,
-  SingleQueryResult,
-  TableSchema,
-  WhereCondition,
-} from "../../../types/database";
 import type { BaseService, ServiceDependencies, ServiceHealthStatus, ServiceLogger } from "../base";
+
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
+
+/**
+ * Database config schema
+ */
+const DatabaseConfigSchema = z.object({
+  maxRetries: z.number().int().positive(),
+  retryDelay: z.number().int().positive(),
+  queryTimeout: z.number().int().positive(),
+  enableQueryLogging: z.boolean(),
+  enableMetrics: z.boolean(),
+});
+
+/**
+ * Database metrics schema
+ */
+const DatabaseMetricsSchema = z.object({
+  totalQueries: z.number().int().nonnegative(),
+  successfulQueries: z.number().int().nonnegative(),
+  failedQueries: z.number().int().nonnegative(),
+  averageQueryTime: z.number().nonnegative(),
+  slowQueries: z.number().int().nonnegative(),
+  connectionErrors: z.number().int().nonnegative(),
+  lastError: z.string().optional(),
+  lastErrorTime: z.string().optional(),
+});
+
+/**
+ * Query parameters schema
+ */
+const QueryParamsSchema = z.array(z.union([z.string(), z.number(), z.boolean(), z.null()]));
+
+/**
+ * Where condition schema
+ */
+const WhereConditionSchema = z.object({
+  column: z.string(),
+  operator: z.enum([
+    "=", "!=", ">", "<", ">=", "<=", "LIKE", "IN", "NOT IN", "IS NULL", "IS NOT NULL"
+  ]),
+  value: z.unknown().optional(),
+});
+
+/**
+ * Order by clause schema
+ */
+const OrderByClauseSchema = z.object({
+  column: z.string(),
+  direction: z.enum(["ASC", "DESC"]),
+});
+
+/**
+ * Join clause schema
+ */
+const JoinClauseSchema = z.object({
+  type: z.enum(["INNER", "LEFT", "RIGHT", "FULL"]),
+  table: z.string(),
+  on: z.string(),
+});
+
+/**
+ * Query options schema
+ */
+const QueryOptionsSchema = z.object({
+  where: z.array(WhereConditionSchema).optional(),
+  orderBy: z.array(OrderByClauseSchema).optional(),
+  limit: z.number().int().positive().optional(),
+  offset: z.number().int().nonnegative().optional(),
+  joins: z.array(JoinClauseSchema).optional(),
+});
+
+/**
+ * Query result schema
+ */
+const QueryResultSchema = z.object({
+  results: z.array(z.unknown()),
+  success: z.boolean(),
+  meta: z.object({
+    duration: z.number(),
+    rows_read: z.number(),
+    rows_written: z.number(),
+  }),
+});
+
+/**
+ * Single query result schema
+ */
+const SingleQueryResultSchema = z.object({
+  result: z.unknown().nullable(),
+  success: z.boolean(),
+  meta: z.object({
+    duration: z.number(),
+    rows_read: z.number(),
+    rows_written: z.number(),
+  }),
+});
+
+/**
+ * Table schema schema
+ */
+const TableSchemaSchema = z.object({
+  name: z.string(),
+  columns: z.array(z.object({
+    name: z.string(),
+    type: z.enum(["TEXT", "INTEGER", "REAL", "BLOB", "NULL"]),
+    nullable: z.boolean(),
+    default: z.union([z.string(), z.number(), z.null()]).optional(),
+    primary_key: z.boolean(),
+    unique: z.boolean(),
+  })),
+  indexes: z.array(z.object({
+    name: z.string(),
+    columns: z.array(z.string()),
+    unique: z.boolean(),
+  })),
+  constraints: z.array(z.object({
+    name: z.string(),
+    type: z.enum(["PRIMARY KEY", "FOREIGN KEY", "UNIQUE", "CHECK"]),
+    definition: z.string(),
+  })),
+});
+
+/**
+ * Migration schema
+ */
+const MigrationSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  up: z.string(),
+  down: z.string(),
+  created_at: z.string(),
+});
+
+/**
+ * Migration record schema
+ */
+const MigrationRecordSchema = z.object({
+  id: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
+  migration_id: z.string(),
+  name: z.string(),
+  executed_at: z.string(),
+  checksum: z.string(),
+});
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+type DatabaseConfig = z.infer<typeof DatabaseConfigSchema>;
+type DatabaseMetrics = z.infer<typeof DatabaseMetricsSchema>;
+type QueryParams = z.infer<typeof QueryParamsSchema>;
+type WhereCondition = z.infer<typeof WhereConditionSchema>;
+type OrderByClause = z.infer<typeof OrderByClauseSchema>;
+type JoinClause = z.infer<typeof JoinClauseSchema>;
+type QueryOptions = z.infer<typeof QueryOptionsSchema>;
+type QueryResult<T = unknown> = Omit<z.infer<typeof QueryResultSchema>, "results"> & { results: T[] };
+type SingleQueryResult<T = unknown> = Omit<z.infer<typeof SingleQueryResultSchema>, "result"> & { result: T | null };
+type TableSchema = z.infer<typeof TableSchemaSchema>;
+type Migration = z.infer<typeof MigrationSchema>;
+type MigrationRecord = z.infer<typeof MigrationRecordSchema>;
+
+/**
+ * Database transaction interface
+ */
+interface DatabaseTransaction {
+  prepare(query: string): D1PreparedStatement;
+  batch(statements: D1PreparedStatement[]): Promise<D1Result[]>;
+  exec(query: string): Promise<D1ExecResult>;
+}
+
+/**
+ * Database connection interface
+ */
+interface DatabaseConnection {
+  prepare(query: string): D1PreparedStatement;
+  batch(statements: D1PreparedStatement[]): Promise<D1Result[]>;
+  exec(query: string): Promise<D1ExecResult>;
+  dump(): Promise<ArrayBuffer>;
+}
+
+/**
+ * Database error classes
+ */
+class DatabaseError extends Error {
+  constructor(
+    message: string,
+    public readonly code?: string,
+    public readonly query?: string,
+    public readonly params?: QueryParams
+  ) {
+    super(message);
+    this.name = "DatabaseError";
+  }
+}
+
+class QueryTimeoutError extends DatabaseError {
+  constructor(query: string, timeout: number) {
+    super(`Query timed out after ${timeout}ms`, "QUERY_TIMEOUT", query);
+    this.name = "QueryTimeoutError";
+  }
+}
+
+class ConnectionError extends DatabaseError {
+  constructor(message: string) {
+    super(message, "CONNECTION_ERROR");
+    this.name = "ConnectionError";
+  }
+}
+
+class MigrationError extends DatabaseError {
+  constructor(message: string, public readonly migrationId?: string) {
+    super(message, "MIGRATION_ERROR");
+    this.name = "MigrationError";
+  }
+}
+
+/**
+ * Database service interface
+ */
+interface DatabaseService {
+  // Connection management
+  getConnection(): DatabaseConnection;
+  healthCheck(): Promise<ServiceHealthStatus>;
+  
+  // Query execution
+  query<T = unknown>(sql: string, params?: QueryParams): Promise<QueryResult<T>>;
+  queryOne<T = unknown>(sql: string, params?: QueryParams): Promise<SingleQueryResult<T>>;
+  execute(sql: string, params?: QueryParams): Promise<D1Result>;
+  
+  // Transaction support
+  transaction<T>(callback: (tx: DatabaseTransaction) => Promise<T>): Promise<T>;
+  
+  // Migration support
+  runMigrations(): Promise<void>;
+  rollbackMigration(migrationId: string): Promise<void>;
+  getMigrationStatus(): Promise<MigrationRecord[]>;
+  
+  // Schema management
+  getTableSchema(tableName: string): Promise<TableSchema>;
+  validateSchema(): Promise<boolean>;
+  
+  // Metrics and monitoring
+  getMetrics(): DatabaseMetrics;
+  resetMetrics(): void;
+}
 
 /**
  * Comprehensive database service for D1 integration
@@ -26,6 +262,20 @@ export class D1DatabaseService implements BaseService, DatabaseService {
   private logger?: ServiceLogger | undefined;
   private config: DatabaseConfig;
   private metrics: DatabaseMetrics;
+
+  // Export schemas for use in other files
+  static readonly DatabaseConfigSchema = DatabaseConfigSchema;
+  static readonly DatabaseMetricsSchema = DatabaseMetricsSchema;
+  static readonly QueryParamsSchema = QueryParamsSchema;
+  static readonly WhereConditionSchema = WhereConditionSchema;
+  static readonly OrderByClauseSchema = OrderByClauseSchema;
+  static readonly JoinClauseSchema = JoinClauseSchema;
+  static readonly QueryOptionsSchema = QueryOptionsSchema;
+  static readonly QueryResultSchema = QueryResultSchema;
+  static readonly SingleQueryResultSchema = SingleQueryResultSchema;
+  static readonly TableSchemaSchema = TableSchemaSchema;
+  static readonly MigrationSchema = MigrationSchema;
+  static readonly MigrationRecordSchema = MigrationRecordSchema;
 
   constructor(config?: Partial<DatabaseConfig>) {
     this.config = {

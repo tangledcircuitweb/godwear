@@ -1,5 +1,49 @@
-import type { AuditLogRecord } from "../../../../types/database";
+import { z } from "zod";
 import { BaseRepository } from "./base-repository";
+
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
+
+/**
+ * Base record schema (imported from BaseRepository)
+ */
+const BaseRecordSchema = BaseRepository.BaseRecordSchema;
+
+/**
+ * Audit log record schema
+ */
+const AuditLogRecordSchema = BaseRecordSchema.extend({
+  user_id: z.string().uuid().nullable().optional(),
+  action: z.string(),
+  resource_type: z.string(),
+  resource_id: z.string().nullable().optional(),
+  old_values: z.string().nullable().optional(), // JSON string
+  new_values: z.string().nullable().optional(), // JSON string
+  ip_address: z.string().nullable().optional(),
+  user_agent: z.string().nullable().optional(),
+});
+
+/**
+ * Audit log creation schema
+ */
+const AuditLogCreateSchema = z.object({
+  userId: z.string().uuid().optional(),
+  action: z.string(),
+  resourceType: z.string(),
+  resourceId: z.string().optional(),
+  oldValues: z.record(z.unknown()).optional(),
+  newValues: z.record(z.unknown()).optional(),
+  ipAddress: z.string().optional(),
+  userAgent: z.string().optional(),
+});
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+type AuditLogRecord = z.infer<typeof AuditLogRecordSchema>;
+type AuditLogCreate = z.infer<typeof AuditLogCreateSchema>;
 
 /**
  * Audit log repository for tracking system changes and user actions
@@ -7,28 +51,26 @@ import { BaseRepository } from "./base-repository";
 export class AuditLogRepository extends BaseRepository<AuditLogRecord> {
   protected tableName = "audit_logs";
 
+  // Export schemas for use in other files
+  static readonly AuditLogRecordSchema = AuditLogRecordSchema;
+  static readonly AuditLogCreateSchema = AuditLogCreateSchema;
+
   /**
    * Create audit log entry
    */
-  async createAuditLog(data: {
-    userId?: string;
-    action: string;
-    resourceType: string;
-    resourceId?: string;
-    oldValues?: Record<string, unknown>;
-    newValues?: Record<string, unknown>;
-    ipAddress?: string;
-    userAgent?: string;
-  }): Promise<AuditLogRecord> {
+  async createAuditLog(data: AuditLogCreate): Promise<AuditLogRecord> {
+    // Validate data using Zod schema
+    const validatedData = AuditLogCreateSchema.parse(data);
+    
     return this.create({
-      user_id: data.userId || null,
-      action: data.action,
-      resource_type: data.resourceType,
-      resource_id: data.resourceId || null,
-      old_values: data.oldValues ? JSON.stringify(data.oldValues) : null,
-      new_values: data.newValues ? JSON.stringify(data.newValues) : null,
-      ip_address: data.ipAddress || null,
-      user_agent: data.userAgent || null,
+      user_id: validatedData.userId || null,
+      action: validatedData.action,
+      resource_type: validatedData.resourceType,
+      resource_id: validatedData.resourceId || null,
+      old_values: validatedData.oldValues ? JSON.stringify(validatedData.oldValues) : null,
+      new_values: validatedData.newValues ? JSON.stringify(validatedData.newValues) : null,
+      ip_address: validatedData.ipAddress || null,
+      user_agent: validatedData.userAgent || null,
     });
   }
 

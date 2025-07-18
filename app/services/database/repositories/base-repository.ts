@@ -1,17 +1,103 @@
-import type {
-  BaseRecord,
-  DatabaseService,
-  QueryOptions,
-  QueryParams,
-  Repository,
-  WhereCondition,
-} from "../../../../types/database";
+import { z } from "zod";
+
+// Import the DatabaseService interface only
+import type { DatabaseService } from "../database-service";
+
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
+
+/**
+ * Base record schema
+ */
+const BaseRecordSchema = z.object({
+  id: z.string().uuid(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+/**
+ * Where condition schema
+ */
+const WhereConditionSchema = z.object({
+  column: z.string(),
+  operator: z.enum([
+    "=", "!=", ">", "<", ">=", "<=", "LIKE", "IN", "NOT IN", "IS NULL", "IS NOT NULL"
+  ]),
+  value: z.unknown().optional(),
+});
+
+/**
+ * Order by clause schema
+ */
+const OrderByClauseSchema = z.object({
+  column: z.string(),
+  direction: z.enum(["ASC", "DESC"]),
+});
+
+/**
+ * Join clause schema
+ */
+const JoinClauseSchema = z.object({
+  type: z.enum(["INNER", "LEFT", "RIGHT", "FULL"]),
+  table: z.string(),
+  on: z.string(),
+});
+
+/**
+ * Query options schema
+ */
+const QueryOptionsSchema = z.object({
+  where: z.array(WhereConditionSchema).optional(),
+  orderBy: z.array(OrderByClauseSchema).optional(),
+  limit: z.number().int().positive().optional(),
+  offset: z.number().int().nonnegative().optional(),
+  joins: z.array(JoinClauseSchema).optional(),
+});
+
+/**
+ * Query parameters schema
+ */
+const QueryParamsSchema = z.array(z.union([z.string(), z.number(), z.boolean(), z.null()]));
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+type BaseRecord = z.infer<typeof BaseRecordSchema>;
+type WhereCondition = z.infer<typeof WhereConditionSchema>;
+type OrderByClause = z.infer<typeof OrderByClauseSchema>;
+type JoinClause = z.infer<typeof JoinClauseSchema>;
+type QueryOptions = z.infer<typeof QueryOptionsSchema>;
+type QueryParams = z.infer<typeof QueryParamsSchema>;
+
+/**
+ * Repository interface for typed database operations
+ */
+interface Repository<T extends BaseRecord> {
+  findById(id: string): Promise<T | null>;
+  findMany(options?: QueryOptions): Promise<T[]>;
+  findOne(options: QueryOptions): Promise<T | null>;
+  create(data: Omit<T, keyof BaseRecord>): Promise<T>;
+  update(id: string, data: Partial<Omit<T, keyof BaseRecord>>): Promise<T>;
+  delete(id: string): Promise<boolean>;
+  count(options?: QueryOptions): Promise<number>;
+  exists(id: string): Promise<boolean>;
+}
 
 /**
  * Base repository implementation with common CRUD operations
  */
 export abstract class BaseRepository<T extends BaseRecord> implements Repository<T> {
   protected abstract tableName: string;
+
+  // Export schemas for use in other files
+  static readonly BaseRecordSchema = BaseRecordSchema;
+  static readonly WhereConditionSchema = WhereConditionSchema;
+  static readonly OrderByClauseSchema = OrderByClauseSchema;
+  static readonly JoinClauseSchema = JoinClauseSchema;
+  static readonly QueryOptionsSchema = QueryOptionsSchema;
+  static readonly QueryParamsSchema = QueryParamsSchema;
 
   constructor(protected db: DatabaseService) {}
 

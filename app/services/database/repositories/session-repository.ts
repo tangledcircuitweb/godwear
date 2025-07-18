@@ -1,11 +1,54 @@
-import type { SessionRecord } from "../../../../types/database";
+import { z } from "zod";
 import { BaseRepository } from "./base-repository";
+
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
+
+/**
+ * Base record schema (imported from BaseRepository)
+ */
+const BaseRecordSchema = BaseRepository.BaseRecordSchema;
+
+/**
+ * Session record schema
+ */
+const SessionRecordSchema = BaseRecordSchema.extend({
+  user_id: z.string().uuid(),
+  token_hash: z.string(),
+  expires_at: z.string().datetime(),
+  ip_address: z.string().nullable().optional(),
+  user_agent: z.string().nullable().optional(),
+  is_active: z.boolean(),
+});
+
+/**
+ * Session creation schema
+ */
+const SessionCreateSchema = z.object({
+  userId: z.string().uuid(),
+  tokenHash: z.string(),
+  expiresAt: z.string().datetime(),
+  ipAddress: z.string().optional(),
+  userAgent: z.string().optional(),
+});
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+type SessionRecord = z.infer<typeof SessionRecordSchema>;
+type SessionCreate = z.infer<typeof SessionCreateSchema>;
 
 /**
  * Session repository for user session management
  */
 export class SessionRepository extends BaseRepository<SessionRecord> {
   protected tableName = "sessions";
+
+  // Export schemas for use in other files
+  static readonly SessionRecordSchema = SessionRecordSchema;
+  static readonly SessionCreateSchema = SessionCreateSchema;
 
   /**
    * Find session by token hash
@@ -36,18 +79,15 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
   /**
    * Create new session
    */
-  createSession(data: {
-    userId: string;
-    tokenHash: string;
-    expiresAt: string;
-    ipAddress?: string;
-    userAgent?: string;
-  }): Promise<SessionRecord> {
+  createSession(data: SessionCreate): Promise<SessionRecord> {
+    // Validate data using Zod schema
+    const validatedData = SessionCreateSchema.parse(data);
+    
     return this.create({
-      user_id: data.userId,
-      token_hash: data.tokenHash,
-      expires_at: data.expiresAt,
-      ip_address: data.ipAddress || null,
+      user_id: validatedData.userId,
+      token_hash: validatedData.tokenHash,
+      expires_at: validatedData.expiresAt,
+      ip_address: validatedData.ipAddress || null,
       user_agent: data.userAgent || null,
       is_active: true,
     });

@@ -1,14 +1,167 @@
 import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
-import {
-  type AuthUserResponse,
-  createErrorResponse,
-  createSuccessResponse,
-  type ErrorCode,
-  ErrorCodes,
-} from "../../../../types/api-responses";
-import type { JWTPayload } from "../../../../types/auth";
+import { z } from "zod";
 import type { CloudflareBindings } from "../../../../types/cloudflare";
+
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
+
+/**
+ * JWT Payload schema
+ */
+const JWTPayloadSchema = z.object({
+  sub: z.string(), // User ID (standard JWT claim)
+  email: z.string(),
+  name: z.string(),
+  picture: z.string().optional(),
+  email_verified: z.boolean().optional(),
+  iat: z.number(),
+  exp: z.number(),
+  iss: z.string(), // Issuer
+  aud: z.string(), // Audience
+});
+
+/**
+ * Standard API Error schema
+ */
+const ApiErrorSchema = z.object({
+  code: z.string(),
+  message: z.string(),
+  details: z.record(z.unknown()).optional(),
+  timestamp: z.string(),
+  service: z.string().optional(),
+});
+
+/**
+ * Response metadata schema
+ */
+const ResponseMetaSchema = z.object({
+  timestamp: z.string().datetime().optional(),
+  requestId: z.string().optional(),
+  version: z.string().optional(),
+  service: z.string().optional(),
+});
+
+/**
+ * User data schema
+ */
+const UserDataSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  name: z.string(),
+  picture: z.string().optional(),
+  loginTime: z.string().optional(),
+  expiresAt: z.string().optional(),
+});
+
+/**
+ * Auth user response schema
+ */
+const AuthUserResponseSchema = z.object({
+  authenticated: z.boolean(),
+  user: UserDataSchema.optional(),
+});
+
+/**
+ * API Response schema - discriminated union for type safety
+ */
+const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z.discriminatedUnion("success", [
+    z.object({
+      success: z.literal(true),
+      data: dataSchema,
+      meta: ResponseMetaSchema.optional(),
+    }),
+    z.object({
+      success: z.literal(false),
+      error: ApiErrorSchema,
+    }),
+  ]);
+
+/**
+ * Health check response schema
+ */
+const HealthCheckResponseSchema = z.object({
+  status: z.enum(["healthy", "degraded", "unhealthy"]),
+  service: z.string(),
+  timestamp: z.string(),
+  version: z.string().optional(),
+  dependencies: z.record(z.enum(["healthy", "degraded", "unhealthy"])).optional(),
+});
+
+/**
+ * Error codes enum
+ */
+const ErrorCodes = {
+  SERVICE_CONFIGURATION_ERROR: "SERVICE_CONFIGURATION_ERROR",
+  SERVICE_UNAVAILABLE: "SERVICE_UNAVAILABLE",
+  AUTH_INVALID_TOKEN: "AUTH_INVALID_TOKEN",
+  AUTH_TOKEN_EXPIRED: "AUTH_TOKEN_EXPIRED",
+} as const;
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+type JWTPayload = z.infer<typeof JWTPayloadSchema>;
+type ApiError = z.infer<typeof ApiErrorSchema>;
+type ResponseMeta = z.infer<typeof ResponseMetaSchema>;
+type UserData = z.infer<typeof UserDataSchema>;
+type AuthUserResponse = z.infer<typeof AuthUserResponseSchema>;
+type ApiResponse<T> = z.infer<ReturnType<typeof ApiResponseSchema<z.ZodType<T>>>>;
+type HealthCheckResponse = z.infer<typeof HealthCheckResponseSchema>;
+type ErrorCode = typeof ErrorCodes[keyof typeof ErrorCodes];
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Create a successful API response
+ */
+function createSuccessResponse<T>(
+  data: T,
+  meta?: ResponseMeta
+): ApiResponse<T> {
+  return {
+    success: true,
+    data,
+    meta: {
+      timestamp: new Date().toISOString(),
+      ...meta,
+    },
+  };
+}
+
+/**
+ * Create an error API response
+ */
+function createErrorResponse(
+  code: ErrorCode,
+  message: string,
+  details?: Record<string, unknown>,
+  service?: string
+): ApiResponse<never> {
+  const error: ApiError = {
+    code,
+    message,
+    timestamp: new Date().toISOString(),
+  };
+
+  if (details) {
+    error.details = details;
+  }
+
+  if (service) {
+    error.service = service;
+  }
+
+  return {
+    success: false,
+    error,
+  };
+}
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -70,7 +223,7 @@ app.get("/", async (c) => {
     const payload = await verifyJWT(sessionToken, c.env.JWT_SECRET);
 
     // Get additional user data from KV if available
-    const userData: AuthUserResponse["user"] = {
+    const userData: UserData = {
       id: payload.sub, // Use sub instead of userId
       email: payload.email,
       name: payload.name,
@@ -157,7 +310,7 @@ app.get("/health", (c) => {
 
   const status = dependencies.jwt === "healthy" ? ("healthy" as const) : ("degraded" as const);
 
-  const healthResponse = {
+  const healthResponse: HealthCheckResponse = {
     status,
     service: "auth-user",
     timestamp: new Date().toISOString(),

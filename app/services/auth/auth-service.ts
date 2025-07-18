@@ -1,30 +1,105 @@
-import type { JWTHeader, JWTPayload } from "../../../types/auth";
+import { z } from "zod";
 import type { CloudflareBindings } from "../../../types/cloudflare";
-import type { GoogleTokenResponse, GoogleUserInfo } from "../../../types/validation";
 import type { BaseService, ServiceDependencies, ServiceHealthStatus, ServiceLogger } from "../base";
 import { D1DatabaseService, RepositoryRegistry } from "../database";
 
-export interface AuthUser {
-  id: string;
-  email: string;
-  name: string;
-  picture?: string | undefined;
-  verifiedEmail?: boolean | undefined;
-}
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
 
-export interface AuthTokens {
-  accessToken: string;
-  refreshToken?: string | undefined;
-  expiresIn?: number;
-}
+/**
+ * JWT Header schema
+ */
+const JWTHeaderSchema = z.object({
+  alg: z.string(),
+  typ: z.string(),
+});
 
-export interface AuthResult {
-  success: boolean;
-  user?: AuthUser;
-  tokens?: AuthTokens;
-  isNewUser?: boolean;
-  error?: string;
-}
+/**
+ * JWT Payload schema
+ */
+const JWTPayloadSchema = z.object({
+  sub: z.string(), // User ID (standard JWT claim)
+  email: z.string(),
+  name: z.string(),
+  picture: z.string().optional(),
+  email_verified: z.boolean().optional(),
+  iat: z.number(),
+  exp: z.number(),
+  iss: z.string(), // Issuer
+  aud: z.string(), // Audience
+  jti: z.string().optional(), // JWT ID for uniqueness
+});
+
+/**
+ * Auth User schema
+ */
+const AuthUserSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  name: z.string(),
+  picture: z.string().optional(),
+  verifiedEmail: z.boolean().optional(),
+});
+
+/**
+ * Auth Tokens schema
+ */
+const AuthTokensSchema = z.object({
+  accessToken: z.string(),
+  refreshToken: z.string().optional(),
+  expiresIn: z.number().optional(),
+});
+
+/**
+ * Auth Result schema
+ */
+const AuthResultSchema = z.object({
+  success: z.boolean(),
+  user: AuthUserSchema.optional(),
+  tokens: AuthTokensSchema.optional(),
+  isNewUser: z.boolean().optional(),
+  error: z.string().optional(),
+});
+
+/**
+ * Google Token Response schema
+ */
+const GoogleTokenResponseSchema = z.object({
+  access_token: z.string(),
+  expires_in: z.number(),
+  refresh_token: z.string().optional(),
+  scope: z.string(),
+  token_type: z.literal("Bearer"),
+  id_token: z.string(),
+});
+
+/**
+ * Google User Info schema
+ */
+const GoogleUserInfoSchema = z.object({
+  id: z.string(),
+  email: z.string().email(),
+  verified_email: z.boolean(),
+  verifiedEmail: z.boolean().optional().default(false),
+  name: z.string(),
+  given_name: z.string().optional(),
+  family_name: z.string().optional(),
+  picture: z.string().url().optional(),
+  locale: z.string().optional(),
+});
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+type JWTHeader = z.infer<typeof JWTHeaderSchema>;
+type JWTPayload = z.infer<typeof JWTPayloadSchema>;
+type AuthUser = z.infer<typeof AuthUserSchema>;
+type AuthTokens = z.infer<typeof AuthTokensSchema>;
+type AuthResult = z.infer<typeof AuthResultSchema>;
+type GoogleTokenResponse = z.infer<typeof GoogleTokenResponseSchema>;
+type GoogleUserInfo = z.infer<typeof GoogleUserInfoSchema>;
 
 /**
  * Authentication service handling OAuth flows and JWT operations
@@ -34,6 +109,24 @@ export class AuthService implements BaseService {
 
   private env!: CloudflareBindings;
   private logger?: ServiceLogger | undefined;
+
+  // Export types for use in other files
+  static readonly JWTPayloadSchema = JWTPayloadSchema;
+  static readonly JWTHeaderSchema = JWTHeaderSchema;
+  static readonly AuthUserSchema = AuthUserSchema;
+  static readonly AuthTokensSchema = AuthTokensSchema;
+  static readonly AuthResultSchema = AuthResultSchema;
+  static readonly GoogleTokenResponseSchema = GoogleTokenResponseSchema;
+  static readonly GoogleUserInfoSchema = GoogleUserInfoSchema;
+
+  // Export type aliases
+  export type JWTPayload = z.infer<typeof JWTPayloadSchema>;
+  export type JWTHeader = z.infer<typeof JWTHeaderSchema>;
+  export type AuthUser = z.infer<typeof AuthUserSchema>;
+  export type AuthTokens = z.infer<typeof AuthTokensSchema>;
+  export type AuthResult = z.infer<typeof AuthResultSchema>;
+  export type GoogleTokenResponse = z.infer<typeof GoogleTokenResponseSchema>;
+  export type GoogleUserInfo = z.infer<typeof GoogleUserInfoSchema>;
 
   initialize(dependencies: ServiceDependencies): void {
     this.env = dependencies.env;

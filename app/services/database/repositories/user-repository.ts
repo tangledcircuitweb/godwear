@@ -1,5 +1,36 @@
-import type { BaseRecord, UserRecord } from "../../../../types/database";
+import { z } from "zod";
 import { BaseRepository } from "./base-repository";
+
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
+
+/**
+ * Base record schema (imported from BaseRepository)
+ */
+const BaseRecordSchema = BaseRepository.BaseRecordSchema;
+
+/**
+ * User record schema
+ */
+const UserRecordSchema = BaseRecordSchema.extend({
+  email: z.string().email(),
+  name: z.string().min(1),
+  picture: z.string().nullable().optional(),
+  verified_email: z.boolean(),
+  last_login_at: z.string().datetime().nullable().optional(),
+  status: z.enum(["active", "inactive", "suspended"]),
+  role: z.enum(["USER", "ADMIN", "MODERATOR"]),
+  provider: z.enum(["email", "google", "github"]),
+  metadata: z.string().nullable().optional(), // JSON string
+});
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+type BaseRecord = z.infer<typeof BaseRecordSchema>;
+type UserRecord = z.infer<typeof UserRecordSchema>;
 
 /**
  * User repository with user-specific operations and validation
@@ -7,12 +38,15 @@ import { BaseRepository } from "./base-repository";
 export class UserRepository extends BaseRepository<UserRecord> {
   protected tableName = "users";
 
+  // Export schemas for use in other files
+  static readonly UserRecordSchema = UserRecordSchema;
+
   /**
    * Validate email format
    */
   private validateEmail(email: string): void {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    const result = z.string().email().safeParse(email);
+    if (!result.success) {
       throw new Error(`Invalid email format: ${email}`);
     }
   }
@@ -21,33 +55,24 @@ export class UserRepository extends BaseRepository<UserRecord> {
    * Validate user data before create/update
    */
   private validateUserData(data: Partial<UserRecord>): void {
-    // Validate email if provided
-    if (data.email) {
-      this.validateEmail(data.email);
-    }
+    // Create a partial schema for validation
+    const partialUserSchema = UserRecordSchema.omit({
+      id: true,
+      created_at: true,
+      updated_at: true,
+    }).partial();
 
-    // Validate required fields for create
-    if (data.name !== undefined && (!data.name || data.name.trim().length === 0)) {
-      throw new Error("Name is required");
-    }
-
-    // Validate role
-    if (data.role && !["USER", "ADMIN", "MODERATOR"].includes(data.role)) {
-      throw new Error(`Invalid role: ${data.role}`);
-    }
-
-    // Validate provider
-    if (data.provider && !["email", "google", "github"].includes(data.provider)) {
-      throw new Error(`Invalid provider: ${data.provider}`);
-    }
-
-    // Validate status
-    if (data.status && !["active", "inactive", "suspended"].includes(data.status)) {
-      throw new Error(`Invalid status: ${data.status}`);
+    const result = partialUserSchema.safeParse(data);
+    if (!result.success) {
+      const errors = result.error.format();
+      const errorMessage = Object.entries(errors)
+        .filter(([key]) => key !== '_errors')
+        .map(([key, value]) => `${key}: ${value._errors.join(', ')}`)
+        .join('; ');
+      
+      throw new Error(`Invalid user data: ${errorMessage}`);
     }
   }
-
-  /**
    * Create user with validation
    */
   override async create(data: Omit<UserRecord, keyof BaseRecord>): Promise<UserRecord> {

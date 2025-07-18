@@ -1,6 +1,7 @@
-import type { JWTPayload } from "../../../types/auth";
-import type { GoogleTokenResponse, GoogleUserInfo } from "../../../types/validation";
+import type { z } from "zod";
 import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../base";
+
+// Define the schemas in the implementation file and reference them here
 export interface AuthUser {
     id: string;
     email: string;
@@ -8,11 +9,13 @@ export interface AuthUser {
     picture?: string | undefined;
     verifiedEmail?: boolean | undefined;
 }
+
 export interface AuthTokens {
     accessToken: string;
     refreshToken?: string | undefined;
     expiresIn?: number;
 }
+
 export interface AuthResult {
     success: boolean;
     user?: AuthUser;
@@ -20,11 +23,46 @@ export interface AuthResult {
     isNewUser?: boolean;
     error?: string;
 }
+
+// JWT Payload type - will be defined with Zod in the implementation file
+export interface JWTPayload {
+    sub: string;
+    email: string;
+    name: string;
+    picture?: string;
+    email_verified?: boolean;
+    iat: number;
+    exp: number;
+    iss: string;
+    aud: string;
+}
+
+// Google API response types - will be defined with Zod in the implementation file
+export interface GoogleTokenResponse {
+    access_token: string;
+    expires_in: number;
+    refresh_token?: string;
+    scope: string;
+    token_type: string;
+    id_token: string;
+}
+
+export interface GoogleUserInfo {
+    id: string;
+    email: string;
+    verified_email: boolean;
+    name: string;
+    given_name?: string;
+    family_name?: string;
+    picture?: string;
+    locale?: string;
+}
+
 /**
  * Authentication service handling OAuth flows and JWT operations
  */
 export declare class AuthService implements BaseService {
-    readonly serviceName = "auth-service";
+    readonly serviceName: string;
     private env;
     private logger?;
     initialize(dependencies: ServiceDependencies): void;
@@ -127,4 +165,3 @@ export declare class AuthService implements BaseService {
         timestamp?: string;
     }>;
 }
-//# sourceMappingURL=auth-service.d.ts.map

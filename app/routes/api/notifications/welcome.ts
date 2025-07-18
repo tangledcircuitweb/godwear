@@ -1,16 +1,182 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import {
-  createErrorResponse,
-  createHealthResponse,
-  createSuccessResponse,
-  type EmailSuccessResponse,
-  type ErrorCode,
-  ErrorCodes,
-} from "../../../../types/api-responses";
+import { z } from "zod";
 import type { CloudflareBindings } from "../../../../types/cloudflare";
-import { WelcomeEmailRequestSchema } from "../../../../types/validation";
 import { createServiceRegistry } from "../../../services";
+
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
+
+/**
+ * Welcome email request schema
+ */
+const WelcomeEmailRequestSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  name: z.string().min(1, "Name is required").max(100, "Name too long"),
+});
+
+/**
+ * Standard API Error schema
+ */
+const ApiErrorSchema = z.object({
+  code: z.string(),
+  message: z.string(),
+  details: z.record(z.unknown()).optional(),
+  timestamp: z.string(),
+  service: z.string().optional(),
+});
+
+/**
+ * Response metadata schema
+ */
+const ResponseMetaSchema = z.object({
+  timestamp: z.string().datetime().optional(),
+  requestId: z.string().optional(),
+  version: z.string().optional(),
+  service: z.string().optional(),
+});
+
+/**
+ * Email success response schema
+ */
+const EmailSuccessResponseSchema = z.object({
+  recipient: z.string(),
+  service: z.string(),
+  status: z.enum(["sent", "queued", "delivered"]),
+  messageId: z.string().optional(),
+});
+
+/**
+ * Health check response schema
+ */
+const HealthCheckResponseSchema = z.object({
+  status: z.enum(["healthy", "degraded", "unhealthy"]),
+  service: z.string(),
+  timestamp: z.string(),
+  version: z.string().optional(),
+  dependencies: z.record(z.enum(["healthy", "degraded", "unhealthy"])).optional(),
+  uptime: z.number().optional(),
+});
+
+/**
+ * API Response schema - discriminated union for type safety
+ */
+const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z.discriminatedUnion("success", [
+    z.object({
+      success: z.literal(true),
+      data: dataSchema,
+      meta: ResponseMetaSchema.optional(),
+    }),
+    z.object({
+      success: z.literal(false),
+      error: ApiErrorSchema,
+    }),
+  ]);
+
+/**
+ * Error codes enum
+ */
+const ErrorCodes = {
+  SERVICE_CONFIGURATION_ERROR: "SERVICE_CONFIGURATION_ERROR",
+  SERVICE_RATE_LIMITED: "SERVICE_RATE_LIMITED",
+  SERVICE_QUOTA_EXCEEDED: "SERVICE_QUOTA_EXCEEDED",
+  INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR",
+} as const;
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+type WelcomeEmailRequest = z.infer<typeof WelcomeEmailRequestSchema>;
+type ApiError = z.infer<typeof ApiErrorSchema>;
+type ResponseMeta = z.infer<typeof ResponseMetaSchema>;
+type EmailSuccessResponse = z.infer<typeof EmailSuccessResponseSchema>;
+type HealthCheckResponse = z.infer<typeof HealthCheckResponseSchema>;
+type ApiResponse<T> = z.infer<ReturnType<typeof ApiResponseSchema<z.ZodType<T>>>>;
+type ErrorCode = typeof ErrorCodes[keyof typeof ErrorCodes];
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Create a successful API response
+ */
+function createSuccessResponse<T>(
+  data: T,
+  meta?: ResponseMeta
+): ApiResponse<T> {
+  return {
+    success: true,
+    data,
+    meta: {
+      timestamp: new Date().toISOString(),
+      ...meta,
+    },
+  };
+}
+
+/**
+ * Create an error API response
+ */
+function createErrorResponse(
+  code: ErrorCode,
+  message: string,
+  details?: Record<string, unknown>,
+  service?: string
+): ApiResponse<never> {
+  const error: ApiError = {
+    code,
+    message,
+    timestamp: new Date().toISOString(),
+  };
+
+  if (details) {
+    error.details = details;
+  }
+
+  if (service) {
+    error.service = service;
+  }
+
+  return {
+    success: false,
+    error,
+  };
+}
+
+/**
+ * Create a health check response
+ */
+function createHealthResponse(
+  service: string,
+  status: HealthCheckResponse["status"] = "healthy",
+  dependencies?: Record<string, "healthy" | "degraded" | "unhealthy">,
+  version?: string
+): HealthCheckResponse {
+  const response: HealthCheckResponse = {
+    status,
+    service,
+    timestamp: new Date().toISOString(),
+  };
+
+  if (version) {
+    response.version = version;
+  }
+
+  if (dependencies) {
+    response.dependencies = dependencies;
+  }
+
+  const uptime = process.uptime?.();
+  if (uptime !== undefined) {
+    response.uptime = uptime;
+  }
+
+  return response;
+}
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 

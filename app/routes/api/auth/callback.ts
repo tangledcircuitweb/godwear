@@ -1,16 +1,158 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
-import {
-  type AuthSuccessResponse,
-  createErrorResponse,
-  createSuccessResponse,
-  type ErrorCode,
-  ErrorCodes,
-} from "../../../../types/api-responses";
+import { z } from "zod";
 import type { CloudflareBindings } from "../../../../types/cloudflare";
-import { OAuthCallbackSchema, OAuthErrorSchema } from "../../../../types/validation";
 import { createServiceRegistry } from "../../../services";
+
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
+
+/**
+ * OAuth callback schema
+ */
+const OAuthCallbackSchema = z.object({
+  code: z.string().min(1, "Authorization code is required"),
+  state: z.string().min(1, "State parameter is required"),
+  scope: z.string().optional(),
+  authuser: z.string().optional(),
+  prompt: z.string().optional(),
+});
+
+/**
+ * OAuth error schema
+ */
+const OAuthErrorSchema = z.object({
+  error: z.string(),
+  error_description: z.string().optional(),
+  state: z.string().optional(),
+});
+
+/**
+ * Standard API Error schema
+ */
+const ApiErrorSchema = z.object({
+  code: z.string(),
+  message: z.string(),
+  details: z.record(z.unknown()).optional(),
+  timestamp: z.string(),
+  service: z.string().optional(),
+});
+
+/**
+ * Response metadata schema
+ */
+const ResponseMetaSchema = z.object({
+  timestamp: z.string().datetime().optional(),
+  requestId: z.string().optional(),
+  version: z.string().optional(),
+  service: z.string().optional(),
+});
+
+/**
+ * Auth success response schema
+ */
+const AuthSuccessResponseSchema = z.object({
+  user: z.object({
+    id: z.string(),
+    email: z.string(),
+    name: z.string(),
+    picture: z.string().optional(),
+  }),
+  isNewUser: z.boolean(),
+});
+
+/**
+ * API Response schema - discriminated union for type safety
+ */
+const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z.discriminatedUnion("success", [
+    z.object({
+      success: z.literal(true),
+      data: dataSchema,
+      meta: ResponseMetaSchema.optional(),
+    }),
+    z.object({
+      success: z.literal(false),
+      error: ApiErrorSchema,
+    }),
+  ]);
+
+/**
+ * Error codes enum
+ */
+const ErrorCodes = {
+  AUTH_OAUTH_ERROR: "AUTH_OAUTH_ERROR",
+  AUTH_INVALID_STATE: "AUTH_INVALID_STATE",
+  AUTH_TOKEN_EXCHANGE_FAILED: "AUTH_TOKEN_EXCHANGE_FAILED",
+  AUTH_USER_INFO_FAILED: "AUTH_USER_INFO_FAILED",
+  DATABASE_QUERY_ERROR: "DATABASE_QUERY_ERROR",
+  AUTH_TOKEN_EXPIRED: "AUTH_TOKEN_EXPIRED",
+  INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR",
+} as const;
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+type OAuthCallback = z.infer<typeof OAuthCallbackSchema>;
+type OAuthError = z.infer<typeof OAuthErrorSchema>;
+type ApiError = z.infer<typeof ApiErrorSchema>;
+type ResponseMeta = z.infer<typeof ResponseMetaSchema>;
+type AuthSuccessResponse = z.infer<typeof AuthSuccessResponseSchema>;
+type ApiResponse<T> = z.infer<ReturnType<typeof ApiResponseSchema<z.ZodType<T>>>>;
+type ErrorCode = typeof ErrorCodes[keyof typeof ErrorCodes];
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Create a successful API response
+ */
+function createSuccessResponse<T>(
+  data: T,
+  meta?: ResponseMeta
+): ApiResponse<T> {
+  return {
+    success: true,
+    data,
+    meta: {
+      timestamp: new Date().toISOString(),
+      ...meta,
+    },
+  };
+}
+
+/**
+ * Create an error API response
+ */
+function createErrorResponse(
+  code: ErrorCode,
+  message: string,
+  details?: Record<string, unknown>,
+  service?: string
+): ApiResponse<never> {
+  const error: ApiError = {
+    code,
+    message,
+    timestamp: new Date().toISOString(),
+  };
+
+  if (details) {
+    error.details = details;
+  }
+
+  if (service) {
+    error.service = service;
+  }
+
+  return {
+    success: false,
+    error,
+  };
+}
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
