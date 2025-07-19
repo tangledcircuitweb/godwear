@@ -279,7 +279,9 @@ app.get("/", zValidator("query", OAuthCallbackSchema.or(OAuthErrorSchema)), asyn
     const sessionId = sessionRecord.id;
 
     // Update user's last login timestamp
-    await services.repositories.getUserRepository().updateLastLogin(authResult.user.id);
+    await services.repositories.getUserRepository().update(authResult.user.id, {
+      last_login_at: new Date().toISOString()
+    });
 
     // Set secure JWT cookie with session tracking
     setCookie(c, "auth_token", authResult.tokens.accessToken, {

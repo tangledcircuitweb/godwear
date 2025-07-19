@@ -101,16 +101,16 @@ type AuthResult = z.infer<typeof AuthResultSchema>;
 type GoogleTokenResponse = z.infer<typeof GoogleTokenResponseSchema>;
 type GoogleUserInfo = z.infer<typeof GoogleUserInfoSchema>;
 
+// Export types for use in other files
+export type { JWTHeader, JWTPayload, AuthUser, AuthTokens, AuthResult, GoogleTokenResponse, GoogleUserInfo };
+
 /**
  * Authentication service handling OAuth flows and JWT operations
  */
 export class AuthService implements BaseService {
   readonly serviceName = "auth-service";
 
-  private env!: CloudflareBindings;
-  private logger?: ServiceLogger | undefined;
-
-  // Export types for use in other files
+  // Static schema exports
   static readonly JWTPayloadSchema = JWTPayloadSchema;
   static readonly JWTHeaderSchema = JWTHeaderSchema;
   static readonly AuthUserSchema = AuthUserSchema;
@@ -119,14 +119,8 @@ export class AuthService implements BaseService {
   static readonly GoogleTokenResponseSchema = GoogleTokenResponseSchema;
   static readonly GoogleUserInfoSchema = GoogleUserInfoSchema;
 
-  // Export type aliases
-  export type JWTPayload = z.infer<typeof JWTPayloadSchema>;
-  export type JWTHeader = z.infer<typeof JWTHeaderSchema>;
-  export type AuthUser = z.infer<typeof AuthUserSchema>;
-  export type AuthTokens = z.infer<typeof AuthTokensSchema>;
-  export type AuthResult = z.infer<typeof AuthResultSchema>;
-  export type GoogleTokenResponse = z.infer<typeof GoogleTokenResponseSchema>;
-  export type GoogleUserInfo = z.infer<typeof GoogleUserInfoSchema>;
+  private env!: CloudflareBindings;
+  private logger?: ServiceLogger | undefined;
 
   initialize(dependencies: ServiceDependencies): void {
     this.env = dependencies.env;

@@ -418,3 +418,7 @@ export class AuditLogRepository extends BaseRepository<AuditLogRecord> {
     };
   }
 }
+
+// Export types for use in other files
+export type { AuditLogRecord };
+

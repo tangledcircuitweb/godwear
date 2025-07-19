@@ -347,3 +347,7 @@ export abstract class BaseRepository<T extends BaseRecord> implements Repository
     return result.result;
   }
 }
+
+// Export types for use in other files
+export type { BaseRecord, WhereCondition, QueryOptions, Repository, QueryParams };
+

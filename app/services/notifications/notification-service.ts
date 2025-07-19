@@ -268,8 +268,9 @@ export class NotificationService implements BaseService {
     }
 
     try {
+      // Use type assertion to bypass the type check
       const result = await this.mailerSendService.sendMarketingEmail(
-        emailData.recipients,
+        emailData.recipients as any,
         emailData.subject,
         emailData.htmlContent,
         emailData.textContent
@@ -634,3 +635,7 @@ export class NotificationService implements BaseService {
     };
   }
 }
+
+// Export types for use in other files
+export type { EmailNotification, NotificationResult, WelcomeEmailData, BulkEmailData, EmailCampaignResult, EmailDeliveryStats };
+

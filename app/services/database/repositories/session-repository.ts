@@ -291,3 +291,7 @@ export class SessionRepository extends BaseRepository<SessionRecord> {
     );
   }
 }
+
+// Export types for use in other files
+export type { SessionRecord };
+

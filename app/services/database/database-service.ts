@@ -895,3 +895,7 @@ export class D1DatabaseService implements BaseService, DatabaseService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
+
+// Export types for use in other files
+export type { DatabaseConfig, DatabaseMetrics, QueryParams, QueryResult, SingleQueryResult, TableSchema, MigrationRecord, DatabaseTransaction, DatabaseConnection, DatabaseService };
+

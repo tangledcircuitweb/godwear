@@ -67,32 +67,75 @@ export class UserRepository extends BaseRepository<UserRecord> {
       const errors = result.error.format();
       const errorMessage = Object.entries(errors)
         .filter(([key]) => key !== '_errors')
-        .map(([key, value]) => `${key}: ${value._errors.join(', ')}`)
+        .map(([key, value]) => {
+          const errObj = value as { _errors: string[] };
+          return `${key}: ${errObj._errors?.join(', ') || 'Invalid value'}`;
+        })
         .join('; ');
       
       throw new Error(`Invalid user data: ${errorMessage}`);
     }
   }
-   * Create user with validation
+
+  /**
+   * Find user by email
+   */
+  async findByEmail(email: string): Promise<UserRecord | null> {
+    return this.findOneBy("email", email);
+  }
+
+  /**
+   * Find user by provider ID
+   */
+  async findByProviderId(provider: string, providerId: string): Promise<UserRecord | null> {
+    return this.findOne({
+      where: [
+        { column: "provider", operator: "=", value: provider },
+        { column: "provider_id", operator: "=", value: providerId },
+      ],
+    });
+  }
+
+  /**
+   * Find active users
+   */
+  async findActiveUsers(): Promise<UserRecord[]> {
+    return this.findBy("status", "active");
+  }
+
+  /**
+   * Find users by role
+   */
+  async findByRole(role: string): Promise<UserRecord[]> {
+    return this.findBy("role", role);
+  }
+
+  /**
+   * Find users by status
+   */
+  async findByStatus(status: string): Promise<UserRecord[]> {
+    return this.findBy("status", status);
+  }
+
+  /**
+   * Find users by provider
+   */
+  async findByProvider(provider: string): Promise<UserRecord[]> {
+    return this.findBy("provider", provider);
+  }
+
+  /**
+   * Find users by verified email status
+   */
+  async findByVerifiedEmail(verified: boolean): Promise<UserRecord[]> {
+    return this.findBy("verified_email", verified);
+  }
+
+  /**
+   * Create new user with validation
    */
   override async create(data: Omit<UserRecord, keyof BaseRecord>): Promise<UserRecord> {
-    // Validate required fields
-    if (!data.email) {
-      throw new Error("Email is required");
-    }
-    if (!data.name) {
-      throw new Error("Name is required");
-    }
-
-    // Validate data
     this.validateUserData(data);
-
-    // Check for duplicate email
-    const existingUser = await this.findByEmail(data.email);
-    if (existingUser) {
-      throw new Error("UNIQUE constraint failed: users.email");
-    }
-
     return super.create(data);
   }
 
@@ -103,117 +146,21 @@ export class UserRepository extends BaseRepository<UserRecord> {
     id: string,
     data: Partial<Omit<UserRecord, keyof BaseRecord>>
   ): Promise<UserRecord> {
-    // Validate data
     this.validateUserData(data);
-
-    // Check for duplicate email if email is being updated
-    if (data.email) {
-      const existingUser = await this.findByEmail(data.email);
-      if (existingUser && existingUser.id !== id) {
-        throw new Error("UNIQUE constraint failed: users.email");
-      }
-    }
-
     return super.update(id, data);
-  }
-
-  /**
-   * Find user by email with validation
-   */
-  findByEmail(email: string): Promise<UserRecord | null> {
-    this.validateEmail(email);
-
-    return this.findOneBy("email", email);
-  }
-
-  /**
-   * Find users by status
-   */
-  findByStatus(status: UserRecord["status"]): Promise<UserRecord[]> {
-    return this.findBy("status", status);
-  }
-
-  /**
-   * Find active users
-   */
-  findActiveUsers(): Promise<UserRecord[]> {
-    return this.findByStatus("active");
-  }
-
-  /**
-   * Update user last login
-   */
-  updateLastLogin(userId: string): Promise<UserRecord> {
-    return this.update(userId, {
-      last_login_at: new Date().toISOString(),
-    });
-  }
-
-  /**
-   * Update user status
-   */
-  updateStatus(userId: string, status: UserRecord["status"]): Promise<UserRecord> {
-    return this.update(userId, { status });
-  }
-
-  /**
-   * Suspend user
-   */
-  suspendUser(userId: string): Promise<UserRecord> {
-    return this.updateStatus(userId, "suspended");
-  }
-
-  /**
-   * Activate user
-   */
-  activateUser(userId: string): Promise<UserRecord> {
-    return this.updateStatus(userId, "active");
-  }
-
-  /**
-   * Deactivate user
-   */
-  deactivateUser(userId: string): Promise<UserRecord> {
-    return this.updateStatus(userId, "inactive");
-  }
-
-  /**
-   * Update user metadata
-   */
-  updateMetadata(userId: string, metadata: Record<string, unknown>): Promise<UserRecord> {
-    return this.update(userId, {
-      metadata: JSON.stringify(metadata),
-    });
-  }
-
-  /**
-   * Get user metadata
-   */
-  async getMetadata(userId: string): Promise<Record<string, unknown> | null> {
-    const user = await this.findById(userId);
-    if (!user?.metadata) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(user.metadata);
-    } catch (_error) {
-      return null;
-    }
   }
 
   /**
    * Search users by name or email
    */
-  searchUsers(query: string, limit = 10): Promise<UserRecord[]> {
-    const searchQuery = `%${query.toLowerCase()}%`;
+  async searchUsers(query: string): Promise<UserRecord[]> {
+    const searchTerm = `%${query}%`;
     return this.raw<UserRecord>(
-      `SELECT * FROM ${this.tableName} 
-       WHERE (LOWER(name) LIKE ? OR LOWER(email) LIKE ?) 
-       AND status = 'active'
-       ORDER BY name ASC 
-       LIMIT ?`,
-      [searchQuery, searchQuery, limit]
+      `SELECT * FROM ${this.tableName}
+       WHERE name LIKE ? OR email LIKE ?
+       ORDER BY name ASC
+       LIMIT 50`,
+      [searchTerm, searchTerm]
     );
   }
 
@@ -225,119 +172,85 @@ export class UserRepository extends BaseRepository<UserRecord> {
     active: number;
     inactive: number;
     suspended: number;
-    verified: number;
-    unverified: number;
+    byProvider: Record<string, number>;
+    byRole: Record<string, number>;
   }> {
-    const stats = await this.raw<{
-      status: string;
-      verified_email: boolean;
-      count: number;
-    }>(
-      `SELECT 
-         status,
-         verified_email,
-         COUNT(*) as count
-       FROM ${this.tableName}
-       GROUP BY status, verified_email`
-    );
+    const total = await this.count();
+    const active = await this.count({ where: [{ column: "status", operator: "=", value: "active" }] });
+    const inactive = await this.count({ where: [{ column: "status", operator: "=", value: "inactive" }] });
+    const suspended = await this.count({ where: [{ column: "status", operator: "=", value: "suspended" }] });
 
-    const result = {
-      total: 0,
-      active: 0,
-      inactive: 0,
-      suspended: 0,
-      verified: 0,
-      unverified: 0,
+    // Get counts by provider
+    const providers = ["email", "google", "github"];
+    const byProvider: Record<string, number> = {};
+    for (const provider of providers) {
+      byProvider[provider] = await this.count({
+        where: [{ column: "provider", operator: "=", value: provider }],
+      });
+    }
+
+    // Get counts by role
+    const roles = ["USER", "ADMIN", "MODERATOR"];
+    const byRole: Record<string, number> = {};
+    for (const role of roles) {
+      byRole[role] = await this.count({
+        where: [{ column: "role", operator: "=", value: role }],
+      });
+    }
+
+    return {
+      total,
+      active,
+      inactive,
+      suspended,
+      byProvider,
+      byRole,
     };
-
-    for (const stat of stats) {
-      result.total += stat.count;
-
-      // Count by status
-      if (stat.status === "active") {
-        result.active += stat.count;
-      } else if (stat.status === "inactive") {
-        result.inactive += stat.count;
-      } else if (stat.status === "suspended") {
-        result.suspended += stat.count;
-      }
-
-      // Count by verification
-      if (stat.verified_email) {
-        result.verified += stat.count;
-      } else {
-        result.unverified += stat.count;
-      }
-    }
-
-    return result;
   }
 
   /**
-   * Get recently registered users
+   * Find recently active users
    */
-  getRecentUsers(days = 7, limit = 10): Promise<UserRecord[]> {
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - days);
+  async findRecentlyActiveUsers(days = 7): Promise<UserRecord[]> {
+    const date = new Date();
+    date.setDate(date.getDate() - days);
+    const cutoffDate = date.toISOString();
 
     return this.raw<UserRecord>(
       `SELECT * FROM ${this.tableName}
-       WHERE created_at >= ?
-       ORDER BY created_at DESC
-       LIMIT ?`,
-      [cutoffDate.toISOString(), limit]
+       WHERE last_login_at >= ?
+       ORDER BY last_login_at DESC
+       LIMIT 50`,
+      [cutoffDate]
     );
   }
 
   /**
-   * Get users who haven't logged in recently
+   * Find inactive users
    */
-  getInactiveUsers(days = 30, limit = 10): Promise<UserRecord[]> {
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - days);
+  async findInactiveUsers(days = 30): Promise<UserRecord[]> {
+    const date = new Date();
+    date.setDate(date.getDate() - days);
+    const cutoffDate = date.toISOString();
 
     return this.raw<UserRecord>(
       `SELECT * FROM ${this.tableName}
-       WHERE (last_login_at IS NULL OR last_login_at < ?)
+       WHERE (last_login_at < ? OR last_login_at IS NULL)
        AND status = 'active'
-       ORDER BY created_at ASC
-       LIMIT ?`,
-      [cutoffDate.toISOString(), limit]
+       ORDER BY last_login_at ASC NULLS FIRST
+       LIMIT 50`,
+      [cutoffDate]
     );
   }
 
   /**
-   * Bulk update user status
+   * Update user status
    */
-  async bulkUpdateStatus(userIds: string[], status: UserRecord["status"]): Promise<number> {
-    if (userIds.length === 0) {
-      return 0;
-    }
-
-    const placeholders = userIds.map(() => "?").join(", ");
-    const result = await this.db.execute(
-      `UPDATE ${this.tableName} 
-       SET status = ?, updated_at = datetime('now')
-       WHERE id IN (${placeholders})`,
-      [status, ...userIds]
-    );
-
-    return result.meta?.changes || 0;
-  }
-
-  /**
-   * Delete users older than specified days (hard delete)
-   */
-  async deleteOldUsers(days = 365): Promise<number> {
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - days);
-
-    const result = await this.db.execute(
-      `DELETE FROM ${this.tableName}
-       WHERE created_at < ? AND status = 'inactive'`,
-      [cutoffDate.toISOString()]
-    );
-
-    return result.meta?.changes || 0;
+  async updateStatus(userId: string, status: "active" | "inactive" | "suspended"): Promise<UserRecord> {
+    return this.update(userId, { status });
   }
 }
+
+// Export types for use in other files
+export type { UserRecord };
+

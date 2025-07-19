@@ -556,3 +556,7 @@ Unsubscribe: https://godwear.ca/unsubscribe?email=${encodeURIComponent(to)}
     }
   }
 }
+
+// Export types for use in other files
+export type { MailerSendPayload, MailerSendContact, MailerSendContactResponse, MailerSendListResponse, ContactData, EmailDeliveryResult, ContactManagementResult };
+
