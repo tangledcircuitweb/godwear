@@ -1,27 +1,122 @@
-import type {
-  MailerSendContact,
-  MailerSendContactResponse,
-  MailerSendListResponse,
-  MailerSendPayload,
-} from "../../types/email";
+import { z } from "zod";
 
-export interface ContactData {
-  email: string;
-  name: string;
-  customFields?: Record<string, string | number | boolean>;
-}
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
 
-export interface EmailDeliveryResult {
-  messageId?: string | undefined;
-  success: boolean;
-  error?: string | undefined;
-}
+/**
+ * MailerSend Payload schema
+ */
+const MailerSendPayloadSchema = z.object({
+  from: z.object({
+    email: z.string().email(),
+    name: z.string(),
+  }),
+  to: z.array(z.object({
+    email: z.string().email(),
+    name: z.string().optional(),
+  })),
+  subject: z.string(),
+  html: z.string(),
+  text: z.string(),
+  reply_to: z.object({
+    email: z.string().email(),
+    name: z.string(),
+  }).optional(),
+  settings: z.object({
+    track_clicks: z.boolean().optional(),
+    track_opens: z.boolean().optional(),
+    track_content: z.boolean().optional(),
+  }).optional(),
+  tags: z.array(z.string()).optional(),
+});
 
-export interface ContactManagementResult {
-  success: boolean;
-  contactId?: string | undefined;
-  error?: string | undefined;
-}
+/**
+ * MailerSend Contact schema
+ */
+const MailerSendContactSchema = z.object({
+  id: z.string(),
+  email: z.string().email(),
+  name: z.string().optional(),
+  status: z.enum(["active", "unsubscribed", "bounced", "complained"]),
+  created_at: z.string(),
+  updated_at: z.string(),
+  custom_fields: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
+});
+
+/**
+ * MailerSend Contact Response schema
+ */
+const MailerSendContactResponseSchema = z.object({
+  data: z.object({
+    id: z.string(),
+    email: z.string().email(),
+    name: z.string().optional(),
+    status: z.string(),
+    created_at: z.string(),
+  }).optional(),
+  message: z.string().optional(),
+});
+
+/**
+ * MailerSend List Response schema
+ */
+const MailerSendListResponseSchema = z.object({
+  data: z.array(z.unknown()).optional(),
+  links: z.object({
+    first: z.string(),
+    last: z.string(),
+    prev: z.string().optional(),
+    next: z.string().optional(),
+  }).optional(),
+  meta: z.object({
+    current_page: z.number(),
+    from: z.number(),
+    last_page: z.number(),
+    per_page: z.number(),
+    to: z.number(),
+    total: z.number(),
+  }).optional(),
+});
+
+/**
+ * Contact Data schema
+ */
+const ContactDataSchema = z.object({
+  email: z.string().email(),
+  name: z.string(),
+  customFields: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
+});
+
+/**
+ * Email Delivery Result schema
+ */
+const EmailDeliveryResultSchema = z.object({
+  messageId: z.string().optional(),
+  success: z.boolean(),
+  error: z.string().optional(),
+});
+
+/**
+ * Contact Management Result schema
+ */
+const ContactManagementResultSchema = z.object({
+  success: z.boolean(),
+  contactId: z.string().optional(),
+  error: z.string().optional(),
+});
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+type MailerSendPayload = z.infer<typeof MailerSendPayloadSchema>;
+type MailerSendContact = z.infer<typeof MailerSendContactSchema>;
+type MailerSendContactResponse = z.infer<typeof MailerSendContactResponseSchema>;
+type MailerSendListResponse<T> = Omit<z.infer<typeof MailerSendListResponseSchema>, "data"> & { data?: T[] };
+type ContactData = z.infer<typeof ContactDataSchema>;
+type EmailDeliveryResult = z.infer<typeof EmailDeliveryResultSchema>;
+type ContactManagementResult = z.infer<typeof ContactManagementResultSchema>;
 
 /**
  * Enhanced MailerSend service with contact management and marketing integration
@@ -31,6 +126,15 @@ export class MailerSendService {
   private fromEmail: string;
   private fromName: string;
   private baseUrl = "https://api.mailersend.com/v1";
+
+  // Export schemas for use in other files
+  static readonly MailerSendPayloadSchema = MailerSendPayloadSchema;
+  static readonly MailerSendContactSchema = MailerSendContactSchema;
+  static readonly MailerSendContactResponseSchema = MailerSendContactResponseSchema;
+  static readonly MailerSendListResponseSchema = MailerSendListResponseSchema;
+  static readonly ContactDataSchema = ContactDataSchema;
+  static readonly EmailDeliveryResultSchema = EmailDeliveryResultSchema;
+  static readonly ContactManagementResultSchema = ContactManagementResultSchema;
 
   constructor(apiKey: string, fromEmail = "noreply@godwear.ca", fromName = "GodWear") {
     this.apiKey = apiKey;

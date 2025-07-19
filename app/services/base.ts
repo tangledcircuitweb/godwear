@@ -1,4 +1,4 @@
-import type { CloudflareBindings } from "../../types/cloudflare";
+import type { CloudflareBindings } from "../lib/zod-utils";
 
 /**
  * Base service interface that all services should implement

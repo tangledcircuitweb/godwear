@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { deleteCookie, getCookie } from "hono/cookie";
 import { z } from "zod";
-import type { CloudflareBindings } from "../../../../types/cloudflare";
+import type { CloudflareBindings } from "../../../lib/zod-utils";
 
 // ============================================================================
 // LOCAL SCHEMAS

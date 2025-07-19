@@ -1,4 +1,4 @@
-import type { CloudflareBindings } from "../../../types/cloudflare";
+import type { CloudflareBindings } from "../../lib/zod-utils";
 import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../base";
 
 export interface SystemHealthStatus {

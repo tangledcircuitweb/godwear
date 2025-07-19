@@ -1,4 +1,4 @@
-import type { DatabaseService } from "../../../types/database";
+import type { DatabaseService } from "./database-service";
 import { AuditLogRepository } from "./repositories/audit-log-repository";
 import { SessionRepository } from "./repositories/session-repository";
 import { UserRepository } from "./repositories/user-repository";

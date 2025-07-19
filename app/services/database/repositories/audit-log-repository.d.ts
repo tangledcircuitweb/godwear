@@ -1,4 +1,20 @@
-import type { AuditLogRecord } from "../../../../types/database";
+import { z } from "zod";
+import { BaseRepository } from "./base-repository";
+
+// Define the types that will be inferred from Zod schemas in the implementation file
+export type AuditLogRecord = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  user_id?: string | null;
+  action: string;
+  resource_type: string;
+  resource_id?: string | null;
+  old_values?: string | null;
+  new_values?: string | null;
+  ip_address?: string | null;
+  user_agent?: string | null;
+};
 import { BaseRepository } from "./base-repository";
 /**
  * Audit log repository for tracking system changes and user actions

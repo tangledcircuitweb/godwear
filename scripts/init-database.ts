@@ -6,7 +6,7 @@
  */
 
 import { D1DatabaseService } from "../app/services/database/database-service";
-import type { CloudflareBindings } from "../types/cloudflare";
+import type { CloudflareBindings } from "../app/lib/zod-utils";
 
 // Mock environment for testing
 const mockEnv: CloudflareBindings = {

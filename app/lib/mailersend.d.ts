@@ -1,19 +1,58 @@
-import type { MailerSendContact } from "../../types/email";
-export interface ContactData {
+import { z } from "zod";
+
+// Define the schemas in the implementation file and reference them here
+export type MailerSendPayload = {
+  from: {
     email: string;
     name: string;
-    customFields?: Record<string, string | number | boolean>;
-}
-export interface EmailDeliveryResult {
-    messageId?: string | undefined;
-    success: boolean;
-    error?: string | undefined;
-}
-export interface ContactManagementResult {
-    success: boolean;
-    contactId?: string | undefined;
-    error?: string | undefined;
-}
+  };
+  to: Array<{
+    email: string;
+    name?: string;
+  }>;
+  subject: string;
+  html: string;
+  text: string;
+  reply_to?: {
+    email: string;
+    name: string;
+  };
+  settings?: {
+    track_clicks?: boolean;
+    track_opens?: boolean;
+    track_content?: boolean;
+  };
+  tags?: string[];
+};
+
+export type MailerSendContact = {
+  id: string;
+  email: string;
+  name?: string;
+  status: "active" | "unsubscribed" | "bounced" | "complained";
+  created_at: string;
+  updated_at: string;
+  custom_fields?: Record<string, string | number | boolean>;
+};
+
+export type ContactData = {
+  email: string;
+  name: string;
+  customFields?: Record<string, string | number | boolean>;
+};
+
+export type EmailDeliveryResult = {
+  messageId?: string;
+  success: boolean;
+  error?: string;
+};
+
+export type ContactManagementResult = {
+  success: boolean;
+  contactId?: string;
+  error?: string;
+};
+
 /**
  * Enhanced MailerSend service with contact management and marketing integration
  */
@@ -22,6 +61,16 @@ export declare class MailerSendService {
     private fromEmail;
     private fromName;
     private baseUrl;
+
+    // Static schema exports
+    static readonly MailerSendPayloadSchema: z.ZodObject<any>;
+    static readonly MailerSendContactSchema: z.ZodObject<any>;
+    static readonly MailerSendContactResponseSchema: z.ZodObject<any>;
+    static readonly MailerSendListResponseSchema: z.ZodObject<any>;
+    static readonly ContactDataSchema: z.ZodObject<any>;
+    static readonly EmailDeliveryResultSchema: z.ZodObject<any>;
+    static readonly ContactManagementResultSchema: z.ZodObject<any>;
+
     constructor(apiKey: string, fromEmail?: string, fromName?: string);
     /**
      * Send welcome email to new user and add them to marketing contacts
@@ -70,4 +119,3 @@ export declare class MailerSendService {
         error?: string;
     }>;
 }
-//# sourceMappingURL=mailersend.d.ts.map

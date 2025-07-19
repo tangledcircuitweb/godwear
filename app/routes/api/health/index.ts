@@ -1,6 +1,6 @@
 import { createRoute } from "honox/factory";
 import { z } from "zod";
-import type { CloudflareBindings } from "../../../../types/cloudflare";
+import type { CloudflareBindings } from "../../../lib/zod-utils";
 import { createServiceRegistry } from "../../../services";
 
 // ============================================================================

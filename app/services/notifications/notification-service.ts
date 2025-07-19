@@ -1,42 +1,96 @@
-import type { CloudflareBindings } from "../../../types/cloudflare";
-import type { EmailCampaignResult, EmailDeliveryStats } from "../../../types/email";
+import { z } from "zod";
+import type { CloudflareBindings } from "../../lib/zod-utils";
 import {
+  MailerSendService,
   type ContactData,
   type ContactManagementResult,
-  MailerSendService,
 } from "../../lib/mailersend";
 import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../base";
 
-export interface EmailNotification {
-  to: string;
-  subject: string;
-  htmlContent: string;
-  textContent?: string;
-  recipientName?: string | undefined;
-  addToContacts?: boolean;
-}
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
 
-export interface WelcomeEmailData {
-  email: string;
-  name: string;
-  addToContacts?: boolean;
-  customFields?: Record<string, string | number | boolean>;
-}
+/**
+ * Email Notification schema
+ */
+const EmailNotificationSchema = z.object({
+  to: z.string().email(),
+  subject: z.string(),
+  htmlContent: z.string(),
+  textContent: z.string().optional(),
+  recipientName: z.string().optional(),
+  addToContacts: z.boolean().optional(),
+});
 
-export interface NotificationResult {
-  success: boolean;
-  messageId?: string | undefined;
-  contactId?: string | undefined;
-  error?: string | undefined;
-}
+/**
+ * Welcome Email Data schema
+ */
+const WelcomeEmailDataSchema = z.object({
+  email: z.string().email(),
+  name: z.string(),
+  addToContacts: z.boolean().optional(),
+  customFields: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
+});
 
-export interface BulkEmailData {
-  recipients: Array<{ email: string; name?: string }>;
-  subject: string;
-  htmlContent: string;
-  textContent?: string;
-  tags?: string[];
-}
+/**
+ * Notification Result schema
+ */
+const NotificationResultSchema = z.object({
+  success: z.boolean(),
+  messageId: z.string().optional(),
+  contactId: z.string().optional(),
+  error: z.string().optional(),
+});
+
+/**
+ * Bulk Email Data schema
+ */
+const BulkEmailDataSchema = z.object({
+  recipients: z.array(z.object({
+    email: z.string().email(),
+    name: z.string().optional(),
+  })),
+  subject: z.string(),
+  htmlContent: z.string(),
+  textContent: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+});
+
+/**
+ * Email Campaign Result schema
+ */
+const EmailCampaignResultSchema = z.object({
+  success: z.boolean(),
+  campaignId: z.string().optional(),
+  messageId: z.string().optional(),
+  recipientCount: z.number().optional(),
+  error: z.string().optional(),
+});
+
+/**
+ * Email Delivery Stats schema
+ */
+const EmailDeliveryStatsSchema = z.object({
+  messageId: z.string(),
+  delivered: z.number(),
+  opened: z.number(),
+  clicked: z.number(),
+  bounced: z.number(),
+  complained: z.number(),
+  timestamp: z.string(),
+});
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+type EmailNotification = z.infer<typeof EmailNotificationSchema>;
+type WelcomeEmailData = z.infer<typeof WelcomeEmailDataSchema>;
+type NotificationResult = z.infer<typeof NotificationResultSchema>;
+type BulkEmailData = z.infer<typeof BulkEmailDataSchema>;
+type EmailCampaignResult = z.infer<typeof EmailCampaignResultSchema>;
+type EmailDeliveryStats = z.infer<typeof EmailDeliveryStatsSchema>;
 
 /**
  * Enhanced notification service with comprehensive MailerSend integration
@@ -44,6 +98,14 @@ export interface BulkEmailData {
  */
 export class NotificationService implements BaseService {
   readonly serviceName = "notification-service";
+
+  // Export schemas for use in other files
+  static readonly EmailNotificationSchema = EmailNotificationSchema;
+  static readonly WelcomeEmailDataSchema = WelcomeEmailDataSchema;
+  static readonly NotificationResultSchema = NotificationResultSchema;
+  static readonly BulkEmailDataSchema = BulkEmailDataSchema;
+  static readonly EmailCampaignResultSchema = EmailCampaignResultSchema;
+  static readonly EmailDeliveryStatsSchema = EmailDeliveryStatsSchema;
 
   private env!: CloudflareBindings;
   private logger?: any;

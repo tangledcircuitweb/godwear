@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { CloudflareBindings } from "../../../types/cloudflare";
+import type { CloudflareBindings } from "../../lib/zod-utils";
 import type { BaseService, ServiceDependencies, ServiceHealthStatus, ServiceLogger } from "../base";
 import { D1DatabaseService, RepositoryRegistry } from "../database";
 

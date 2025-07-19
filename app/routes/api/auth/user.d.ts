@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import type { CloudflareBindings } from "../../../../types/cloudflare";
+import type { CloudflareBindings } from "../../../lib/zod-utils";
 declare const app: Hono<{
     Bindings: CloudflareBindings;
 }, import("hono/types").BlankSchema, "/">;

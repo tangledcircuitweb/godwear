@@ -1,4 +1,18 @@
-import type { SessionRecord } from "../../../../types/database";
+import { z } from "zod";
+import { BaseRepository } from "./base-repository";
+
+// Define the types that will be inferred from Zod schemas in the implementation file
+export type SessionRecord = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  user_id: string;
+  token_hash: string;
+  expires_at: string;
+  ip_address?: string | null;
+  user_agent?: string | null;
+  is_active: boolean;
+};
 import { BaseRepository } from "./base-repository";
 /**
  * Session repository for user session management

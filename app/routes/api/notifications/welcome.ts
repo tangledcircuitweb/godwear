@@ -1,7 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
-import type { CloudflareBindings } from "../../../../types/cloudflare";
+import type { CloudflareBindings } from "../../../lib/zod-utils";
 import { createServiceRegistry } from "../../../services";
 
 // ============================================================================

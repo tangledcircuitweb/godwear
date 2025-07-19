@@ -3,6 +3,7 @@ import { type BaseService, ServiceContainer, type ServiceDependencies } from "./
 import { D1DatabaseService, RepositoryRegistry } from "./database";
 import { HealthService } from "./health/health-service";
 import { NotificationService } from "./notifications/notification-service";
+import type { CloudflareBindings } from "../lib/zod-utils";
 
 /**
  * Service registry for managing all application services

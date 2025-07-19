@@ -1,34 +1,39 @@
 // Database service exports
 
-// Re-export database types
+// Re-export database types from local files
 export type {
-  AuditLogRecord,
-  BaseRecord,
-  ColumnSchema,
-  ConfigRecord,
-  ConnectionError,
-  ConstraintSchema,
   DatabaseConfig,
-  DatabaseError,
   DatabaseMetrics,
-  DatabaseService,
-  IndexSchema,
-  JoinClause,
-  Migration,
-  MigrationError,
-  MigrationRecord,
-  OrderByClause,
-  QueryOptions,
   QueryParams,
   QueryResult,
-  QueryTimeoutError,
-  Repository,
-  SessionRecord,
   SingleQueryResult,
   TableSchema,
-  UserRecord,
+  MigrationRecord,
+  DatabaseTransaction,
+  DatabaseConnection,
+  DatabaseService,
+} from "./database-service";
+
+export type {
+  BaseRecord,
   WhereCondition,
-} from "../../../types/database";
+  QueryOptions,
+  Repository,
+} from "./repositories/base-repository";
+
+export type {
+  UserRecord,
+} from "./repositories/user-repository";
+
+export type {
+  SessionRecord,
+} from "./repositories/session-repository";
+
+export type {
+  AuditLogRecord,
+} from "./repositories/audit-log-repository";
+
+// Export classes
 export { D1DatabaseService } from "./database-service";
 export { AuditLogRepository } from "./repositories/audit-log-repository";
 // Repository exports

@@ -172,6 +172,36 @@ export function safeParse<T extends z.ZodTypeAny>(
 }
 
 /**
- * Type helper for inferring Zod schema types
+ * Cloudflare bindings schema
  */
-export type InferSchema<T extends z.ZodTypeAny> = z.infer<T>;
+export const cloudflareBindingsSchema = z.object({
+  GODWEAR_KV: z.custom<KVNamespace>(),
+  DB: z.custom<D1Database>(),
+  // Session and Cache KV Namespaces
+  SESSION_STORE: z.custom<KVNamespace>(),
+  CACHE: z.custom<KVNamespace>(),
+  USER_SESSIONS: z.custom<KVNamespace>(),
+  // R2 Storage
+  ASSETS: z.custom<R2Bucket>(),
+  // OAuth Configuration
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  // JWT Secret
+  JWT_SECRET: z.string().optional(),
+  // Email Service Configuration
+  // SendGrid Configuration (legacy - being replaced by MailerSend)
+  SENDGRID_API_KEY: z.string().optional(),
+  // MailerSend Configuration (current email service)
+  MAILERSEND_API_KEY: z.string().optional(),
+  // Environment
+  NODE_ENV: z.string().optional(),
+  // Domain Configuration
+  PRODUCTION_DOMAIN: z.string().optional(),
+  STAGING_DOMAIN: z.string().optional(),
+  DEVELOPMENT_DOMAIN: z.string().optional(),
+});
+
+/**
+ * Type helper for Cloudflare bindings
+ */
+export type CloudflareBindings = z.infer<typeof cloudflareBindingsSchema>;

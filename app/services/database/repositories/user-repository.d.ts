@@ -1,4 +1,24 @@
-import type { BaseRecord, UserRecord } from "../../../../types/database";
+import { z } from "zod";
+import { BaseRepository } from "./base-repository";
+
+// Define the types that will be inferred from Zod schemas in the implementation file
+export type BaseRecord = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type UserRecord = BaseRecord & {
+  email: string;
+  name: string;
+  picture?: string | null;
+  verified_email: boolean;
+  last_login_at?: string | null;
+  status: "active" | "inactive" | "suspended";
+  role: "USER" | "ADMIN" | "MODERATOR";
+  provider: "email" | "google" | "github";
+  metadata?: string | null;
+};
 import { BaseRepository } from "./base-repository";
 /**
  * User repository with user-specific operations and validation
