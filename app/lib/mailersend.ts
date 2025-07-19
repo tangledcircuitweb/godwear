@@ -9,18 +9,18 @@ import { z } from "zod";
  */
 const MailerSendPayloadSchema = z.object({
   from: z.object({
-    email: z.string().email(),
+    email: z.email({}),
     name: z.string(),
   }),
   to: z.array(z.object({
-    email: z.string().email(),
+    email: z.email({}),
     name: z.string().optional(),
   })),
   subject: z.string(),
   html: z.string(),
   text: z.string(),
   reply_to: z.object({
-    email: z.string().email(),
+    email: z.email({}),
     name: z.string(),
   }).optional(),
   settings: z.object({
@@ -36,12 +36,12 @@ const MailerSendPayloadSchema = z.object({
  */
 const MailerSendContactSchema = z.object({
   id: z.string(),
-  email: z.string().email(),
+  email: z.email({}),
   name: z.string().optional(),
   status: z.enum(["active", "unsubscribed", "bounced", "complained"]),
   created_at: z.string(),
   updated_at: z.string(),
-  custom_fields: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
+  custom_fields: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()], {})).optional(),
 });
 
 /**
@@ -50,7 +50,7 @@ const MailerSendContactSchema = z.object({
 const MailerSendContactResponseSchema = z.object({
   data: z.object({
     id: z.string(),
-    email: z.string().email(),
+    email: z.email({}),
     name: z.string().optional(),
     status: z.string(),
     created_at: z.string(),
@@ -83,9 +83,9 @@ const MailerSendListResponseSchema = z.object({
  * Contact Data schema
  */
 const ContactDataSchema = z.object({
-  email: z.string().email(),
+  email: z.email({}),
   name: z.string(),
-  customFields: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
+  customFields: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()], {})).optional(),
 });
 
 /**
@@ -559,4 +559,3 @@ Unsubscribe: https://godwear.ca/unsubscribe?email=${encodeURIComponent(to)}
 
 // Export types for use in other files
 export type { MailerSendPayload, MailerSendContact, MailerSendContactResponse, MailerSendListResponse, ContactData, EmailDeliveryResult, ContactManagementResult };
-

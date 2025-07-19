@@ -44,12 +44,12 @@
     "playwright:install": "npx playwright install --with-deps"
   },
   "dependencies": {
-    "@hono/zod-validator": "^0.7.0",
+    "@hono/zod-validator": "^0.7.2",
     "@sendgrid/mail": "^8.1.5",
     "dotenv": "^17.2.0",
     "hono": "^4.8.4",
     "honox": "^0.1.43",
-    "zod": "^3.25.76"
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@biomejs/biome": "2.1.1",

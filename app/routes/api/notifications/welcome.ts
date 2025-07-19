@@ -1,6 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
+import { createDiscriminatedUnion, createHealthCheckResponseSchema } from "../../../lib/zod-compat";
 import type { CloudflareBindings } from "../../../lib/zod-utils";
 import { createServiceRegistry } from "../../../services";
 
@@ -22,7 +23,7 @@ const WelcomeEmailRequestSchema = z.object({
 const ApiErrorSchema = z.object({
   code: z.string(),
   message: z.string(),
-  details: z.record(z.unknown()).optional(),
+  details: z.record(z.string(), z.unknown()).optional(),
   timestamp: z.string(),
   service: z.string().optional(),
 });
@@ -50,30 +51,25 @@ const EmailSuccessResponseSchema = z.object({
 /**
  * Health check response schema
  */
-const HealthCheckResponseSchema = z.object({
-  status: z.enum(["healthy", "degraded", "unhealthy"]),
-  service: z.string(),
-  timestamp: z.string(),
-  version: z.string().optional(),
-  dependencies: z.record(z.enum(["healthy", "degraded", "unhealthy"])).optional(),
-  uptime: z.number().optional(),
-});
+const HealthCheckResponseSchema = createHealthCheckResponseSchema();
 
 /**
  * API Response schema - discriminated union for type safety
  */
-const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
-  z.discriminatedUnion("success", [
-    z.object({
-      success: z.literal(true),
-      data: dataSchema,
-      meta: ResponseMetaSchema.optional(),
-    }),
-    z.object({
-      success: z.literal(false),
-      error: ApiErrorSchema,
-    }),
-  ]);
+const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
+  const successSchema = z.object({
+    success: z.literal(true),
+    data: dataSchema,
+    meta: ResponseMetaSchema.optional(),
+  });
+  
+  const errorSchema = z.object({
+    success: z.literal(false),
+    error: ApiErrorSchema,
+  });
+  
+  return createDiscriminatedUnion("success", [successSchema, errorSchema]);
+};
 
 /**
  * Error codes enum

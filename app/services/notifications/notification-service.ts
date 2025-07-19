@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createDiscriminatedUnion } from "../../lib/zod-compat";
 import type { CloudflareBindings } from "../../lib/zod-utils";
 import {
   MailerSendService,
@@ -15,7 +16,7 @@ import type { BaseService, ServiceDependencies, ServiceHealthStatus } from "../b
  * Email Notification schema
  */
 const EmailNotificationSchema = z.object({
-  to: z.string().email(),
+  to: z.email({}),
   subject: z.string(),
   htmlContent: z.string(),
   textContent: z.string().optional(),
@@ -27,10 +28,10 @@ const EmailNotificationSchema = z.object({
  * Welcome Email Data schema
  */
 const WelcomeEmailDataSchema = z.object({
-  email: z.string().email(),
+  email: z.email({}),
   name: z.string(),
   addToContacts: z.boolean().optional(),
-  customFields: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
+  customFields: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()], {})).optional(),
 });
 
 /**
@@ -48,7 +49,7 @@ const NotificationResultSchema = z.object({
  */
 const BulkEmailDataSchema = z.object({
   recipients: z.array(z.object({
-    email: z.string().email(),
+    email: z.email({}),
     name: z.string().optional(),
   })),
   subject: z.string(),

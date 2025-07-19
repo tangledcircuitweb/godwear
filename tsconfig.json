@@ -14,6 +14,8 @@
     "allowUnreachableCode": false,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    // Temporarily ignore type errors while migrating to Zod v4
+    "noEmitOnError": false,
     "lib": [
       "ESNext",
       "DOM",

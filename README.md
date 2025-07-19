@@ -28,6 +28,36 @@ Pass the `CloudflareBindings` as generics when instantiation `Hono`:
 const app = new Hono<{ Bindings: CloudflareBindings }>()
 ```
 
+## Zod v4 Integration
+
+GodWear uses Zod v4 for schema validation:
+
+```ts
+// Import directly from zod
+import { z } from 'zod';
+
+// Create API response schemas with proper discriminated union
+const userResponseSchema = z.discriminatedUnion("success", [
+  z.object({
+    success: z.literal(true),
+    data: userSchema,
+    meta: responseMetaSchema,
+  }),
+  z.object({
+    success: z.literal(false),
+    error: apiErrorSchema,
+  }),
+], {});
+```
+
+Key Zod v4 patterns used in GodWear:
+- `z.email({})` - Email validation with required empty options object
+- `z.union([...], {})` - Union with required options object
+- `z.discriminatedUnion(discriminator, [...], {})` - Discriminated union with required options
+- `z.record(z.string(), z.unknown())` - Record with key and value type parameters
+
+See [`docs/zod-v4-migration.md`](./docs/zod-v4-migration.md) for complete migration guide.
+
 ## Testing
 
 GodWear includes a comprehensive testing system with automatic cleanup for live Cloudflare resources.
@@ -67,4 +97,4 @@ See [`docs/test-cleanup-system.md`](./docs/test-cleanup-system.md) for complete 
 - [`docs/test-cleanup-system.md`](./docs/test-cleanup-system.md) - Resource cleanup system
 - [`docs/current-testing-infrastructure.md`](./docs/current-testing-infrastructure.md) - Current test status
 - [`docs/mailersend-integration.md`](./docs/mailersend-integration.md) - Email service integration
-```
+- [`docs/zod-v4-migration.md`](./docs/zod-v4-migration.md) - Zod v4 migration guide

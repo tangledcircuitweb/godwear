@@ -1,6 +1,7 @@
 import { setCookie } from "hono/cookie";
 import { createRoute } from "honox/factory";
 import { z } from "zod";
+import { createDiscriminatedUnion } from "../../../lib/zod-compat";
 import type { CloudflareBindings } from "../../../lib/zod-utils";
 import { createServiceRegistry } from "../../../services";
 
@@ -14,7 +15,7 @@ import { createServiceRegistry } from "../../../services";
 const ApiErrorSchema = z.object({
   code: z.string(),
   message: z.string(),
-  details: z.record(z.unknown()).optional(),
+  details: z.record(z.string(), z.unknown()).optional(),
   timestamp: z.string(),
   service: z.string().optional(),
 });
@@ -40,18 +41,20 @@ const LoginResponseSchema = z.object({
 /**
  * API Response schema - discriminated union for type safety
  */
-const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
-  z.discriminatedUnion("success", [
-    z.object({
-      success: z.literal(true),
-      data: dataSchema,
-      meta: ResponseMetaSchema.optional(),
-    }),
-    z.object({
-      success: z.literal(false),
-      error: ApiErrorSchema,
-    }),
-  ]);
+const ApiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
+  const successSchema = z.object({
+    success: z.literal(true),
+    data: dataSchema,
+    meta: ResponseMetaSchema.optional(),
+  });
+  
+  const errorSchema = z.object({
+    success: z.literal(false),
+    error: ApiErrorSchema,
+  });
+  
+  return createDiscriminatedUnion("success", [successSchema, errorSchema]);
+};
 
 /**
  * Error codes enum

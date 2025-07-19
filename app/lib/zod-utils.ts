@@ -1,5 +1,6 @@
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
+import { createApiResponseSchema, createDiscriminatedUnion } from "./zod-compat";
 
 /**
  * Type helper for inferring Zod schema types
@@ -28,23 +29,17 @@ export const paginationParamsSchema = z.object({
 
 /**
  * Generic API response wrapper schema
+ * @deprecated Use createApiResponseSchema from zod-compat.ts instead
  */
-export const apiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
-  z.discriminatedUnion("success", [
-    z.object({
-      success: z.literal(true),
-      data: dataSchema,
-    }),
-    z.object({
-      success: z.literal(false),
-      error: z.object({
-        code: z.string(),
-        message: z.string(),
-        details: z.record(z.unknown()).optional(),
-        timestamp: z.string().datetime(),
-      }),
-    }),
-  ]);
+export const apiResponseSchema = <T extends z.ZodTypeAny>(
+  dataSchema: T,
+  options: {
+    includeMeta?: boolean;
+    metaSchema?: z.ZodTypeAny;
+  } = {}
+) => {
+  return createApiResponseSchema(dataSchema, options);
+};
 
 /**
  * Response metadata schema
@@ -59,11 +54,13 @@ export const responseMetaSchema = z.object({
 /**
  * Paginated response schema
  */
-export const paginatedResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
-  z.object({
+export const paginatedResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) => {
+  // Create a schema for paginated responses
+  return z.object({
     items: z.array(itemSchema),
     pagination: paginationSchema,
   });
+};
 
 /**
  * Base record schema for database entities

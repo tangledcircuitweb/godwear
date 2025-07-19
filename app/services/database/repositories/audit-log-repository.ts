@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createDiscriminatedUnion } from "../../../lib/zod-compat";
 import { BaseRepository } from "./base-repository";
 
 // ============================================================================
@@ -32,8 +33,8 @@ const AuditLogCreateSchema = z.object({
   action: z.string(),
   resourceType: z.string(),
   resourceId: z.string().optional(),
-  oldValues: z.record(z.unknown()).optional(),
-  newValues: z.record(z.unknown()).optional(),
+  oldValues: z.record(z.string(), z.unknown()).optional(),
+  newValues: z.record(z.string(), z.unknown()).optional(),
   ipAddress: z.string().optional(),
   userAgent: z.string().optional(),
 });
