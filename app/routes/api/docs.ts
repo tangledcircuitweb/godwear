@@ -31,15 +31,35 @@ openAPIApp.doc('/api/docs', (c) => ({
  * This route serves the Swagger UI for interactive API documentation.
  * It can be accessed at /api/docs/ui
  */
-openAPIApp.doc('/api/docs/ui', {
-  ...openAPIConfig,
-  servers: [
-    {
-      url: '/',
-      description: 'Current environment',
-    },
-    ...openAPIConfig.servers,
-  ],
+openAPIApp.get('/api/docs/ui', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>GodWear API Documentation</title>
+      <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui.css">
+    </head>
+    <body>
+      <div id="swagger-ui"></div>
+      <script src="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-bundle.js"></script>
+      <script>
+        window.onload = function() {
+          SwaggerUIBundle({
+            url: '/api/docs',
+            dom_id: '#swagger-ui',
+            presets: [
+              SwaggerUIBundle.presets.apis,
+              SwaggerUIBundle.SwaggerUIStandalonePreset
+            ],
+            layout: "BaseLayout",
+            deepLinking: true
+          });
+        }
+      </script>
+    </body>
+    </html>
+  `);
 });
 
 /**
