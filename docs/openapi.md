@@ -1,401 +1,329 @@
-Zod OpenAPI Hono is an extended Hono class that supports OpenAPI. With it, you can validate values and types using Zod and generate OpenAPI Swagger documentation. This is based on Zod to OpenAPI (thanks a lot!). For details on creating schemas and defining routes, please refer to the "Zod to OpenAPI" resource.
+# OpenAPI Integration in GodWear
 
-Note: This is not standalone middleware but is hosted on the monorepo "github.com/honojs/middleware".
+This document outlines how OpenAPI is integrated into the GodWear project using Zod OpenAPI.
 
-Usage
-Installation
-You can install it via npm. It should be installed alongside hono and zod.
+## Overview
 
-npm i hono zod @hono/zod-openapi
-Basic Usage
-Setting up your application
-First, define your schemas with Zod. The z object should be imported from @hono/zod-openapi:
+GodWear uses the `@hono/zod-openapi` package to provide OpenAPI documentation and validation for its API endpoints. This integration enables:
 
-import { z } from '@hono/zod-openapi'
+1. **Interactive API Documentation**: Available at `/api/docs/ui` (Swagger UI)
+2. **JSON OpenAPI Specification**: Available at `/api/docs`
+3. **Request Validation**: Using Zod schemas with OpenAPI extensions
+4. **Response Documentation**: Standardized API responses with proper documentation
 
-const ParamsSchema = z.object({
-  id: z
-    .string()
-    .min(3)
-    .openapi({
-      param: {
-        name: 'id',
-        in: 'path',
+## Core Components
+
+### 1. OpenAPI Configuration
+
+Located at `/app/lib/openapi/config.ts`, this file contains the base OpenAPI configuration:
+
+```typescript
+import { OpenAPIHono } from '@hono/zod-openapi';
+import type { OpenAPIOptions } from '@hono/zod-openapi';
+
+export const createOpenAPIConfig = (c?: any): OpenAPIOptions => {
+  const baseUrl = c ? new URL(c.req.url).origin : 'https://api.godwear.app';
+  
+  return {
+    openapi: '3.0.0',
+    info: {
+      title: 'GodWear API',
+      version: '1.0.0',
+      description: 'API for GodWear application',
+    },
+    servers: [
+      {
+        url: baseUrl,
+        description: 'Current environment',
       },
-      example: '1212121',
-    }),
-})
-
-const UserSchema = z
-  .object({
-    id: z.string().openapi({
-      example: '123',
-    }),
-    name: z.string().openapi({
-      example: 'John Doe',
-    }),
-    age: z.number().openapi({
-      example: 42,
-    }),
-  })
-  .openapi('User')
-Tip
-
-UserSchema schema will be registered as "#/components/schemas/User" refs in the OpenAPI document. If you want to register the schema as referenced components, use .openapi() method.
-
-Next, create a route:
-
-import { createRoute } from '@hono/zod-openapi'
-
-const route = createRoute({
-  method: 'get',
-  path: '/users/{id}',
-  request: {
-    params: ParamsSchema,
-  },
-  responses: {
-    200: {
-      content: {
-        'application/json': {
-          schema: UserSchema,
-        },
+    ],
+    security: [
+      {
+        BearerAuth: [],
       },
-      description: 'Retrieve the user',
-    },
-  },
-})
-Finally, set up the app:
+    ],
+  };
+};
 
-import { OpenAPIHono } from '@hono/zod-openapi'
+export const registerSecuritySchemes = (app: OpenAPIHono) => {
+  app.openAPIRegistry.registerComponent('securitySchemes', 'BearerAuth', {
+    type: 'http',
+    scheme: 'bearer',
+  });
+};
+```
 
-const app = new OpenAPIHono()
+### 2. Common Schema Definitions
 
-app.openapi(route, (c) => {
-  const { id } = c.req.valid('param')
-  return c.json(
-    {
-      id,
-      age: 20,
-      name: 'Ultra-man',
-    },
-    200 // You should specify the status code even if it is 200.
-  )
-})
+Located at `/app/lib/openapi/schemas.ts`, this file contains common schema definitions used across the API:
 
-// The OpenAPI documentation will be available at /doc
-app.doc('/doc', {
-  openapi: '3.0.0',
-  info: {
-    version: '1.0.0',
-    title: 'My API',
-  },
-})
-You can start your app just like you would with Hono. For Cloudflare Workers and Bun, use this entry point:
+```typescript
+import { z } from '@hono/zod-openapi';
 
-export default app
-Important
-
-The request must have the proper Content-Type to ensure the validation. For example, if you want to validate a JSON body, the request must have the Content-Type to application/json in the request. Otherwise, the value of c.req.valid('json') will be {}.
-
-import { createRoute, z, OpenAPIHono } from '@hono/zod-openapi'
-
-const route = createRoute({
-  method: 'post',
-  path: '/books',
-  request: {
-    body: {
-      content: {
-        'application/json': {
-          schema: z.object({
-            title: z.string(),
-          }),
-        },
-      },
-    },
-  },
-  responses: {
-    200: {
-      description: 'Success message',
-    },
-  },
-})
-
-const app = new OpenAPIHono()
-
-app.openapi(route, (c) => {
-  const validatedBody = c.req.valid('json')
-  return c.json(validatedBody) // validatedBody is {}
-})
-
-const res = await app.request('/books', {
-  method: 'POST',
-  body: JSON.stringify({ title: 'foo' }),
-  // The Content-Type header is lacking.
-})
-
-const data = await res.json()
-console.log(data) // {}
-If you want to force validation of requests that do not have the proper Content-Type, set the value of request.body.required to true.
-
-const route = createRoute({
-  method: 'post',
-  path: '/books',
-  request: {
-    body: {
-      content: {
-        'application/json': {
-          schema: z.object({
-            title: z.string(),
-          }),
-        },
-      },
-      required: true, // <== add
-    },
-  },
-})
-Handling Validation Errors
-Validation errors can be handled as follows:
-
-First, define the error schema:
-
-const ErrorSchema = z.object({
-  code: z.number().openapi({
-    example: 400,
+// API Error Schema
+export const apiErrorSchema = z.object({
+  code: z.string().openapi({
+    example: 'VALIDATION_ERROR',
   }),
   message: z.string().openapi({
-    example: 'Bad Request',
+    example: 'Invalid request data',
   }),
-})
-Then, add the error response:
-
-const route = createRoute({
-  method: 'get',
-  path: '/users/{id}',
-  request: {
-    params: ParamsSchema,
-  },
-  responses: {
-    400: {
-      content: {
-        'application/json': {
-          schema: ErrorSchema,
-        },
-      },
-      description: 'Returns an error',
-    },
-  },
-})
-Finally, add the hook:
-
-app.openapi(
-  route,
-  (c) => {
-    const { id } = c.req.valid('param')
-    return c.json(
-      {
-        id,
-        age: 20,
-        name: 'Ultra-man',
-      },
-      200
-    )
-  },
-  // Hook
-  (result, c) => {
-    if (!result.success) {
-      return c.json(
-        {
-          code: 400,
-          message: 'Validation Error',
-        },
-        400
-      )
-    }
-  }
-)
-A DRY approach to handling validation errors
-In the case that you have a common error formatter, you can initialize the OpenAPIHono instance with a defaultHook.
-
-const app = new OpenAPIHono({
-  defaultHook: (result, c) => {
-    if (!result.success) {
-      return c.json(
-        {
-          ok: false,
-          errors: formatZodErrors(result),
-          source: 'custom_error_handler',
-        },
-        422
-      )
-    }
-  },
-})
-You can still override the defaultHook by providing the hook at the call site when appropriate.
-
-// uses the defaultHook
-app.openapi(createPostRoute, (c) => {
-  const { title } = c.req.valid('json')
-  return c.json({ title })
-})
-
-// override the defaultHook by passing in a hook
-app.openapi(
-  createBookRoute,
-  (c) => {
-    const { title } = c.req.valid('json')
-    return c.json({ title }, 200)
-  },
-  (result, c) => {
-    if (!result.success) {
-      return c.json(
-        {
-          ok: false,
-          source: 'routeHook' as const,
-        },
-        400
-      )
-    }
-  }
-)
-OpenAPI v3.1
-You can generate OpenAPI v3.1 spec using the following methods:
-
-app.doc31('/docs', { openapi: '3.1.0', info: { title: 'foo', version: '1' } }) // new endpoint
-app.getOpenAPI31Document({
-  openapi: '3.1.0',
-  info: { title: 'foo', version: '1' },
-}) // schema object
-The Registry
-You can access the OpenAPIRegistry object via app.openAPIRegistry:
-
-const registry = app.openAPIRegistry
-Middleware
-Zod OpenAPI Hono is an extension of Hono, so you can use Hono's middleware in the same way:
-
-import { prettyJSON } from 'hono/pretty-json'
-
-//...
-
-app.use('/doc/*', prettyJSON())
-Configure middleware for each endpoint
-You can configure middleware for each endpoint from a route created by createRoute as follows.
-
-import { prettyJSON } from 'hono/pretty-json'
-import { cache } from 'hono/cache'
-
-app.use(route.getRoutingPath(), prettyJSON(), cache({ cacheName: 'my-cache' }))
-app.openapi(route, handler)
-Or you can use the middleware property in the route definition.
-
-const route = createRoute({
-  method: 'get',
-  path: '/users/{id}',
-  request: {
-    params: ParamsSchema,
-  },
-  middleware: [prettyJSON(), cache({ cacheName: 'my-cache' })] as const, // Use `as const` to ensure TypeScript infers the middleware's Context.
-  responses: {
-    200: {
-      content: {
-        'application/json': {
-          schema: UserSchema,
-        },
-      },
-      description: 'Retrieve the user',
-    },
-  },
-})
-RPC Mode
-Zod OpenAPI Hono supports Hono's RPC mode. You can define types for the Hono Client as follows:
-
-import { hc } from 'hono/client'
-
-const appRoutes = app.openapi(route, (c) => {
-  const data = c.req.valid('json')
-  return c.json(
-    {
-      id: data.id,
-      message: 'Success',
-    },
-    200
-  )
-})
-
-const client = hc<typeof appRoutes>('http://localhost:8787/')
-Tips
-How to register components
-You can register components to the registry as follows:
-
-app.openAPIRegistry.registerComponent('schemas', {
-  User: UserSchema,
-})
-About this feature, please refer to the "Zod to OpenAPI" resource / Defining Custom Components
-
-How to setup authorization
-You can setup authorization as follows:
-
-eg. Bearer Auth
-
-Register the security scheme:
-
-app.openAPIRegistry.registerComponent('securitySchemes', 'Bearer', {
-  type: 'http',
-  scheme: 'bearer',
-})
-And setup the security scheme for specific routes:
-
-const route = createRoute({
-  // ...
-  security: [
-    {
-      Bearer: [],
-    },
-  ],
-})
-How to access context in app.doc
-You can access the context in app.doc as follows:
-
-app.doc('/doc', (c) => ({
-  openapi: '3.0.0',
-  info: {
-    version: '1.0.0',
-    title: 'My API',
-  },
-  servers: [
-    {
-      url: new URL(c.req.url).origin,
-      description: 'Current environment',
-    },
-  ],
-}))
-How to exclude a specific route from OpenAPI docs
-You can use hide property as follows:
-
-const route = createRoute({
-  // ...
-  hide: true,
-})
-Limitations
-Combining with Hono
-Be careful when combining OpenAPIHono instances with plain Hono instances. OpenAPIHono will merge the definitions of direct subapps, but plain Hono knows nothing about the OpenAPI spec additions. Similarly OpenAPIHono will not "dig" for instances deep inside a branch of plain Hono instances.
-
-If you're migrating from plain Hono to OpenAPIHono, we recommend porting your top-level app, then working your way down the router tree.
-
-When using the .route() method to mount a child OpenAPIHono app that uses path parameters, you should use the Hono :param syntax in the parent route path, rather than the OpenAPI {param} syntax:
-
-const bookActionsApp = new OpenAPIHono()
-...
-// ❌ Incorrect: This will not match the route
-app.route('/books/{bookId}', bookActionsApp)
-
-// ✅ Using Hono parameter syntax
-app.route('/books/:bookId', bookActionsApp)
-Header keys
-Header keys that you define in your schema must be in lowercase.
-
-const HeadersSchema = z.object({
-  // Header keys must be in lowercase, `Authorization` is not allowed.
-  authorization: z.string().openapi({
-    example: 'Bearer SECRET',
+  details: z.record(z.string(), z.unknown()).optional().openapi({
+    example: { field: 'email', message: 'Invalid email format' },
   }),
-})
+}, {});
+
+// Response Metadata Schema
+export const responseMetaSchema = z.object({
+  timestamp: z.string().datetime({}).openapi({
+    example: '2025-07-20T15:00:00Z',
+  }),
+}, {});
+
+// Pagination Schema
+export const paginationSchema = z.object({
+  page: z.number().int({}).positive({}).openapi({
+    example: 1,
+  }),
+  pageSize: z.number().int({}).positive({}).openapi({
+    example: 10,
+  }),
+  total: z.number().int({}).nonnegative({}).openapi({
+    example: 100,
+  }),
+  totalPages: z.number().int({}).positive({}).openapi({
+    example: 10,
+  }),
+}, {});
+
+// Helper function to create API response schemas
+export function createApiResponseSchema<T extends z.ZodTypeAny>(dataSchema: T) {
+  return z.discriminatedUnion('success', [
+    z.object({
+      success: z.literal(true),
+      data: dataSchema,
+      meta: responseMetaSchema,
+    }, {}),
+    z.object({
+      success: z.literal(false),
+      error: apiErrorSchema,
+    }, {}),
+  ], {});
+}
+
+// Helper function to create paginated API response schemas
+export function createPaginatedApiResponseSchema<T extends z.ZodTypeAny>(itemsSchema: T) {
+  return createApiResponseSchema(
+    z.object({
+      items: z.array(itemsSchema, {}),
+      pagination: paginationSchema,
+    }, {})
+  );
+}
+```
+
+### 3. Route Conversion Utilities
+
+Located at `/app/lib/openapi/route-utils.ts`, this file contains utilities for registering OpenAPI routes:
+
+```typescript
+import { Hono } from 'hono';
+import { createRoute } from '@hono/zod-openapi';
+import type { RouteConfig } from '@hono/zod-openapi';
+
+// Interface for OpenAPI route options
+export interface OpenAPIRouteOptions extends RouteConfig {
+  handler: (c: any) => any;
+}
+
+// Function to convert OpenAPI path parameters to Hono path parameters
+export function convertPathParams(path: string): string {
+  return path.replace(/{([^}]+)}/g, ':$1');
+}
+
+// Function to register an OpenAPI route
+export function registerOpenAPIRoute(app: Hono, options: OpenAPIRouteOptions) {
+  const { handler, ...routeConfig } = options;
+  
+  // Create the OpenAPI route
+  const route = createRoute(routeConfig);
+  
+  // Convert path parameters from OpenAPI {param} to Hono :param syntax
+  const honoPath = convertPathParams(options.path);
+  
+  // Register the route with Hono
+  app[options.method](honoPath, handler);
+  
+  // Return the route for potential further configuration
+  return route;
+}
+```
+
+### 4. OpenAPI Documentation Endpoint
+
+Located at `/app/routes/api/docs.ts`, this file sets up the OpenAPI documentation endpoints:
+
+```typescript
+import { Hono } from 'hono';
+import { OpenAPIHono } from '@hono/zod-openapi';
+import { swaggerUI } from '@hono/swagger-ui';
+import { createOpenAPIConfig, registerSecuritySchemes } from '../../lib/openapi/config';
+
+// Create the OpenAPI app
+const app = new OpenAPIHono();
+
+// Register security schemes
+registerSecuritySchemes(app);
+
+// Set up the JSON documentation endpoint
+app.doc('/api/docs', (c) => createOpenAPIConfig(c));
+
+// Set up the Swagger UI endpoint
+app.get('/api/docs/ui', swaggerUI({ url: '/api/docs' }));
+
+export default app;
+```
+
+## Using OpenAPI in API Routes
+
+### Example API Route
+
+```typescript
+import { z } from '@hono/zod-openapi';
+import { registerOpenAPIRoute } from '../../lib/openapi/route-utils';
+import { createApiResponseSchema } from '../../lib/openapi/schemas';
+
+// Define schemas
+const userSchema = z.object({
+  id: z.string().uuid({}).openapi({
+    example: '123e4567-e89b-12d3-a456-426614174000'
+  }),
+  name: z.string().min(1, {}).openapi({
+    example: 'John Doe'
+  }),
+  email: z.email({}).openapi({
+    example: 'john@example.com'
+  }),
+}, {});
+
+const createUserRequestSchema = z.object({
+  name: z.string().min(1, {}).openapi({
+    example: 'John Doe'
+  }),
+  email: z.email({}).openapi({
+    example: 'john@example.com'
+  }),
+}, {});
+
+// Create response schema
+const userResponseSchema = createApiResponseSchema(userSchema);
+
+// Define route
+export default function usersRoutes(app) {
+  // POST /api/users
+  registerOpenAPIRoute(app, {
+    method: 'post',
+    path: '/api/users',
+    tags: ['Users'],
+    summary: 'Create a new user',
+    description: 'Creates a new user with the provided information',
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: createUserRequestSchema,
+          },
+        },
+      },
+    },
+    responses: {
+      201: {
+        description: 'User created successfully',
+        content: {
+          'application/json': {
+            schema: userResponseSchema,
+          },
+        },
+      },
+      400: {
+        description: 'Invalid request',
+        content: {
+          'application/json': {
+            schema: userResponseSchema,
+          },
+        },
+      },
+    },
+    handler: async (c) => {
+      try {
+        const data = await c.req.json();
+        const validatedData = createUserRequestSchema.parse(data);
+        
+        // Implementation logic...
+        
+        return c.json({
+          success: true,
+          data: newUser,
+          meta: { timestamp: new Date().toISOString() },
+        }, 201);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          return c.json({
+            success: false,
+            error: {
+              code: 'VALIDATION_ERROR',
+              message: 'Invalid user data',
+              details: error.errors,
+            }
+          }, 400);
+        }
+        
+        return c.json({
+          success: false,
+          error: {
+            code: 'INTERNAL_ERROR',
+            message: 'Failed to create user',
+          }
+        }, 500);
+      }
+    },
+  });
+
+  return app;
+}
+```
+
+## Path Parameter Handling
+
+OpenAPI uses `{param}` syntax for path parameters, while Hono uses `:param`. Our `registerOpenAPIRoute` utility handles this conversion:
+
+```typescript
+// OpenAPI path
+const path = '/api/users/{userId}';
+
+// Converted to Hono path
+const honoPath = '/api/users/:userId';
+```
+
+## Testing OpenAPI Documentation
+
+You can test the OpenAPI documentation by:
+
+1. Starting the development server: `npm run dev`
+2. Accessing the Swagger UI at: `http://localhost:8787/api/docs/ui`
+3. Accessing the JSON documentation at: `http://localhost:8787/api/docs`
+
+## Best Practices
+
+1. **Complete Documentation**: Include detailed descriptions, examples, and tags in your OpenAPI metadata
+2. **Consistent Response Format**: Always use the standardized response format with `success`, `data`, and `meta` properties
+3. **Explicit Validation**: Always validate request data explicitly using Zod schemas
+4. **Error Handling**: Use standardized error responses with appropriate status codes
+
+For more detailed guidelines on API development with OpenAPI, see [`api-development-guidelines.md`](./api-development-guidelines.md).
+
+## References
+
+- [Hono Zod OpenAPI Documentation](https://github.com/honojs/middleware/tree/main/packages/zod-openapi)
+- [OpenAPI Specification](https://swagger.io/specification/)
+- [Zod Documentation](https://zod.dev/)

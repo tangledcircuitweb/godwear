@@ -93,8 +93,12 @@ See [`docs/test-cleanup-system.md`](./docs/test-cleanup-system.md) for complete 
 
 ## Documentation
 
+- [`docs/api-development-guidelines.md`](./docs/api-development-guidelines.md) - API development standards
+- [`docs/openapi.md`](./docs/openapi.md) - OpenAPI integration details
+- [`docs/api-structure.md`](./docs/api-structure.md) - API route organization
 - [`docs/testing-strategy.md`](./docs/testing-strategy.md) - Comprehensive testing approach
 - [`docs/test-cleanup-system.md`](./docs/test-cleanup-system.md) - Resource cleanup system
 - [`docs/current-testing-infrastructure.md`](./docs/current-testing-infrastructure.md) - Current test status
 - [`docs/mailersend-integration.md`](./docs/mailersend-integration.md) - Email service integration
 - [`docs/zod-v4-migration.md`](./docs/zod-v4-migration.md) - Zod v4 migration guide
+- [`docs/futureai.md`](./docs/futureai.md) - AI-first design principles
