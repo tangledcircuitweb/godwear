@@ -44,6 +44,7 @@
     "playwright:install": "npx playwright install --with-deps"
   },
   "dependencies": {
+    "@hono/zod-openapi": "^1.0.2",
     "@hono/zod-validator": "^0.7.2",
     "@sendgrid/mail": "^8.1.5",
     "dotenv": "^17.2.0",
