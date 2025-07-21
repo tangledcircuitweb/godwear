@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="utf-8">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <!--[if mso]>
+  <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
+  <style>
+    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
+  </style>
+  <![endif]-->
+  <title>How do you like your {{product.name}}?</title>
+  <style>
+    /* Base styles */
+    @media (prefers-color-scheme: dark) {
+      .dark-mode { background-color: #121212 !important; color: #ffffff !important; }
+      .dark-text { color: #ffffff !important; }
+      .dark-bg { background-color: #1e1e1e !important; }
+      .dark-button { background-color: #4f46e5 !important; color: #ffffff !important; }
+      .dark-border { border-color: #2e2e2e !important; }
+      .dark-divider { border-top-color: #2e2e2e !important; }
+      .dark-table-row { background-color: #1e1e1e !important; }
+      .dark-table-header { background-color: #2e2e2e !important; color: #ffffff !important; }
+      .dark-incentive { background-color: #2e2e2e !important; border-color: #10b981 !important; }
+      .dark-stars { color: #fbbf24 !important; }
+    }
+    
+    @media screen and (max-width: 600px) {
+      .sm-w-full { width: 100% !important; }
+      .sm-px-4 { padding-left: 16px !important; padding-right: 16px !important; }
+      .sm-py-8 { padding-top: 32px !important; padding-bottom: 32px !important; }
+      .sm-text-sm { font-size: 14px !important; }
+      .sm-text-lg { font-size: 18px !important; }
+      .sm-hidden { display: none !important; }
+      .sm-block { display: block !important; }
+      .sm-inline-block { display: inline-block !important; }
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background-color: #f3f4f6;" class="dark-mode">
+  <!-- Email wrapper -->
+  <div style="display: none;">We'd love to hear your thoughts on your {{product.name}}. {{#if incentive}}Share your review and earn {{incentive}}!{{/if}}</div>
+  <div role="article" aria-roledescription="email" aria-label="How do you like your {{product.name}}?" lang="en">
+    <table style="width: 100%; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;" cellpadding="0" cellspacing="0" role="presentation">
+      <tr>
+        <td align="center" style="padding: 24px 0;">
+          <!-- Email container -->
+          <table class="sm-w-full" style="width: 600px;" cellpadding="0" cellspacing="0" role="presentation">
+            <!-- Header -->
+            <tr>
+              <td class="dark-bg" style="background-color: #ffffff; padding: 24px; text-align: center; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+                <img src="{{logoUrl}}" width="150" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle;">
+              </td>
+            </tr>
+            <!-- Body -->
+            <tr>
+              <td class="dark-bg" style="background-color: #ffffff;">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td class="sm-px-4 sm-py-8" style="padding: 40px 48px; text-align: left;">
+                      <!-- Email content -->
+                      <h1 style="margin: 0; font-size: 24px; font-weight: 600; line-height: 32px; color: #111827;" class="dark-text sm-text-lg">How do you like your purchase?</h1>
+                      
+                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
+                        Hi {{firstName}},
+                      </p>
+                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
+                        Thank you for purchasing the {{product.name}}! We hope you're enjoying it. Your feedback is incredibly valuable to us and helps other customers make informed decisions.
+                      </p>
+                      
+                      <!-- Product Info -->
+                      <table style="width: 100%; margin-top: 32px; border-collapse: collapse;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr class="dark-table-row">
+                          <td style="padding: 24px; border: 1px solid #e5e7eb; border-radius: 4px; vertical-align: top;" class="dark-border">
+                            <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                              <tr>
+                                <td style="width: 120px; padding-right: 24px; vertical-align: top;" class="sm-hidden">
+                                  <img src="{{product.imageUrl}}" width="120" alt="{{product.name}}" style="border: 0; border-radius: 4px; max-width: 100%; vertical-align: middle;">
+                                </td>
+                                <td style="vertical-align: top;">
+                                  <h2 style="margin: 0; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">{{product.name}}</h2>
+                                  <p style="margin: 0; margin-top: 4px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">{{product.variant}}</p>
+                                  <p style="margin: 0; margin-top: 8px; font-size: 16px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">{{product.price}}</p>
+                                  <p style="margin: 0; margin-top: 16px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">
+                                    Purchased on {{orderDate}} • Order #{{orderNumber}}
+                                  </p>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Star Rating -->
+                      <table style="width: 100%; margin-top: 32px; text-align: center;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td>
+                            <p style="margin: 0; font-size: 16px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">
+                              How would you rate this product?
+                            </p>
+                            <div style="margin-top: 16px; font-size: 32px; line-height: 32px; color: #fbbf24;" class="dark-stars">
+                              <a href="{{reviewUrl}}?rating=5" style="color: #fbbf24; text-decoration: none; padding: 0 4px;">★</a>
+                              <a href="{{reviewUrl}}?rating=4" style="color: #fbbf24; text-decoration: none; padding: 0 4px;">★</a>
+                              <a href="{{reviewUrl}}?rating=3" style="color: #fbbf24; text-decoration: none; padding: 0 4px;">★</a>
+                              <a href="{{reviewUrl}}?rating=2" style="color: #fbbf24; text-decoration: none; padding: 0 4px;">★</a>
+                              <a href="{{reviewUrl}}?rating=1" style="color: #fbbf24; text-decoration: none; padding: 0 4px;">★</a>
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Review Button -->
+                      <table style="width: 100%; margin-top: 32px;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="text-align: center;">
+                            <a href="{{reviewUrl}}" style="display: inline-block; background-color: #4f46e5; color: #ffffff; font-size: 16px; font-weight: 600; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 24px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;" class="dark-button sm-w-full">
+                              Write a Review
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Incentive -->
+                      {{#if incentive}}
+                      <table style="width: 100%; margin-top: 32px; background-color: #ecfdf5; border-radius: 4px; border-left: 4px solid #10b981;" class="dark-incentive" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="padding: 16px;">
+                            <p style="margin: 0; font-size: 16px; line-height: 24px; color: #065f46;" class="dark-text">
+                              <strong>Special Offer:</strong> Share your review and earn <strong>{{incentive}}</strong>!
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                      {{/if}}
+                      
+                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
+                        Your review helps us improve our products and helps other customers make informed decisions. It only takes a minute to share your thoughts.
+                      </p>
+                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
+                        Thank you for your support!<br>
+                        The GodWear Team
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <!-- Footer -->
+            <tr>
+              <td class="dark-bg dark-border" style="background-color: #ffffff; border-top: 1px solid #e5e7eb; padding: 24px; text-align: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;">
+                <p style="margin: 0; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
+                  &copy; {{currentYear}} GodWear. All rights reserved.
+                </p>
+                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
+                  <a href="{{unsubscribeUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Unsubscribe</a> •
+                  <a href="{{privacyUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Privacy Policy</a> •
+                  <a href="{{termsUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Terms of Service</a>
+                </p>
+                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
+                  GodWear Inc., 123 Fashion Street, New York, NY 10001
+                </p>
+              </td>
+            </tr>
+            <!-- Spacer -->
+            <tr>
+              <td style="height: 24px;"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+HOW WAS YOUR ORDER?
+
+Hi {{firstName}},
+
+Thank you for your recent order! We hope you're enjoying your new GodWear items. We'd love to hear your feedback to help us improve our products and service.
+
+ORDER SUMMARY:
+Order Number: #{{orderNumber}}
+Order Date: {{orderDate}}
+Delivery Date: {{deliveryDate}}
+
+ITEMS PURCHASED:
+{{#each items}}
+- {{this.name}} ({{this.variant}})
+  {{this.price}} × {{this.quantity}}
+{{/each}}
+
+LEAVE YOUR FEEDBACK:
+{{reviewUrl}}
+
+{{#if discount}}
+SPECIAL OFFER JUST FOR YOU:
+As a thank you for your purchase, enjoy {{discount}}% off your next order with code: {{discountCode}}
+*Offer expires on {{discountExpiryDate}}
+{{/if}}
+
+{{#if recommendations.length}}
+YOU MIGHT ALSO LIKE:
+{{#each recommendations}}
+- {{this.name}} - {{this.price}}
+  {{this.url}}
+{{/each}}
+{{/if}}
+
+View order details: {{orderUrl}}
+
+If you have any questions about your order, please contact our support team:
+{{supportEmail}}
+
+Thank you for shopping with us!
+The GodWear Team
+
+---
+
+© {{currentYear}} GodWear. All rights reserved.
+
+Unsubscribe: {{unsubscribeUrl}}
+Privacy Policy: {{privacyUrl}}
+Terms of Service: {{termsUrl}}
+
+GodWear Inc., 123 Fashion Street, New York, NY 10001

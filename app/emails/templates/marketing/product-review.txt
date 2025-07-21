@@ -1,0 +1,32 @@
+HOW DO YOU LIKE YOUR {{product.name}}?
+
+Hi {{firstName}},
+
+Thank you for purchasing the {{product.name}}! We hope you're enjoying it. Your feedback is incredibly valuable to us and helps other customers make informed decisions.
+
+PRODUCT DETAILS:
+{{product.name}} ({{product.variant}})
+Price: {{product.price}}
+Purchased on {{orderDate}} • Order #{{orderNumber}}
+
+HOW WOULD YOU RATE THIS PRODUCT?
+Rate 1-5 stars and write a review: {{reviewUrl}}
+
+{{#if incentive}}
+SPECIAL OFFER: Share your review and earn {{incentive}}!
+{{/if}}
+
+Your review helps us improve our products and helps other customers make informed decisions. It only takes a minute to share your thoughts.
+
+Thank you for your support!
+The GodWear Team
+
+---
+
+© {{currentYear}} GodWear. All rights reserved.
+
+Unsubscribe: {{unsubscribeUrl}}
+Privacy Policy: {{privacyUrl}}
+Terms of Service: {{termsUrl}}
+
+GodWear Inc., 123 Fashion Street, New York, NY 10001
