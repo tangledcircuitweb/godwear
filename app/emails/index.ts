@@ -1,5 +1,6 @@
 // Re-export all email services and utilities
 export * from "./services";
+export * from "./analytics";
 
 // Export default email service factory
 import { EmailQueueService } from "./services/email-queue-service";

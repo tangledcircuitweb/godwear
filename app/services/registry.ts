@@ -4,6 +4,10 @@ import { D1DatabaseService, RepositoryRegistry } from "./database";
 import { HealthService } from "./health/health-service";
 import { NotificationService } from "./notifications/notification-service";
 import type { CloudflareBindings } from "../lib/zod-utils";
+import { createEmailService } from "../emails";
+import type { EmailService } from "../emails/services/email-service";
+import { createEmailAnalyticsService } from "../emails/analytics";
+import type { EmailAnalyticsService } from "../emails/analytics/email-analytics-service";
 
 /**
  * Service registry for managing all application services
@@ -17,6 +21,8 @@ export class ServiceRegistry {
   public readonly auth: AuthService;
   public readonly health: HealthService;
   public readonly notifications: NotificationService;
+  public readonly email: EmailService;
+  public readonly emailAnalytics: EmailAnalyticsService;
 
   constructor(dependencies: ServiceDependencies) {
     this.container = new ServiceContainer(dependencies);
@@ -39,6 +45,24 @@ export class ServiceRegistry {
     this.auth = this.container.register(new AuthService());
     this.health = this.container.register(new HealthService());
     this.notifications = this.container.register(new NotificationService());
+    
+    // Initialize email service
+    const emailServiceType = dependencies.env.EMAIL_SERVICE_TYPE || "queue";
+    this.email = this.container.register(
+      createEmailService({
+        type: emailServiceType as any,
+        dependencies,
+      })
+    );
+    
+    // Initialize email analytics service
+    const analyticsServiceType = dependencies.env.EMAIL_ANALYTICS_SERVICE_TYPE || "memory";
+    this.emailAnalytics = this.container.register(
+      createEmailAnalyticsService({
+        type: analyticsServiceType as any,
+        dependencies,
+      })
+    );
   }
 
   /**
@@ -135,4 +159,6 @@ export type Services = {
   auth: AuthService;
   health: HealthService;
   notifications: NotificationService;
+  email: EmailService;
+  emailAnalytics: EmailAnalyticsService;
 };
