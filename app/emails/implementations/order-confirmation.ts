@@ -11,7 +11,7 @@ import type { CloudflareBindings } from "../../lib/zod-utils";
 /**
  * Order item schema
  */
-const OrderItemSchema = z.object({
+export const OrderItemSchema = z.object({
   id: z.string(),
   productId: z.string(),
   name: z.string(),
@@ -25,7 +25,7 @@ const OrderItemSchema = z.object({
 /**
  * Address schema
  */
-const AddressSchema = z.object({
+export const AddressSchema = z.object({
   name: z.string(),
   street: z.string(),
   street2: z.string().optional(),

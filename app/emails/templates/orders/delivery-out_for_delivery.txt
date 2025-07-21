@@ -1,0 +1,33 @@
+YOUR ORDER IS OUT FOR DELIVERY - #{{orderNumber}}
+
+Hi {{firstName}},
+
+Great news! Your order #{{orderNumber}} is out for delivery today. Your package should arrive shortly.
+
+DELIVERY STATUS: OUT FOR DELIVERY
+{{statusMessage}}
+
+TRACKING INFORMATION:
+Carrier: {{carrier}}
+Tracking Number: {{trackingNumber}}
+{{#if updatedDeliveryDate}}Expected Delivery: {{updatedDeliveryDate}}{{/if}}
+
+Track your package: {{trackingUrl}}
+
+View order details: {{orderUrl}}
+
+If you have any questions about your delivery, please contact our support team:
+{{supportEmail}}
+
+Thank you for shopping with us!
+The GodWear Team
+
+---
+
+© {{currentYear}} GodWear. All rights reserved.
+
+Unsubscribe: {{unsubscribeUrl}}
+Privacy Policy: {{privacyUrl}}
+Terms of Service: {{termsUrl}}
+
+GodWear Inc., 123 Fashion Street, New York, NY 10001

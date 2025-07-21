@@ -1,0 +1,40 @@
+YOUR ORDER HAS BEEN DELIVERED - #{{orderNumber}}
+
+Hi {{firstName}},
+
+Great news! Your order #{{orderNumber}} has been delivered.
+
+DELIVERY STATUS: DELIVERED
+{{statusMessage}}
+{{#if deliveryLocation}}Location: {{deliveryLocation}}{{/if}}
+{{#if deliveryTime}}Time: {{deliveryTime}}{{/if}}
+
+TRACKING INFORMATION:
+Carrier: {{carrier}}
+Tracking Number: {{trackingNumber}}
+
+{{#if proofOfDelivery}}
+View proof of delivery: {{proofOfDelivery}}
+{{/if}}
+
+View order details: {{orderUrl}}
+
+HOW WAS YOUR EXPERIENCE?
+We'd love to hear your feedback. Please take a moment to review your purchase:
+{{orderUrl}}/review
+
+If you have any questions about your delivery, please contact our support team:
+{{supportEmail}}
+
+Thank you for shopping with us!
+The GodWear Team
+
+---
+
+© {{currentYear}} GodWear. All rights reserved.
+
+Unsubscribe: {{unsubscribeUrl}}
+Privacy Policy: {{privacyUrl}}
+Terms of Service: {{termsUrl}}
+
+GodWear Inc., 123 Fashion Street, New York, NY 10001

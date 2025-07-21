@@ -1,0 +1,57 @@
+PART OF YOUR ORDER HAS SHIPPED - #{{orderNumber}}
+
+Hi {{firstName}},
+
+Great news! Part of your order #{{orderNumber}} has shipped and is on its way to you. You can track your package using the information below.
+
+TRACKING INFORMATION:
+Carrier: {{carrier}}
+Tracking Number: {{trackingNumber}}
+Estimated Delivery: {{estimatedDelivery}}
+
+Track your package: {{trackingUrl}}
+
+SHIPPING ADDRESS:
+{{shippingAddress.name}}
+{{shippingAddress.street}}
+{{#if shippingAddress.street2}}{{shippingAddress.street2}}{{/if}}
+{{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}
+{{shippingAddress.country}}
+
+ITEMS SHIPPED:
+{{#each shippedItems}}
+- {{this.name}} ({{this.variant}})
+  Quantity: {{this.quantity}}
+  SKU: {{this.sku}}
+{{/each}}
+
+ITEMS STILL BEING PROCESSED:
+The following items from your order are still being processed and will ship separately:
+{{#each remainingItems}}
+- {{this.name}} ({{this.variant}}) - Qty: {{this.quantity}}
+{{/each}}
+
+We'll send you another email when these items ship.
+
+{{#if deliveryInstructions}}
+DELIVERY INSTRUCTIONS:
+{{deliveryInstructions}}
+{{/if}}
+
+View order details: {{orderUrl}}
+
+If you have any questions about your shipment, please contact our support team:
+{{supportEmail}}
+
+Thank you for shopping with us!
+The GodWear Team
+
+---
+
+© {{currentYear}} GodWear. All rights reserved.
+
+Unsubscribe: {{unsubscribeUrl}}
+Privacy Policy: {{privacyUrl}}
+Terms of Service: {{termsUrl}}
+
+GodWear Inc., 123 Fashion Street, New York, NY 10001
