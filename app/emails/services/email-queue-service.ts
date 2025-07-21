@@ -614,6 +614,199 @@ export class EmailQueueService extends BaseEmailService {
   }
 
   /**
+   * Resend an email
+   */
+  async resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult> {
+    try {
+      // Validate options if provided
+      const validatedOptions = options ? ResendOptionsSchema.parse(options) : undefined;
+      
+      // Find the email in the queue
+      const queueItem = this.queue.find(item => item.id === emailId);
+      
+      if (!queueItem) {
+        // If not in the queue, try to resend via the underlying email service
+        return await this.emailService.resendEmail(emailId, validatedOptions);
+      }
+      
+      // If the email is already completed or failed, create a new queue item
+      if (queueItem.status === "completed" || queueItem.status === "failed") {
+        // Create a new queue item based on the original
+        const newItem = {
+          ...queueItem,
+          id: crypto.randomUUID(),
+          attempts: 0,
+          nextAttempt: Date.now(),
+          status: "pending",
+        };
+        
+        // Update recipient if requested
+        if (validatedOptions?.updateRecipient && validatedOptions?.newRecipient) {
+          if (newItem.options.type === "raw") {
+            newItem.options.data.to = validatedOptions.newRecipient;
+          } else {
+            newItem.options.data.to = validatedOptions.newRecipient;
+          }
+        }
+        
+        // Add to queue
+        this.queue.push(newItem);
+        
+        // Save queue if persistence is enabled
+        await this.saveQueue();
+        
+        // Return result
+        return {
+          success: true,
+          messageId: newItem.id,
+          timestamp: new Date().toISOString(),
+          provider: "queue",
+          recipient: typeof validatedOptions?.newRecipient === "string" 
+            ? validatedOptions.newRecipient 
+            : validatedOptions?.newRecipient?.email || "unknown",
+          subject: "Resent Email",
+          status: "queued",
+        };
+      }
+      
+      // If the email is pending or processing, just return its status
+      return {
+        success: true,
+        messageId: queueItem.id,
+        timestamp: new Date().toISOString(),
+        provider: "queue",
+        recipient: "unknown", // We don't have easy access to the recipient here
+        subject: "Queued Email",
+        status: queueItem.status,
+      };
+    } catch (error) {
+      this.logger?.error("Failed to resend email", error as Error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get email status
+   */
+  async getEmailStatus(emailId: string): Promise<EmailStatus> {
+    try {
+      // Find the email in the queue
+      const queueItem = this.queue.find(item => item.id === emailId);
+      
+      if (!queueItem) {
+        // If not in the queue, try to get status from the underlying email service
+        return await this.emailService.getEmailStatus(emailId);
+      }
+      
+      // Map queue status to email status
+      let status: EmailStatus["status"];
+      switch (queueItem.status) {
+        case "pending":
+          status = queueItem.scheduledFor > Date.now() ? "scheduled" : "queued";
+          break;
+        case "processing":
+          status = "sending";
+          break;
+        case "completed":
+          status = "sent";
+          break;
+        case "failed":
+          status = "failed";
+          break;
+        default:
+          status = "queued";
+      }
+      
+      // Extract recipient and subject from options
+      let recipient = "unknown";
+      let subject = "Unknown";
+      
+      if (queueItem.options.type === "raw") {
+        const to = queueItem.options.data.to;
+        recipient = typeof to === "string" ? to : Array.isArray(to) ? to[0] : to.email;
+        subject = queueItem.options.data.subject;
+      } else {
+        const to = queueItem.options.data.to;
+        recipient = typeof to === "string" ? to : Array.isArray(to) ? to[0] : to.email;
+        subject = queueItem.options.data.subject;
+      }
+      
+      return {
+        id: queueItem.id,
+        status,
+        recipient,
+        subject,
+        scheduledFor: queueItem.scheduledFor > Date.now() ? new Date(queueItem.scheduledFor).toISOString() : undefined,
+        metadata: {
+          createdAt: new Date(queueItem.createdAt).toISOString(),
+          attempts: queueItem.attempts,
+          maxAttempts: queueItem.maxAttempts,
+          priority: queueItem.priority,
+        },
+      };
+    } catch (error) {
+      this.logger?.error("Failed to get email status", error as Error);
+      throw error;
+    }
+  }
+
+  /**
+   * Cancel a scheduled email
+   */
+  async cancelEmail(emailId: string): Promise<EmailResult> {
+    try {
+      // Find the email in the queue
+      const queueItemIndex = this.queue.findIndex(item => item.id === emailId);
+      
+      if (queueItemIndex === -1) {
+        // If not in the queue, try to cancel via the underlying email service
+        return await this.emailService.cancelEmail(emailId);
+      }
+      
+      const queueItem = this.queue[queueItemIndex];
+      
+      // Can only cancel pending emails
+      if (queueItem.status !== "pending") {
+        throw new Error(`Cannot cancel email with status: ${queueItem.status}`);
+      }
+      
+      // Remove from queue
+      this.queue.splice(queueItemIndex, 1);
+      
+      // Save queue if persistence is enabled
+      await this.saveQueue();
+      
+      // Extract recipient and subject from options
+      let recipient = "unknown";
+      let subject = "Unknown";
+      
+      if (queueItem.options.type === "raw") {
+        const to = queueItem.options.data.to;
+        recipient = typeof to === "string" ? to : Array.isArray(to) ? to[0] : to.email;
+        subject = queueItem.options.data.subject;
+      } else {
+        const to = queueItem.options.data.to;
+        recipient = typeof to === "string" ? to : Array.isArray(to) ? to[0] : to.email;
+        subject = queueItem.options.data.subject;
+      }
+      
+      // Return result
+      return {
+        success: true,
+        messageId: queueItem.id,
+        timestamp: new Date().toISOString(),
+        provider: "queue",
+        recipient,
+        subject,
+        status: "cancelled",
+      };
+    } catch (error) {
+      this.logger?.error("Failed to cancel email", error as Error);
+      throw error;
+    }
+  }
+
+  /**
    * Get health status of the email queue service
    */
   async getHealth(): Promise<ServiceHealthStatus> {

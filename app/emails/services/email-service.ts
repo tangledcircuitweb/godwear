@@ -68,6 +68,39 @@ const EmailResultSchema = z.object({
   subject: z.string(),
 });
 
+/**
+ * Email status schema
+ */
+const EmailStatusSchema = z.object({
+  id: z.string(),
+  status: z.enum([
+    "queued", 
+    "scheduled", 
+    "sending", 
+    "sent", 
+    "delivered", 
+    "failed", 
+    "bounced", 
+    "rejected", 
+    "cancelled"
+  ], {}),
+  recipient: z.string(),
+  subject: z.string(),
+  scheduledFor: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+});
+
+/**
+ * Resend options schema
+ */
+const ResendOptionsSchema = z.object({
+  updateRecipient: z.boolean().optional(),
+  newRecipient: z.object({
+    email: z.string().email({}),
+    name: z.string().optional(),
+  }).optional(),
+});
+
 // ============================================================================
 // TYPE INFERENCE
 // ============================================================================
@@ -78,6 +111,8 @@ export type BaseEmailOptions = z.infer<typeof BaseEmailOptionsSchema>;
 export type RawEmailOptions = z.infer<typeof RawEmailOptionsSchema>;
 export type TemplatedEmailOptions = z.infer<typeof TemplatedEmailOptionsSchema>;
 export type EmailResult = z.infer<typeof EmailResultSchema>;
+export type EmailStatus = z.infer<typeof EmailStatusSchema>;
+export type ResendOptions = z.infer<typeof ResendOptionsSchema>;
 
 /**
  * Email service interface for sending transactional emails
@@ -92,6 +127,21 @@ export interface EmailService extends BaseService {
    * Send an email using a template
    */
   sendTemplatedEmail(options: TemplatedEmailOptions): Promise<EmailResult>;
+
+  /**
+   * Resend an email
+   */
+  resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult>;
+
+  /**
+   * Get email status
+   */
+  getEmailStatus(emailId: string): Promise<EmailStatus>;
+
+  /**
+   * Cancel a scheduled email
+   */
+  cancelEmail(emailId: string): Promise<EmailResult>;
 
   /**
    * Get health status of the email service
@@ -114,6 +164,8 @@ export abstract class BaseEmailService implements EmailService {
   static readonly RawEmailOptionsSchema = RawEmailOptionsSchema;
   static readonly TemplatedEmailOptionsSchema = TemplatedEmailOptionsSchema;
   static readonly EmailResultSchema = EmailResultSchema;
+  static readonly EmailStatusSchema = EmailStatusSchema;
+  static readonly ResendOptionsSchema = ResendOptionsSchema;
 
   /**
    * Initialize the email service with dependencies
@@ -132,6 +184,21 @@ export abstract class BaseEmailService implements EmailService {
    * Send an email using a template
    */
   abstract sendTemplatedEmail(options: TemplatedEmailOptions): Promise<EmailResult>;
+
+  /**
+   * Resend an email
+   */
+  abstract resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult>;
+
+  /**
+   * Get email status
+   */
+  abstract getEmailStatus(emailId: string): Promise<EmailStatus>;
+
+  /**
+   * Cancel a scheduled email
+   */
+  abstract cancelEmail(emailId: string): Promise<EmailResult>;
 
   /**
    * Get health status of the email service

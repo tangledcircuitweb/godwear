@@ -654,6 +654,45 @@ export class TransactionalEmailService extends BaseEmailService {
   }
 
   /**
+   * Resend an email
+   */
+  async resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult> {
+    try {
+      // Delegate to the underlying email service
+      return await this.emailService.resendEmail(emailId, options);
+    } catch (error) {
+      this.logger?.error("Failed to resend email", error as Error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get email status
+   */
+  async getEmailStatus(emailId: string): Promise<EmailStatus> {
+    try {
+      // Delegate to the underlying email service
+      return await this.emailService.getEmailStatus(emailId);
+    } catch (error) {
+      this.logger?.error("Failed to get email status", error as Error);
+      throw error;
+    }
+  }
+
+  /**
+   * Cancel a scheduled email
+   */
+  async cancelEmail(emailId: string): Promise<EmailResult> {
+    try {
+      // Delegate to the underlying email service
+      return await this.emailService.cancelEmail(emailId);
+    } catch (error) {
+      this.logger?.error("Failed to cancel email", error as Error);
+      throw error;
+    }
+  }
+
+  /**
    * Get health status of the email service
    */
   async getHealth(): Promise<ServiceHealthStatus> {

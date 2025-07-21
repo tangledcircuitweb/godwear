@@ -206,6 +206,103 @@ export class MailerSendService extends BaseEmailService {
   }
 
   /**
+   * Resend an email
+   */
+  async resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult> {
+    try {
+      // Validate options if provided
+      const validatedOptions = options ? ResendOptionsSchema.parse(options) : undefined;
+      
+      // In a real implementation, we would call the MailerSend API to resend the email
+      // For now, we'll simulate the response
+      
+      // Check if the email exists (in a real implementation, we would check the API)
+      if (!emailId || !emailId.startsWith("email_")) {
+        throw new Error(`Email not found: ${emailId}`);
+      }
+      
+      // Log the resend request
+      this.logger?.info("Resending email", { emailId, options: validatedOptions });
+      
+      // Return a simulated result
+      return {
+        success: true,
+        messageId: `resend_${emailId}_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        provider: "mailersend",
+        recipient: validatedOptions?.newRecipient?.email || "recipient@example.com",
+        subject: "Resent Email",
+      };
+    } catch (error) {
+      this.logger?.error("Failed to resend email", error as Error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get email status
+   */
+  async getEmailStatus(emailId: string): Promise<EmailStatus> {
+    try {
+      // In a real implementation, we would call the MailerSend API to get the email status
+      // For now, we'll simulate the response
+      
+      // Check if the email exists (in a real implementation, we would check the API)
+      if (!emailId || !emailId.startsWith("email_")) {
+        throw new Error(`Email not found: ${emailId}`);
+      }
+      
+      // Log the status request
+      this.logger?.info("Getting email status", { emailId });
+      
+      // Return a simulated status
+      return {
+        id: emailId,
+        status: "sent",
+        recipient: "recipient@example.com",
+        subject: "Sample Email",
+        metadata: {
+          timestamp: new Date().toISOString(),
+        },
+      };
+    } catch (error) {
+      this.logger?.error("Failed to get email status", error as Error);
+      throw error;
+    }
+  }
+
+  /**
+   * Cancel a scheduled email
+   */
+  async cancelEmail(emailId: string): Promise<EmailResult> {
+    try {
+      // In a real implementation, we would call the MailerSend API to cancel the email
+      // For now, we'll simulate the response
+      
+      // Check if the email exists (in a real implementation, we would check the API)
+      if (!emailId || !emailId.startsWith("email_")) {
+        throw new Error(`Email not found: ${emailId}`);
+      }
+      
+      // Log the cancel request
+      this.logger?.info("Cancelling email", { emailId });
+      
+      // Return a simulated result
+      return {
+        success: true,
+        messageId: emailId,
+        timestamp: new Date().toISOString(),
+        provider: "mailersend",
+        recipient: "recipient@example.com",
+        subject: "Cancelled Email",
+      };
+    } catch (error) {
+      this.logger?.error("Failed to cancel email", error as Error);
+      throw error;
+    }
+  }
+
+  /**
    * Get health status of the MailerSend service
    */
   async getHealth(): Promise<ServiceHealthStatus> {

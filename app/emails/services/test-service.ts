@@ -141,6 +141,80 @@ export class TestEmailService extends BaseEmailService {
   }
 
   /**
+   * Resend an email
+   */
+  async resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult> {
+    try {
+      // Validate options if provided
+      const validatedOptions = options ? ResendOptionsSchema.parse(options) : undefined;
+      
+      // Log the resend request
+      this.logger?.info("Test service: Resending email", { emailId, options: validatedOptions });
+      
+      // Return a simulated result
+      return {
+        success: true,
+        messageId: `test_resend_${emailId}_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        provider: "test",
+        recipient: validatedOptions?.newRecipient?.email || "recipient@example.com",
+        subject: "Resent Test Email",
+      };
+    } catch (error) {
+      this.logger?.error("Test service: Failed to resend email", error as Error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get email status
+   */
+  async getEmailStatus(emailId: string): Promise<EmailStatus> {
+    try {
+      // Log the status request
+      this.logger?.info("Test service: Getting email status", { emailId });
+      
+      // Return a simulated status
+      return {
+        id: emailId,
+        status: "sent",
+        recipient: "recipient@example.com",
+        subject: "Test Email",
+        metadata: {
+          timestamp: new Date().toISOString(),
+          test: true,
+        },
+      };
+    } catch (error) {
+      this.logger?.error("Test service: Failed to get email status", error as Error);
+      throw error;
+    }
+  }
+
+  /**
+   * Cancel a scheduled email
+   */
+  async cancelEmail(emailId: string): Promise<EmailResult> {
+    try {
+      // Log the cancel request
+      this.logger?.info("Test service: Cancelling email", { emailId });
+      
+      // Return a simulated result
+      return {
+        success: true,
+        messageId: emailId,
+        timestamp: new Date().toISOString(),
+        provider: "test",
+        recipient: "recipient@example.com",
+        subject: "Cancelled Test Email",
+      };
+    } catch (error) {
+      this.logger?.error("Test service: Failed to cancel email", error as Error);
+      throw error;
+    }
+  }
+
+  /**
    * Get health status of the test email service
    */
   async getHealth(): Promise<ServiceHealthStatus> {
