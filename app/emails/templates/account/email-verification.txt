@@ -1,0 +1,25 @@
+VERIFY YOUR EMAIL ADDRESS
+
+Hi {{firstName}},
+
+Please verify your email address by clicking the link below. This step helps us keep your account secure and allows you to receive important notifications.
+
+VERIFY EMAIL ADDRESS:
+{{verificationUrl}}
+
+Note: This verification link will expire in {{expiresInMinutes}} minutes ({{expiresAt}}). If the link expires, you can request a new verification email from your account settings.
+
+If you didn't create an account with GodWear, please ignore this email or contact our support team if you have concerns:
+{{supportUrl}}
+
+Thank you,
+The GodWear Team
+
+---
+
+© {{currentYear}} GodWear. All rights reserved.
+
+Privacy Policy: {{privacyUrl}}
+Terms of Service: {{termsUrl}}
+
+GodWear Inc., 123 Fashion Street, New York, NY 10001

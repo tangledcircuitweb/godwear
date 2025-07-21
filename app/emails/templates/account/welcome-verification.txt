@@ -1,0 +1,33 @@
+WELCOME TO GODWEAR - VERIFY YOUR EMAIL
+
+Hi {{firstName}},
+
+Thank you for creating an account with GodWear! We're excited to have you join our community of athletes and fitness enthusiasts.
+
+To get started, please verify your email address by clicking the link below:
+
+VERIFY EMAIL ADDRESS:
+{{verificationUrl}}
+
+Note: This verification link will expire in {{expiresInMinutes}} minutes ({{expiresAt}}). If the link expires, you can request a new verification email from your account settings.
+
+YOUR GODWEAR BENEFITS:
+- Premium Quality: Performance fabrics designed for comfort and durability
+- Free Shipping: On all orders over $75
+- Exclusive Access: Early access to new collections and limited editions
+- Rewards Program: Earn points with every purchase
+
+If you have any questions or need assistance, please contact our support team:
+{{supportEmail}}
+
+Welcome to the team!
+The GodWear Team
+
+---
+
+© {{currentYear}} GodWear. All rights reserved.
+
+Privacy Policy: {{privacyUrl}}
+Terms of Service: {{termsUrl}}
+
+GodWear Inc., 123 Fashion Street, New York, NY 10001
