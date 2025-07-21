@@ -41,6 +41,13 @@
     "test:live": "vitest --config vitest.live.config.ts",
     "test:live:run": "vitest run --config vitest.live.config.ts",
     "test:live:kv": "vitest run --config vitest.live.config.ts app/services/auth/auth-service.test.ts",
+    "test:emails": "vitest run app/emails/**/*.test.ts",
+    "test:emails:watch": "vitest watch app/emails/**/*.test.ts",
+    "test:emails:templates": "vitest run app/emails/testing/template-rendering.test.ts",
+    "test:emails:visual": "tsx app/emails/testing/index.ts render-templates",
+    "test:emails:api": "vitest run app/emails/testing/api-integration.test.ts",
+    "test:emails:analytics": "vitest run app/emails/testing/analytics.test.ts",
+    "test:emails:implementations": "vitest run app/emails/testing/implementations.test.ts",
     "playwright:install": "npx playwright install --with-deps"
   },
   "dependencies": {
