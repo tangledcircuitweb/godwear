@@ -1,0 +1,15 @@
+{{title}}
+
+{{preheader}}
+
+{{content}}
+
+---
+
+© {{currentYear}} GodWear. All rights reserved.
+
+Unsubscribe: {{unsubscribeUrl}}
+Privacy Policy: {{privacyUrl}}
+Terms of Service: {{termsUrl}}
+
+GodWear Inc., 123 Fashion Street, New York, NY 10001

@@ -1,0 +1,36 @@
+WELCOME TO GODWEAR, {{name}}!
+
+Thank you for joining our community of athletes and fitness enthusiasts. We're excited to have you on board!
+
+At GodWear, we're committed to providing premium athletic wear that helps you perform at your best. Our products are designed with cutting-edge technology and sustainable materials to support your fitness journey.
+
+YOUR GODWEAR BENEFITS:
+- Premium Quality: Performance fabrics designed for comfort and durability
+- Free Shipping: On all orders over $75
+- Exclusive Access: Early access to new collections and limited editions
+- Rewards Program: Earn points with every purchase
+
+SPECIAL OFFER:
+Enjoy 10% off your first purchase with code: WELCOME10
+
+START SHOPPING: {{shopUrl}}
+
+Follow us for fitness tips and product updates:
+Instagram: {{instagramUrl}}
+Facebook: {{facebookUrl}}
+Twitter: {{twitterUrl}}
+
+If you have any questions, feel free to contact our support team at {{supportEmail}}.
+
+Welcome to the team!
+The GodWear Team
+
+---
+
+© {{currentYear}} GodWear. All rights reserved.
+
+Unsubscribe: {{unsubscribeUrl}}
+Privacy Policy: {{privacyUrl}}
+Terms of Service: {{termsUrl}}
+
+GodWear Inc., 123 Fashion Street, New York, NY 10001
