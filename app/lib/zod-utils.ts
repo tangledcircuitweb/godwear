@@ -1,6 +1,6 @@
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import { createApiResponseSchema, createDiscriminatedUnion } from "./zod-compat";
+import { createApiResponseSchema } from "./zod-compat";
 
 /**
  * Type helper for inferring Zod schema types
