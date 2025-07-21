@@ -43,3 +43,5 @@ vitest.config.js.timestamp-*
 
 # misc
 .DS_Store
+# Large files
+amazon-q.deb
