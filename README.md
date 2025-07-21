@@ -62,6 +62,8 @@ See [`docs/zod-v4-migration.md`](./docs/zod-v4-migration.md) for complete migrat
 
 GodWear includes a comprehensive testing system with automatic cleanup for live Cloudflare resources.
 
+> **Security Note:** There are known vulnerabilities in the Miniflare v2 testing dependencies. These are development-only dependencies and do not affect production deployments. We plan to upgrade to Miniflare v4 in a future update.
+
 ### Test Commands
 
 ```bash
