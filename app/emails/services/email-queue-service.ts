@@ -10,25 +10,25 @@ import type { ServiceDependencies, ServiceHealthStatus } from "../../services/ba
 /**
  * Email priority enum
  */
-const EmailPriorityEnum = z.enum(["critical", "high", "medium", "low"]);
+const EmailPriorityEnum = z.enum(["critical", "high", "medium", "low"], {});
 
 /**
  * Queue item schema
  */
 const QueueItemSchema = z.object({
   id: z.string(),
-  type: z.enum(["raw", "templated"]),
+  type: z.enum(["raw", "templated"], {}),
   options: z.union([
     z.object({ type: z.literal("raw"), data: z.any() }),
     z.object({ type: z.literal("templated"), data: z.any() }),
-  ]),
+  ], {}),
   priority: EmailPriorityEnum,
   attempts: z.number().int().nonnegative(),
   maxAttempts: z.number().int().positive(),
   nextAttempt: z.number().int().nonnegative(),
   createdAt: z.number().int().nonnegative(),
   scheduledFor: z.number().int().nonnegative(),
-  status: z.enum(["pending", "processing", "completed", "failed"]),
+  status: z.enum(["pending", "processing", "completed", "failed"], {}),
   result: z.any().optional(),
   error: z.string().optional(),
 });

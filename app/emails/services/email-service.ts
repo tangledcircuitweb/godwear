@@ -18,9 +18,9 @@ const EmailRecipientSchema = z.object({
  */
 const EmailAttachmentSchema = z.object({
   filename: z.string(),
-  content: z.union([z.string(), z.instanceof(Buffer)]),
+  content: z.union([z.string(), z.instanceof(Buffer)], {}),
   contentType: z.string().optional(),
-  disposition: z.enum(["attachment", "inline"]).optional(),
+  disposition: z.enum(["attachment", "inline"], {}).optional(),
   id: z.string().optional(), // For inline attachments (CID)
 });
 

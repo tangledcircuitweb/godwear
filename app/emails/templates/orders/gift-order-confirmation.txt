@@ -1,0 +1,67 @@
+GIFT ORDER CONFIRMATION - #{{orderNumber}}
+
+Hi {{name}},
+
+Thank you for your gift order! We've received your order and are getting it ready to ship. We'll notify you when it's on the way.
+
+YOUR GIFT MESSAGE:
+"{{giftMessage}}"
+
+ORDER SUMMARY:
+Order Number: #{{orderNumber}}
+Order Date: {{orderDate}}
+Payment Method: {{paymentMethod}}
+Shipping Method: {{shippingMethod}}
+
+GIFT ITEMS:
+{{#each items}}
+- {{this.name}} ({{this.variant}})
+  Quantity: {{this.quantity}}
+  Price: {{this.price}}
+  SKU: {{this.sku}}
+{{/each}}
+
+TOTALS:
+Subtotal: {{subtotal}}
+Shipping: {{shipping}}
+Tax: {{tax}}
+{{#if discount}}Discount: -{{discount}}{{/if}}
+Total: {{total}}
+
+SHIPPING ADDRESS:
+{{shippingAddress.name}}
+{{shippingAddress.street}}
+{{#if shippingAddress.street2}}{{shippingAddress.street2}}{{/if}}
+{{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}
+{{shippingAddress.country}}
+
+BILLING ADDRESS:
+{{billingAddress.name}}
+{{billingAddress.street}}
+{{#if billingAddress.street2}}{{billingAddress.street2}}{{/if}}
+{{billingAddress.city}}, {{billingAddress.state}} {{billingAddress.zip}}
+{{billingAddress.country}}
+
+ESTIMATED DELIVERY DATE:
+{{estimatedDelivery}}
+
+Note: This is a gift order. No pricing information will be included with the shipment.
+
+TRACK YOUR ORDER:
+{{trackOrderUrl}}
+
+If you have any questions about your order, please contact our support team:
+{{supportEmail}}
+
+Thank you for shopping with us!
+The GodWear Team
+
+---
+
+© {{currentYear}} GodWear. All rights reserved.
+
+Unsubscribe: {{unsubscribeUrl}}
+Privacy Policy: {{privacyUrl}}
+Terms of Service: {{termsUrl}}
+
+GodWear Inc., 123 Fashion Street, New York, NY 10001

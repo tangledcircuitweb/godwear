@@ -1,0 +1,54 @@
+ORDER CANCELLATION - #{{orderNumber}}
+
+Hi {{name}},
+
+We're writing to confirm that your order #{{orderNumber}} has been cancelled.
+
+CANCELLATION DETAILS:
+Reason: {{cancellationReason}}
+{{#if refund}}
+Refund Amount: {{refund.formattedAmount}}
+Refund Method: {{refund.method}}
+
+Please allow 3-5 business days for the refund to appear in your account.
+{{/if}}
+
+ORDER SUMMARY:
+Order Number: #{{orderNumber}}
+Order Date: {{orderDate}}
+Payment Method: {{paymentMethod}}
+
+CANCELLED ITEMS:
+{{#each items}}
+- {{this.name}} ({{this.variant}})
+  Quantity: {{this.quantity}}
+  Price: {{this.price}}
+  SKU: {{this.sku}}
+{{/each}}
+
+TOTALS:
+Subtotal: {{subtotal}}
+Shipping: {{shipping}}
+Tax: {{tax}}
+{{#if discount}}Discount: -{{discount}}{{/if}}
+Total: {{total}}
+
+View order details: {{orderUrl}}
+
+We're sorry we couldn't fulfill your order. If you're still looking for similar items, please visit our website to browse our latest collection.
+
+If you have any questions about your cancellation, please contact our support team:
+{{supportEmail}}
+
+Thank you for your understanding,
+The GodWear Team
+
+---
+
+© {{currentYear}} GodWear. All rights reserved.
+
+Unsubscribe: {{unsubscribeUrl}}
+Privacy Policy: {{privacyUrl}}
+Terms of Service: {{termsUrl}}
+
+GodWear Inc., 123 Fashion Street, New York, NY 10001
