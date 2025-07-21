@@ -4,6 +4,7 @@ export * from "./analytics";
 
 // Export default email service factory
 import { EmailQueueService } from "./services/email-queue-service";
+import { EnhancedEmailQueueService } from "./services/enhanced-queue-service";
 import { MailerSendService } from "./services/mailersend-service";
 import { TestEmailService } from "./services/test-service";
 import { TransactionalEmailService } from "./services/transactional-email-service";
@@ -17,11 +18,12 @@ export interface EmailServiceFactoryOptions {
   /**
    * Type of email service to create
    * - "queue": Email queue service with scheduling and rate limiting
+   * - "enhanced-queue": Enhanced email queue service with advanced scheduling and prioritization
    * - "transactional": Transactional email service with specialized methods
    * - "mailersend": Direct MailerSend service
    * - "test": Test email service for development
    */
-  type?: "queue" | "transactional" | "mailersend" | "test";
+  type?: "queue" | "enhanced-queue" | "transactional" | "mailersend" | "test";
   
   /**
    * Service dependencies
@@ -40,6 +42,9 @@ export function createEmailService(options: EmailServiceFactoryOptions): BaseEma
   switch (type) {
     case "queue":
       service = new EmailQueueService();
+      break;
+    case "enhanced-queue":
+      service = new EnhancedEmailQueueService();
       break;
     case "transactional":
       service = new TransactionalEmailService();
