@@ -81,10 +81,10 @@ export function createLiveEmailTestEnvironment(): LiveEmailTestEnvironment {
       
       // Configurable email timing intervals (in milliseconds)
       EMAIL_INTERVAL_CRITICAL: "0",     // No delay for critical emails
-      EMAIL_INTERVAL_HIGH: "5000",      // 5 seconds between high priority emails
-      EMAIL_INTERVAL_MEDIUM: "30000",   // 30 seconds between medium priority emails
-      EMAIL_INTERVAL_LOW: "60000",      // 1 minute between low priority emails
-      EMAIL_INTERVAL_TESTING: "60000",  // 1 minute for testing mode (configurable)
+      EMAIL_INTERVAL_HIGH: "60000",     // 60 seconds between high priority emails
+      EMAIL_INTERVAL_MEDIUM: "60000",   // 60 seconds between medium priority emails
+      EMAIL_INTERVAL_LOW: "60000",      // 60 seconds between low priority emails
+      EMAIL_INTERVAL_TESTING: "60000",  // 60 seconds for testing mode (configurable)
       
       // Enable testing mode for consistent timing
       EMAIL_TESTING_MODE: "true",

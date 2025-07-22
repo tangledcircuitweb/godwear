@@ -37,9 +37,9 @@ describe("Email Timing System", () => {
     testRecipient: "njordrenterprises@gmail.com",
     fromEmail: "noreply@godwear.ca",
     testIntervals: {
-      short: 10000,  // 10 seconds for quick testing
-      medium: 30000, // 30 seconds
-      long: 60000,   // 1 minute
+      short: 60000,  // 60 seconds for rate limiting prevention
+      medium: 60000, // 60 seconds
+      long: 60000,   // 60 seconds
     },
   };
 

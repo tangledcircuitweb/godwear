@@ -33,7 +33,7 @@ describe("Live Email Analytics", () => {
   const config: LiveAnalyticsTestConfig = {
     testRecipient: "njordrenterprises@gmail.com",
     fromEmail: "noreply@godwear.ca",
-    timingInterval: 30000, // 30 seconds between emails for testing
+    timingInterval: 60000, // 60 seconds between emails for testing
   };
 
   let testEnv = createLiveEmailTestEnvironment();

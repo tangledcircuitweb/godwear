@@ -53,10 +53,10 @@ const QueueOptionsSchema = z.object({
   // Configurable timing intervals between emails (in milliseconds)
   emailIntervals: z.object({
     critical: z.number().int().nonnegative().default(0),     // No delay for critical emails
-    high: z.number().int().nonnegative().default(5000),     // 5 seconds between high priority emails
-    medium: z.number().int().nonnegative().default(30000),  // 30 seconds between medium priority emails
-    low: z.number().int().nonnegative().default(60000),     // 1 minute between low priority emails
-    testing: z.number().int().nonnegative().default(60000), // 1 minute for testing mode
+    high: z.number().int().nonnegative().default(60000),    // 60 seconds between high priority emails
+    medium: z.number().int().nonnegative().default(60000),  // 60 seconds between medium priority emails
+    low: z.number().int().nonnegative().default(60000),     // 60 seconds between low priority emails
+    testing: z.number().int().nonnegative().default(60000), // 60 seconds for testing mode
   }).default({}),
   retryDelays: z.array(z.number().int().nonnegative()).default([1000, 5000, 15000, 60000]),
   persistenceKey: z.string().optional(),
@@ -231,8 +231,8 @@ export class EnhancedEmailQueueService extends BaseEmailService {
       },
       emailIntervals: {
         critical: Number(this.env.EMAIL_INTERVAL_CRITICAL || 0),
-        high: Number(this.env.EMAIL_INTERVAL_HIGH || 5000),
-        medium: Number(this.env.EMAIL_INTERVAL_MEDIUM || 30000),
+        high: Number(this.env.EMAIL_INTERVAL_HIGH || 60000),
+        medium: Number(this.env.EMAIL_INTERVAL_MEDIUM || 60000),
         low: Number(this.env.EMAIL_INTERVAL_LOW || 60000),
         testing: Number(this.env.EMAIL_INTERVAL_TESTING || 60000),
       },
