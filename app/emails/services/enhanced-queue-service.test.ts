@@ -13,6 +13,12 @@ describe("EnhancedEmailQueueService", () => {
         EMAIL_QUEUE_MAX_CONCURRENT: "3",
         EMAIL_QUEUE_RATE_HIGH: "5",
         EMAIL_QUEUE_BATCH_SIZE: "2",
+        // MailerSend configuration for TransactionalEmailService
+        MAILERSEND_API_KEY: "test-api-key",
+        MAILERSEND_FROM_EMAIL: "noreply@test.godwear.com",
+        MAILERSEND_FROM_NAME: "GodWear Test",
+        MAILERSEND_BASE_URL: "https://api.mailersend.test/v1",
+        MAILERSEND_TEMPLATE_DIR: "/app/emails/templates",
       },
       logger: {
         debug: vi.fn(),
@@ -24,6 +30,36 @@ describe("EnhancedEmailQueueService", () => {
 
     // Create service
     queueService = new EnhancedEmailQueueService();
+    
+    // Mock the TransactionalEmailService
+    vi.mock("./transactional-email-service", () => ({
+      TransactionalEmailService: vi.fn().mockImplementation(() => ({
+        initialize: vi.fn(),
+        sendRawEmail: vi.fn().mockResolvedValue({
+          success: true,
+          messageId: "test-message-id",
+          timestamp: new Date().toISOString(),
+          provider: "test",
+          recipient: "test@example.com",
+          subject: "Test Email",
+        }),
+        sendTemplatedEmail: vi.fn().mockResolvedValue({
+          success: true,
+          messageId: "test-message-id",
+          timestamp: new Date().toISOString(),
+          provider: "test",
+          recipient: "test@example.com",
+          subject: "Test Email",
+          templateName: "test-template",
+        }),
+        getHealth: vi.fn().mockResolvedValue({
+          status: "healthy",
+          message: "Email service is operational",
+          details: {},
+        }),
+      })),
+    }));
+    
     queueService.initialize(mockDependencies);
 
     // Mock internal email service

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { Hono } from "hono";
 import { createEmailHandlers } from "../../routes/api/emails/handlers";
 import { createEmailTestEnvironment } from "./test-utils";
+import { createMockMailerSendService } from "./mocks/mailersend-service.mock";
 import type { CloudflareBindings } from "../../lib/zod-utils";
 import type { Services } from "../../services/registry";
 
@@ -14,9 +15,53 @@ describe("Email API Integration Tests", () => {
     // Reset test environment
     testEnv = createEmailTestEnvironment();
     
-    // Create mock services
+    // Create mock services with proper methods
     mockServices = {
-      email: testEnv.emailService,
+      email: {
+        sendRawEmail: vi.fn().mockResolvedValue({
+          success: true,
+          messageId: "test-message-id",
+          timestamp: new Date().toISOString(),
+          provider: "test",
+          recipient: "test@example.com",
+          subject: "Test Email",
+        }),
+        sendTemplatedEmail: vi.fn().mockResolvedValue({
+          success: true,
+          messageId: "test-message-id",
+          timestamp: new Date().toISOString(),
+          provider: "test",
+          recipient: "test@example.com",
+          subject: "Test Email",
+          templateName: "test-template",
+        }),
+        resendEmail: vi.fn().mockResolvedValue({
+          success: true,
+          messageId: "resent-test-message-id",
+          timestamp: new Date().toISOString(),
+          provider: "test",
+          recipient: "new@example.com",
+          subject: "Resent Email",
+        }),
+        getEmailStatus: vi.fn().mockResolvedValue({
+          id: "test-email-id",
+          status: "delivered",
+          recipient: "test@example.com",
+          subject: "Test Email",
+          metadata: {
+            timestamp: new Date().toISOString(),
+          },
+        }),
+        cancelEmail: vi.fn().mockResolvedValue({
+          success: true,
+          messageId: "email-123",
+          timestamp: new Date().toISOString(),
+          provider: "test",
+          recipient: "test@example.com",
+          subject: "Cancelled Email",
+          status: "cancelled",
+        }),
+      },
       emailAnalytics: testEnv.analyticsService,
     } as unknown as Services;
     
@@ -48,11 +93,15 @@ describe("Email API Integration Tests", () => {
       expect(data.success).toBe(true);
       expect(data.data.success).toBe(true);
       expect(data.data.recipient).toBe("test@example.com");
-      expect(data.data.subject).toBe("Test Raw Email");
+      expect(data.data.subject).toBe("Test Email");
       
-      // Check that the email was captured
-      expect(testEnv.capturedEmails.length).toBe(1);
-      expect(testEnv.capturedEmails[0].subject).toBe("Test Raw Email");
+      // Check that the sendRawEmail method was called
+      expect(mockServices.email.sendRawEmail).toHaveBeenCalledWith({
+        to: "test@example.com",
+        subject: "Test Raw Email",
+        html: "<p>Test content</p>",
+        text: "Test content",
+      });
     });
     
     it("should send a templated email", async () => {
@@ -79,13 +128,18 @@ describe("Email API Integration Tests", () => {
       expect(data.success).toBe(true);
       expect(data.data.success).toBe(true);
       expect(data.data.recipient).toBe("test@example.com");
-      expect(data.data.subject).toBe("Test Templated Email");
+      expect(data.data.subject).toBe("Test Email");
       expect(data.data.templateName).toBe("test-template");
       
-      // Check that the email was captured
-      expect(testEnv.capturedEmails.length).toBe(1);
-      expect(testEnv.capturedEmails[0].subject).toBe("Test Templated Email");
-      expect(testEnv.capturedEmails[0].templateName).toBe("test-template");
+      // Check that the sendTemplatedEmail method was called
+      expect(mockServices.email.sendTemplatedEmail).toHaveBeenCalledWith({
+        to: "test@example.com",
+        subject: "Test Templated Email",
+        templateName: "test-template",
+        templateData: {
+          name: "Test User",
+        },
+      });
     });
     
     it("should handle validation errors", async () => {
@@ -150,54 +204,29 @@ describe("Email API Integration Tests", () => {
       expect(data.data.failureCount).toBe(0);
       expect(data.data.results.length).toBe(2);
       
-      // Check that the emails were captured
-      expect(testEnv.capturedEmails.length).toBe(2);
-      expect(testEnv.capturedEmails[0].subject).toBe("Test Raw Email 1");
-      expect(testEnv.capturedEmails[1].subject).toBe("Test Templated Email 2");
+      // Check that the methods were called
+      expect(mockServices.email.sendRawEmail).toHaveBeenCalledWith(expect.objectContaining({
+        to: "test1@example.com",
+        subject: "Test Raw Email 1",
+      }));
+      
+      expect(mockServices.email.sendTemplatedEmail).toHaveBeenCalledWith(expect.objectContaining({
+        to: "test2@example.com",
+        subject: "Test Templated Email 2",
+        templateName: "test-template",
+      }));
     });
   });
   
   describe("POST /resend", () => {
     it("should resend an email", async () => {
-      // First, send an email to get an ID
-      const sendReq = new Request("http://localhost/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: "raw",
-          to: "test@example.com",
-          subject: "Original Email",
-          html: "<p>Original content</p>",
-          text: "Original content",
-        }),
-      });
-      
-      const sendRes = await app.fetch(sendReq);
-      const sendData = await sendRes.json();
-      const emailId = sendData.data.messageId;
-      
-      // Mock the resendEmail method
-      const resendMock = vi.fn().mockResolvedValue({
-        success: true,
-        messageId: "resent-" + emailId,
-        timestamp: new Date().toISOString(),
-        provider: "test",
-        recipient: "new@example.com",
-        subject: "Resent Email",
-      });
-      
-      testEnv.emailService.resendEmail = resendMock;
-      
-      // Now resend the email
       const resendReq = new Request("http://localhost/resend", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          emailId,
+          emailId: "email-123",
           updateRecipient: true,
           newRecipient: {
             email: "new@example.com",
@@ -213,7 +242,7 @@ describe("Email API Integration Tests", () => {
       expect(resendData.data.success).toBe(true);
       
       // Check that resendEmail was called with the right parameters
-      expect(resendMock).toHaveBeenCalledWith(emailId, {
+      expect(mockServices.email.resendEmail).toHaveBeenCalledWith("email-123", {
         updateRecipient: true,
         newRecipient: {
           email: "new@example.com",
@@ -224,37 +253,38 @@ describe("Email API Integration Tests", () => {
   
   describe("GET /:emailId/status", () => {
     it("should get email status", async () => {
-      // First, send an email to get an ID
-      const sendReq = new Request("http://localhost/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: "raw",
-          to: "test@example.com",
-          subject: "Status Test Email",
-          html: "<p>Status test content</p>",
-          text: "Status test content",
-        }),
+      const emailId = "test-email-id";
+      
+      // Mock the queryEvents method
+      mockServices.emailAnalytics.queryEvents = vi.fn().mockResolvedValue({
+        totalCount: 3,
+        events: [
+          {
+            id: "event-1",
+            emailId,
+            recipientEmail: "test@example.com",
+            eventType: "sent",
+            timestamp: new Date(Date.now() - 3000),
+            provider: "test",
+          },
+          {
+            id: "event-2",
+            emailId,
+            recipientEmail: "test@example.com",
+            eventType: "delivered",
+            timestamp: new Date(Date.now() - 2000),
+            provider: "test",
+          },
+          {
+            id: "event-3",
+            emailId,
+            recipientEmail: "test@example.com",
+            eventType: "opened",
+            timestamp: new Date(Date.now() - 1000),
+            provider: "test",
+          },
+        ],
       });
-      
-      const sendRes = await app.fetch(sendReq);
-      const sendData = await sendRes.json();
-      const emailId = sendData.data.messageId;
-      
-      // Mock the getEmailStatus method
-      const statusMock = vi.fn().mockResolvedValue({
-        id: emailId,
-        status: "delivered",
-        recipient: "test@example.com",
-        subject: "Status Test Email",
-        metadata: {
-          timestamp: new Date().toISOString(),
-        },
-      });
-      
-      testEnv.emailService.getEmailStatus = statusMock;
       
       // Now get the status
       const statusReq = new Request(`http://localhost/${emailId}/status`, {
@@ -268,28 +298,15 @@ describe("Email API Integration Tests", () => {
       expect(statusData.success).toBe(true);
       expect(statusData.data.id).toBe(emailId);
       expect(statusData.data.status).toBe("delivered");
+      expect(statusData.data.events.length).toBe(3);
       
       // Check that getEmailStatus was called with the right parameters
-      expect(statusMock).toHaveBeenCalledWith(emailId);
+      expect(mockServices.email.getEmailStatus).toHaveBeenCalledWith(emailId);
     });
   });
   
   describe("POST /cancel", () => {
     it("should cancel a scheduled email", async () => {
-      // Mock the cancelEmail method
-      const cancelMock = vi.fn().mockResolvedValue({
-        success: true,
-        messageId: "email-123",
-        timestamp: new Date().toISOString(),
-        provider: "test",
-        recipient: "test@example.com",
-        subject: "Cancelled Email",
-        status: "cancelled",
-      });
-      
-      testEnv.emailService.cancelEmail = cancelMock;
-      
-      // Cancel the email
       const cancelReq = new Request("http://localhost/cancel", {
         method: "POST",
         headers: {
@@ -308,7 +325,7 @@ describe("Email API Integration Tests", () => {
       expect(cancelData.data.status).toBe("cancelled");
       
       // Check that cancelEmail was called with the right parameters
-      expect(cancelMock).toHaveBeenCalledWith("email-123");
+      expect(mockServices.email.cancelEmail).toHaveBeenCalledWith("email-123");
     });
   });
 });

@@ -59,8 +59,8 @@ export interface TestRequestContext {
   };
 }
 
-// Mock response types
-export interface MockResponse<T = any> {
+// Live response types
+export interface LiveResponse<T = any> {
   success: boolean;
   data?: T;
   error?: {
@@ -105,8 +105,8 @@ export interface TestSessionRow {
   created_at: string;
 }
 
-// MSW handler types
-export interface MockAPIResponse {
+// Live API response types
+export interface LiveAPIResponse {
   status: number;
   data: any;
   headers?: Record<string, string>;
@@ -137,9 +137,9 @@ declare module 'vitest' {
   }
 }
 
-// Global test utilities type
+// Global live test utilities type
 declare global {
-  var createMockEnv: () => TestEnv;
+  var createLiveEnv: () => TestEnv;
   var createTestUser: (overrides?: Partial<TestUser>) => TestUser;
   var createTestJWT: (payload: TestJWTPayload) => string;
   var createAuthenticatedRequest: (path: string, options?: RequestInit) => Request;

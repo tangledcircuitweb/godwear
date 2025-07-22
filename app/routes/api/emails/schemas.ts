@@ -208,18 +208,3 @@ export const EmailBatchResponseSchema = z.object({
 // ============================================================================
 // API RESPONSE CREATORS
 // ============================================================================
-
-/**
- * Create an API response for a single email
- */
-export const createEmailResponse = createApiResponse(EmailResponseSchema);
-
-/**
- * Create an API response for email status
- */
-export const createEmailStatusResponse = createApiResponse(EmailStatusResponseSchema);
-
-/**
- * Create an API response for email batch
- */
-export const createEmailBatchResponse = createApiResponse(EmailBatchResponseSchema);

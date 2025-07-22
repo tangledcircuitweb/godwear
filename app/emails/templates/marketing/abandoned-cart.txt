@@ -1,43 +1,43 @@
-COMPLETE YOUR GODWEAR PURCHASE
+YOUR CART IS WAITING! - GODWEAR
 
-Hi {{name}},
+Hello {{firstName}},
 
-We noticed you left some items in your shopping cart. Don't worry, we've saved them for you! These popular items often sell out quickly, so we wanted to make sure you didn't miss out.
+We noticed you left some items in your shopping cart. Don't worry, we've saved them for you!
 
-YOUR CART ITEMS:
+YOUR CART
+----------------
 {{#each items}}
-- {{this.name}} ({{this.variant}})
-  Price: {{this.price}}
+* {{name}} - {{variant}}
+  Quantity: {{quantity}}
+  Price: {{price}}
 {{/each}}
 
 Total: {{cartTotal}}
 
 {{#if discount}}
-SPECIAL OFFER JUST FOR YOU:
-Complete your purchase now and get {{discount}}% off with code: {{discountCode}}
-*Offer expires in {{expiryHours}} hours
+SAVE {{discount}}% TODAY!
+----------------
+Complete your purchase now and get {{discount}}% off your order!
+
+Discount Code: {{discountCode}}
+
+This offer expires in {{expiryHours}} hours.
 {{/if}}
 
 Complete your purchase: {{cartUrl}}
 
-YOU MIGHT ALSO LIKE:
+{{#if recommendations.length}}
+YOU MIGHT ALSO LIKE
+----------------
 {{#each recommendations}}
-- {{this.name}} - {{this.price}}
-  {{this.url}}
+* {{name}} - {{price}}
+  {{url}}
 {{/each}}
+{{/if}}
 
-If you have any questions or need assistance with your purchase, please contact our support team:
-{{supportEmail}}
-
-Happy shopping!
-The GodWear Team
-
----
+If you have any questions or need assistance with your purchase, please contact our customer service team at {{supportEmail}}.
 
 © {{currentYear}} GodWear. All rights reserved.
-
 Unsubscribe: {{unsubscribeUrl}}
 Privacy Policy: {{privacyUrl}}
 Terms of Service: {{termsUrl}}
-
-GodWear Inc., 123 Fashion Street, New York, NY 10001

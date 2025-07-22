@@ -1,3 +1,105 @@
+import { z } from "zod";
+import { BaseEmailService, EmailResult, EmailStatus, RawEmailOptions, ResendOptions, TemplatedEmailOptions } from "./email-service";
+import type { ServiceDependencies, ServiceHealthStatus } from "../../services/base";
+
+// ============================================================================
+// LOCAL SCHEMAS
+// ============================================================================
+
+/**
+ * Email priority enum
+ */
+const EmailPriorityEnum = z.enum(["critical", "high", "medium", "low"], {});
+
+/**
+ * Queue item schema
+ */
+const QueueItemSchema = z.object({
+  id: z.string(),
+  type: z.enum(["raw", "templated"], {}),
+  options: z.union([
+    z.object({ type: z.literal("raw"), data: z.any() }),
+    z.object({ type: z.literal("templated"), data: z.any() }),
+  ], {}),
+  priority: EmailPriorityEnum,
+  attempts: z.number().int().nonnegative(),
+  maxAttempts: z.number().int().positive(),
+  nextAttempt: z.number().int().nonnegative(),
+  createdAt: z.number().int().nonnegative(),
+  scheduledFor: z.number().int().nonnegative(),
+  status: z.enum(["pending", "processing", "completed", "failed", "cancelled"], {}),
+  result: z.any().optional(),
+  error: z.string().optional(),
+});
+
+/**
+ * Queue options schema
+ */
+const QueueOptionsSchema = z.object({
+  maxConcurrent: z.number().int().positive().default(5),
+  rateLimit: z.object({
+    critical: z.number().int().nonnegative().default(0), // No limit
+    high: z.number().int().nonnegative().default(10),    // 10 per second
+    medium: z.number().int().nonnegative().default(5),   // 5 per second
+    low: z.number().int().nonnegative().default(2),     // 2 per second
+  }),
+  retryDelay: z.number().int().positive().default(5000), // 5 seconds
+  maxRetries: z.number().int().nonnegative().default(3),
+  batchSize: z.number().int().positive().default(10),
+});
+
+// ============================================================================
+// TYPE INFERENCE
+// ============================================================================
+
+export type EmailPriority = z.infer<typeof EmailPriorityEnum>;
+export type QueueItem = z.infer<typeof QueueItemSchema>;
+export type QueueOptions = z.infer<typeof QueueOptionsSchema>;
+
+/**
+ * Email queue service for managing email sending with priorities and rate limiting
+ */
+export class EmailQueueService extends BaseEmailService {
+  readonly serviceName = "email-queue-service";
+  
+  private emailService: BaseEmailService;
+  private queue: QueueItem[] = [];
+  private processing = new Set<string>();
+  private options: QueueOptions;
+  private rateLimiters = new Map<EmailPriority, { count: number; resetTime: number }>();
+  private isProcessing = false;
+
+  constructor(emailService: BaseEmailService) {
+    super();
+    this.emailService = emailService;
+    this.options = QueueOptionsSchema.parse({});
+  }
+
+  /**
+   * Initialize the queue service
+   */
+  initialize(dependencies: ServiceDependencies): void {
+    super.initialize(dependencies);
+    this.emailService.initialize(dependencies);
+    
+    // Parse queue options from environment
+    this.options = QueueOptionsSchema.parse({
+      maxConcurrent: parseInt(dependencies.env.EMAIL_QUEUE_MAX_CONCURRENT || "5"),
+      rateLimit: {
+        critical: parseInt(dependencies.env.EMAIL_QUEUE_RATE_CRITICAL || "0"),
+        high: parseInt(dependencies.env.EMAIL_QUEUE_RATE_HIGH || "10"),
+        medium: parseInt(dependencies.env.EMAIL_QUEUE_RATE_MEDIUM || "5"),
+        low: parseInt(dependencies.env.EMAIL_QUEUE_RATE_LOW || "2"),
+      },
+      retryDelay: parseInt(dependencies.env.EMAIL_QUEUE_RETRY_DELAY || "5000"),
+      maxRetries: parseInt(dependencies.env.EMAIL_QUEUE_MAX_RETRIES || "3"),
+      batchSize: parseInt(dependencies.env.EMAIL_QUEUE_BATCH_SIZE || "10"),
+    });
+    
+    // Start processing queue
+    this.startProcessing();
+  }
+
   /**
    * Update dynamic priorities for all pending items
    */
@@ -17,156 +119,336 @@
       }
       
       // Add boost for retry attempts
-      priorityScore += item.attempts * this.options.priorityBoost.retryCount * 10;
+      priorityScore += item.attempts * 10;
       
-      // Add boost for wait time (minutes waiting)
-      const waitTimeMinutes = (now - item.createdAt) / (60 * 1000);
-      priorityScore += waitTimeMinutes * this.options.priorityBoost.waitTime * 10;
+      // Add age boost (older items get higher priority)
+      const ageMinutes = (now - item.createdAt) / (1000 * 60);
+      priorityScore += ageMinutes * 0.1;
       
-      // Store the calculated priority
-      item.dynamicPriority = priorityScore;
+      // Store calculated priority
+      (item as any).dynamicPriority = priorityScore;
     }
   }
 
   /**
-   * Sort the queue by dynamic priority (highest first)
+   * Start processing the queue
    */
-  private sortQueue(): void {
-    this.queue.sort((a, b) => {
-      // First sort by status (pending first)
-      if (a.status === "pending" && b.status !== "pending") return -1;
-      if (a.status !== "pending" && b.status === "pending") return 1;
-      
-      // Then by dynamic priority if available
-      if (a.dynamicPriority !== undefined && b.dynamicPriority !== undefined) {
-        return b.dynamicPriority - a.dynamicPriority;
-      }
-      
-      // Then by priority level
-      const priorityOrder: Record<EmailPriority, number> = {
-        critical: 3,
-        high: 2,
-        medium: 1,
-        low: 0,
-      };
-      
-      if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
-        return priorityOrder[b.priority] - priorityOrder[a.priority];
-      }
-      
-      // Then by scheduled time
-      return a.scheduledFor - b.scheduledFor;
-    });
+  private startProcessing(): void {
+    if (this.isProcessing) return;
+    
+    this.isProcessing = true;
+    this.processQueue();
   }
 
   /**
-   * Clean up old completed and failed items
+   * Process items in the queue
    */
-  private cleanupQueue(): void {
-    const now = Date.now();
-    const maxAge = this.options.maxAge;
-    
-    // Remove old completed and failed items
-    this.queue = this.queue.filter(item => {
-      if (item.status === "completed" || item.status === "failed") {
-        return now - item.createdAt < maxAge;
+  private async processQueue(): Promise<void> {
+    while (this.isProcessing) {
+      try {
+        // Update dynamic priorities
+        this.updateDynamicPriorities();
+        
+        // Get next batch of items to process
+        const itemsToProcess = this.getNextBatch();
+        
+        if (itemsToProcess.length === 0) {
+          // No items to process, wait a bit
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          continue;
+        }
+        
+        // Process items concurrently
+        const promises = itemsToProcess.map(item => this.processItem(item));
+        await Promise.allSettled(promises);
+        
+      } catch (error) {
+        this.logger?.error("Error in queue processing:", error);
+        await new Promise(resolve => setTimeout(resolve, 5000));
       }
-      return true;
-    });
+    }
+  }
+
+  /**
+   * Get next batch of items to process
+   */
+  private getNextBatch(): QueueItem[] {
+    const now = Date.now();
+    const availableSlots = this.options.maxConcurrent - this.processing.size;
     
-    // Clean up idempotency cache
-    if (this.idempotencyCache.size > 1000) {
-      // Find idempotency keys that are no longer in the queue
-      const activeKeys = new Set(
-        this.queue
-          .filter(item => item.idempotencyKey)
-          .map(item => item.idempotencyKey!)
-      );
+    if (availableSlots <= 0) return [];
+    
+    // Filter pending items that are ready to be processed
+    const readyItems = this.queue
+      .filter(item => 
+        item.status === "pending" && 
+        item.scheduledFor <= now &&
+        !this.processing.has(item.id) &&
+        this.canSendWithRateLimit(item.priority)
+      )
+      .sort((a, b) => {
+        // Sort by dynamic priority (higher first), then by creation time (older first)
+        const priorityDiff = ((b as any).dynamicPriority || 0) - ((a as any).dynamicPriority || 0);
+        if (priorityDiff !== 0) return priorityDiff;
+        return a.createdAt - b.createdAt;
+      });
+    
+    return readyItems.slice(0, Math.min(availableSlots, this.options.batchSize));
+  }
+
+  /**
+   * Check if we can send an email with the given priority based on rate limits
+   */
+  private canSendWithRateLimit(priority: EmailPriority): boolean {
+    const limit = this.options.rateLimit[priority];
+    if (limit === 0) return true; // No limit
+    
+    const now = Date.now();
+    const rateLimiter = this.rateLimiters.get(priority);
+    
+    if (!rateLimiter || now >= rateLimiter.resetTime) {
+      // Reset or initialize rate limiter
+      this.rateLimiters.set(priority, { count: 0, resetTime: now + 1000 });
+      return true;
+    }
+    
+    return rateLimiter.count < limit;
+  }
+
+  /**
+   * Process a single queue item
+   */
+  private async processItem(item: QueueItem): Promise<void> {
+    this.processing.add(item.id);
+    item.status = "processing";
+    
+    try {
+      // Update rate limiter
+      const priority = item.priority;
+      const rateLimiter = this.rateLimiters.get(priority);
+      if (rateLimiter) {
+        rateLimiter.count++;
+      }
       
-      // Remove keys that are no longer active
-      for (const key of this.idempotencyCache) {
-        if (!activeKeys.has(key)) {
-          this.idempotencyCache.delete(key);
+      // Send the email
+      let result: EmailResult;
+      
+      if (item.type === "raw") {
+        result = await this.emailService.sendRawEmail(item.options.data);
+      } else {
+        result = await this.emailService.sendTemplatedEmail(item.options.data);
+      }
+      
+      // Update item with result
+      item.result = result;
+      item.status = result.success ? "completed" : "failed";
+      
+      if (!result.success) {
+        item.error = result.error;
+        
+        // Schedule retry if attempts remaining
+        if (item.attempts < item.maxAttempts) {
+          item.attempts++;
+          item.status = "pending";
+          item.nextAttempt = Date.now() + this.options.retryDelay * Math.pow(2, item.attempts - 1);
+          item.scheduledFor = item.nextAttempt;
         }
       }
+      
+    } catch (error) {
+      // Handle processing error
+      item.error = error instanceof Error ? error.message : String(error);
+      item.status = "failed";
+      
+      // Schedule retry if attempts remaining
+      if (item.attempts < item.maxAttempts) {
+        item.attempts++;
+        item.status = "pending";
+        item.nextAttempt = Date.now() + this.options.retryDelay * Math.pow(2, item.attempts - 1);
+        item.scheduledFor = item.nextAttempt;
+      }
+      
+    } finally {
+      this.processing.delete(item.id);
     }
-    
-    // Save queue if persistence is enabled
-    if (this.options.persistenceKey) {
-      this.persistQueue();
-    }
   }
 
   /**
-   * Set a throttle limit for a specific domain
+   * Add email to queue
    */
-  setDomainThrottle(domain: string, limit: number): void {
-    this.domainThrottles.set(domain, limit);
-  }
-
-  /**
-   * Remove a domain throttle
-   */
-  removeDomainThrottle(domain: string): void {
-    this.domainThrottles.delete(domain);
-  }
-
-  /**
-   * Check if sending is allowed for the given domain
-   */
-  private canSendToDomain(domain: string): boolean {
-    if (!this.domainThrottles.has(domain)) return true;
-    
-    // Implement a simple token bucket algorithm
+  private addToQueue(
+    type: "raw" | "templated",
+    options: RawEmailOptions | TemplatedEmailOptions,
+    priority: EmailPriority = "medium",
+    scheduledFor?: Date
+  ): string {
+    const id = crypto.randomUUID();
     const now = Date.now();
-    const lastSendKey = `${domain}_lastSend`;
-    const tokensKey = `${domain}_tokens`;
     
-    // Get last send time and available tokens
-    const lastSend = Number(this.env[lastSendKey] || 0);
-    let tokens = Number(this.env[tokensKey] || this.domainThrottles.get(domain));
+    const item: QueueItem = {
+      id,
+      type,
+      options: type === "raw" 
+        ? { type: "raw", data: options }
+        : { type: "templated", data: options },
+      priority,
+      attempts: 0,
+      maxAttempts: this.options.maxRetries,
+      nextAttempt: scheduledFor ? scheduledFor.getTime() : now,
+      createdAt: now,
+      scheduledFor: scheduledFor ? scheduledFor.getTime() : now,
+      status: "pending",
+    };
     
-    // Refill tokens based on time elapsed
-    const limit = this.domainThrottles.get(domain)!;
-    const elapsed = (now - lastSend) / 1000; // seconds
-    tokens = Math.min(limit, tokens + elapsed * limit);
-    
-    // Check if we have at least one token
-    if (tokens < 1) return false;
-    
-    return true;
+    this.queue.push(item);
+    return id;
   }
 
   /**
-   * Record a send for the given domain
+   * Send a raw email (queued)
    */
-  private recordDomainSend(domain: string): void {
-    if (!this.domainThrottles.has(domain)) return;
+  async sendRawEmail(options: RawEmailOptions, priority: EmailPriority = "medium"): Promise<EmailResult> {
+    const queueId = this.addToQueue("raw", options, priority);
     
-    const now = Date.now();
-    const lastSendKey = `${domain}_lastSend`;
-    const tokensKey = `${domain}_tokens`;
-    
-    // Get current tokens
-    let tokens = Number(this.env[tokensKey] || this.domainThrottles.get(domain));
-    
-    // Use one token
-    tokens = Math.max(0, tokens - 1);
-    
-    // Update state
-    this.env[lastSendKey] = now.toString();
-    this.env[tokensKey] = tokens.toString();
+    // For immediate processing, we could wait for the result
+    // For now, return a pending result
+    return {
+      success: true,
+      messageId: queueId,
+      timestamp: new Date().toISOString(),
+      provider: this.serviceName,
+      recipient: typeof options.to === "string" ? options.to : 
+        Array.isArray(options.to) ? 
+          (typeof options.to[0] === "string" ? options.to[0] : options.to[0].email) : 
+          options.to.email,
+      subject: options.subject,
+      status: "queued",
+    };
   }
 
   /**
-   * Get recipient email from various formats
+   * Send a templated email (queued)
    */
-  private getRecipientEmail(to: any): string {
-    if (typeof to === "string") {
-      return to;
-    } else if (Array.isArray(to)) {
-      return typeof to[0] === "string" ? to[0] : to[0].email;
-    } else {
-      return to.email;
+  async sendTemplatedEmail(options: TemplatedEmailOptions, priority: EmailPriority = "medium"): Promise<EmailResult> {
+    const queueId = this.addToQueue("templated", options, priority);
+    
+    return {
+      success: true,
+      messageId: queueId,
+      timestamp: new Date().toISOString(),
+      provider: this.serviceName,
+      recipient: typeof options.to === "string" ? options.to : 
+        Array.isArray(options.to) ? 
+          (typeof options.to[0] === "string" ? options.to[0] : options.to[0].email) : 
+          options.to.email,
+      subject: options.subject,
+      templateName: options.templateName,
+      status: "queued",
+    };
+  }
+
+  /**
+   * Resend an email
+   */
+  async resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult> {
+    return this.emailService.resendEmail(emailId, options);
+  }
+
+  /**
+   * Get email status
+   */
+  async getEmailStatus(emailId: string): Promise<EmailStatus> {
+    // Check if it's a queue item
+    const queueItem = this.queue.find(item => item.id === emailId);
+    
+    if (queueItem) {
+      return {
+        id: emailId,
+        status: queueItem.status === "completed" ? "delivered" : 
+               queueItem.status === "failed" ? "failed" :
+               queueItem.status === "processing" ? "sent" : "queued",
+        recipient: "unknown", // Would need to extract from options
+        subject: "unknown",   // Would need to extract from options
+        metadata: {
+          attempts: queueItem.attempts,
+          priority: queueItem.priority,
+          createdAt: new Date(queueItem.createdAt).toISOString(),
+          scheduledFor: new Date(queueItem.scheduledFor).toISOString(),
+        },
+      };
     }
+    
+    // If not in the queue, try to get status from the underlying email service
+    return await this.emailService.getEmailStatus(emailId);
   }
+
+  /**
+   * Cancel a scheduled email
+   */
+  async cancelEmail(emailId: string): Promise<EmailResult> {
+    const queueItem = this.queue.find(item => item.id === emailId);
+    
+    if (queueItem && queueItem.status === "pending") {
+      queueItem.status = "cancelled";
+      
+      return {
+        success: true,
+        messageId: emailId,
+        timestamp: new Date().toISOString(),
+        provider: this.serviceName,
+        recipient: "unknown",
+        subject: "unknown",
+        status: "cancelled",
+      };
+    }
+    
+    return this.emailService.cancelEmail(emailId);
+  }
+
+  /**
+   * Get service health status
+   */
+  async getHealth(): Promise<ServiceHealthStatus> {
+    const underlyingHealth = await this.emailService.getHealth();
+    
+    const queueStats = {
+      total: this.queue.length,
+      pending: this.queue.filter(item => item.status === "pending").length,
+      processing: this.processing.size,
+      completed: this.queue.filter(item => item.status === "completed").length,
+      failed: this.queue.filter(item => item.status === "failed").length,
+      cancelled: this.queue.filter(item => item.status === "cancelled").length,
+    };
+    
+    return {
+      status: underlyingHealth.status === "healthy" && queueStats.processing < this.options.maxConcurrent ? "healthy" : "degraded",
+      message: `Queue service operational. ${queueStats.pending} pending, ${queueStats.processing} processing.`,
+      details: {
+        underlying: underlyingHealth,
+        queue: queueStats,
+        options: this.options,
+      },
+    };
+  }
+
+  /**
+   * Stop processing the queue
+   */
+  stop(): void {
+    this.isProcessing = false;
+  }
+
+  /**
+   * Get queue statistics
+   */
+  getQueueStats() {
+    return {
+      total: this.queue.length,
+      pending: this.queue.filter(item => item.status === "pending").length,
+      processing: this.processing.size,
+      completed: this.queue.filter(item => item.status === "completed").length,
+      failed: this.queue.filter(item => item.status === "failed").length,
+      cancelled: this.queue.filter(item => item.status === "cancelled").length,
+    };
+  }
+}

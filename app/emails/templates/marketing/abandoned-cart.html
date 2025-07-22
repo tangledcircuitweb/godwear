@@ -12,164 +12,272 @@
     td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
   </style>
   <![endif]-->
-  <title>Complete Your GodWear Purchase</title>
+  <title>Your Blessed Items Are Waiting - Complete Your Faith Journey | GodWear</title>
   <style>
-    /* Base styles */
-    @media (prefers-color-scheme: dark) {
-      .dark-mode { background-color: #121212 !important; color: #ffffff !important; }
-      .dark-text { color: #ffffff !important; }
-      .dark-bg { background-color: #1e1e1e !important; }
-      .dark-button { background-color: #4f46e5 !important; color: #ffffff !important; }
-      .dark-border { border-color: #2e2e2e !important; }
-      .dark-divider { border-top-color: #2e2e2e !important; }
-      .dark-table-row { background-color: #1e1e1e !important; }
-      .dark-table-header { background-color: #2e2e2e !important; color: #ffffff !important; }
+    /* GodWear Christian Branding - Holy Color Palette */
+    :root {
+      --deep-purple: #4C1D95;
+      --royal-purple: #6B21A8;
+      --sacred-gold: #B45309;
+      --pure-white: #FFFFFF;
+      --cream: #FEF7ED;
+      --light-purple: #EDE9FE;
+      --gold-light: #FEF3C7;
     }
     
+    /* Base styles with Christian theme */
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: linear-gradient(135deg, var(--cream) 0%, var(--light-purple) 100%);
+    }
+    
+    .holy-gradient {
+      background: linear-gradient(135deg, var(--deep-purple) 0%, var(--royal-purple) 50%, var(--sacred-gold) 100%);
+    }
+    
+    .sacred-border {
+      border: 2px solid var(--sacred-gold);
+      border-radius: 8px;
+    }
+    
+    .blessing-text {
+      font-style: italic;
+      color: var(--deep-purple);
+      text-align: center;
+      font-size: 14px;
+      margin: 16px 0;
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .dark-mode { background-color: #1a1a2e !important; color: #ffffff !important; }
+      .dark-text { color: #ffffff !important; }
+      .dark-bg { background-color: #16213e !important; }
+      .dark-button { background-color: var(--deep-purple) !important; color: #ffffff !important; }
+      .dark-border { border-color: var(--sacred-gold) !important; }
+      .dark-divider { border-top-color: var(--sacred-gold) !important; }
+    }
+    
+    /* Enhanced Mobile Responsiveness */
     @media screen and (max-width: 600px) {
       .sm-w-full { width: 100% !important; }
       .sm-px-4 { padding-left: 16px !important; padding-right: 16px !important; }
       .sm-py-8 { padding-top: 32px !important; padding-bottom: 32px !important; }
-      .sm-text-sm { font-size: 14px !important; }
-      .sm-text-lg { font-size: 18px !important; }
+      .sm-text-sm { font-size: 14px !important; line-height: 1.4 !important; }
+      .sm-text-base { font-size: 16px !important; line-height: 1.5 !important; }
+      .sm-text-lg { font-size: 18px !important; line-height: 1.4 !important; }
+      .sm-text-xl { font-size: 20px !important; line-height: 1.3 !important; }
       .sm-hidden { display: none !important; }
       .sm-block { display: block !important; }
-      .sm-inline-block { display: inline-block !important; }
+      .sm-stack { display: block !important; width: 100% !important; }
+      .sm-center { text-align: center !important; }
+      .sm-p-4 { padding: 16px !important; }
+      .sm-p-6 { padding: 24px !important; }
+      .sm-mt-4 { margin-top: 16px !important; }
+      .sm-mb-4 { margin-bottom: 16px !important; }
+      
+      /* Mobile button full width */
+      .sm-btn-full {
+        display: block !important;
+        width: 100% !important;
+        padding: 16px !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* Mobile cart item layout */
+      .sm-cart-stack {
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+        margin-bottom: 16px !important;
+      }
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background-color: #f3f4f6;" class="dark-mode">
+<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%);" class="dark-mode">
   <!-- Email wrapper -->
-  <div style="display: none;">You left some items in your cart. Complete your purchase before they're gone!</div>
-  <div role="article" aria-roledescription="email" aria-label="Complete Your GodWear Purchase" lang="en">
-    <table style="width: 100%; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;" cellpadding="0" cellspacing="0" role="presentation">
+  <div style="display: none;">Your blessed items are waiting for you! Complete your faith journey with GodWear.</div>
+  <div role="article" aria-roledescription="email" aria-label="Your Blessed Items Are Waiting" lang="en">
+    <table style="width: 100%; font-family: 'Georgia', 'Times New Roman', serif;" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
-        <td align="center" style="padding: 24px 0;">
+        <td align="center" style="padding: 24px 16px;" class="sm-px-4">
           <!-- Email container -->
-          <table class="sm-w-full" style="width: 600px;" cellpadding="0" cellspacing="0" role="presentation">
-            <!-- Header -->
+          <table class="sm-w-full" style="width: 600px; box-shadow: 0 10px 25px rgba(76, 29, 149, 0.1);" cellpadding="0" cellspacing="0" role="presentation">
+            <!-- Header with Holy Gradient -->
             <tr>
-              <td class="dark-bg" style="background-color: #ffffff; padding: 24px; text-align: center; border-top-left-radius: 4px; border-top-right-radius: 4px;">
-                <img src="{{logoUrl}}" width="150" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle;">
+              <td class="dark-bg holy-gradient" style="background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 50%, #B45309 100%); padding: 32px 24px; text-align: center; border-top-left-radius: 12px; border-top-right-radius: 12px;" class="sm-p-6">
+                <img src="{{logoUrl}}" width="180" alt="GodWear - Faith Meets Fashion" style="border: 0; max-width: 100%; vertical-align: middle; filter: brightness(0) invert(1);" class="sm-w-full">
+                <div class="blessing-text" style="color: #FEF7ED; font-size: 16px; margin-top: 16px; font-style: italic;">
+                  "The Lord your God will bless you in all your work" - Deuteronomy 15:18
+                </div>
               </td>
             </tr>
             <!-- Body -->
             <tr>
-              <td class="dark-bg" style="background-color: #ffffff;">
+              <td class="dark-bg" style="background-color: #FFFFFF; border-left: 3px solid #B45309; border-right: 3px solid #B45309;">
                 <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
-                    <td class="sm-px-4 sm-py-8" style="padding: 40px 48px; text-align: left;">
+                    <td class="sm-px-4 sm-py-8" style="padding: 48px;" class="sm-p-6">
                       <!-- Email content -->
-                      <h1 style="margin: 0; font-size: 24px; font-weight: 600; line-height: 32px; color: #111827;" class="dark-text sm-text-lg">Still thinking about it?</h1>
+                      <h1 style="margin: 0; font-size: 28px; font-weight: 700; line-height: 1.2; color: #4C1D95; text-align: center;" class="dark-text sm-text-xl">
+                        🛍️ Your Blessed Items Are Waiting
+                      </h1>
+                      <div style="text-align: center; margin: 16px 0; padding: 16px; background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%); border-radius: 8px; border: 1px solid #B45309;">
+                        <p style="margin: 0; font-size: 14px; color: #4C1D95; font-style: italic;">
+                          "Do not let your hearts be troubled" - John 14:1
+                        </p>
+                      </div>
                       
-                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        Hi {{name}},
+                      <!-- Personal Message -->
+                      <p style="margin: 0; margin-top: 32px; font-size: 18px; line-height: 1.6; color: #4C1D95; font-weight: 600;" class="dark-text sm-text-base">
+                        Dear {{name}},
                       </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        We noticed you left some items in your shopping cart. Don't worry, we've saved them for you! These popular items often sell out quickly, so we wanted to make sure you didn't miss out.
+                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 1.6; color: #6B21A8;" class="dark-text sm-text-sm">
+                        We noticed you left some beautiful faith-inspired items in your cart. These blessed pieces are waiting to become part of your faith journey and help you express your beliefs with style and grace.
                       </p>
                       
                       <!-- Cart Items -->
-                      <h2 style="margin: 0; margin-top: 32px; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">Your Cart Items</h2>
-                      <table style="width: 100%; margin-top: 16px; border-collapse: collapse;" cellpadding="0" cellspacing="0" role="presentation">
-                        <!-- Item Row Template - Repeat for each item -->
-                        {{#each items}}
-                        <tr class="dark-table-row">
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; vertical-align: top;" class="dark-border">
-                            <img src="{{this.imageUrl}}" width="80" alt="{{this.name}}" style="border: 0; border-radius: 4px; max-width: 100%; vertical-align: middle;">
-                          </td>
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; vertical-align: top; font-size: 14px; line-height: 20px; color: #111827;" class="dark-text dark-border">
-                            <div style="font-weight: 600; font-size: 16px;">{{this.name}}</div>
-                            <div style="margin-top: 4px; color: #6b7280;" class="dark-text">{{this.variant}}</div>
-                            <div style="margin-top: 8px; font-weight: 600; color: #111827;" class="dark-text">{{this.price}}</div>
-                          </td>
-                        </tr>
-                        {{/each}}
-                        <tr>
-                          <td colspan="2" style="padding: 16px; border-top: 1px solid #e5e7eb; font-size: 16px; font-weight: 600; line-height: 24px; color: #111827; text-align: right;" class="dark-text dark-border">
-                            Total: {{cartTotal}}
-                          </td>
-                        </tr>
-                      </table>
+                      <div style="margin-top: 40px;">
+                        <h2 style="margin: 0 0 24px 0; font-size: 20px; font-weight: 700; line-height: 1.3; color: #4C1D95; text-align: center;" class="dark-text sm-text-lg">
+                          ✨ Your Sacred Selection
+                        </h2>
+                        
+                        <!-- Cart Items Container -->
+                        <div style="background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%); padding: 24px; border-radius: 12px; border: 2px solid #B45309;" class="sm-p-4">
+                          {{#each cartItems}}
+                          <table style="width: 100%; margin-bottom: 20px; border-bottom: 1px solid #B45309; padding-bottom: 20px;" cellpadding="0" cellspacing="0" role="presentation">
+                            <tr>
+                              <td style="width: 100px; vertical-align: top; padding-right: 16px;" class="sm-cart-stack sm-hidden">
+                                <img src="{{this.imageUrl}}" width="80" alt="{{this.name}}" style="border: 0; border-radius: 8px; max-width: 100%; vertical-align: middle; box-shadow: 0 2px 8px rgba(76, 29, 149, 0.1);">
+                              </td>
+                              <td style="vertical-align: top;" class="sm-cart-stack">
+                                <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: #4C1D95;" class="dark-text sm-text-base">{{this.name}}</h3>
+                                <p style="margin: 0 0 8px 0; font-size: 14px; color: #6B21A8;" class="dark-text sm-text-sm">{{this.variant}}</p>
+                                <p style="margin: 0 0 8px 0; font-size: 14px; color: #B45309; font-weight: 600;" class="dark-text sm-text-sm">Quantity: {{this.quantity}}</p>
+                                <p style="margin: 0; font-size: 18px; font-weight: 700; color: #4C1D95;" class="dark-text sm-text-base">{{this.price}}</p>
+                              </td>
+                            </tr>
+                          </table>
+                          {{/each}}
+                          
+                          <!-- Cart Total -->
+                          <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 2px solid #B45309;">
+                            <p style="margin: 0; font-size: 20px; font-weight: 700; color: #4C1D95;" class="dark-text sm-text-lg">
+                              Total: {{cartTotal}}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                       
                       <!-- Special Offer -->
-                      {{#if discount}}
-                      <table style="width: 100%; margin-top: 32px; background-color: #f9fafb; border-radius: 4px;" class="dark-bg dark-border" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 24px; text-align: center;">
-                            <h2 style="margin: 0; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">Special Offer Just For You</h2>
-                            <p style="margin: 0; margin-top: 8px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                              Complete your purchase now and get <strong>{{discount}}% off</strong> with code:
-                            </p>
-                            <p style="margin: 0; margin-top: 8px; font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #111827;" class="dark-text">
-                              {{discountCode}}
-                            </p>
-                            <p style="margin: 0; margin-top: 8px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">
-                              *Offer expires in {{expiryHours}} hours
-                            </p>
-                          </td>
-                        </tr>
-                      </table>
-                      {{/if}}
+                      <div style="margin-top: 40px; background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 100%); padding: 32px; border-radius: 12px; text-align: center;" class="sm-p-4">
+                        <h3 style="margin: 0 0 16px 0; font-size: 22px; font-weight: 700; color: #FFFFFF;" class="sm-text-lg">🎁 Special Blessing for You</h3>
+                        <p style="margin: 0 0 16px 0; font-size: 18px; line-height: 1.5; color: #FEF7ED;" class="sm-text-base">
+                          Complete your purchase in the next 24 hours and receive <strong>15% off</strong> your entire order!
+                        </p>
+                        <div style="background: rgba(254, 247, 237, 0.2); padding: 16px; border-radius: 8px; margin: 16px 0;">
+                          <p style="margin: 0; font-size: 24px; font-weight: 700; color: #FFFFFF; letter-spacing: 2px;">BLESSED15</p>
+                        </div>
+                        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #EDE9FE; font-style: italic;" class="sm-text-sm">
+                          "Every good and perfect gift is from above" - James 1:17
+                        </p>
+                      </div>
                       
                       <!-- Complete Purchase Button -->
-                      <table style="width: 100%; margin-top: 32px;" cellpadding="0" cellspacing="0" role="presentation">
+                      <table style="width: 100%; margin-top: 40px;" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
                           <td style="text-align: center;">
-                            <a href="{{cartUrl}}" style="display: inline-block; background-color: #4f46e5; color: #ffffff; font-size: 16px; font-weight: 600; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 24px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;" class="dark-button sm-w-full">
-                              Complete Your Purchase
+                            <a href="{{cartUrl}}" style="display: inline-block; background: linear-gradient(135deg, #B45309 0%, #4C1D95 100%); color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.2; text-decoration: none; text-align: center; padding: 20px 40px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 16px rgba(180, 83, 9, 0.3);" class="dark-button sm-btn-full sm-text-base">
+                              ✨ Complete Your Faith Journey
                             </a>
                           </td>
                         </tr>
                       </table>
                       
-                      <!-- Product Recommendations -->
-                      <h2 style="margin: 0; margin-top: 48px; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827; text-align: center;" class="dark-text">You Might Also Like</h2>
-                      <table style="width: 100%; margin-top: 16px;" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          {{#each recommendations}}
-                          <td style="width: 33.333%; padding: 8px; vertical-align: top;" class="sm-w-full sm-block">
-                            <a href="{{this.url}}" style="text-decoration: none; color: inherit; display: block;">
-                              <img src="{{this.imageUrl}}" width="100%" alt="{{this.name}}" style="border: 0; border-radius: 4px; max-width: 100%; vertical-align: middle;">
-                              <p style="margin: 0; margin-top: 8px; font-size: 14px; font-weight: 600; line-height: 20px; color: #111827;" class="dark-text">{{this.name}}</p>
-                              <p style="margin: 0; margin-top: 4px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">{{this.price}}</p>
-                            </a>
-                          </td>
-                          {{/each}}
-                        </tr>
-                      </table>
+                      <!-- Why Choose GodWear -->
+                      <div style="margin-top: 40px;">
+                        <h3 style="margin: 0 0 24px 0; font-size: 20px; font-weight: 700; color: #4C1D95; text-align: center;" class="dark-text sm-text-lg">
+                          🌟 Why Choose GodWear?
+                        </h3>
+                        
+                        <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                          <tr>
+                            <td style="width: 33.33%; padding: 0 8px; vertical-align: top;" class="sm-stack sm-w-full sm-mb-4">
+                              <div style="background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%); padding: 20px; border-radius: 12px; border: 1px solid #B45309; text-align: center; height: 100%;" class="sm-p-4">
+                                <div style="font-size: 24px; margin-bottom: 8px;">🙏</div>
+                                <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: #4C1D95;" class="sm-text-sm">Faith-Inspired</h4>
+                                <p style="margin: 0; font-size: 12px; color: #6B21A8;" class="sm-text-sm">Every design tells a story of faith and hope</p>
+                              </div>
+                            </td>
+                            <td style="width: 33.33%; padding: 0 8px; vertical-align: top;" class="sm-stack sm-w-full sm-mb-4">
+                              <div style="background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%); padding: 20px; border-radius: 12px; border: 1px solid #B45309; text-align: center; height: 100%;" class="sm-p-4">
+                                <div style="font-size: 24px; margin-bottom: 8px;">✨</div>
+                                <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: #4C1D95;" class="sm-text-sm">Premium Quality</h4>
+                                <p style="margin: 0; font-size: 12px; color: #6B21A8;" class="sm-text-sm">Crafted with care and attention to detail</p>
+                              </div>
+                            </td>
+                            <td style="width: 33.33%; padding: 0 8px; vertical-align: top;" class="sm-stack sm-w-full">
+                              <div style="background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%); padding: 20px; border-radius: 12px; border: 1px solid #B45309; text-align: center; height: 100%;" class="sm-p-4">
+                                <div style="font-size: 24px; margin-bottom: 8px;">❤️</div>
+                                <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: #4C1D95;" class="sm-text-sm">Community</h4>
+                                <p style="margin: 0; font-size: 12px; color: #6B21A8;" class="sm-text-sm">Join a community of faithful believers</p>
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
                       
-                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        If you have any questions or need assistance with your purchase, please <a href="mailto:{{supportEmail}}" style="color: #4f46e5; text-decoration: underline;" class="dark-text">contact our support team</a>.
-                      </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        Happy shopping!<br>
-                        The GodWear Team
-                      </p>
+                      <!-- Support Section -->
+                      <div style="margin-top: 32px; background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%); padding: 24px; border-radius: 12px; border: 1px solid #B45309; text-align: center;" class="sm-p-4">
+                        <p style="margin: 0 0 12px 0; font-size: 16px; line-height: 1.6; color: #6B21A8;" class="dark-text sm-text-sm">
+                          💌 <strong>Need Help?</strong> Our faithful support team is here for you with love and care.
+                        </p>
+                        <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #4C1D95;" class="dark-text sm-text-sm">
+                          Contact us at <a href="mailto:{{supportEmail}}" style="color: #4C1D95; text-decoration: underline; font-weight: 600;" class="dark-text">{{supportEmail}}</a>
+                        </p>
+                      </div>
+                      
+                      <!-- Closing Message -->
+                      <div style="margin-top: 32px; text-align: center;">
+                        <p style="margin: 0; font-size: 18px; line-height: 1.5; color: #4C1D95; font-weight: 600;" class="dark-text sm-text-base">
+                          Don't let these blessed items slip away! 🙏
+                        </p>
+                        <p style="margin: 8px 0 0 0; font-size: 16px; line-height: 1.5; color: #6B21A8; font-style: italic;" class="dark-text sm-text-sm">
+                          With faith and blessings,<br>
+                          <strong>The GodWear Family</strong>
+                        </p>
+                      </div>
                     </td>
                   </tr>
                 </table>
               </td>
             </tr>
-            <!-- Footer -->
+            <!-- Footer with Christian Branding -->
             <tr>
-              <td class="dark-bg dark-border" style="background-color: #ffffff; border-top: 1px solid #e5e7eb; padding: 24px; text-align: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;">
-                <p style="margin: 0; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  &copy; {{currentYear}} GodWear. All rights reserved.
+              <td class="dark-bg dark-border" style="background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 100%); border-top: 3px solid #B45309; padding: 32px 24px; text-align: center; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;" class="sm-p-6">
+                <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #FFFFFF; font-weight: 600;" class="dark-text sm-text-sm">
+                  &copy; {{currentYear}} GodWear - Faith Meets Fashion. All rights reserved.
                 </p>
-                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  <a href="{{unsubscribeUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Unsubscribe</a> •
-                  <a href="{{privacyUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Privacy Policy</a> •
-                  <a href="{{termsUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Terms of Service</a>
+                <div style="margin: 16px 0; padding: 16px; background: rgba(254, 247, 237, 0.1); border-radius: 8px;">
+                  <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #FEF7ED; font-style: italic;" class="dark-text sm-text-sm">
+                    "Let your light shine before others" - Matthew 5:16
+                  </p>
+                </div>
+                <p style="margin: 0; margin-top: 16px; font-size: 14px; line-height: 1.5; color: #EDE9FE;" class="dark-text sm-text-sm">
+                  <a href="{{unsubscribeUrl}}" style="color: #FEF7ED; text-decoration: underline;" class="dark-text">Unsubscribe</a> •
+                  <a href="{{privacyUrl}}" style="color: #FEF7ED; text-decoration: underline;" class="dark-text">Privacy Policy</a> •
+                  <a href="{{termsUrl}}" style="color: #FEF7ED; text-decoration: underline;" class="dark-text">Terms of Service</a>
                 </p>
-                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  GodWear Inc., 123 Fashion Street, New York, NY 10001
+                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 1.5; color: #EDE9FE;" class="dark-text sm-text-sm">
+                  GodWear Inc. - Spreading Faith Through Fashion<br>
+                  📍 123 Faith Street, Blessed City, BC V1A 2B3, Canada
                 </p>
               </td>
             </tr>
             <!-- Spacer -->
             <tr>
-              <td style="height: 24px;"></td>
+              <td style="height: 32px;"></td>
             </tr>
           </table>
         </td>

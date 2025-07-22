@@ -1,0 +1,52 @@
+YOUR ORDER HAS SHIPPED - GODWEAR
+
+Hello {{firstName}},
+
+Great news! Your order is on its way to you. We've packed your items with care and handed them over to {{carrier}}.
+
+ORDER INFORMATION
+----------------
+Order Number: {{orderNumber}}
+Order Date: {{orderDate}}
+Shipped Date: {{shippedDate}}
+
+TRACKING INFORMATION
+----------------
+Carrier: {{carrier}}
+Tracking Number: {{trackingNumber}}
+Estimated Delivery: {{estimatedDelivery}}
+Track your package at: {{trackingUrl}}
+
+ITEMS SHIPPED
+----------------
+{{#each items}}
+* {{name}} - {{variant}}
+  Quantity: {{quantity}}
+{{/each}}
+
+{{#if isPartialShipment}}
+PARTIAL SHIPMENT
+----------------
+This is a partial shipment. The following items will be shipped separately:
+{{#each remainingItems}}
+* {{name}} ({{quantity}})
+{{/each}}
+
+We'll notify you when these items ship.
+{{/if}}
+
+SHIPPING ADDRESS
+----------------
+{{shippingAddress.name}}
+{{shippingAddress.street}}
+{{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}
+{{shippingAddress.country}}
+
+You can view your order details anytime by visiting your account: {{orderUrl}}
+
+If you have any questions about your shipment, please contact our customer service team at {{supportEmail}}.
+
+Thank you for shopping with GodWear!
+
+© {{currentYear}} GodWear. All rights reserved.
+This email was sent to notify you about your shipment.

@@ -1,0 +1,51 @@
+ORDER CONFIRMATION - GODWEAR
+
+Hello {{firstName}},
+
+Thank you for your order! We're excited to confirm that your order has been received and is being processed.
+
+ORDER INFORMATION
+----------------
+Order Number: {{orderNumber}}
+Order Date: {{orderDate}}
+Payment Method: {{paymentMethod}}
+
+ORDER DETAILS
+----------------
+{{#each items}}
+* {{name}} - {{variant}}
+  Quantity: {{quantity}}
+  Price: {{price}}
+{{/each}}
+
+TOTALS
+----------------
+Subtotal: {{subtotal}}
+Shipping: {{shipping}}
+Tax: {{tax}}
+TOTAL: {{total}}
+
+SHIPPING INFORMATION
+----------------
+{{shippingAddress.name}}
+{{shippingAddress.street}}
+{{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}
+{{shippingAddress.country}}
+
+Estimated Delivery: {{estimatedDelivery}}
+
+{{#if trackingNumber}}
+TRACKING INFORMATION
+----------------
+Tracking Number: {{trackingNumber}}
+Track your order at: {{trackingUrl}}
+{{/if}}
+
+You can view your order details anytime by visiting your account: {{orderUrl}}
+
+If you have any questions about your order, please contact our customer service team at {{supportEmail}}.
+
+Thank you for shopping with GodWear!
+
+© {{currentYear}} GodWear. All rights reserved.
+This email was sent to confirm your recent order.

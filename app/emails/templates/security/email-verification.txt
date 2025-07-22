@@ -1,0 +1,19 @@
+VERIFY YOUR EMAIL - GODWEAR
+
+Hello {{firstName}},
+
+{{#if isNewUser}}
+Welcome to GodWear! To complete your registration and access all features, please verify your email address.
+{{else}}
+Please verify your email address to ensure you receive important updates about your GodWear account.
+{{/if}}
+
+To verify your email address, please visit the following link:
+{{verificationUrl}}
+
+This verification link will expire in {{expiryHours}} hours ({{expiryTime}}).
+
+If you didn't create an account with GodWear, please ignore this email or contact our support team at {{supportEmail}}.
+
+© {{currentYear}} GodWear. All rights reserved.
+This is an automated email, please do not reply directly to this message.

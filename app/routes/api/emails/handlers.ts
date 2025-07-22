@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { createApiErrorResponse } from "../../../lib/api-utils";
+import { createApiErrorResponse, createApiResponse } from "../../../lib/api-utils";
 import type { CloudflareBindings } from "../../../lib/zod-utils";
 import type { Services } from "../../../services/registry";
 import { 
@@ -9,10 +9,7 @@ import {
   EmailResendRequestSchema, 
   EmailStatusRequestSchema, 
   EmailCancelRequestSchema,
-  EmailBatchRequestSchema,
-  createEmailResponse,
-  createEmailStatusResponse,
-  createEmailBatchResponse
+  EmailBatchRequestSchema
 } from "./schemas";
 
 /**
@@ -37,7 +34,7 @@ export function createEmailHandlers(services: Services) {
         
         if (emailRequest.type === "raw") {
           // Handle raw email
-          result = await email.sendEmail({
+          result = await email.sendRawEmail({
             to: emailRequest.to,
             cc: emailRequest.cc,
             bcc: emailRequest.bcc,
@@ -66,7 +63,7 @@ export function createEmailHandlers(services: Services) {
           });
         }
         
-        return c.json(createEmailResponse(result));
+        return c.json(createApiResponse(result));
       } catch (error) {
         console.error("Failed to send email", error);
         return c.json(
@@ -100,7 +97,7 @@ export function createEmailHandlers(services: Services) {
             try {
               if (emailRequest.type === "raw") {
                 // Handle raw email
-                return await email.sendEmail({
+                return await email.sendRawEmail({
                   to: emailRequest.to,
                   cc: emailRequest.cc,
                   bcc: emailRequest.bcc,
@@ -157,7 +154,7 @@ export function createEmailHandlers(services: Services) {
         const failureCount = results.length - successCount;
         
         return c.json(
-          createEmailBatchResponse({
+          createApiResponse({
             batchId: actualBatchId,
             totalEmails: results.length,
             successCount,
@@ -195,7 +192,7 @@ export function createEmailHandlers(services: Services) {
           newRecipient,
         });
         
-        return c.json(createEmailResponse(result));
+        return c.json(createApiResponse(result));
       } catch (error) {
         console.error("Failed to resend email", error);
         return c.json(
@@ -252,7 +249,7 @@ export function createEmailHandlers(services: Services) {
         const failureReason = failureEvent?.metadata?.reason || failureEvent?.metadata?.error;
         
         return c.json(
-          createEmailStatusResponse({
+          createApiResponse({
             id: emailId,
             status: emailStatus.status,
             events,
@@ -295,7 +292,7 @@ export function createEmailHandlers(services: Services) {
         // Cancel the email
         const result = await email.cancelEmail(emailId);
         
-        return c.json(createEmailResponse(result));
+        return c.json(createApiResponse(result));
       } catch (error) {
         console.error("Failed to cancel email", error);
         return c.json(

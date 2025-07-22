@@ -7,18 +7,18 @@ export default defineConfig({
     environment: "node",
     // Use node environment for now, we'll add Miniflare integration later
     env: {
-      // Environment variables for testing
+      // Environment variables for testing - use real values from .env
       ENVIRONMENT: "test",
-      JWT_SECRET: "test-jwt-secret-key-for-testing-only",
-      MAILERSEND_API_KEY: "test-mailersend-api-key",
-      GOOGLE_CLIENT_ID: "test-google-client-id",
-      GOOGLE_CLIENT_SECRET: "test-google-client-secret",
-      GITHUB_CLIENT_ID: "test-github-client-id",
-      GITHUB_CLIENT_SECRET: "test-github-client-secret",
-      BASE_URL: "http://localhost:3000",
-      OAUTH_REDIRECT_URI: "http://localhost:3000/api/auth/callback",
+      JWT_SECRET: process.env.JWT_SECRET || "test-jwt-secret-key-for-testing-only",
+      MAILERSEND_API_KEY: process.env.MAILERSEND_API_KEY,
+      GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+      GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+      GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+      GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+      BASE_URL: process.env.BASE_URL || "http://localhost:3000",
+      OAUTH_REDIRECT_URI: process.env.OAUTH_REDIRECT_URI || "http://localhost:3000/api/auth/callback",
     },
-    setupFiles: ["./tests/live/setup.ts"],
+
     globalTeardown: ["./tests/global-teardown.ts"],
     include: [
       "src/**/*.{test,spec}.{js,ts}",
@@ -94,6 +94,6 @@ export default defineConfig({
   },
   // Optimize dependencies for testing
   optimizeDeps: {
-    include: ["vitest", "msw", "zod", "@hono/zod-validator"],
+    include: ["vitest", "zod", "@hono/zod-validator"],
   },
 });

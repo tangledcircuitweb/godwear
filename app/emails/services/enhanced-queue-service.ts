@@ -50,9 +50,17 @@ const QueueOptionsSchema = z.object({
     medium: z.number().int().nonnegative().default(5),   // 5 per second
     low: z.number().int().nonnegative().default(2),      // 2 per second
   }).default({}),
+  // Configurable timing intervals between emails (in milliseconds)
+  emailIntervals: z.object({
+    critical: z.number().int().nonnegative().default(0),     // No delay for critical emails
+    high: z.number().int().nonnegative().default(5000),     // 5 seconds between high priority emails
+    medium: z.number().int().nonnegative().default(30000),  // 30 seconds between medium priority emails
+    low: z.number().int().nonnegative().default(60000),     // 1 minute between low priority emails
+    testing: z.number().int().nonnegative().default(60000), // 1 minute for testing mode
+  }).default({}),
   retryDelays: z.array(z.number().int().nonnegative()).default([1000, 5000, 15000, 60000]),
   persistenceKey: z.string().optional(),
-  // New options for enhanced scheduling and rate limiting
+  // Enhanced scheduling and rate limiting options
   maxQueueSize: z.number().int().positive().default(1000),
   batchSize: z.number().int().positive().default(10),
   processingInterval: z.number().int().positive().default(1000), // ms
@@ -62,6 +70,8 @@ const QueueOptionsSchema = z.object({
     retryCount: z.number().nonnegative().default(0.1), // Priority boost per retry
     waitTime: z.number().nonnegative().default(0.01),  // Priority boost per minute waiting
   }).default({}),
+  // Testing mode configuration
+  testingMode: z.boolean().default(false), // When true, uses testing intervals
 });
 
 /**
@@ -193,6 +203,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
   private persistenceInterval: NodeJS.Timeout | null = null;
   private domainThrottles: Map<string, number> = new Map();
   private idempotencyCache: Set<string> = new Set();
+  private lastSendTimes: Map<string, number> = new Map(); // Track last send times for timing intervals
   private stats = {
     processed: 0,
     successful: 0,
@@ -218,6 +229,13 @@ export class EnhancedEmailQueueService extends BaseEmailService {
         medium: Number(this.env.EMAIL_QUEUE_RATE_MEDIUM || 5),
         low: Number(this.env.EMAIL_QUEUE_RATE_LOW || 2),
       },
+      emailIntervals: {
+        critical: Number(this.env.EMAIL_INTERVAL_CRITICAL || 0),
+        high: Number(this.env.EMAIL_INTERVAL_HIGH || 5000),
+        medium: Number(this.env.EMAIL_INTERVAL_MEDIUM || 30000),
+        low: Number(this.env.EMAIL_INTERVAL_LOW || 60000),
+        testing: Number(this.env.EMAIL_INTERVAL_TESTING || 60000),
+      },
       retryDelays: this.env.EMAIL_QUEUE_RETRY_DELAYS
         ? JSON.parse(this.env.EMAIL_QUEUE_RETRY_DELAYS)
         : [1000, 5000, 15000, 60000],
@@ -231,6 +249,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
         retryCount: Number(this.env.EMAIL_QUEUE_PRIORITY_BOOST_RETRY || 0.1),
         waitTime: Number(this.env.EMAIL_QUEUE_PRIORITY_BOOST_WAIT || 0.01),
       },
+      testingMode: this.env.EMAIL_TESTING_MODE === "true",
     });
 
     // Initialize the email service
@@ -760,6 +779,12 @@ export class EnhancedEmailQueueService extends BaseEmailService {
             continue;
           }
           
+          // Check timing intervals between emails
+          if (!this.canSendWithTiming(item.priority)) {
+            this.stats.rateDelayed++;
+            continue;
+          }
+          
           // Check domain throttling if applicable
           if (
             item.recipientDomain &&
@@ -841,12 +866,19 @@ export class EnhancedEmailQueueService extends BaseEmailService {
         item.status = "completed";
         this.stats.successful++;
         
+        // Record timing for this priority level
+        this.recordEmailSent(item.priority);
+        
         // Log success
         this.logger?.info("Email sent successfully", {
           id: item.id,
           messageId: result.messageId,
           recipient: result.recipient,
           subject: result.subject,
+          priority: item.priority,
+          timingInterval: this.options.testingMode 
+            ? this.options.emailIntervals.testing
+            : this.options.emailIntervals[item.priority],
         });
       } else {
         // Check if we should retry
@@ -1020,6 +1052,55 @@ export class EnhancedEmailQueueService extends BaseEmailService {
    */
   removeDomainThrottle(domain: string): void {
     this.domainThrottles.delete(domain);
+  }
+
+  /**
+   * Check if enough time has passed since the last email of this priority
+   */
+  private canSendWithTiming(priority: EmailPriority): boolean {
+    const now = Date.now();
+    const lastSendKey = `lastSend_${priority}`;
+    const lastSendTime = this.lastSendTimes.get(lastSendKey) || 0;
+    
+    // Get the required interval for this priority
+    const requiredInterval = this.options.testingMode 
+      ? this.options.emailIntervals.testing
+      : this.options.emailIntervals[priority];
+    
+    // Check if enough time has passed
+    const timeSinceLastSend = now - lastSendTime;
+    const canSend = timeSinceLastSend >= requiredInterval;
+    
+    if (!canSend) {
+      this.logger?.debug(`Timing interval not met for ${priority}: ${timeSinceLastSend}ms < ${requiredInterval}ms`);
+    }
+    
+    return canSend;
+  }
+
+  /**
+   * Record that an email was sent for timing purposes
+   */
+  private recordEmailSent(priority: EmailPriority): void {
+    const now = Date.now();
+    const lastSendKey = `lastSend_${priority}`;
+    this.lastSendTimes.set(lastSendKey, now);
+    
+    this.logger?.debug(`Recorded email sent for ${priority} at ${new Date(now).toISOString()}`);
+  }
+
+  /**
+   * Get the next allowed send time for a priority
+   */
+  private getNextAllowedSendTime(priority: EmailPriority): number {
+    const lastSendKey = `lastSend_${priority}`;
+    const lastSendTime = this.lastSendTimes.get(lastSendKey) || 0;
+    
+    const requiredInterval = this.options.testingMode 
+      ? this.options.emailIntervals.testing
+      : this.options.emailIntervals[priority];
+    
+    return lastSendTime + requiredInterval;
   }
 
   /**

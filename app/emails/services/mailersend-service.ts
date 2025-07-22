@@ -120,11 +120,15 @@ export class MailerSendService extends BaseEmailService {
       // Send email via MailerSend API
       const response = await this.sendMailerSendRequest("/email", payload);
 
-      if (!response.message_id) {
-        throw new Error(response.error || "Unknown error sending email");
+      // Check if there was an error
+      if (response.error) {
+        throw new Error(response.error);
       }
 
-      return this.createSuccessResult(response.message_id, validatedOptions, "mailersend");
+      // Use the message_id from response, or generate one if not provided
+      const messageId = response.message_id || `mailersend-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+      return this.createSuccessResult(messageId, validatedOptions, "mailersend");
     } catch (error) {
       this.logger?.error("Failed to send raw email", error as Error);
       return this.createErrorResult(
@@ -186,16 +190,26 @@ export class MailerSendService extends BaseEmailService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorText = await response.text();
         return {
-          error: errorData.message || `HTTP error ${response.status}`,
+          error: errorText || `HTTP error ${response.status}`,
           status: response.status,
         };
       }
 
-      const data = await response.json();
+      const responseText = await response.text();
+      let data;
+      try {
+        data = responseText ? JSON.parse(responseText) : {};
+      } catch (e) {
+        data = {};
+      }
+      
+      // MailerSend returns 202 with empty body when email is queued successfully
+      const messageId = data.id || data.message_id || `mailersend-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
       return {
-        message_id: data.id || data.message_id,
+        message_id: messageId,
         status: response.status,
       };
     } catch (error) {

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Order Has Shipped - GodWear</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .logo {
+      max-width: 150px;
+      height: auto;
+    }
+    .order-info {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    .tracking-info {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f0f7ff;
+      border-radius: 5px;
+    }
+    .item {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 15px;
+    }
+    .item-image {
+      width: 80px;
+      margin-right: 15px;
+    }
+    .item-details {
+      flex-grow: 1;
+    }
+    .shipping-info {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4a90e2;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      text-align: center;
+      font-size: 0.8em;
+      color: #777;
+    }
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #222;
+        color: #eee;
+      }
+      .order-info, .shipping-info, .tracking-info {
+        background-color: #333;
+      }
+      .item, .footer, .header {
+        border-color: #444;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="{{logoUrl}}" alt="GodWear Logo" class="logo">
+      <h1>Your Order Has Shipped!</h1>
+    </div>
+    
+    <p>Hello {{firstName}},</p>
+    
+    <p>Great news! Your order is on its way to you. We've packed your items with care and handed them over to {{carrier}}.</p>
+    
+    <div class="order-info">
+      <h2>Order Information</h2>
+      <p><strong>Order Number:</strong> {{orderNumber}}</p>
+      <p><strong>Order Date:</strong> {{orderDate}}</p>
+      <p><strong>Shipped Date:</strong> {{shippedDate}}</p>
+    </div>
+    
+    <div class="tracking-info">
+      <h2>Tracking Information</h2>
+      <p><strong>Carrier:</strong> {{carrier}}</p>
+      <p><strong>Tracking Number:</strong> {{trackingNumber}}</p>
+      <p><strong>Estimated Delivery:</strong> {{estimatedDelivery}}</p>
+      <a href="{{trackingUrl}}" class="button">Track Your Package</a>
+    </div>
+    
+    <h2>Items Shipped</h2>
+    {{#each items}}
+    <div class="item">
+      <img src="{{imageUrl}}" alt="{{name}}" class="item-image">
+      <div class="item-details">
+        <h3>{{name}}</h3>
+        <p>{{variant}}</p>
+        <p>Quantity: {{quantity}}</p>
+      </div>
+    </div>
+    {{/each}}
+    
+    {{#if isPartialShipment}}
+    <div class="order-info">
+      <h2>Partial Shipment</h2>
+      <p>This is a partial shipment. The following items will be shipped separately:</p>
+      <ul>
+        {{#each remainingItems}}
+        <li>{{name}} ({{quantity}})</li>
+        {{/each}}
+      </ul>
+      <p>We'll notify you when these items ship.</p>
+    </div>
+    {{/if}}
+    
+    <div class="shipping-info">
+      <h2>Shipping Address</h2>
+      <p>
+        {{shippingAddress.name}}<br>
+        {{shippingAddress.street}}<br>
+        {{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br>
+        {{shippingAddress.country}}
+      </p>
+    </div>
+    
+    <p>You can view your order details anytime by visiting <a href="{{orderUrl}}">your account</a>.</p>
+    
+    <p>If you have any questions about your shipment, please contact our customer service team at <a href="mailto:{{supportEmail}}">{{supportEmail}}</a>.</p>
+    
+    <p>Thank you for shopping with GodWear!</p>
+    
+    <div class="footer">
+      <p>&copy; {{currentYear}} GodWear. All rights reserved.</p>
+      <p>This email was sent to notify you about your shipment.</p>
+    </div>
+  </div>
+</body>
+</html>

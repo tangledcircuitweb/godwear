@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmation - GodWear</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .logo {
+      max-width: 150px;
+      height: auto;
+    }
+    .order-info {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    .order-details {
+      margin: 20px 0;
+    }
+    .item {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 15px;
+    }
+    .item-image {
+      width: 80px;
+      margin-right: 15px;
+    }
+    .item-details {
+      flex-grow: 1;
+    }
+    .item-price {
+      font-weight: bold;
+    }
+    .totals {
+      margin: 20px 0;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .grand-total {
+      font-weight: bold;
+      font-size: 1.2em;
+      border-top: 2px solid #eee;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    .shipping-info {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    .tracking-info {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f0f7ff;
+      border-radius: 5px;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4a90e2;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      text-align: center;
+      font-size: 0.8em;
+      color: #777;
+    }
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #222;
+        color: #eee;
+      }
+      .order-info, .shipping-info, .tracking-info {
+        background-color: #333;
+      }
+      .item, .totals, .footer, .header {
+        border-color: #444;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="{{logoUrl}}" alt="GodWear Logo" class="logo">
+      <h1>Order Confirmation</h1>
+    </div>
+    
+    <p>Hello {{firstName}},</p>
+    
+    <p>Thank you for your order! We're excited to confirm that your order has been received and is being processed.</p>
+    
+    <div class="order-info">
+      <h2>Order Information</h2>
+      <p><strong>Order Number:</strong> {{orderNumber}}</p>
+      <p><strong>Order Date:</strong> {{orderDate}}</p>
+      <p><strong>Payment Method:</strong> {{paymentMethod}}</p>
+    </div>
+    
+    <div class="order-details">
+      <h2>Order Details</h2>
+      
+      {{#each items}}
+      <div class="item">
+        <img src="{{imageUrl}}" alt="{{name}}" class="item-image">
+        <div class="item-details">
+          <h3>{{name}}</h3>
+          <p>{{variant}}</p>
+          <p>Quantity: {{quantity}}</p>
+        </div>
+        <div class="item-price">
+          {{price}}
+        </div>
+      </div>
+      {{/each}}
+      
+      <div class="totals">
+        <div class="total-row">
+          <span>Subtotal:</span>
+          <span>{{subtotal}}</span>
+        </div>
+        <div class="total-row">
+          <span>Shipping:</span>
+          <span>{{shipping}}</span>
+        </div>
+        <div class="total-row">
+          <span>Tax:</span>
+          <span>{{tax}}</span>
+        </div>
+        <div class="total-row grand-total">
+          <span>Total:</span>
+          <span>{{total}}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="shipping-info">
+      <h2>Shipping Information</h2>
+      <p>
+        {{shippingAddress.name}}<br>
+        {{shippingAddress.street}}<br>
+        {{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br>
+        {{shippingAddress.country}}
+      </p>
+      <p><strong>Estimated Delivery:</strong> {{estimatedDelivery}}</p>
+    </div>
+    
+    {{#if trackingNumber}}
+    <div class="tracking-info">
+      <h2>Tracking Information</h2>
+      <p><strong>Tracking Number:</strong> {{trackingNumber}}</p>
+      <a href="{{trackingUrl}}" class="button">Track Your Order</a>
+    </div>
+    {{/if}}
+    
+    <p>You can view your order details anytime by visiting <a href="{{orderUrl}}">your account</a>.</p>
+    
+    <p>If you have any questions about your order, please contact our customer service team at <a href="mailto:{{supportEmail}}">{{supportEmail}}</a>.</p>
+    
+    <p>Thank you for shopping with GodWear!</p>
+    
+    <div class="footer">
+      <p>&copy; {{currentYear}} GodWear. All rights reserved.</p>
+      <p>This email was sent to confirm your recent order.</p>
+    </div>
+  </div>
+</body>
+</html>
