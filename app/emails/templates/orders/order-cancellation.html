@@ -9,22 +9,34 @@
   <!--[if mso]>
   <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
   <style>
-    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
+    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: Georgia, serif; mso-line-height-rule: exactly;}
   </style>
   <![endif]-->
-  <title>Order Cancellation - #{{orderNumber}}</title>
+  <title>Sacred Order Cancellation - #{{orderNumber}}</title>
   <style>
-    /* Base styles */
+    /* Christian Brand Colors */
+    :root {
+      --deep-purple: #4C1D95;
+      --sacred-gold: #B45309;
+      --cream: #FEF7ED;
+      --royal-purple: #6B21A8;
+    }
+    
+    /* Base styles with Christian typography */
+    body, table, td, p, h1, h2, h3, h4, h5, h6 {
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    
     @media (prefers-color-scheme: dark) {
-      .dark-mode { background-color: #121212 !important; color: #ffffff !important; }
-      .dark-text { color: #ffffff !important; }
-      .dark-bg { background-color: #1e1e1e !important; }
-      .dark-button { background-color: #4f46e5 !important; color: #ffffff !important; }
-      .dark-border { border-color: #2e2e2e !important; }
-      .dark-divider { border-top-color: #2e2e2e !important; }
-      .dark-table-row { background-color: #1e1e1e !important; }
-      .dark-table-header { background-color: #2e2e2e !important; color: #ffffff !important; }
-      .dark-alert { background-color: #2e2e2e !important; }
+      .dark-mode { background-color: #2D1B69 !important; color: #FEF7ED !important; }
+      .dark-text { color: #FEF7ED !important; }
+      .dark-bg { background-color: #4C1D95 !important; }
+      .dark-button { background-color: #B45309 !important; color: #FEF7ED !important; }
+      .dark-border { border-color: #6B21A8 !important; }
+      .dark-divider { border-top-color: #6B21A8 !important; }
+      .dark-table-row { background-color: #4C1D95 !important; }
+      .dark-table-header { background-color: #6B21A8 !important; color: #FEF7ED !important; }
+      .dark-alert { background-color: #6B21A8 !important; }
     }
     
     @media screen and (max-width: 600px) {
@@ -36,81 +48,93 @@
       .sm-hidden { display: none !important; }
       .sm-block { display: block !important; }
       .sm-inline-block { display: inline-block !important; }
+      .sm-center { text-align: center !important; }
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background-color: #f3f4f6;" class="dark-mode">
+<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background-color: #FEF7ED;" class="dark-mode">
   <!-- Email wrapper -->
-  <div style="display: none;">Your order #{{orderNumber}} has been cancelled.</div>
-  <div role="article" aria-roledescription="email" aria-label="Order Cancellation - #{{orderNumber}}" lang="en">
-    <table style="width: 100%; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;" cellpadding="0" cellspacing="0" role="presentation">
+  <div style="display: none;">Your sacred order #{{orderNumber}} has been cancelled. "Trust in the Lord with all your heart" - Proverbs 3:5</div>
+  <div role="article" aria-roledescription="email" aria-label="Sacred Order Cancellation - #{{orderNumber}}" lang="en">
+    <table style="width: 100%; font-family: Georgia, 'Times New Roman', serif;" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center" style="padding: 24px 0;">
           <!-- Email container -->
           <table class="sm-w-full" style="width: 600px;" cellpadding="0" cellspacing="0" role="presentation">
             <!-- Header -->
             <tr>
-              <td class="dark-bg" style="background-color: #ffffff; padding: 24px; text-align: center; border-top-left-radius: 4px; border-top-right-radius: 4px;">
-                <img src="{{logoUrl}}" width="150" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle;">
+              <td class="dark-bg" style="background-color: #4C1D95; padding: 24px; text-align: center; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                <img src="{{logoUrl}}" width="150" alt="GodWear - Faith-Inspired Fashion" style="border: 0; max-width: 100%; vertical-align: middle;">
               </td>
             </tr>
             <!-- Body -->
             <tr>
-              <td class="dark-bg" style="background-color: #ffffff;">
+              <td class="dark-bg" style="background-color: #FEF7ED; border-left: 3px solid #B45309; border-right: 3px solid #B45309;">
                 <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
                     <td class="sm-px-4 sm-py-8" style="padding: 40px 48px; text-align: left;">
                       <!-- Email content -->
-                      <h1 style="margin: 0; font-size: 24px; font-weight: 600; line-height: 32px; color: #111827;" class="dark-text sm-text-lg">Order Cancellation</h1>
+                      <h1 style="margin: 0; font-size: 28px; font-weight: bold; line-height: 36px; color: #4C1D95; text-align: center;" class="dark-text sm-text-lg">🙏 Sacred Order Cancellation 💙</h1>
+                      
+                      <div style="text-align: center; margin: 24px 0; padding: 20px; background-color: #B45309; border-radius: 8px;">
+                        <p style="margin: 0; font-size: 16px; font-style: italic; color: #FEF7ED; line-height: 24px;">
+                          "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to Him, and He will make your paths straight."
+                        </p>
+                        <p style="margin: 8px 0 0 0; font-size: 14px; color: #FEF7ED; font-weight: bold;">
+                          - Proverbs 3:5-6
+                        </p>
+                      </div>
                       
                       <!-- Order Info -->
-                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        Hi {{name}},
+                      <p style="margin: 0; margin-top: 24px; font-size: 18px; line-height: 28px; color: #4C1D95;" class="dark-text">
+                        Dear {{name}}, 💝
                       </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        We're writing to confirm that your order #{{orderNumber}} has been cancelled.
+                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 26px; color: #6B21A8;" class="dark-text">
+                        We're writing with a heavy heart to confirm that your sacred order #{{orderNumber}} has been cancelled. While this may not be what we hoped for, we trust that God has a perfect plan for all things, and His timing is always right.
                       </p>
                       
                       <!-- Cancellation Reason -->
-                      <table style="width: 100%; margin-top: 32px; background-color: #f9fafb; border-radius: 4px;" class="dark-bg dark-border" cellpadding="0" cellspacing="0" role="presentation">
+                      <table style="width: 100%; margin-top: 32px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;" class="dark-bg dark-border" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
                           <td style="padding: 24px;">
-                            <h2 style="margin: 0; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">Cancellation Details</h2>
-                            <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                              <strong>Reason:</strong> {{cancellationReason}}
-                            </p>
-                            {{#if refund}}
-                            <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                              <strong>Refund Amount:</strong> {{refund.formattedAmount}}
-                            </p>
-                            <p style="margin: 0; margin-top: 8px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                              <strong>Refund Method:</strong> {{refund.method}}
-                            </p>
-                            <p style="margin: 0; margin-top: 8px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">
-                              Please allow 3-5 business days for the refund to appear in your account.
-                            </p>
-                            {{/if}}
+                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">💙 Sacred Cancellation Details 💙</h2>
+                            <div style="margin-top: 16px; padding: 16px; background-color: #FEF7ED; border-radius: 6px; border: 2px solid #B45309;">
+                              <p style="margin: 0; font-size: 16px; line-height: 26px; color: #4C1D95;" class="dark-text">
+                                <strong>🔍 Reason:</strong> {{cancellationReason}}
+                              </p>
+                              {{#if refund}}
+                              <p style="margin: 16px 0 0 0; font-size: 16px; line-height: 26px; color: #4C1D95;" class="dark-text">
+                                <strong>💰 Blessed Refund Amount:</strong> {{refund.formattedAmount}}
+                              </p>
+                              <p style="margin: 8px 0 0 0; font-size: 16px; line-height: 26px; color: #4C1D95;" class="dark-text">
+                                <strong>💳 Refund Method:</strong> {{refund.method}}
+                              </p>
+                              <p style="margin: 8px 0 0 0; font-size: 14px; line-height: 22px; color: #6B21A8; font-style: italic;" class="dark-text">
+                                Please allow 3-5 business days for the refund to appear in your account. God's timing is perfect in all things. 🙏
+                              </p>
+                              {{/if}}
+                            </div>
                           </td>
                         </tr>
                       </table>
                       
                       <!-- Order Summary Box -->
-                      <table style="width: 100%; margin-top: 32px; background-color: #f9fafb; border-radius: 4px;" class="dark-bg dark-border" cellpadding="0" cellspacing="0" role="presentation">
+                      <table style="width: 100%; margin-top: 32px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;" class="dark-bg dark-border" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
                           <td style="padding: 24px;">
-                            <h2 style="margin: 0; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">Order Summary</h2>
+                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">✨ Sacred Order Summary ✨</h2>
                             <table style="width: 100%; margin-top: 16px;" cellpadding="0" cellspacing="0" role="presentation">
                               <tr>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">Order Number:</td>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text"><strong>#{{orderNumber}}</strong></td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #FEF7ED;" class="dark-text">🔢 Order Number:</td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">#{{orderNumber}}</td>
                               </tr>
                               <tr>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">Order Date:</td>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text">{{orderDate}}</td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #FEF7ED;" class="dark-text">📅 Blessed Date:</td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{orderDate}}</td>
                               </tr>
                               <tr>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">Payment Method:</td>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text">{{paymentMethod}}</td>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #FEF7ED;" class="dark-text">💳 Payment Method:</td>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{paymentMethod}}</td>
                               </tr>
                             </table>
                           </td>
@@ -118,106 +142,122 @@
                       </table>
                       
                       <!-- Order Items -->
-                      <h2 style="margin: 0; margin-top: 32px; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">Cancelled Items</h2>
-                      <table style="width: 100%; margin-top: 16px; border-collapse: collapse;" cellpadding="0" cellspacing="0" role="presentation">
+                      <h2 style="margin: 0; margin-top: 32px; font-size: 20px; font-weight: bold; line-height: 28px; color: #4C1D95; text-align: center;" class="dark-text">💙 Cancelled Sacred Items 💙</h2>
+                      <table style="width: 100%; margin-top: 16px; border-collapse: collapse; border-radius: 8px; overflow: hidden; border: 2px solid #B45309;" cellpadding="0" cellspacing="0" role="presentation">
                         <tr class="dark-table-header">
-                          <th style="padding: 12px 16px; background-color: #f3f4f6; font-size: 14px; font-weight: 600; text-align: left; color: #111827; border-top-left-radius: 4px;" class="sm-hidden">Image</th>
-                          <th style="padding: 12px 16px; background-color: #f3f4f6; font-size: 14px; font-weight: 600; text-align: left; color: #111827;" class="dark-text">Product</th>
-                          <th style="padding: 12px 16px; background-color: #f3f4f6; font-size: 14px; font-weight: 600; text-align: center; color: #111827;" class="dark-text">Qty</th>
-                          <th style="padding: 12px 16px; background-color: #f3f4f6; font-size: 14px; font-weight: 600; text-align: right; color: #111827; border-top-right-radius: 4px;" class="dark-text">Price</th>
+                          <th style="padding: 16px; background-color: #4C1D95; font-size: 16px; font-weight: bold; text-align: left; color: #FEF7ED; border-top-left-radius: 6px;" class="sm-hidden">Image</th>
+                          <th style="padding: 16px; background-color: #4C1D95; font-size: 16px; font-weight: bold; text-align: left; color: #FEF7ED;" class="dark-text">Product</th>
+                          <th style="padding: 16px; background-color: #4C1D95; font-size: 16px; font-weight: bold; text-align: center; color: #FEF7ED;" class="dark-text">Qty</th>
+                          <th style="padding: 16px; background-color: #4C1D95; font-size: 16px; font-weight: bold; text-align: right; color: #FEF7ED; border-top-right-radius: 6px;" class="dark-text">Price</th>
                         </tr>
                         
                         <!-- Item Row Template - Repeat for each item -->
                         {{#each items}}
                         <tr class="dark-table-row">
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; vertical-align: top;" class="dark-border sm-hidden">
-                            <img src="{{this.imageUrl}}" width="64" alt="{{this.name}}" style="border: 0; border-radius: 4px; max-width: 100%; vertical-align: middle;">
+                          <td style="padding: 16px; border-top: 2px solid #B45309; vertical-align: top; background-color: #FEF7ED;" class="dark-border sm-hidden">
+                            <img src="{{this.imageUrl}}" width="64" alt="{{this.name}}" style="border: 0; border-radius: 6px; max-width: 100%; vertical-align: middle; border: 2px solid #4C1D95;">
                           </td>
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; vertical-align: top; font-size: 14px; line-height: 20px; color: #111827;" class="dark-text dark-border">
-                            <div style="font-weight: 600;">{{this.name}}</div>
-                            <div style="margin-top: 4px; color: #6b7280;" class="dark-text">{{this.variant}}</div>
-                            <div style="margin-top: 4px; color: #6b7280;" class="dark-text">SKU: {{this.sku}}</div>
+                          <td style="padding: 16px; border-top: 2px solid #B45309; vertical-align: top; font-size: 16px; line-height: 24px; color: #4C1D95; background-color: #FEF7ED;" class="dark-text dark-border">
+                            <div style="font-weight: bold; font-size: 18px;">{{this.name}}</div>
+                            <div style="margin-top: 6px; color: #6B21A8; font-style: italic;" class="dark-text">{{this.variant}}</div>
+                            <div style="margin-top: 4px; color: #B45309; font-size: 14px;" class="dark-text">SKU: {{this.sku}}</div>
                           </td>
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; vertical-align: top; font-size: 14px; line-height: 20px; color: #111827; text-align: center;" class="dark-text dark-border">
+                          <td style="padding: 16px; border-top: 2px solid #B45309; vertical-align: top; font-size: 18px; line-height: 24px; color: #4C1D95; text-align: center; font-weight: bold; background-color: #FEF7ED;" class="dark-text dark-border">
                             {{this.quantity}}
                           </td>
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; vertical-align: top; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text dark-border">
+                          <td style="padding: 16px; border-top: 2px solid #B45309; vertical-align: top; font-size: 18px; line-height: 24px; color: #4C1D95; text-align: right; font-weight: bold; background-color: #FEF7ED;" class="dark-text dark-border">
                             {{this.price}}
                           </td>
                         </tr>
                         {{/each}}
                         
-                        <!-- Totals -->
+                        <!-- Sacred Totals -->
                         <tr>
                           <td colspan="2" class="sm-hidden"></td>
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; font-size: 14px; line-height: 20px; color: #6b7280; text-align: right;" class="dark-text dark-border">Subtotal:</td>
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text dark-border">{{subtotal}}</td>
+                          <td style="padding: 16px; border-top: 2px solid #B45309; font-size: 16px; line-height: 24px; color: #4C1D95; text-align: right; font-weight: bold; background-color: #FEF7ED;" class="dark-text dark-border">Blessed Subtotal:</td>
+                          <td style="padding: 16px; border-top: 2px solid #B45309; font-size: 16px; line-height: 24px; color: #4C1D95; text-align: right; font-weight: bold; background-color: #FEF7ED;" class="dark-text dark-border">{{subtotal}}</td>
                         </tr>
                         <tr>
                           <td colspan="2" class="sm-hidden"></td>
-                          <td style="padding: 8px 16px; font-size: 14px; line-height: 20px; color: #6b7280; text-align: right;" class="dark-text">Shipping:</td>
-                          <td style="padding: 8px 16px; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text">{{shipping}}</td>
+                          <td style="padding: 8px 16px; font-size: 16px; line-height: 24px; color: #6B21A8; text-align: right; font-weight: bold; background-color: #FEF7ED;" class="dark-text">Sacred Shipping:</td>
+                          <td style="padding: 8px 16px; font-size: 16px; line-height: 24px; color: #6B21A8; text-align: right; font-weight: bold; background-color: #FEF7ED;" class="dark-text">{{shipping}}</td>
                         </tr>
                         <tr>
                           <td colspan="2" class="sm-hidden"></td>
-                          <td style="padding: 8px 16px; font-size: 14px; line-height: 20px; color: #6b7280; text-align: right;" class="dark-text">Tax:</td>
-                          <td style="padding: 8px 16px; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text">{{tax}}</td>
+                          <td style="padding: 8px 16px; font-size: 16px; line-height: 24px; color: #6B21A8; text-align: right; font-weight: bold; background-color: #FEF7ED;" class="dark-text">Holy Tax:</td>
+                          <td style="padding: 8px 16px; font-size: 16px; line-height: 24px; color: #6B21A8; text-align: right; font-weight: bold; background-color: #FEF7ED;" class="dark-text">{{tax}}</td>
                         </tr>
                         {{#if discount}}
                         <tr>
                           <td colspan="2" class="sm-hidden"></td>
-                          <td style="padding: 8px 16px; font-size: 14px; line-height: 20px; color: #6b7280; text-align: right;" class="dark-text">Discount:</td>
-                          <td style="padding: 8px 16px; font-size: 14px; line-height: 20px; color: #10b981; text-align: right;" class="dark-text">-{{discount}}</td>
+                          <td style="padding: 8px 16px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold; background-color: #FEF7ED;" class="dark-text">Divine Discount:</td>
+                          <td style="padding: 8px 16px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold; background-color: #FEF7ED;" class="dark-text">-{{discount}}</td>
                         </tr>
                         {{/if}}
                         <tr>
                           <td colspan="2" class="sm-hidden"></td>
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; font-size: 16px; font-weight: 600; line-height: 24px; color: #111827; text-align: right;" class="dark-text dark-border">Total:</td>
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; font-size: 16px; font-weight: 600; line-height: 24px; color: #111827; text-align: right;" class="dark-text dark-border">{{total}}</td>
+                          <td style="padding: 16px; border-top: 2px solid #B45309; font-size: 18px; font-weight: bold; line-height: 24px; color: #4C1D95; text-align: right; background-color: #FEF7ED;" class="dark-text dark-border">💙 Sacred Total:</td>
+                          <td style="padding: 16px; border-top: 2px solid #B45309; font-size: 18px; font-weight: bold; line-height: 24px; color: #4C1D95; text-align: right; background-color: #FEF7ED;" class="dark-text dark-border">{{total}}</td>
                         </tr>
                       </table>
                       
-                      <!-- View Order Button -->
+                      <!-- Sacred Order Details Button -->
                       <table style="width: 100%; margin-top: 32px;" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
                           <td style="text-align: center;">
-                            <a href="{{orderUrl}}" style="display: inline-block; background-color: #4f46e5; color: #ffffff; font-size: 16px; font-weight: 600; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 24px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;" class="dark-button sm-w-full">
-                              View Order Details
+                            <a href="{{orderUrl}}" style="display: inline-block; background-color: #B45309; color: #FEF7ED; font-size: 16px; font-weight: bold; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 32px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #4C1D95; font-family: Georgia, serif;" class="dark-button sm-w-full">
+                              🙏 View Sacred Order Details 🙏
                             </a>
                           </td>
                         </tr>
                       </table>
                       
-                      <!-- Recommendations -->
-                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        We're sorry we couldn't fulfill your order. If you're still looking for similar items, please visit our website to browse our latest collection.
+                      <!-- Sacred Encouragement -->
+                      <div style="text-align: center; margin: 32px 0; padding: 20px; background-color: #6B21A8; border-radius: 8px; border: 2px solid #B45309;">
+                        <p style="margin: 0; font-size: 16px; color: #FEF7ED; line-height: 24px;">
+                          💙 Though this order was cancelled, we trust in God's perfect timing. He has something even better planned for you! 💙
+                        </p>
+                        <p style="margin: 16px 0 0 0; font-size: 14px; color: #FEF7ED; font-style: italic;">
+                          "For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, to give you hope and a future." - Jeremiah 29:11
+                        </p>
+                      </div>
+                      
+                      <!-- Sacred Recommendations -->
+                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 26px; color: #4C1D95;" class="dark-text">
+                        🙏 We're deeply sorry we couldn't fulfill your sacred order. If you're still seeking faith-inspired fashion, please visit our blessed collection where every piece is designed to glorify God and strengthen your walk with Him.
                       </p>
                       
-                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        If you have any questions about your cancellation, please <a href="mailto:{{supportEmail}}" style="color: #4f46e5; text-decoration: underline;" class="dark-text">contact our support team</a>.
+                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 26px; color: #6B21A8;" class="dark-text">
+                        If you have any questions about your cancellation, please <a href="mailto:{{supportEmail}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">contact our blessed support team</a>. We're here to serve you with Christian love and care. 💝
                       </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        Thank you for your understanding,<br>
-                        The GodWear Team
+                      
+                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 26px; color: #4C1D95; text-align: center;" class="dark-text">
+                        🙏 <strong>Clothed in righteousness, walking in faith</strong> 🙏<br>
+                        <em style="color: #6B21A8;">With Christian blessings and love,</em><br>
+                        <strong style="color: #B45309;">The GodWear Family</strong> 💙
                       </p>
                     </td>
                   </tr>
                 </table>
               </td>
             </tr>
-            <!-- Footer -->
+            <!-- Sacred Footer -->
             <tr>
-              <td class="dark-bg dark-border" style="background-color: #ffffff; border-top: 1px solid #e5e7eb; padding: 24px; text-align: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;">
-                <p style="margin: 0; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  &copy; {{currentYear}} GodWear. All rights reserved.
+              <td class="dark-bg dark-border" style="background-color: #4C1D95; border-top: 3px solid #B45309; padding: 32px 24px; text-align: center; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                <p style="margin: 0; font-size: 16px; line-height: 24px; color: #FEF7ED; font-weight: bold;" class="dark-text">
+                  🙏 Clothed in righteousness, walking in faith 🙏
                 </p>
-                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  <a href="{{unsubscribeUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Unsubscribe</a> •
-                  <a href="{{privacyUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Privacy Policy</a> •
-                  <a href="{{termsUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Terms of Service</a>
+                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
+                  &copy; {{currentYear}} GodWear - Faith-Inspired Fashion. All rights reserved under God's grace.
                 </p>
-                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  GodWear Inc., 123 Fashion Street, New York, NY 10001
+                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
+                  <a href="{{unsubscribeUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">Unsubscribe</a> •
+                  <a href="{{privacyUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">Privacy Policy</a> •
+                  <a href="{{termsUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">Terms of Service</a>
+                </p>
+                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED; font-style: italic;" class="dark-text">
+                  💙 GodWear Inc., 123 Faith Avenue, Blessed City, NY 10001 💙<br>
+                  <em>"She is clothed with strength and dignity" - Proverbs 31:25</em>
                 </p>
               </td>
             </tr>
