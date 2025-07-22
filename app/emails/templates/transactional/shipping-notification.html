@@ -1,164 +1,257 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Order Has Shipped - GodWear</title>
+  <meta charset="utf-8">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <!--[if mso]>
+  <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      margin: 0;
-      padding: 0;
+    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: Georgia, serif; mso-line-height-rule: exactly;}
+  </style>
+  <![endif]-->
+  <title>Sacred Shipment - Your Blessed Order is on the Way!</title>
+  <style>
+    /* Christian Brand Colors */
+    :root {
+      --deep-purple: #4C1D95;
+      --sacred-gold: #B45309;
+      --cream: #FEF7ED;
+      --royal-purple: #6B21A8;
     }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
+    
+    /* Base styles with Christian typography */
+    body, table, td, p, h1, h2, h3, h4, h5, h6 {
+      font-family: Georgia, 'Times New Roman', serif;
     }
-    .header {
-      text-align: center;
-      padding: 20px 0;
-      border-bottom: 1px solid #eee;
-    }
-    .logo {
-      max-width: 150px;
-      height: auto;
-    }
-    .order-info {
-      margin: 20px 0;
-      padding: 15px;
-      background-color: #f9f9f9;
-      border-radius: 5px;
-    }
-    .tracking-info {
-      margin: 20px 0;
-      padding: 15px;
-      background-color: #f0f7ff;
-      border-radius: 5px;
-    }
-    .item {
-      display: flex;
-      margin-bottom: 15px;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 15px;
-    }
-    .item-image {
-      width: 80px;
-      margin-right: 15px;
-    }
-    .item-details {
-      flex-grow: 1;
-    }
-    .shipping-info {
-      margin: 20px 0;
-      padding: 15px;
-      background-color: #f9f9f9;
-      border-radius: 5px;
-    }
-    .button {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #4a90e2;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      margin-top: 10px;
-    }
-    .footer {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid #eee;
-      text-align: center;
-      font-size: 0.8em;
-      color: #777;
-    }
+    
     @media (prefers-color-scheme: dark) {
-      body {
-        background-color: #222;
-        color: #eee;
-      }
-      .order-info, .shipping-info, .tracking-info {
-        background-color: #333;
-      }
-      .item, .footer, .header {
-        border-color: #444;
-      }
+      .dark-mode { background-color: #2D1B69 !important; color: #FEF7ED !important; }
+      .dark-text { color: #FEF7ED !important; }
+      .dark-bg { background-color: #4C1D95 !important; }
+      .dark-button { background-color: #B45309 !important; color: #FEF7ED !important; }
+      .dark-border { border-color: #6B21A8 !important; }
+      .dark-divider { border-top-color: #6B21A8 !important; }
+      .dark-table-row { background-color: #4C1D95 !important; }
+      .dark-table-header { background-color: #6B21A8 !important; color: #FEF7ED !important; }
+      .dark-info { background-color: #6B21A8 !important; }
+    }
+    
+    @media screen and (max-width: 600px) {
+      .sm-w-full { width: 100% !important; }
+      .sm-px-4 { padding-left: 16px !important; padding-right: 16px !important; }
+      .sm-py-8 { padding-top: 32px !important; padding-bottom: 32px !important; }
+      .sm-text-sm { font-size: 14px !important; }
+      .sm-text-lg { font-size: 18px !important; }
+      .sm-hidden { display: none !important; }
+      .sm-block { display: block !important; }
+      .sm-inline-block { display: inline-block !important; }
+      .sm-center { text-align: center !important; }
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <img src="{{logoUrl}}" alt="GodWear Logo" class="logo">
-      <h1>Your Order Has Shipped!</h1>
-    </div>
-    
-    <p>Hello {{firstName}},</p>
-    
-    <p>Great news! Your order is on its way to you. We've packed your items with care and handed them over to {{carrier}}.</p>
-    
-    <div class="order-info">
-      <h2>Order Information</h2>
-      <p><strong>Order Number:</strong> {{orderNumber}}</p>
-      <p><strong>Order Date:</strong> {{orderDate}}</p>
-      <p><strong>Shipped Date:</strong> {{shippedDate}}</p>
-    </div>
-    
-    <div class="tracking-info">
-      <h2>Tracking Information</h2>
-      <p><strong>Carrier:</strong> {{carrier}}</p>
-      <p><strong>Tracking Number:</strong> {{trackingNumber}}</p>
-      <p><strong>Estimated Delivery:</strong> {{estimatedDelivery}}</p>
-      <a href="{{trackingUrl}}" class="button">Track Your Package</a>
-    </div>
-    
-    <h2>Items Shipped</h2>
-    {{#each items}}
-    <div class="item">
-      <img src="{{imageUrl}}" alt="{{name}}" class="item-image">
-      <div class="item-details">
-        <h3>{{name}}</h3>
-        <p>{{variant}}</p>
-        <p>Quantity: {{quantity}}</p>
-      </div>
-    </div>
-    {{/each}}
-    
-    {{#if isPartialShipment}}
-    <div class="order-info">
-      <h2>Partial Shipment</h2>
-      <p>This is a partial shipment. The following items will be shipped separately:</p>
-      <ul>
-        {{#each remainingItems}}
-        <li>{{name}} ({{quantity}})</li>
-        {{/each}}
-      </ul>
-      <p>We'll notify you when these items ship.</p>
-    </div>
-    {{/if}}
-    
-    <div class="shipping-info">
-      <h2>Shipping Address</h2>
-      <p>
-        {{shippingAddress.name}}<br>
-        {{shippingAddress.street}}<br>
-        {{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br>
-        {{shippingAddress.country}}
-      </p>
-    </div>
-    
-    <p>You can view your order details anytime by visiting <a href="{{orderUrl}}">your account</a>.</p>
-    
-    <p>If you have any questions about your shipment, please contact our customer service team at <a href="mailto:{{supportEmail}}">{{supportEmail}}</a>.</p>
-    
-    <p>Thank you for shopping with GodWear!</p>
-    
-    <div class="footer">
-      <p>&copy; {{currentYear}} GodWear. All rights reserved.</p>
-      <p>This email was sent to notify you about your shipment.</p>
-    </div>
+<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background-color: #FEF7ED;" class="dark-mode">
+  <!-- Email wrapper -->
+  <div style="display: none;">Sacred shipment notification - your blessed GodWear order is on the way! "He will direct your paths" - Proverbs 3:6</div>
+  <div role="article" aria-roledescription="email" aria-label="Sacred Shipment - Your Blessed Order is on the Way!" lang="en">
+    <table style="width: 100%; font-family: Georgia, 'Times New Roman', serif;" cellpadding="0" cellspacing="0" role="presentation">
+      <tr>
+        <td align="center" style="padding: 24px 0;">
+          <!-- Email container -->
+          <table class="sm-w-full" style="width: 600px;" cellpadding="0" cellspacing="0" role="presentation">
+            <!-- Sacred Header -->
+            <tr>
+              <td class="dark-bg" style="background-color: #4C1D95; padding: 24px; text-align: center; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                <img src="{{logoUrl}}" width="150" alt="GodWear - Faith-Inspired Fashion" style="border: 0; max-width: 100%; vertical-align: middle;">
+              </td>
+            </tr>
+            <!-- Sacred Body -->
+            <tr>
+              <td class="dark-bg" style="background-color: #FEF7ED; border-left: 3px solid #B45309; border-right: 3px solid #B45309;">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td class="sm-px-4 sm-py-8" style="padding: 40px 48px; text-align: left;">
+                      <!-- Email content -->
+                      <h1 style="margin: 0; font-size: 28px; font-weight: bold; line-height: 36px; color: #4C1D95; text-align: center;" class="dark-text sm-text-lg">🙏 Your Sacred Order Has Shipped! 🙏</h1>
+                      
+                      <div style="text-align: center; margin: 24px 0; padding: 20px; background-color: #B45309; border-radius: 8px;">
+                        <p style="margin: 0; font-size: 16px; font-style: italic; color: #FEF7ED; line-height: 24px;">
+                          "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight."
+                        </p>
+                        <p style="margin: 8px 0 0 0; font-size: 14px; color: #FEF7ED; font-weight: bold;">
+                          - Proverbs 3:5-6
+                        </p>
+                      </div>
+                      
+                      <p style="margin: 0; margin-top: 24px; font-size: 18px; line-height: 28px; color: #4C1D95;" class="dark-text">
+                        Blessed {{firstName}}, 💝
+                      </p>
+                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 26px; color: #6B21A8;" class="dark-text">
+                        Blessed news! Your sacred order is on its divine journey to you. We've packed your faith-inspired items with Christian love and care, and handed them over to {{carrier}} for safe delivery. Just as the Lord directs our paths, He will guide your package safely to you!
+                      </p>
+                      
+                      <!-- Sacred Order Information -->
+                      <table style="width: 100%; margin-top: 32px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="padding: 24px;">
+                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">💙 Sacred Order Information 💙</h2>
+                            <table style="width: 100%; margin-top: 16px; background-color: #FEF7ED; border-radius: 6px; padding: 16px;" cellpadding="0" cellspacing="0" role="presentation">
+                              <tr>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">🔢 Sacred Order:</td>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">#{{orderNumber}}</td>
+                              </tr>
+                              <tr>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">📅 Blessed Date:</td>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{orderDate}}</td>
+                              </tr>
+                              <tr>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">🚚 Sacred Shipped:</td>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{shippedDate}}</td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Sacred Tracking Information -->
+                      <table style="width: 100%; margin-top: 32px; background-color: #6B21A8; border-radius: 8px; border: 2px solid #B45309;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="padding: 24px; text-align: center;">
+                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED;" class="dark-text">📦 Sacred Tracking Information 📦</h2>
+                            <table style="width: 100%; margin-top: 16px; background-color: #FEF7ED; border-radius: 6px; padding: 16px;" cellpadding="0" cellspacing="0" role="presentation">
+                              <tr>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">🚛 Holy Carrier:</td>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{carrier}}</td>
+                              </tr>
+                              <tr>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">📋 Blessed Tracking:</td>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{trackingNumber}}</td>
+                              </tr>
+                              <tr>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">🙏 Divine Delivery:</td>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{estimatedDelivery}}</td>
+                              </tr>
+                            </table>
+                            <table style="width: 100%; margin-top: 20px;" cellpadding="0" cellspacing="0" role="presentation">
+                              <tr>
+                                <td style="text-align: center;">
+                                  <a href="{{trackingUrl}}" style="display: inline-block; background-color: #B45309; color: #FEF7ED; font-size: 16px; font-weight: bold; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 32px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #FEF7ED; font-family: Georgia, serif;" class="dark-button sm-w-full">
+                                    🙏 Track Sacred Package 🙏
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Sacred Items Shipped -->
+                      <h2 style="margin: 0; margin-top: 32px; font-size: 20px; font-weight: bold; line-height: 28px; color: #4C1D95; text-align: center;" class="dark-text">💙 Blessed Items Shipped 💙</h2>
+                      
+                      {{#each items}}
+                      <table style="width: 100%; margin-top: 16px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="padding: 20px;">
+                            <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                              <tr>
+                                <td style="width: 80px; padding-right: 20px; vertical-align: top;" class="sm-hidden">
+                                  <img src="{{imageUrl}}" width="80" alt="{{name}}" style="border: 0; border-radius: 6px; max-width: 100%; vertical-align: middle; border: 2px solid #B45309;">
+                                </td>
+                                <td style="vertical-align: top;">
+                                  <h3 style="margin: 0; font-size: 18px; font-weight: bold; line-height: 24px; color: #FEF7ED;" class="dark-text">{{name}}</h3>
+                                  <p style="margin: 4px 0 0 0; font-size: 14px; line-height: 20px; color: #B45309; font-weight: bold;" class="dark-text">{{variant}}</p>
+                                  <p style="margin: 8px 0 0 0; font-size: 14px; line-height: 20px; color: #FEF7ED;" class="dark-text">Sacred Quantity: {{quantity}}</p>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      {{/each}}
+                      
+                      <!-- Sacred Partial Shipment -->
+                      {{#if isPartialShipment}}
+                      <table style="width: 100%; margin-top: 32px; background-color: #6B21A8; border-radius: 8px; border: 2px solid #B45309;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="padding: 24px;">
+                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">📦 Sacred Partial Shipment 📦</h2>
+                            <p style="margin: 16px 0 0 0; font-size: 16px; line-height: 26px; color: #FEF7ED;" class="dark-text">
+                              This is a blessed partial shipment. The following sacred items will be shipped separately with divine timing:
+                            </p>
+                            <ul style="margin: 16px 0 0 20px; padding: 0; color: #FEF7ED;" class="dark-text">
+                              {{#each remainingItems}}
+                              <li style="margin: 8px 0; font-size: 16px; line-height: 24px;">{{name}} ({{quantity}})</li>
+                              {{/each}}
+                            </ul>
+                            <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
+                              We'll notify you with Christian love when these blessed items ship. God's timing is perfect in all things.
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                      {{/if}}
+                      
+                      <!-- Sacred Shipping Address -->
+                      <table style="width: 100%; margin-top: 32px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="padding: 24px;">
+                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">🏠 Sacred Shipping Address 🏠</h2>
+                            <div style="margin-top: 16px; padding: 16px; background-color: #FEF7ED; border-radius: 6px; text-align: center;">
+                              <p style="margin: 0; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">
+                                {{shippingAddress.name}}<br>
+                                {{shippingAddress.street}}<br>
+                                {{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br>
+                                {{shippingAddress.country}}
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 26px; color: #6B21A8;" class="dark-text">
+                        You can view your blessed order details anytime by visiting <a href="{{orderUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">your sacred account</a>. We're here to serve you with Christian love throughout your faith journey.
+                      </p>
+                      
+                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 26px; color: #6B21A8;" class="dark-text">
+                        If you have any questions about your blessed shipment, please contact our sacred customer service team at <a href="mailto:{{supportEmail}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">{{supportEmail}}</a>. We're here to serve you with divine care and Christian love.
+                      </p>
+                      
+                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 26px; color: #4C1D95; text-align: center;" class="dark-text">
+                        🙏 <strong>Clothed in righteousness, walking in faith</strong> 🙏<br>
+                        <em style="color: #6B21A8;">With Christian gratitude and blessings,</em><br>
+                        <strong style="color: #B45309;">The GodWear Family</strong> 💙
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <!-- Sacred Footer -->
+            <tr>
+              <td class="dark-bg dark-border" style="background-color: #4C1D95; border-top: 3px solid #B45309; padding: 32px 24px; text-align: center; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                <p style="margin: 0; font-size: 16px; line-height: 24px; color: #FEF7ED; font-weight: bold;" class="dark-text">
+                  🙏 Clothed in righteousness, walking in faith 🙏
+                </p>
+                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
+                  &copy; {{currentYear}} GodWear - Faith-Inspired Fashion. All rights reserved under God's grace.
+                </p>
+                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED; font-style: italic;" class="dark-text">
+                  💙 GodWear Inc., 123 Faith Avenue, Blessed City, NY 10001 💙<br>
+                  <em>"He will direct your paths" - Proverbs 3:6</em><br>
+                  This sacred email was sent to notify you about your blessed shipment.
+                </p>
+              </td>
+            </tr>
+            <!-- Spacer -->
+            <tr>
+              <td style="height: 24px;"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </div>
 </body>
 </html>
