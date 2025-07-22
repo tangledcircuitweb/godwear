@@ -9,20 +9,34 @@
   <!--[if mso]>
   <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
   <style>
-    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
+    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: Georgia, serif; mso-line-height-rule: exactly;}
   </style>
   <![endif]-->
-  <title>Your Account {{updateTypeDisplay}} Has Been Updated</title>
+  <title>Sacred Account {{updateTypeDisplay}} Update - GodWear</title>
   <style>
-    /* Base styles */
+    /* Christian Brand Colors */
+    :root {
+      --deep-purple: #4C1D95;
+      --sacred-gold: #B45309;
+      --cream: #FEF7ED;
+      --royal-purple: #6B21A8;
+    }
+    
+    /* Base styles with Christian typography */
+    body, table, td, p, h1, h2, h3, h4, h5, h6 {
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    
     @media (prefers-color-scheme: dark) {
-      .dark-mode { background-color: #121212 !important; color: #ffffff !important; }
-      .dark-text { color: #ffffff !important; }
-      .dark-bg { background-color: #1e1e1e !important; }
-      .dark-button { background-color: #4f46e5 !important; color: #ffffff !important; }
-      .dark-border { border-color: #2e2e2e !important; }
-      .dark-divider { border-top-color: #2e2e2e !important; }
-      .dark-alert { background-color: #2e2e2e !important; }
+      .dark-mode { background-color: #2D1B69 !important; color: #FEF7ED !important; }
+      .dark-text { color: #FEF7ED !important; }
+      .dark-bg { background-color: #4C1D95 !important; }
+      .dark-button { background-color: #B45309 !important; color: #FEF7ED !important; }
+      .dark-border { border-color: #6B21A8 !important; }
+      .dark-divider { border-top-color: #6B21A8 !important; }
+      .dark-table-row { background-color: #4C1D95 !important; }
+      .dark-table-header { background-color: #6B21A8 !important; color: #FEF7ED !important; }
+      .dark-alert { background-color: #6B21A8 !important; }
     }
     
     @media screen and (max-width: 600px) {
@@ -31,128 +45,152 @@
       .sm-py-8 { padding-top: 32px !important; padding-bottom: 32px !important; }
       .sm-text-sm { font-size: 14px !important; }
       .sm-text-lg { font-size: 18px !important; }
+      .sm-hidden { display: none !important; }
+      .sm-block { display: block !important; }
+      .sm-inline-block { display: inline-block !important; }
+      .sm-center { text-align: center !important; }
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background-color: #f3f4f6;" class="dark-mode">
+<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background-color: #FEF7ED;" class="dark-mode">
   <!-- Email wrapper -->
-  <div style="display: none;">Your GodWear account {{updateTypeDisplay}} has been updated. If you didn't make this change, please contact us immediately.</div>
-  <div role="article" aria-roledescription="email" aria-label="Your Account {{updateTypeDisplay}} Has Been Updated" lang="en">
-    <table style="width: 100%; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;" cellpadding="0" cellspacing="0" role="presentation">
+  <div style="display: none;">Sacred account {{updateTypeDisplay}} update notification. "The Lord will watch over your coming and going" - Psalm 121:8</div>
+  <div role="article" aria-roledescription="email" aria-label="Sacred Account {{updateTypeDisplay}} Update - GodWear" lang="en">
+    <table style="width: 100%; font-family: Georgia, 'Times New Roman', serif;" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center" style="padding: 24px 0;">
           <!-- Email container -->
           <table class="sm-w-full" style="width: 600px;" cellpadding="0" cellspacing="0" role="presentation">
-            <!-- Header -->
+            <!-- Sacred Header -->
             <tr>
-              <td class="dark-bg" style="background-color: #ffffff; padding: 24px; text-align: center; border-top-left-radius: 4px; border-top-right-radius: 4px;">
-                <img src="{{logoUrl}}" width="150" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle;">
+              <td class="dark-bg" style="background-color: #4C1D95; padding: 24px; text-align: center; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                <img src="{{logoUrl}}" width="150" alt="GodWear - Faith-Inspired Fashion" style="border: 0; max-width: 100%; vertical-align: middle;">
               </td>
             </tr>
-            <!-- Security Image -->
+            <!-- Sacred Security Section -->
             <tr>
-              <td class="dark-bg" style="background-color: #ffffff; text-align: center; padding: 0 48px;">
-                <img src="{{securityImageUrl}}" width="120" alt="Security" style="border: 0; max-width: 100%; vertical-align: middle;">
+              <td class="dark-bg" style="background-color: #4C1D95; text-align: center; padding: 16px 48px;">
+                <div style="background-color: #B45309; border-radius: 50%; width: 120px; height: 120px; margin: 0 auto; display: flex; align-items: center; justify-content: center; border: 3px solid #FEF7ED;">
+                  <span style="font-size: 48px; color: #FEF7ED;">🛡️</span>
+                </div>
               </td>
             </tr>
-            <!-- Body -->
+            <!-- Sacred Body -->
             <tr>
-              <td class="dark-bg" style="background-color: #ffffff;">
+              <td class="dark-bg" style="background-color: #FEF7ED; border-left: 3px solid #B45309; border-right: 3px solid #B45309;">
                 <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
                     <td class="sm-px-4 sm-py-8" style="padding: 40px 48px; text-align: left;">
                       <!-- Email content -->
-                      <h1 style="margin: 0; font-size: 24px; font-weight: 600; line-height: 32px; color: #111827;" class="dark-text sm-text-lg">Your Account {{updateTypeDisplay}} Has Been Updated</h1>
-                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        Hi {{firstName}},
+                      <h1 style="margin: 0; font-size: 28px; font-weight: bold; line-height: 36px; color: #4C1D95; text-align: center;" class="dark-text sm-text-lg">🙏 Sacred Account {{updateTypeDisplay}} Update 🙏</h1>
+                      
+                      <div style="text-align: center; margin: 24px 0; padding: 20px; background-color: #B45309; border-radius: 8px;">
+                        <p style="margin: 0; font-size: 16px; font-style: italic; color: #FEF7ED; line-height: 24px;">
+                          "The Lord will watch over your coming and going both now and forevermore."
+                        </p>
+                        <p style="margin: 8px 0 0 0; font-size: 14px; color: #FEF7ED; font-weight: bold;">
+                          - Psalm 121:8
+                        </p>
+                      </div>
+                      
+                      <p style="margin: 0; margin-top: 24px; font-size: 18px; line-height: 28px; color: #4C1D95;" class="dark-text">
+                        Blessed {{firstName}}, 💝
                       </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        We're writing to let you know that your GodWear account {{updateTypeDisplay}} was recently updated.
+                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 26px; color: #6B21A8;" class="dark-text">
+                        We're writing with sacred care to let you know that your blessed GodWear account {{updateTypeDisplay}} was recently updated. Just as the Lord watches over us, we watch over your account with divine protection.
                       </p>
                       
-                      <!-- Update Details -->
-                      <table style="width: 100%; margin-top: 32px; background-color: #f9fafb; border-radius: 4px;" class="dark-bg dark-border" cellpadding="0" cellspacing="0" role="presentation">
+                      <!-- Sacred Update Details -->
+                      <table style="width: 100%; margin-top: 32px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;" class="dark-bg dark-border" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
                           <td style="padding: 24px;">
-                            <h2 style="margin: 0; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">Update Details</h2>
-                            <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
+                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">💙 Sacred Update Details 💙</h2>
+                            <p style="margin: 16px 0 0 0; font-size: 16px; line-height: 26px; color: #FEF7ED;" class="dark-text">
                               {{updateDetails}}
                             </p>
-                            <table style="width: 100%; margin-top: 16px;" cellpadding="0" cellspacing="0" role="presentation">
+                            <table style="width: 100%; margin-top: 20px; background-color: #FEF7ED; border-radius: 6px; padding: 16px;" cellpadding="0" cellspacing="0" role="presentation">
                               <tr>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">Date & Time:</td>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text">{{timestamp}}</td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">🕐 Sacred Time:</td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{timestamp}}</td>
                               </tr>
                               <tr>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">IP Address:</td>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text">{{ipAddress}}</td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">🌐 Holy IP Address:</td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{ipAddress}}</td>
                               </tr>
                               <tr>
-                                <td style="padding-bottom: 0; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">Device:</td>
-                                <td style="padding-bottom: 0; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text">{{device}}</td>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">📱 Blessed Device:</td>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{device}}</td>
                               </tr>
                             </table>
                           </td>
                         </tr>
                       </table>
                       
-                      <!-- Security Alert -->
-                      <table style="width: 100%; margin-top: 32px; background-color: #fef2f2; border-radius: 4px; border-left: 4px solid #ef4444;" class="dark-alert" cellpadding="0" cellspacing="0" role="presentation">
+                      <!-- Sacred Security Alert -->
+                      <table style="width: 100%; margin-top: 32px; background-color: #6B21A8; border-radius: 8px; border: 2px solid #B45309;" class="dark-alert" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
-                          <td style="padding: 16px;">
-                            <p style="margin: 0; font-size: 14px; line-height: 20px; color: #991b1b;" class="dark-text">
-                              <strong>If you didn't make this change</strong>, someone may have gained access to your account. Please contact our support team immediately to secure your account.
+                          <td style="padding: 20px;">
+                            <p style="margin: 0; font-size: 16px; line-height: 24px; color: #FEF7ED; text-align: center;" class="dark-text">
+                              <strong>🛡️ Sacred Security Notice 🛡️</strong>
+                            </p>
+                            <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
+                              <strong>If you didn't make this blessed change</strong>, someone may have gained access to your sacred account. Please contact our holy support team immediately to secure your account with divine protection. We guard your digital sanctuary with the same care we guard our faith.
                             </p>
                           </td>
                         </tr>
                       </table>
                       
-                      <!-- Account Settings Button -->
+                      <!-- Sacred Account Settings Button -->
                       <table style="width: 100%; margin-top: 32px;" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
                           <td style="text-align: center;">
-                            <a href="{{accountSettingsUrl}}" style="display: inline-block; background-color: #4f46e5; color: #ffffff; font-size: 16px; font-weight: 600; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 24px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;" class="dark-button sm-w-full">
-                              Manage Account Settings
+                            <a href="{{accountSettingsUrl}}" style="display: inline-block; background-color: #B45309; color: #FEF7ED; font-size: 16px; font-weight: bold; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 32px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #4C1D95; font-family: Georgia, serif;" class="dark-button sm-w-full">
+                              🙏 Manage Sacred Settings 🙏
                             </a>
                           </td>
                         </tr>
                       </table>
                       
-                      <!-- Support Button -->
+                      <!-- Sacred Support Button -->
                       <table style="width: 100%; margin-top: 16px;" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
                           <td style="text-align: center;">
-                            <a href="{{supportUrl}}" style="display: inline-block; background-color: #ffffff; color: #4f46e5; font-size: 16px; font-weight: 600; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 24px; border-radius: 4px; border: 1px solid #4f46e5; text-transform: uppercase; letter-spacing: 0.5px;" class="dark-button sm-w-full">
-                              Contact Support
+                            <a href="{{supportUrl}}" style="display: inline-block; background-color: #FEF7ED; color: #4C1D95; font-size: 16px; font-weight: bold; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 32px; border-radius: 8px; border: 2px solid #4C1D95; text-transform: uppercase; letter-spacing: 0.5px; font-family: Georgia, serif;" class="dark-button sm-w-full">
+                              💝 Contact Sacred Support 💝
                             </a>
                           </td>
                         </tr>
                       </table>
                       
-                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        We take the security of your account seriously and will notify you of any important changes to your account.
+                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 26px; color: #6B21A8;" class="dark-text">
+                        We take the sacred security of your account seriously and will notify you of any important changes to your blessed account. Your digital sanctuary is protected with divine care and Christian love.
                       </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        Thank you,<br>
-                        The GodWear Security Team
+                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 26px; color: #4C1D95; text-align: center;" class="dark-text">
+                        🙏 <strong>Clothed in righteousness, walking in faith</strong> 🙏<br>
+                        <em style="color: #6B21A8;">With Christian blessings and protection,</em><br>
+                        <strong style="color: #B45309;">The GodWear Sacred Security Team</strong> 💙
                       </p>
                     </td>
                   </tr>
                 </table>
               </td>
             </tr>
-            <!-- Footer -->
+            <!-- Sacred Footer -->
             <tr>
-              <td class="dark-bg dark-border" style="background-color: #ffffff; border-top: 1px solid #e5e7eb; padding: 24px; text-align: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;">
-                <p style="margin: 0; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  &copy; {{currentYear}} GodWear. All rights reserved.
+              <td class="dark-bg dark-border" style="background-color: #4C1D95; border-top: 3px solid #B45309; padding: 32px 24px; text-align: center; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                <p style="margin: 0; font-size: 16px; line-height: 24px; color: #FEF7ED; font-weight: bold;" class="dark-text">
+                  🙏 Clothed in righteousness, walking in faith 🙏
                 </p>
-                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  <a href="{{privacyUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Privacy Policy</a> •
-                  <a href="{{termsUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Terms of Service</a>
+                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
+                  &copy; {{currentYear}} GodWear - Faith-Inspired Fashion. All rights reserved under God's grace.
                 </p>
-                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  GodWear Inc., 123 Fashion Street, New York, NY 10001
+                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
+                  <a href="{{privacyUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">Privacy Policy</a> •
+                  <a href="{{termsUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">Terms of Service</a>
+                </p>
+                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED; font-style: italic;" class="dark-text">
+                  💙 GodWear Inc., 123 Faith Avenue, Blessed City, NY 10001 💙<br>
+                  <em>"The Lord will watch over your coming and going" - Psalm 121:8</em>
                 </p>
               </td>
             </tr>
