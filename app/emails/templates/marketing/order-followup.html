@@ -1,196 +1,260 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How was your order? - GodWear</title>
+  <meta charset="utf-8">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <!--[if mso]>
+  <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      margin: 0;
-      padding: 0;
+    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: Georgia, serif; mso-line-height-rule: exactly;}
+  </style>
+  <![endif]-->
+  <title>Sacred Order Follow-up - How was your blessed experience?</title>
+  <style>
+    /* Christian Brand Colors */
+    :root {
+      --deep-purple: #4C1D95;
+      --sacred-gold: #B45309;
+      --cream: #FEF7ED;
+      --royal-purple: #6B21A8;
     }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
+    
+    /* Base styles with Christian typography */
+    body, table, td, p, h1, h2, h3, h4, h5, h6 {
+      font-family: Georgia, 'Times New Roman', serif;
     }
-    .header {
-      text-align: center;
-      padding: 20px 0;
-      border-bottom: 1px solid #eee;
-    }
-    .logo {
-      max-width: 150px;
-      height: auto;
-    }
-    .order-info {
-      margin: 20px 0;
-      padding: 15px;
-      background-color: #f9f9f9;
-      border-radius: 5px;
-    }
-    .item {
-      display: flex;
-      margin-bottom: 15px;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 15px;
-    }
-    .item-image {
-      width: 80px;
-      margin-right: 15px;
-    }
-    .item-details {
-      flex-grow: 1;
-    }
-    .button {
-      display: inline-block;
-      padding: 12px 24px;
-      background-color: #4a90e2;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      margin: 10px 0;
-      font-weight: bold;
-      text-align: center;
-    }
-    .button-container {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .discount-section {
-      margin: 30px 0;
-      padding: 20px;
-      background-color: #f0f7ff;
-      border-radius: 5px;
-      text-align: center;
-    }
-    .discount-code {
-      font-size: 1.5em;
-      font-weight: bold;
-      padding: 10px;
-      background-color: #fff;
-      border: 2px dashed #4a90e2;
-      display: inline-block;
-      margin: 10px 0;
-    }
-    .recommendations {
-      margin: 30px 0;
-    }
-    .recommendation {
-      display: flex;
-      margin-bottom: 15px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid #eee;
-    }
-    .recommendation-image {
-      width: 100px;
-      margin-right: 15px;
-    }
-    .recommendation-details {
-      flex-grow: 1;
-    }
-    .footer {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid #eee;
-      text-align: center;
-      font-size: 0.8em;
-      color: #777;
-    }
+    
     @media (prefers-color-scheme: dark) {
-      body {
-        background-color: #222;
-        color: #eee;
-      }
-      .order-info {
-        background-color: #333;
-      }
-      .discount-section {
-        background-color: #2c3e50;
-      }
-      .discount-code {
-        background-color: #333;
-        border-color: #4a90e2;
-      }
-      .item, .recommendation, .footer, .header {
-        border-color: #444;
-      }
+      .dark-mode { background-color: #2D1B69 !important; color: #FEF7ED !important; }
+      .dark-text { color: #FEF7ED !important; }
+      .dark-bg { background-color: #4C1D95 !important; }
+      .dark-button { background-color: #B45309 !important; color: #FEF7ED !important; }
+      .dark-border { border-color: #6B21A8 !important; }
+      .dark-divider { border-top-color: #6B21A8 !important; }
+      .dark-table-row { background-color: #4C1D95 !important; }
+      .dark-table-header { background-color: #6B21A8 !important; color: #FEF7ED !important; }
+      .dark-discount { background-color: #6B21A8 !important; border-color: #B45309 !important; }
+    }
+    
+    @media screen and (max-width: 600px) {
+      .sm-w-full { width: 100% !important; }
+      .sm-px-4 { padding-left: 16px !important; padding-right: 16px !important; }
+      .sm-py-8 { padding-top: 32px !important; padding-bottom: 32px !important; }
+      .sm-text-sm { font-size: 14px !important; }
+      .sm-text-lg { font-size: 18px !important; }
+      .sm-hidden { display: none !important; }
+      .sm-block { display: block !important; }
+      .sm-inline-block { display: inline-block !important; }
+      .sm-center { text-align: center !important; }
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <img src="{{logoUrl}}" alt="GodWear Logo" class="logo">
-      <h1>How was your order?</h1>
-    </div>
-    
-    <p>Hello {{firstName}},</p>
-    
-    <p>Thank you for your recent purchase from GodWear! We hope you're enjoying your new items.</p>
-    
-    <div class="order-info">
-      <h2>Order Details</h2>
-      <p><strong>Order Number:</strong> {{orderNumber}}</p>
-      <p><strong>Order Date:</strong> {{orderDate}}</p>
-      <p><strong>Delivery Date:</strong> {{deliveryDate}}</p>
-    </div>
-    
-    <h2>Your Items</h2>
-    {{#each items}}
-    <div class="item">
-      <img src="{{imageUrl}}" alt="{{name}}" class="item-image">
-      <div class="item-details">
-        <h3>{{name}}</h3>
-        <p>{{variant}}</p>
-        <p>Price: {{price}}</p>
-      </div>
-    </div>
-    {{/each}}
-    
-    <div class="button-container">
-      <a href="{{reviewUrl}}" class="button">Leave a Review</a>
-    </div>
-    
-    <p>Your feedback helps us improve our products and services. We'd love to hear about your experience!</p>
-    
-    {{#if discount}}
-    <div class="discount-section">
-      <h2>Special Offer Just For You</h2>
-      <p>As a thank you for your purchase, enjoy <strong>{{discount}}% off</strong> your next order!</p>
-      <div class="discount-code">{{discountCode}}</div>
-      <p>Use this code at checkout before {{discountExpiryDate}}.</p>
-      <a href="{{orderUrl}}" class="button">Shop Now</a>
-    </div>
-    {{/if}}
-    
-    {{#if recommendations.length}}
-    <div class="recommendations">
-      <h2>You Might Also Like</h2>
-      {{#each recommendations}}
-      <div class="recommendation">
-        <img src="{{imageUrl}}" alt="{{name}}" class="recommendation-image">
-        <div class="recommendation-details">
-          <h3>{{name}}</h3>
-          <p>{{price}}</p>
-          <a href="{{url}}">View Details</a>
-        </div>
-      </div>
-      {{/each}}
-    </div>
-    {{/if}}
-    
-    <p>If you have any questions about your order, please contact our customer service team at <a href="mailto:{{supportEmail}}">{{supportEmail}}</a>.</p>
-    
-    <p>Thank you for shopping with GodWear!</p>
-    
-    <div class="footer">
-      <p>&copy; {{currentYear}} GodWear. All rights reserved.</p>
-      <p><a href="{{unsubscribeUrl}}">Unsubscribe</a> | <a href="{{privacyUrl}}">Privacy Policy</a> | <a href="{{termsUrl}}">Terms of Service</a></p>
-    </div>
+<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background-color: #FEF7ED;" class="dark-mode">
+  <!-- Email wrapper -->
+  <div style="display: none;">Sacred order follow-up: How was your blessed GodWear experience? "Give thanks in all circumstances" - 1 Thessalonians 5:18</div>
+  <div role="article" aria-roledescription="email" aria-label="Sacred Order Follow-up - How was your blessed experience?" lang="en">
+    <table style="width: 100%; font-family: Georgia, 'Times New Roman', serif;" cellpadding="0" cellspacing="0" role="presentation">
+      <tr>
+        <td align="center" style="padding: 24px 0;">
+          <!-- Email container -->
+          <table class="sm-w-full" style="width: 600px;" cellpadding="0" cellspacing="0" role="presentation">
+            <!-- Sacred Header -->
+            <tr>
+              <td class="dark-bg" style="background-color: #4C1D95; padding: 24px; text-align: center; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                <img src="{{logoUrl}}" width="150" alt="GodWear - Faith-Inspired Fashion" style="border: 0; max-width: 100%; vertical-align: middle;">
+              </td>
+            </tr>
+            <!-- Sacred Body -->
+            <tr>
+              <td class="dark-bg" style="background-color: #FEF7ED; border-left: 3px solid #B45309; border-right: 3px solid #B45309;">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td class="sm-px-4 sm-py-8" style="padding: 40px 48px; text-align: left;">
+                      <!-- Email content -->
+                      <h1 style="margin: 0; font-size: 28px; font-weight: bold; line-height: 36px; color: #4C1D95; text-align: center;" class="dark-text sm-text-lg">🙏 How was your blessed experience? 🙏</h1>
+                      
+                      <div style="text-align: center; margin: 24px 0; padding: 20px; background-color: #B45309; border-radius: 8px;">
+                        <p style="margin: 0; font-size: 16px; font-style: italic; color: #FEF7ED; line-height: 24px;">
+                          "Rejoice always, pray continually, give thanks in all circumstances; for this is God's will for you in Christ Jesus."
+                        </p>
+                        <p style="margin: 8px 0 0 0; font-size: 14px; color: #FEF7ED; font-weight: bold;">
+                          - 1 Thessalonians 5:16-18
+                        </p>
+                      </div>
+                      
+                      <p style="margin: 0; margin-top: 24px; font-size: 18px; line-height: 28px; color: #4C1D95;" class="dark-text">
+                        Blessed {{firstName}}, 💝
+                      </p>
+                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 26px; color: #6B21A8;" class="dark-text">
+                        Thank you for your recent blessed purchase from GodWear! We pray you're being blessed by your new faith-inspired items and that they're helping you walk in righteousness. We'd love to hear how God has used these sacred pieces in your life!
+                      </p>
+                      
+                      <!-- Sacred Order Details -->
+                      <table style="width: 100%; margin-top: 32px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="padding: 24px;">
+                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">💙 Sacred Order Details 💙</h2>
+                            <table style="width: 100%; margin-top: 16px; background-color: #FEF7ED; border-radius: 6px; padding: 16px;" cellpadding="0" cellspacing="0" role="presentation">
+                              <tr>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">🔢 Sacred Order:</td>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">#{{orderNumber}}</td>
+                              </tr>
+                              <tr>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">📅 Blessed Date:</td>
+                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{orderDate}}</td>
+                              </tr>
+                              <tr>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #4C1D95; font-weight: bold;" class="dark-text">🚚 Holy Delivery:</td>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{deliveryDate}}</td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Sacred Items -->
+                      <h2 style="margin: 0; margin-top: 32px; font-size: 20px; font-weight: bold; line-height: 28px; color: #4C1D95; text-align: center;" class="dark-text">💙 Your Blessed Items 💙</h2>
+                      {{#each items}}
+                      <table style="width: 100%; margin-top: 16px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="padding: 20px;">
+                            <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                              <tr>
+                                <td style="width: 80px; padding-right: 20px; vertical-align: top;" class="sm-hidden">
+                                  <img src="{{imageUrl}}" width="80" alt="{{name}}" style="border: 0; border-radius: 6px; max-width: 100%; vertical-align: middle; border: 2px solid #B45309;">
+                                </td>
+                                <td style="vertical-align: top;">
+                                  <h3 style="margin: 0; font-size: 18px; font-weight: bold; line-height: 24px; color: #FEF7ED;" class="dark-text">{{name}}</h3>
+                                  <p style="margin: 4px 0 0 0; font-size: 14px; line-height: 20px; color: #B45309; font-weight: bold;" class="dark-text">{{variant}}</p>
+                                  <p style="margin: 8px 0 0 0; font-size: 16px; font-weight: bold; line-height: 24px; color: #FEF7ED;" class="dark-text">{{price}}</p>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      {{/each}}
+                      
+                      <!-- Sacred Review Button -->
+                      <table style="width: 100%; margin-top: 32px;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="text-align: center;">
+                            <a href="{{reviewUrl}}" style="display: inline-block; background-color: #B45309; color: #FEF7ED; font-size: 16px; font-weight: bold; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 32px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #4C1D95; font-family: Georgia, serif;" class="dark-button sm-w-full">
+                              🙏 Share Sacred Testimony 🙏
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 26px; color: #6B21A8; text-align: center;" class="dark-text">
+                        Your blessed feedback helps us improve our sacred products and services. We'd love to hear about your faith journey with these items!
+                      </p>
+                      
+                      <!-- Divine Discount Section -->
+                      {{#if discount}}
+                      <table style="width: 100%; margin-top: 32px; background-color: #6B21A8; border-radius: 8px; border: 2px solid #B45309;" class="dark-discount" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="padding: 24px; text-align: center;">
+                            <h2 style="margin: 0; font-size: 22px; font-weight: bold; line-height: 30px; color: #FEF7ED;" class="dark-text">🎁 Divine Blessing Just For You 🎁</h2>
+                            <p style="margin: 16px 0 0 0; font-size: 16px; line-height: 26px; color: #FEF7ED;" class="dark-text">
+                              As a sacred thank you for your faithful purchase, enjoy <strong>{{discount}}% off</strong> your next blessed order!
+                            </p>
+                            <div style="margin: 20px 0; padding: 16px; background-color: #FEF7ED; border: 3px dashed #B45309; border-radius: 8px; display: inline-block;">
+                              <span style="font-size: 24px; font-weight: bold; color: #4C1D95; font-family: Georgia, serif;">{{discountCode}}</span>
+                            </div>
+                            <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
+                              Use this blessed code at checkout before {{discountExpiryDate}}
+                            </p>
+                            <table style="width: 100%; margin-top: 20px;" cellpadding="0" cellspacing="0" role="presentation">
+                              <tr>
+                                <td style="text-align: center;">
+                                  <a href="{{orderUrl}}" style="display: inline-block; background-color: #B45309; color: #FEF7ED; font-size: 16px; font-weight: bold; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 32px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #FEF7ED; font-family: Georgia, serif;" class="dark-button sm-w-full">
+                                    💝 Shop Sacred Collection 💝
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      {{/if}}
+                      
+                      <!-- Sacred Recommendations -->
+                      {{#if recommendations.length}}
+                      <h2 style="margin: 0; margin-top: 32px; font-size: 20px; font-weight: bold; line-height: 28px; color: #4C1D95; text-align: center;" class="dark-text">💙 You Might Also Be Blessed By 💙</h2>
+                      {{#each recommendations}}
+                      <table style="width: 100%; margin-top: 16px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="padding: 20px;">
+                            <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                              <tr>
+                                <td style="width: 100px; padding-right: 20px; vertical-align: top;" class="sm-hidden">
+                                  <img src="{{imageUrl}}" width="100" alt="{{name}}" style="border: 0; border-radius: 6px; max-width: 100%; vertical-align: middle; border: 2px solid #B45309;">
+                                </td>
+                                <td style="vertical-align: top;">
+                                  <h3 style="margin: 0; font-size: 18px; font-weight: bold; line-height: 24px; color: #FEF7ED;" class="dark-text">{{name}}</h3>
+                                  <p style="margin: 8px 0 0 0; font-size: 16px; font-weight: bold; line-height: 24px; color: #B45309;" class="dark-text">{{price}}</p>
+                                  <table style="margin-top: 12px;" cellpadding="0" cellspacing="0" role="presentation">
+                                    <tr>
+                                      <td>
+                                        <a href="{{url}}" style="display: inline-block; background-color: #B45309; color: #FEF7ED; font-size: 14px; font-weight: bold; line-height: 100%; text-decoration: none; text-align: center; padding: 12px 20px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; font-family: Georgia, serif;">View Sacred Details</a>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      {{/each}}
+                      {{/if}}
+                      
+                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 26px; color: #6B21A8;" class="dark-text">
+                        If you have any questions about your blessed order, please contact our sacred customer service team at <a href="mailto:{{supportEmail}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">{{supportEmail}}</a>. We're here to serve you with Christian love and care.
+                      </p>
+                      
+                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 26px; color: #4C1D95; text-align: center;" class="dark-text">
+                        🙏 <strong>Clothed in righteousness, walking in faith</strong> 🙏<br>
+                        <em style="color: #6B21A8;">With Christian gratitude and blessings,</em><br>
+                        <strong style="color: #B45309;">The GodWear Family</strong> 💙
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <!-- Sacred Footer -->
+            <tr>
+              <td class="dark-bg dark-border" style="background-color: #4C1D95; border-top: 3px solid #B45309; padding: 32px 24px; text-align: center; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                <p style="margin: 0; font-size: 16px; line-height: 24px; color: #FEF7ED; font-weight: bold;" class="dark-text">
+                  🙏 Clothed in righteousness, walking in faith 🙏
+                </p>
+                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
+                  &copy; {{currentYear}} GodWear - Faith-Inspired Fashion. All rights reserved under God's grace.
+                </p>
+                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
+                  <a href="{{unsubscribeUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">Unsubscribe</a> •
+                  <a href="{{privacyUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">Privacy Policy</a> •
+                  <a href="{{termsUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">Terms of Service</a>
+                </p>
+                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED; font-style: italic;" class="dark-text">
+                  💙 GodWear Inc., 123 Faith Avenue, Blessed City, NY 10001 💙<br>
+                  <em>"Give thanks in all circumstances" - 1 Thessalonians 5:18</em>
+                </p>
+              </td>
+            </tr>
+            <!-- Spacer -->
+            <tr>
+              <td style="height: 24px;"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </div>
 </body>
 </html>
