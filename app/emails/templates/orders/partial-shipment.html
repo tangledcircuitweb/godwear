@@ -9,22 +9,34 @@
   <!--[if mso]>
   <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
   <style>
-    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
+    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: Georgia, serif; mso-line-height-rule: exactly;}
   </style>
   <![endif]-->
-  <title>Part of Your Order Has Shipped - #{{orderNumber}}</title>
+  <title>Part of Your Blessed Order Has Shipped - #{{orderNumber}}</title>
   <style>
-    /* Base styles */
+    /* Christian Brand Colors */
+    :root {
+      --deep-purple: #4C1D95;
+      --sacred-gold: #B45309;
+      --cream: #FEF7ED;
+      --royal-purple: #6B21A8;
+    }
+    
+    /* Base styles with Christian typography */
+    body, table, td, p, h1, h2, h3, h4, h5, h6 {
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    
     @media (prefers-color-scheme: dark) {
-      .dark-mode { background-color: #121212 !important; color: #ffffff !important; }
-      .dark-text { color: #ffffff !important; }
-      .dark-bg { background-color: #1e1e1e !important; }
-      .dark-button { background-color: #4f46e5 !important; color: #ffffff !important; }
-      .dark-border { border-color: #2e2e2e !important; }
-      .dark-divider { border-top-color: #2e2e2e !important; }
-      .dark-table-row { background-color: #1e1e1e !important; }
-      .dark-table-header { background-color: #2e2e2e !important; color: #ffffff !important; }
-      .dark-alert { background-color: #2e2e2e !important; }
+      .dark-mode { background-color: #2D1B69 !important; color: #FEF7ED !important; }
+      .dark-text { color: #FEF7ED !important; }
+      .dark-bg { background-color: #4C1D95 !important; }
+      .dark-button { background-color: #B45309 !important; color: #FEF7ED !important; }
+      .dark-border { border-color: #6B21A8 !important; }
+      .dark-divider { border-top-color: #6B21A8 !important; }
+      .dark-table-row { background-color: #4C1D95 !important; }
+      .dark-table-header { background-color: #6B21A8 !important; color: #FEF7ED !important; }
+      .dark-alert { background-color: #6B21A8 !important; }
     }
     
     @media screen and (max-width: 600px) {
@@ -36,63 +48,74 @@
       .sm-hidden { display: none !important; }
       .sm-block { display: block !important; }
       .sm-inline-block { display: inline-block !important; }
+      .sm-stack { display: block !important; width: 100% !important; }
+      .sm-center { text-align: center !important; }
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background-color: #f3f4f6;" class="dark-mode">
+<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background-color: #FEF7ED;" class="dark-mode">
   <!-- Email wrapper -->
-  <div style="display: none;">Part of your order #{{orderNumber}} has shipped and is on its way to you!</div>
-  <div role="article" aria-roledescription="email" aria-label="Part of Your Order Has Shipped - #{{orderNumber}}" lang="en">
-    <table style="width: 100%; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;" cellpadding="0" cellspacing="0" role="presentation">
+  <div style="display: none;">Part of your blessed order #{{orderNumber}} has shipped and is on its way to you! "Be strong and courageous!" - Joshua 1:9</div>
+  <div role="article" aria-roledescription="email" aria-label="Part of Your Blessed Order Has Shipped - #{{orderNumber}}" lang="en">
+    <table style="width: 100%; font-family: Georgia, 'Times New Roman', serif;" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center" style="padding: 24px 0;">
           <!-- Email container -->
           <table class="sm-w-full" style="width: 600px;" cellpadding="0" cellspacing="0" role="presentation">
             <!-- Header -->
             <tr>
-              <td class="dark-bg" style="background-color: #ffffff; padding: 24px; text-align: center; border-top-left-radius: 4px; border-top-right-radius: 4px;">
-                <img src="{{logoUrl}}" width="150" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle;">
+              <td class="dark-bg" style="background-color: #4C1D95; padding: 24px; text-align: center; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                <img src="{{logoUrl}}" width="150" alt="GodWear - Faith-Inspired Fashion" style="border: 0; max-width: 100%; vertical-align: middle;">
               </td>
             </tr>
             <!-- Shipping Illustration -->
             <tr>
-              <td class="dark-bg" style="background-color: #ffffff; text-align: center; padding: 0 48px;">
-                <img src="{{shippingImageUrl}}" width="200" alt="Package Shipped" style="border: 0; max-width: 100%; vertical-align: middle;">
+              <td class="dark-bg" style="background-color: #FEF7ED; text-align: center; padding: 24px 48px; border-left: 3px solid #B45309; border-right: 3px solid #B45309;">
+                <img src="{{shippingImageUrl}}" width="200" alt="Blessed Package Shipped" style="border: 0; max-width: 100%; vertical-align: middle;">
               </td>
             </tr>
             <!-- Body -->
             <tr>
-              <td class="dark-bg" style="background-color: #ffffff;">
+              <td class="dark-bg" style="background-color: #FEF7ED; border-left: 3px solid #B45309; border-right: 3px solid #B45309;">
                 <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
                     <td class="sm-px-4 sm-py-8" style="padding: 40px 48px; text-align: left;">
                       <!-- Email content -->
-                      <h1 style="margin: 0; font-size: 24px; font-weight: 600; line-height: 32px; color: #111827;" class="dark-text sm-text-lg">Part of Your Order Has Shipped!</h1>
+                      <h1 style="margin: 0; font-size: 28px; font-weight: bold; line-height: 36px; color: #4C1D95; text-align: center;" class="dark-text sm-text-lg">🙏 Part of Your Blessed Order Has Shipped! 📦</h1>
                       
-                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        Hi {{firstName}},
+                      <div style="text-align: center; margin: 24px 0; padding: 20px; background-color: #B45309; border-radius: 8px;">
+                        <p style="margin: 0; font-size: 16px; font-style: italic; color: #FEF7ED; line-height: 24px;">
+                          "Be strong and courageous! Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go."
+                        </p>
+                        <p style="margin: 8px 0 0 0; font-size: 14px; color: #FEF7ED; font-weight: bold;">
+                          - Joshua 1:9
+                        </p>
+                      </div>
+                      
+                      <p style="margin: 0; margin-top: 24px; font-size: 18px; line-height: 28px; color: #4C1D95;" class="dark-text">
+                        Blessings, {{firstName}}! 🌟
                       </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        Great news! Part of your order #{{orderNumber}} has shipped and is on its way to you. You can track your package using the information below.
+                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 26px; color: #6B21A8;" class="dark-text">
+                        Wonderful news! Part of your blessed order #{{orderNumber}} has shipped and is faithfully making its way to you. Track your package with the holy details below, knowing that God's timing is perfect in all things.
                       </p>
                       
                       <!-- Tracking Information -->
-                      <table style="width: 100%; margin-top: 32px; background-color: #f9fafb; border-radius: 4px;" class="dark-bg dark-border" cellpadding="0" cellspacing="0" role="presentation">
+                      <table style="width: 100%; margin-top: 32px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;" class="dark-bg dark-border" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
                           <td style="padding: 24px;">
-                            <h2 style="margin: 0; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">Tracking Information</h2>
+                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">✨ Sacred Tracking Information ✨</h2>
                             <table style="width: 100%; margin-top: 16px;" cellpadding="0" cellspacing="0" role="presentation">
                               <tr>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">Carrier:</td>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text"><strong>{{carrier}}</strong></td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #FEF7ED;" class="dark-text">📦 Carrier:</td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{carrier}}</td>
                               </tr>
                               <tr>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">Tracking Number:</td>
-                                <td style="padding-bottom: 8px; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text">{{trackingNumber}}</td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #FEF7ED;" class="dark-text">🔢 Tracking Number:</td>
+                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{trackingNumber}}</td>
                               </tr>
                               <tr>
-                                <td style="padding-bottom: 0; font-size: 14px; line-height: 20px; color: #6b7280;" class="dark-text">Estimated Delivery:</td>
-                                <td style="padding-bottom: 0; font-size: 14px; line-height: 20px; color: #111827; text-align: right;" class="dark-text">{{estimatedDelivery}}</td>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #FEF7ED;" class="dark-text">🕐 Blessed Delivery:</td>
+                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: #B45309; text-align: right; font-weight: bold;" class="dark-text">{{estimatedDelivery}}</td>
                               </tr>
                             </table>
                           </td>
@@ -103,44 +126,46 @@
                       <table style="width: 100%; margin-top: 32px;" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
                           <td style="text-align: center;">
-                            <a href="{{trackingUrl}}" style="display: inline-block; background-color: #4f46e5; color: #ffffff; font-size: 16px; font-weight: 600; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 24px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;" class="dark-button sm-w-full">
-                              Track Your Package
+                            <a href="{{trackingUrl}}" style="display: inline-block; background-color: #B45309; color: #FEF7ED; font-size: 18px; font-weight: bold; line-height: 100%; text-decoration: none; text-align: center; padding: 18px 36px; border-radius: 8px; text-transform: uppercase; letter-spacing: 1px; border: 2px solid #4C1D95;" class="dark-button sm-w-full sm-center">
+                              🔍 Track Your Blessed Package 📦
                             </a>
                           </td>
                         </tr>
                       </table>
                       
                       <!-- Shipping Address -->
-                      <h2 style="margin: 0; margin-top: 32px; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">Shipping Address</h2>
-                      <p style="margin: 0; margin-top: 8px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        {{shippingAddress.name}}<br>
-                        {{shippingAddress.street}}<br>
-                        {{#if shippingAddress.street2}}{{shippingAddress.street2}}<br>{{/if}}
-                        {{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br>
-                        {{shippingAddress.country}}
-                      </p>
+                      <h2 style="margin: 0; margin-top: 32px; font-size: 20px; font-weight: bold; line-height: 28px; color: #4C1D95; text-align: center;" class="dark-text">🏠 Blessed Shipping Address 📍</h2>
+                      <div style="margin-top: 16px; padding: 20px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;">
+                        <p style="margin: 0; font-size: 16px; line-height: 26px; color: #FEF7ED; text-align: center;" class="dark-text">
+                          {{shippingAddress.name}}<br>
+                          {{shippingAddress.street}}<br>
+                          {{#if shippingAddress.street2}}{{shippingAddress.street2}}<br>{{/if}}
+                          {{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br>
+                          {{shippingAddress.country}}
+                        </p>
+                      </div>
                       
                       <!-- Shipped Items -->
-                      <h2 style="margin: 0; margin-top: 32px; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">Items Shipped</h2>
-                      <table style="width: 100%; margin-top: 16px; border-collapse: collapse;" cellpadding="0" cellspacing="0" role="presentation">
+                      <h2 style="margin: 0; margin-top: 32px; font-size: 20px; font-weight: bold; line-height: 28px; color: #4C1D95; text-align: center;" class="dark-text">📦 Items Blessed & Shipped ✨</h2>
+                      <table style="width: 100%; margin-top: 16px; border-collapse: collapse; border-radius: 8px; overflow: hidden; border: 2px solid #B45309;" cellpadding="0" cellspacing="0" role="presentation">
                         <tr class="dark-table-header">
-                          <th style="padding: 12px 16px; background-color: #f3f4f6; font-size: 14px; font-weight: 600; text-align: left; color: #111827; border-top-left-radius: 4px;" class="sm-hidden">Image</th>
-                          <th style="padding: 12px 16px; background-color: #f3f4f6; font-size: 14px; font-weight: 600; text-align: left; color: #111827;" class="dark-text">Product</th>
-                          <th style="padding: 12px 16px; background-color: #f3f4f6; font-size: 14px; font-weight: 600; text-align: center; color: #111827; border-top-right-radius: 4px;" class="dark-text">Qty</th>
+                          <th style="padding: 16px; background-color: #4C1D95; font-size: 16px; font-weight: bold; text-align: left; color: #FEF7ED; border-top-left-radius: 6px;" class="sm-hidden">Image</th>
+                          <th style="padding: 16px; background-color: #4C1D95; font-size: 16px; font-weight: bold; text-align: left; color: #FEF7ED;" class="dark-text">Product</th>
+                          <th style="padding: 16px; background-color: #4C1D95; font-size: 16px; font-weight: bold; text-align: center; color: #FEF7ED; border-top-right-radius: 6px;" class="dark-text">Qty</th>
                         </tr>
                         
                         <!-- Item Row Template - Repeat for each item -->
                         {{#each shippedItems}}
                         <tr class="dark-table-row">
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; vertical-align: top;" class="dark-border sm-hidden">
-                            <img src="{{this.imageUrl}}" width="64" alt="{{this.name}}" style="border: 0; border-radius: 4px; max-width: 100%; vertical-align: middle;">
+                          <td style="padding: 16px; border-top: 2px solid #B45309; vertical-align: top; background-color: #FEF7ED;" class="dark-border sm-hidden">
+                            <img src="{{this.imageUrl}}" width="64" alt="{{this.name}}" style="border: 0; border-radius: 6px; max-width: 100%; vertical-align: middle; border: 2px solid #4C1D95;">
                           </td>
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; vertical-align: top; font-size: 14px; line-height: 20px; color: #111827;" class="dark-text dark-border">
-                            <div style="font-weight: 600;">{{this.name}}</div>
-                            <div style="margin-top: 4px; color: #6b7280;" class="dark-text">{{this.variant}}</div>
-                            <div style="margin-top: 4px; color: #6b7280;" class="dark-text">SKU: {{this.sku}}</div>
+                          <td style="padding: 16px; border-top: 2px solid #B45309; vertical-align: top; font-size: 16px; line-height: 24px; color: #4C1D95; background-color: #FEF7ED;" class="dark-text dark-border">
+                            <div style="font-weight: bold; font-size: 18px;">{{this.name}}</div>
+                            <div style="margin-top: 6px; color: #6B21A8; font-style: italic;" class="dark-text">{{this.variant}}</div>
+                            <div style="margin-top: 4px; color: #B45309; font-size: 14px;" class="dark-text">SKU: {{this.sku}}</div>
                           </td>
-                          <td style="padding: 16px; border-top: 1px solid #e5e7eb; vertical-align: top; font-size: 14px; line-height: 20px; color: #111827; text-align: center;" class="dark-text dark-border">
+                          <td style="padding: 16px; border-top: 2px solid #B45309; vertical-align: top; font-size: 18px; line-height: 24px; color: #4C1D95; text-align: center; font-weight: bold; background-color: #FEF7ED;" class="dark-text dark-border">
                             {{this.quantity}}
                           </td>
                         </tr>
@@ -148,22 +173,22 @@
                       </table>
                       
                       <!-- Remaining Items Alert -->
-                      <table style="width: 100%; margin-top: 32px; background-color: #fff8f1; border-radius: 4px; border-left: 4px solid #f97316;" class="dark-alert" cellpadding="0" cellspacing="0" role="presentation">
+                      <table style="width: 100%; margin-top: 32px; background-color: #B45309; border-radius: 8px; border: 3px solid #4C1D95;" class="dark-alert" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
                           <td style="padding: 24px;">
-                            <h3 style="margin: 0; font-size: 16px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">Items Still Being Processed</h3>
-                            <p style="margin: 0; margin-top: 8px; font-size: 14px; line-height: 20px; color: #4b5563;" class="dark-text">
-                              The following items from your order are still being processed and will ship separately:
+                            <h3 style="margin: 0; font-size: 18px; font-weight: bold; line-height: 26px; color: #FEF7ED; text-align: center;" class="dark-text">⏳ Items Still Being Blessed & Prepared 🙏</h3>
+                            <p style="margin: 0; margin-top: 12px; font-size: 16px; line-height: 24px; color: #FEF7ED; text-align: center;" class="dark-text">
+                              The following sacred items from your order are still being lovingly prepared and will ship separately with God's perfect timing:
                             </p>
-                            <ul style="margin: 8px 0 0 0; padding-left: 24px;">
+                            <ul style="margin: 16px 0 0 0; padding-left: 24px;">
                               {{#each remainingItems}}
-                              <li style="margin: 4px 0; font-size: 14px; line-height: 20px; color: #4b5563;" class="dark-text">
-                                {{this.name}} ({{this.variant}}) - Qty: {{this.quantity}}
+                              <li style="margin: 8px 0; font-size: 16px; line-height: 24px; color: #FEF7ED;" class="dark-text">
+                                ✨ {{this.name}} ({{this.variant}}) - Qty: {{this.quantity}}
                               </li>
                               {{/each}}
                             </ul>
-                            <p style="margin: 0; margin-top: 8px; font-size: 14px; line-height: 20px; color: #4b5563;" class="dark-text">
-                              We'll send you another email when these items ship.
+                            <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #FEF7ED; text-align: center; font-style: italic;" class="dark-text">
+                              We'll send you another blessed notification when these items ship. Trust in His timing! 🌟
                             </p>
                           </td>
                         </tr>
@@ -171,30 +196,35 @@
                       
                       <!-- Delivery Instructions -->
                       {{#if deliveryInstructions}}
-                      <h2 style="margin: 0; margin-top: 32px; font-size: 18px; font-weight: 600; line-height: 24px; color: #111827;" class="dark-text">Delivery Instructions</h2>
-                      <p style="margin: 0; margin-top: 8px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        {{deliveryInstructions}}
-                      </p>
+                      <h2 style="margin: 0; margin-top: 32px; font-size: 20px; font-weight: bold; line-height: 28px; color: #4C1D95; text-align: center;" class="dark-text">📋 Sacred Delivery Instructions 🏠</h2>
+                      <div style="margin-top: 16px; padding: 20px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309;">
+                        <p style="margin: 0; font-size: 16px; line-height: 26px; color: #FEF7ED; text-align: center;" class="dark-text">
+                          {{deliveryInstructions}}
+                        </p>
+                      </div>
                       {{/if}}
                       
                       <!-- View Order Button -->
                       <table style="width: 100%; margin-top: 32px;" cellpadding="0" cellspacing="0" role="presentation">
                         <tr>
                           <td style="text-align: center;">
-                            <a href="{{orderUrl}}" style="display: inline-block; background-color: #ffffff; color: #4f46e5; font-size: 16px; font-weight: 600; line-height: 100%; text-decoration: none; text-align: center; padding: 16px 24px; border-radius: 4px; border: 1px solid #4f46e5; text-transform: uppercase; letter-spacing: 0.5px;" class="dark-button sm-w-full">
-                              View Order Details
+                            <a href="{{orderUrl}}" style="display: inline-block; background-color: #FEF7ED; color: #4C1D95; font-size: 18px; font-weight: bold; line-height: 100%; text-decoration: none; text-align: center; padding: 18px 36px; border-radius: 8px; border: 3px solid #4C1D95; text-transform: uppercase; letter-spacing: 1px;" class="dark-button sm-w-full sm-center">
+                              📋 View Sacred Order Details ✨
                             </a>
                           </td>
                         </tr>
                       </table>
                       
-                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        If you have any questions about your shipment, please <a href="mailto:{{supportEmail}}" style="color: #4f46e5; text-decoration: underline;" class="dark-text">contact our support team</a>.
-                      </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 24px; color: #4b5563;" class="dark-text">
-                        Thank you for shopping with us!<br>
-                        The GodWear Team
-                      </p>
+                      <div style="margin-top: 32px; padding: 24px; background-color: #4C1D95; border-radius: 8px; border: 2px solid #B45309; text-align: center;">
+                        <p style="margin: 0; font-size: 16px; line-height: 26px; color: #FEF7ED;" class="dark-text">
+                          If you have any questions about your blessed shipment, please <a href="mailto:{{supportEmail}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">contact our faithful support team</a>. We're here to serve you with Christian love! 💝
+                        </p>
+                        <p style="margin: 16px 0 0 0; font-size: 18px; line-height: 28px; color: #FEF7ED; font-weight: bold;" class="dark-text">
+                          Thank you for choosing GodWear! 🙏<br>
+                          <span style="color: #B45309;">Blessings & Grace,</span><br>
+                          <span style="font-style: italic;">The GodWear Family ✨</span>
+                        </p>
+                      </div>
                     </td>
                   </tr>
                 </table>
@@ -202,17 +232,20 @@
             </tr>
             <!-- Footer -->
             <tr>
-              <td class="dark-bg dark-border" style="background-color: #ffffff; border-top: 1px solid #e5e7eb; padding: 24px; text-align: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;">
-                <p style="margin: 0; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  &copy; {{currentYear}} GodWear. All rights reserved.
+              <td class="dark-bg dark-border" style="background-color: #4C1D95; border-top: 3px solid #B45309; padding: 24px; text-align: center; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; border-left: 3px solid #B45309; border-right: 3px solid #B45309; border-bottom: 3px solid #B45309;">
+                <p style="margin: 0; font-size: 16px; line-height: 24px; color: #FEF7ED; font-weight: bold;" class="dark-text">
+                  ✨ &copy; {{currentYear}} GodWear - Faith-Inspired Fashion ✨
                 </p>
-                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  <a href="{{unsubscribeUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Unsubscribe</a> •
-                  <a href="{{privacyUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Privacy Policy</a> •
-                  <a href="{{termsUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Terms of Service</a>
+                <p style="margin: 0; margin-top: 8px; font-size: 14px; line-height: 20px; color: #FEF7ED; font-style: italic;" class="dark-text">
+                  "Clothed in righteousness, walking in faith" 🙏
                 </p>
-                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  GodWear Inc., 123 Fashion Street, New York, NY 10001
+                <p style="margin: 0; margin-top: 16px; font-size: 14px; line-height: 24px; color: #FEF7ED;" class="dark-text">
+                  <a href="{{unsubscribeUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">Unsubscribe</a> •
+                  <a href="{{privacyUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">Privacy Policy</a> •
+                  <a href="{{termsUrl}}" style="color: #B45309; text-decoration: underline; font-weight: bold;" class="dark-text">Terms of Service</a>
+                </p>
+                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #FEF7ED;" class="dark-text">
+                  GodWear Inc., 123 Faith Street, New York, NY 10001
                 </p>
               </td>
             </tr>
