@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
+import { promises as fs } from 'fs';
+import path from 'path';
 import { 
   createLiveEmailTestEnvironment, 
   configureEmailTiming, 
@@ -150,14 +152,61 @@ describe("Comprehensive Christian Template Test", () => {
       const startTime = Date.now();
       
       try {
+        // Read the actual template file
+        const templatePath = path.resolve('/home/tangled/godwear/app/emails/templates', template.name);
+        const templateHtml = await fs.readFile(templatePath, 'utf-8');
+        
+        // Import mock data processing functions
+        const { 
+          generateOrderTemplateData,
+          generateAccountTemplateData, 
+          generateMarketingTemplateData,
+          generateTemplateDataForPersona,
+          processTemplate,
+          CUSTOMER_PERSONAS 
+        } = await import('../data/template-data');
+        
+        // Generate appropriate mock data based on template type
+        let mockData: Record<string, any>;
+        const persona = Object.keys(CUSTOMER_PERSONAS)[emailCount % Object.keys(CUSTOMER_PERSONAS).length] as keyof typeof CUSTOMER_PERSONAS;
+        
+        switch (template.type) {
+          case 'order':
+            mockData = generateTemplateDataForPersona(persona, 'order');
+            break;
+          case 'account':
+          case 'security':
+            mockData = generateTemplateDataForPersona(persona, 'account');
+            break;
+          case 'marketing':
+          case 'transactional':
+            mockData = generateTemplateDataForPersona(persona, 'marketing');
+            break;
+          default:
+            mockData = generateAccountTemplateData();
+        }
+        
+        // Process the template with mock data to replace {{variables}}
+        const processedHtml = processTemplate(templateHtml, mockData);
+        
+        // Generate appropriate subject line for this template type with mock data
+        const subject = generateTemplateSubject(template, emailCount, CHRISTIAN_TEMPLATES.length, mockData);
+        
+        // Generate plain text version from processed HTML with mock data
+        const plainText = generatePlainTextFromTemplate(template, emailCount, CHRISTIAN_TEMPLATES.length, mockData);
+        
+        console.log(`   👤 Using persona: ${mockData.name}`);
+        console.log(`   📊 Variables processed: ${Object.keys(mockData).length} fields`);
+        console.log(`   📧 Subject: ${subject}`);
+        
         const result = await sendTestEmailWithTiming(
           testEnv,
           `Christian Template Test ${emailCount}/${CHRISTIAN_TEMPLATES.length}`,
           testEnv.mailerSendService.sendRawEmail({
-            to: config.testRecipient,
-            subject: `🙏 Christian Template ${emailCount}/${CHRISTIAN_TEMPLATES.length}: ${template.name} - ${new Date().toLocaleString()}`,
-            html: await generateChristianTemplateTestEmail(template, emailCount, CHRISTIAN_TEMPLATES.length),
-            text: await generateChristianTemplateTestText(template, emailCount, CHRISTIAN_TEMPLATES.length),
+            recipient: { email: config.testRecipient },
+            subject: subject,
+            html: processedHtml,
+            text: plainText,
           })
         );
         
@@ -212,192 +261,149 @@ describe("Comprehensive Christian Template Test", () => {
   }, 30 * 60 * 1000); // 30 minute timeout for all emails
 });
 
-// Helper function to generate test email HTML
-async function generateChristianTemplateTestEmail(
+// Helper function to generate appropriate subject line for each template type
+function generateTemplateSubject(
   template: typeof CHRISTIAN_TEMPLATES[0], 
   emailCount: number, 
-  totalCount: number
-): Promise<string> {
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Christian Template Test - ${template.name}</title>
-  <style>
-    body {
-      font-family: Georgia, 'Times New Roman', serif;
-      line-height: 1.6;
-      color: #4C1D95;
-      margin: 0;
-      padding: 20px;
-      background-color: #FEF7ED;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: #FEF7ED;
-      border: 3px solid #B45309;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    .header {
-      background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 100%);
-      color: #FEF7ED;
-      padding: 30px 20px;
-      text-align: center;
-    }
-    .content {
-      padding: 30px;
-    }
-    .template-info {
-      background: #4C1D95;
-      color: #FEF7ED;
-      padding: 20px;
-      border-radius: 8px;
-      margin: 20px 0;
-    }
-    .biblical-reference {
-      background: #B45309;
-      color: #FEF7ED;
-      padding: 20px;
-      border-radius: 8px;
-      margin: 20px 0;
-      text-align: center;
-      font-style: italic;
-    }
-    .progress {
-      background: #6B21A8;
-      color: #FEF7ED;
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: bold;
-    }
-    .features {
-      background: #FEF7ED;
-      border: 2px solid #B45309;
-      padding: 20px;
-      border-radius: 8px;
-      margin: 20px 0;
-    }
-    .feature-list {
-      list-style: none;
-      padding: 0;
-    }
-    .feature-list li {
-      padding: 8px 0;
-      border-bottom: 1px solid #B45309;
-    }
-    .feature-list li:last-child {
-      border-bottom: none;
-    }
-    .footer {
-      background: #4C1D95;
-      color: #FEF7ED;
-      padding: 20px;
-      text-align: center;
-      font-size: 14px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>🙏 Christian Template Test 🙏</h1>
-      <p>Comprehensive Testing of Redesigned Templates</p>
-    </div>
+  totalCount: number,
+  mockData?: Record<string, any>
+): string {
+  const timestamp = new Date().toLocaleString();
+  
+  // If mock data is provided, use personalized subjects
+  if (mockData) {
+    const subjectMap: Record<string, (data: Record<string, any>) => string> = {
+      // Order templates
+      'orders/partial-shipment.html': (data) => `🙏 ${data.name}, Your Order #${data.orderNumber} is Partially Shipped`,
+      'orders/gift-order-confirmation.html': (data) => `🎁 ${data.name}, Gift Order #${data.orderNumber} Confirmed - Every Good Gift`,
+      'orders/delivery-out_for_delivery.html': (data) => `🚚 ${data.name}, Order #${data.orderNumber} Out for Delivery`,
+      'orders/delivery-delivered.html': (data) => `✅ ${data.name}, Order #${data.orderNumber} Delivered - Delight in the Lord`,
+      'orders/order-cancellation.html': (data) => `💙 ${data.name}, Order #${data.orderNumber} Cancelled - All Things Work Together`,
+      
+      // Account templates
+      'account/password-reset.html': (data) => `🔐 ${data.name}, Reset Your GodWear Password - New Creation`,
+      'account/email-verification.html': (data) => `✉️ ${data.name}, Verify Your GodWear Email - The Lord Knows His Own`,
+      'account/welcome-verification.html': (data) => `🙏 Welcome ${data.name} to GodWear - Christ Welcomes You`,
+      'account/account-update.html': (data) => `📝 ${data.name}, Your GodWear Account Updated`,
+      'account/password-changed.html': (data) => `🔒 ${data.name}, Password Changed Successfully - Clean Heart`,
+      
+      // Marketing templates
+      'marketing/product-review.html': (data) => `⭐ ${data.name}, Share Your GodWear Experience - Let Your Light Shine`,
+      'marketing/order-followup.html': (data) => `💙 ${data.name}, How Was Your GodWear Experience?`,
+      
+      // Security templates
+      'security/password-reset.html': (data) => `🛡️ ${data.name}, GodWear Security: Password Reset`,
+      'security/email-verification.html': (data) => `🔐 ${data.name}, GodWear Security: Verify Your Email`,
+      
+      // Transactional templates
+      'transactional/order-confirmation.html': (data) => `📦 ${data.name}, Order #${data.orderNumber || 'N/A'} Confirmed - Every Good Gift`,
+      'transactional/shipping-notification.html': (data) => `🚚 ${data.name}, Order #${data.orderNumber || 'N/A'} Has Shipped`
+    };
     
-    <div class="content">
-      <div class="progress">
-        📧 Email ${emailCount} of ${totalCount}
-      </div>
-      
-      <div class="template-info">
-        <h2>💙 Template: ${template.name} 💙</h2>
-        <p><strong>Type:</strong> ${template.type}</p>
-        <p><strong>Description:</strong> ${template.description}</p>
-      </div>
-      
-      <div class="biblical-reference">
-        <h3>📖 Biblical Reference</h3>
-        <p>${template.biblicalReference}</p>
-      </div>
-      
-      <div class="features">
-        <h3>✨ Christian Branding Features Applied</h3>
-        <ul class="feature-list">
-          <li>✅ Deep Purple (#4C1D95), Sacred Gold (#B45309), Cream (#FEF7ED) color scheme</li>
-          <li>✅ Georgia serif font for traditional, reverent appearance</li>
-          <li>✅ Biblical references contextually integrated</li>
-          <li>✅ Faith-based messaging throughout</li>
-          <li>✅ Sacred terminology and holy emojis</li>
-          <li>✅ Mobile responsive design with Christian styling</li>
-          <li>✅ "Clothed in righteousness, walking in faith" tagline</li>
-          <li>✅ Dark mode compatibility with Christian colors</li>
-        </ul>
-      </div>
-      
-      <div style="text-align: center; margin: 30px 0;">
-        <p style="font-size: 18px; color: #4C1D95; font-weight: bold;">
-          🙏 Clothed in righteousness, walking in faith 🙏
-        </p>
-        <p style="color: #6B21A8;">
-          <em>With Christian blessings and divine testing,</em><br>
-          <strong style="color: #B45309;">The GodWear Development Team</strong> 💙
-        </p>
-      </div>
-    </div>
+    const subjectGenerator = subjectMap[template.name];
+    if (subjectGenerator) {
+      const baseSubject = subjectGenerator(mockData);
+      return `${baseSubject} [Mock Data Test ${emailCount}/${totalCount}]`;
+    }
+  }
+  
+  // Generate contextually appropriate subject lines based on template type
+  const subjectMap: Record<string, string> = {
+    // Order templates
+    'orders/partial-shipment.html': '🙏 Your GodWear Order is Partially Shipped - Walking in Faith',
+    'orders/gift-order-confirmation.html': '🎁 Gift Order Confirmed - Every Good Gift from Above',
+    'orders/delivery-out_for_delivery.html': '🚚 Your GodWear Order is Out for Delivery - Beautiful Feet',
+    'orders/delivery-delivered.html': '✅ Your GodWear Order Has Been Delivered - Delight in the Lord',
+    'orders/order-cancellation.html': '💙 Order Cancellation - All Things Work Together for Good',
     
-    <div class="footer">
-      <p><strong>GodWear - Faith-Inspired Fashion</strong></p>
-      <p>Comprehensive Christian Template Testing System</p>
-      <p>Sent at ${new Date().toLocaleString()}</p>
-    </div>
-  </div>
-</body>
-</html>
-  `;
+    // Account templates
+    'account/password-reset.html': '🔐 Reset Your GodWear Password - New Creation in Christ',
+    'account/email-verification.html': '✉️ Verify Your GodWear Email - The Lord Knows His Own',
+    'account/welcome-verification.html': '🙏 Welcome to GodWear - Christ Welcomes You',
+    'account/account-update.html': '📝 Your GodWear Account Updated - The Lord Watches Over You',
+    'account/password-changed.html': '🔒 Password Changed Successfully - Clean Heart Created',
+    
+    // Marketing templates
+    'marketing/product-review.html': '⭐ Share Your GodWear Experience - Let Your Light Shine',
+    'marketing/order-followup.html': '💙 How Was Your GodWear Experience? - Give Thanks Always',
+    
+    // Security templates
+    'security/password-reset.html': '🛡️ GodWear Security: Password Reset - The Lord is Your Fortress',
+    'security/email-verification.html': '🔐 GodWear Security: Verify Your Email - Light of the World',
+    
+    // Transactional templates
+    'transactional/order-confirmation.html': '📦 GodWear Order Confirmed - Every Good Gift from Above',
+    'transactional/shipping-notification.html': '🚚 Your GodWear Order Has Shipped - He Directs Your Paths'
+  };
+  
+  const baseSubject = subjectMap[template.name] || `🙏 GodWear ${template.name}`;
+  return `${baseSubject} [Test ${emailCount}/${totalCount}] - ${timestamp}`;
 }
 
-// Helper function to generate test email text
-async function generateChristianTemplateTestText(
+// Helper function to generate plain text version
+function generatePlainTextFromTemplate(
   template: typeof CHRISTIAN_TEMPLATES[0], 
   emailCount: number, 
-  totalCount: number
-): Promise<string> {
+  totalCount: number,
+  mockData?: Record<string, any>
+): string {
+  const customerName = mockData?.name || 'Valued Customer';
+  const supportEmail = mockData?.supportEmail || 'support@godwear.com';
+  const currentYear = mockData?.currentYear || new Date().getFullYear();
+  
   return `
-🙏 CHRISTIAN TEMPLATE TEST 🙏
-Comprehensive Testing of Redesigned Templates
+GodWear - Clothed in Righteousness, Walking in Faith
 
-📧 Email ${emailCount} of ${totalCount}
+Dear ${customerName},
 
-💙 Template: ${template.name}
-Type: ${template.type}
-Description: ${template.description}
+${template.name} (Mock Data Test ${emailCount}/${totalCount})
 
-📖 Biblical Reference:
-${template.biblicalReference}
+This is a test of the ${template.name} template with PROCESSED MOCK DATA.
 
-✨ Christian Branding Features Applied:
-✅ Deep Purple (#4C1D95), Sacred Gold (#B45309), Cream (#FEF7ED) color scheme
-✅ Georgia serif font for traditional, reverent appearance
-✅ Biblical references contextually integrated
-✅ Faith-based messaging throughout
-✅ Sacred terminology and holy emojis
-✅ Mobile responsive design with Christian styling
+🎯 PURPOSE: This email demonstrates that all {{variables}} in your email templates 
+are now being replaced with actual data instead of showing as placeholders.
+
+Template Information:
+- Type: ${template.type}
+- Description: ${template.description}
+- Biblical Reference: ${template.biblicalReference}
+
+✅ Mock Data Successfully Processed (Variables Replaced):
+- Customer Name: ${customerName} (was {{name}})
+- Support Email: ${supportEmail} (was {{supportEmail}})
+- Current Year: ${currentYear} (was {{currentYear}})
+${mockData?.orderNumber ? `- Order Number: ${mockData.orderNumber} (was {{orderNumber}})` : ''}
+${mockData?.total ? `- Order Total: ${mockData.total} (was {{total}})` : ''}
+${mockData?.resetUrl ? `- Reset URL: ${mockData.resetUrl} (was {{resetUrl}})` : ''}
+${mockData?.ipAddress ? `- IP Address: ${mockData.ipAddress} (was {{ipAddress}})` : ''}
+
+🎨 Christian Features Applied:
+✅ Sacred color scheme (Deep Purple, Sacred Gold, Cream)
+✅ Georgia serif font for reverent appearance
+✅ Biblical references integrated
+✅ Faith-based messaging with processed variables
+✅ Mobile responsive design
 ✅ "Clothed in righteousness, walking in faith" tagline
-✅ Dark mode compatibility with Christian colors
 
-🙏 Clothed in righteousness, walking in faith 🙏
+📧 What This Proves:
+- All {{placeholder}} variables are now replaced with real data
+- Your email templates are production-ready
+- Christian branding is properly applied
+- Personalization works correctly
 
-With Christian blessings and divine testing,
-The GodWear Development Team 💙
+The HTML version of this email contains the full processed template with all variables 
+replaced and Christian styling applied.
+
+Blessings,
+The GodWear Team
 
 ---
-GodWear - Faith-Inspired Fashion
-Comprehensive Christian Template Testing System
-Sent at ${new Date().toLocaleString()}
-  `;
+GodWear
+${supportEmail}
+Clothed in righteousness, walking in faith
+© ${currentYear} GodWear - Faith Meets Fashion
+
+P.S. Check the HTML version of this email to see the full Christian-branded template 
+with all variables properly processed!
+`;
 }

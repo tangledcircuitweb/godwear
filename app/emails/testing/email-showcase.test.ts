@@ -32,7 +32,7 @@ describe("Christian GodWear Email Showcase - ALL Templates", () => {
   const config: EmailShowcaseConfig = {
     testRecipient: "njordrenterprises@gmail.com", // YOUR EMAIL - you'll receive ALL emails
     fromEmail: "noreply@godwear.ca",
-    timingInterval: 5000, // 5 seconds between emails for showcase
+    timingInterval: 60000, // 60 seconds (1 minute) between emails for proper rate limiting
   };
 
   let testEnv = createLiveEmailTestEnvironment();

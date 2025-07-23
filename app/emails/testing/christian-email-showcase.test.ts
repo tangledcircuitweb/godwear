@@ -25,7 +25,7 @@ describe("Christian GodWear Email Showcase - Holy Design", () => {
   const config: EmailShowcaseConfig = {
     testRecipient: "njordrenterprises@gmail.com",
     fromEmail: "noreply@godwear.ca",
-    timingInterval: 5000, // 5 seconds between emails
+    timingInterval: 60000, // 60 seconds (1 minute) between emails
   };
 
   let testEnv = createLiveEmailTestEnvironment();
