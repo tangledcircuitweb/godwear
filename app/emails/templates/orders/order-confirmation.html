@@ -14,38 +14,167 @@
   <![endif]-->
   <title>Order Confirmation - #{{orderNumber}} | GodWear</title>
   <style>
-    /* GodWear Christian Branding - Holy Color Palette */
+    /* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
     :root {
-      --deep-purple: #4C1D95;
-      --royal-purple: #6B21A8;
-      --sacred-gold: #B45309;
       --pure-white: #FFFFFF;
-      --cream: #FEF7ED;
-      --light-purple: #EDE9FE;
-      --gold-light: #FEF3C7;
+      --warm-white: #FEFEFE;
+      --soft-white: #F8F9FA;
+      --elegant-gold: #D4AF37;
+      --rich-gold: #B8860B;
+      --light-gold: #F7E98E;
+      --platinum-silver: #E5E4E2;
+      --sterling-silver: #C0C0C0;
+      --dark-silver: #A9A9A9;
+      --charcoal: #36454F;
+      --deep-navy: #2C3E50;
+      --glass-white: rgba(255, 255, 255, 0.25);
+      --glass-gold: rgba(212, 175, 55, 0.15);
+      --glass-silver: rgba(192, 192, 192, 0.2);
     }
     
-    /* Base styles with Christian theme */
+    /* Modern Glassmorphism Base */
     body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background: linear-gradient(135deg, var(--cream) 0%, var(--light-purple) 100%);
+      font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, 
+        var(--soft-white) 0%, 
+        var(--platinum-silver) 25%, 
+        var(--warm-white) 50%, 
+        var(--light-gold) 75%, 
+        var(--pure-white) 100%);
+      background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
     }
     
-    .holy-gradient {
-      background: linear-gradient(135deg, var(--deep-purple) 0%, var(--royal-purple) 50%, var(--sacred-gold) 100%);
+    /* Glassmorphism Container */
+    .glass-container {
+      background: var(--glass-white);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      padding: 32px;
+      margin: 20px auto;
+      max-width: 600px;
     }
     
-    .sacred-border {
-      border: 2px solid var(--sacred-gold);
-      border-radius: 8px;
+    /* Elegant Gold Accent */
+    .gold-gradient {
+      background: linear-gradient(135deg, 
+        var(--elegant-gold) 0%, 
+        var(--rich-gold) 50%, 
+        var(--light-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
     }
     
-    .blessing-text {
-      font-style: italic;
-      color: var(--deep-purple);
-      text-align: center;
-      font-size: 14px;
+    /* Silver Glassmorphism Card */
+    .silver-glass-card {
+      background: var(--glass-silver);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(192, 192, 192, 0.3);
+      border-radius: 16px;
+      padding: 24px;
       margin: 16px 0;
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+    
+    /* Gold Glassmorphism Highlight */
+    .gold-glass-highlight {
+      background: var(--glass-gold);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      box-shadow: 
+        0 2px 8px rgba(212, 175, 55, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+    
+    /* Elegant Typography */
+    .elegant-heading {
+      color: var(--charcoal);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    
+    .refined-text {
+      color: var(--deep-navy);
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+    }
+    
+    .silver-accent {
+      color: var(--dark-silver);
+      font-weight: 500;
+    }
+    
+    /* Modern Button with Glassmorphism */
+    .glass-button {
+      background: var(--glass-white);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid var(--elegant-gold);
+      border-radius: 50px;
+      padding: 14px 32px;
+      color: var(--charcoal);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 4px 16px rgba(212, 175, 55, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+    
+    .glass-button:hover {
+      background: var(--glass-gold);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 8px 24px rgba(212, 175, 55, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+    
+    /* Frosted Divider */
+    .frosted-divider {
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--sterling-silver) 50%, 
+        transparent 100%);
+      margin: 32px 0;
+      opacity: 0.6;
+    }
+    
+    /* Faith Message with Glassmorphism */
+    .faith-blessing {
+      background: var(--glass-white);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      font-style: italic;
+      color: var(--deep-navy);
+      font-size: 15px;
+      margin: 24px 0;
+      box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
     }
     
     /* Dark mode support */
@@ -106,42 +235,126 @@
     @media screen and (max-width: 768px) and (min-width: 601px) {
       .tablet-adjust { padding: 20px !important; }
       .tablet-text { font-size: 15px !important; }
+    /* Mobile Responsive Design */
+    @media screen and (max-width: 600px) {
+      .glass-container {
+        margin: 10px;
+        padding: 20px;
+        border-radius: 16px;
+      }
+      
+      .silver-glass-card,
+      .gold-glass-highlight {
+        padding: 16px;
+        border-radius: 12px;
+      }
+      
+      .elegant-heading {
+        font-size: 20px !important;
+      }
+      
+      .gold-gradient {
+        font-size: 24px !important;
+      }
+      
+      .glass-button {
+        padding: 12px 24px;
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      
+      /* Stack grid layouts on mobile */
+      div[style*="display: grid"] {
+        display: block !important;
+      }
+      
+      div[style*="grid-template-columns"] > div {
+        margin-bottom: 16px;
+      }
+      
+      div[style*="display: flex"] {
+        flex-direction: column !important;
+        gap: 8px !important;
+      }
+      
+      /* Mobile item layout */
+      .silver-glass-card div[style*="display: flex"] {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+      }
+      
+      .silver-glass-card img {
+        align-self: center;
+      }
+    }
+    
+    /* Enhanced Glassmorphism Effects for Modern Browsers */
+    @supports (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(25px) saturate(180%);
+        -webkit-backdrop-filter: blur(25px) saturate(180%);
+      }
+      
+      .silver-glass-card {
+        background: rgba(229, 228, 226, 0.25);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+      }
+      
+      .gold-glass-highlight {
+        background: rgba(212, 175, 55, 0.2);
+        backdrop-filter: blur(15px) saturate(200%);
+        -webkit-backdrop-filter: blur(15px) saturate(200%);
+      }
+    }
+    
+    /* Fallback for browsers without backdrop-filter support */
+    @supports not (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      }
+      
+      .silver-glass-card {
+        background: rgba(229, 228, 226, 0.9);
+      }
+      
+      .gold-glass-highlight {
+        background: rgba(212, 175, 55, 0.3);
+      }
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%);" class="dark-mode">
+<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased;">
   <!-- Email wrapper -->
-  <div style="display: none;">Your order #{{orderNumber}} has been confirmed with blessings. Thank you for choosing GodWear - where faith meets fashion!</div>
+  <div style="display: none;">Your order #{{orderNumber}} has been confirmed with elegance. Thank you for choosing GodWear - where faith meets fashion!</div>
   <div role="article" aria-roledescription="email" aria-label="Order Confirmation - #{{orderNumber}}" lang="en">
-    <table style="width: 100%; font-family: 'Georgia', 'Times New Roman', serif;" cellpadding="0" cellspacing="0" role="presentation">
-      <tr>
-        <td align="center" style="padding: 24px 16px;" class="sm-px-4">
-          <!-- Email container -->
-          <table class="sm-w-full" style="width: 600px; box-shadow: 0 10px 25px rgba(76, 29, 149, 0.1);" cellpadding="0" cellspacing="0" role="presentation">
-            <!-- Header with Holy Gradient -->
-            <tr>
-              <td class="dark-bg holy-gradient" style="background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 50%, #B45309 100%); padding: 32px 24px; text-align: center; border-top-left-radius: 12px; border-top-right-radius: 12px;" class="sm-p-6">
-                <img src="{{logoUrl}}" width="180" alt="GodWear - Faith Meets Fashion" style="border: 0; max-width: 100%; vertical-align: middle; filter: brightness(0) invert(1);" class="sm-w-full">
-                <div class="blessing-text" style="color: #FEF7ED; font-size: 16px; margin-top: 16px; font-style: italic;">
-                  "Give thanks in all circumstances" - 1 Thessalonians 5:18
-                </div>
-              </td>
-            </tr>
-            <!-- Body -->
-            <tr>
-              <td class="dark-bg" style="background-color: #FFFFFF; border-left: 3px solid #B45309; border-right: 3px solid #B45309;">
-                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
-                  <tr>
-                    <td class="sm-px-4 sm-py-8" style="padding: 48px;" class="sm-p-6">
-                      <!-- Email content -->
-                      <h1 style="margin: 0; font-size: 28px; font-weight: 700; line-height: 1.2; color: #4C1D95; text-align: center;" class="dark-text sm-text-xl">
-                        🙏 Order Confirmation
-                      </h1>
-                      <div style="text-align: center; margin: 16px 0; padding: 16px; background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%); border-radius: 8px; border: 1px solid #B45309;">
-                        <p style="margin: 0; font-size: 14px; color: #4C1D95; font-style: italic;">
-                          "Be strong and courageous!" - Joshua 1:9
-                        </p>
-                      </div>
+    
+    <!-- Main Glassmorphism Container -->
+    <div class="glass-container">
+      <!-- Elegant Header with Gold Gradient -->
+      <div style="text-align: center; margin-bottom: 32px;">
+        <img src="{{logoUrl}}" width="200" alt="GodWear - Faith Meets Fashion" style="border: 0; max-width: 100%; vertical-align: middle; margin-bottom: 16px;">
+        <h1 class="elegant-heading gold-gradient" style="font-size: 32px; margin: 0;">
+          ✨ Order Confirmation
+        </h1>
+        <div class="faith-blessing">
+          "Give thanks in all circumstances" - 1 Thessalonians 5:18
+        </div>
+      </div>
+
+      <!-- Welcome Message -->
+      <div class="silver-glass-card">
+        <h2 class="elegant-heading" style="font-size: 24px; margin: 0 0 16px 0;">
+          Blessings {{name}},
+        </h2>
+        <p class="refined-text" style="margin: 0; font-size: 16px;">
+          Thank you for your faithful order! We've received your purchase with gratitude and are preparing it with care. We'll notify you when your blessed items are on their way to you.
+        </p>
+      </div>
                       
                       <!-- Order Info -->
                       <p style="margin: 0; margin-top: 32px; font-size: 18px; line-height: 1.6; color: #4C1D95; font-weight: 600;" class="dark-text sm-text-base">
@@ -150,214 +363,189 @@
                       <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 1.6; color: #6B21A8;" class="dark-text sm-text-sm">
                         Thank you for your faithful order! We've received your purchase with gratitude and are preparing it with care. We'll notify you when your blessed items are on their way to you.
                       </p>
-                      
-                      <!-- Order Summary Box with Sacred Styling -->
-                      <table style="width: 100%; margin-top: 40px; background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%); border-radius: 12px; border: 2px solid #B45309;" class="dark-bg dark-border sacred-border" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 32px;" class="sm-p-4">
-                            <h2 style="margin: 0; font-size: 20px; font-weight: 700; line-height: 1.3; color: #4C1D95; text-align: center;" class="dark-text sm-text-lg">
-                              ✨ Your Sacred Order Summary
-                            </h2>
-                            <table style="width: 100%; margin-top: 24px;" cellpadding="0" cellspacing="0" role="presentation">
-                              <tr>
-                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 1.5; color: #6B21A8; font-weight: 600;" class="dark-text sm-text-sm">Order Number:</td>
-                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 1.5; color: #4C1D95; text-align: right; font-weight: 700;" class="dark-text sm-text-sm"><strong>#{{orderNumber}}</strong></td>
-                              </tr>
-                              <tr>
-                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 1.5; color: #6B21A8; font-weight: 600;" class="dark-text sm-text-sm">Order Date:</td>
-                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 1.5; color: #4C1D95; text-align: right;" class="dark-text sm-text-sm">{{orderDate}}</td>
-                              </tr>
-                              <tr>
-                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 1.5; color: #6B21A8; font-weight: 600;" class="dark-text sm-text-sm">Payment Method:</td>
-                                <td style="padding-bottom: 12px; font-size: 16px; line-height: 1.5; color: #4C1D95; text-align: right;" class="dark-text sm-text-sm">{{paymentMethod}}</td>
-                              </tr>
-                              <tr>
-                                <td style="padding-bottom: 0; font-size: 16px; line-height: 1.5; color: #6B21A8; font-weight: 600;" class="dark-text sm-text-sm">Shipping Method:</td>
-                                <td style="padding-bottom: 0; font-size: 16px; line-height: 1.5; color: #4C1D95; text-align: right;" class="dark-text sm-text-sm">{{shippingMethod}}</td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Order Items -->
-                      <h2 style="margin: 0; margin-top: 40px; font-size: 20px; font-weight: 700; line-height: 1.3; color: #4C1D95; text-align: center;" class="dark-text sm-text-lg">
-                        🛍️ Your Blessed Items
-                      </h2>
-                      <table style="width: 100%; margin-top: 24px; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(76, 29, 149, 0.1);" cellpadding="0" cellspacing="0" role="presentation" class="sm-table-stack">
-                        <tr class="dark-table-header" style="background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 100%);">
-                          <th style="padding: 16px; font-size: 16px; font-weight: 700; text-align: left; color: #FFFFFF; border-top-left-radius: 12px;" class="sm-hidden">Image</th>
-                          <th style="padding: 16px; font-size: 16px; font-weight: 700; text-align: left; color: #FFFFFF;" class="dark-text">Product</th>
-                          <th style="padding: 16px; font-size: 16px; font-weight: 700; text-align: center; color: #FFFFFF;" class="dark-text">Qty</th>
-                          <th style="padding: 16px; font-size: 16px; font-weight: 700; text-align: right; color: #FFFFFF; border-top-right-radius: 12px;" class="dark-text">Price</th>
-                        </tr>
-                        
-                        <!-- Item Row Template - Repeat for each item -->
-                        {{#each items}}
-                        <tr class="dark-table-row" style="background-color: #FFFFFF; border-bottom: 1px solid #EDE9FE;">
-                          <td style="padding: 20px; border-top: 1px solid #EDE9FE; vertical-align: top;" class="dark-border sm-hidden">
-                            <img src="{{this.imageUrl}}" width="80" alt="{{this.name}}" style="border: 0; border-radius: 8px; max-width: 100%; vertical-align: middle; box-shadow: 0 2px 8px rgba(76, 29, 149, 0.1);">
-                          </td>
-                          <td style="padding: 20px; border-top: 1px solid #EDE9FE; vertical-align: top; font-size: 16px; line-height: 1.5;" class="dark-text dark-border sm-text-sm">
-                            <div style="font-weight: 700; color: #4C1D95; margin-bottom: 8px;">{{this.name}}</div>
-                            <div style="color: #6B21A8; font-size: 14px; margin-bottom: 4px;" class="dark-text">{{this.variant}}</div>
-                            <div style="color: #B45309; font-size: 14px; font-weight: 600;" class="dark-text">SKU: {{this.sku}}</div>
-                          </td>
-                          <td style="padding: 20px; border-top: 1px solid #EDE9FE; vertical-align: top; font-size: 16px; line-height: 1.5; color: #4C1D95; text-align: center; font-weight: 700;" class="dark-text dark-border sm-text-sm sm-center">
-                            {{this.quantity}}
+      <!-- Order Summary with Gold Glassmorphism -->
+      <div class="gold-glass-highlight">
+        <h2 class="elegant-heading" style="font-size: 22px; margin: 0 0 20px 0; text-align: center;">
+          ✨ Your Elegant Order Summary
+        </h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div>
+            <span class="silver-accent" style="font-size: 14px;">Order Number:</span>
+            <div class="refined-text" style="font-weight: 700; font-size: 16px;">#{{orderNumber}}</div>
+          </div>
+          <div>
+            <span class="silver-accent" style="font-size: 14px;">Order Date:</span>
+            <div class="refined-text" style="font-size: 16px;">{{orderDate}}</div>
+          </div>
+          <div>
+            <span class="silver-accent" style="font-size: 14px;">Payment Method:</span>
+            <div class="refined-text" style="font-size: 16px;">{{paymentMethod}}</div>
+          </div>
+          <div>
+            <span class="silver-accent" style="font-size: 14px;">Shipping Method:</span>
+            <div class="refined-text" style="font-size: 16px;">{{shippingMethod}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="frosted-divider"></div>
+
+      <!-- Order Items with Silver Glassmorphism -->
+      <h2 class="elegant-heading gold-gradient" style="font-size: 22px; margin: 0 0 24px 0; text-align: center;">
+        🛍️ Your Blessed Items
+      </h2>
+      
+      {{#each items}}
+      <div class="silver-glass-card" style="margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <img src="{{this.imageUrl}}" width="80" height="80" alt="{{this.name}}" 
+               style="border: 0; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+          <div style="flex: 1;">
+            <h3 class="elegant-heading" style="font-size: 18px; margin: 0 0 8px 0;">{{this.name}}</h3>
+            <p class="silver-accent" style="margin: 0 0 4px 0; font-size: 14px;">{{this.variant}}</p>
+            <p class="silver-accent" style="margin: 0; font-size: 12px;">SKU: {{this.sku}}</p>
+          </div>
+          <div style="text-align: right;">
+            <div class="refined-text" style="font-size: 16px; font-weight: 600;">Qty: {{this.quantity}}</div>
+            <div class="gold-gradient" style="font-size: 18px; font-weight: 700; margin-top: 4px;">{{this.price}}</div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
                           </td>
                           <td style="padding: 20px; border-top: 1px solid #EDE9FE; vertical-align: top; font-size: 16px; line-height: 1.5; color: #4C1D95; text-align: right; font-weight: 700;" class="dark-text dark-border sm-text-sm">
                             {{this.price}}
                           </td>
                         </tr>
-                        {{/each}}
-                        
-                        <!-- Totals with Sacred Gold Accent -->
-                        <tr style="background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%);">
-                          <td colspan="2" class="sm-hidden"></td>
-                          <td style="padding: 16px 20px; border-top: 2px solid #B45309; font-size: 16px; line-height: 1.5; color: #6B21A8; text-align: right; font-weight: 600;" class="dark-text dark-border sm-text-sm">Subtotal:</td>
-                          <td style="padding: 16px 20px; border-top: 2px solid #B45309; font-size: 16px; line-height: 1.5; color: #4C1D95; text-align: right; font-weight: 700;" class="dark-text dark-border sm-text-sm">{{subtotal}}</td>
-                        </tr>
-                        <tr style="background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%);">
-                          <td colspan="2" class="sm-hidden"></td>
-                          <td style="padding: 8px 20px; font-size: 16px; line-height: 1.5; color: #6B21A8; text-align: right; font-weight: 600;" class="dark-text sm-text-sm">Shipping:</td>
-                          <td style="padding: 8px 20px; font-size: 16px; line-height: 1.5; color: #4C1D95; text-align: right; font-weight: 700;" class="dark-text sm-text-sm">{{shipping}}</td>
-                        </tr>
-                        <tr style="background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%);">
-                          <td colspan="2" class="sm-hidden"></td>
-                          <td style="padding: 8px 20px; font-size: 16px; line-height: 1.5; color: #6B21A8; text-align: right; font-weight: 600;" class="dark-text sm-text-sm">Tax:</td>
-                          <td style="padding: 8px 20px; font-size: 16px; line-height: 1.5; color: #4C1D95; text-align: right; font-weight: 700;" class="dark-text sm-text-sm">{{tax}}</td>
-                        </tr>
-                        {{#if discount}}
-                        <tr style="background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%);">
-                          <td colspan="2" class="sm-hidden"></td>
-                          <td style="padding: 8px 20px; font-size: 16px; line-height: 1.5; color: #6B21A8; text-align: right; font-weight: 600;" class="dark-text sm-text-sm">Blessing Discount:</td>
-                          <td style="padding: 8px 20px; font-size: 16px; line-height: 1.5; color: #B45309; text-align: right; font-weight: 700;" class="dark-text sm-text-sm">-{{discount}}</td>
-                        </tr>
-                        {{/if}}
-                        <tr style="background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 100%); color: #FFFFFF;">
-                          <td colspan="2" class="sm-hidden"></td>
-                          <td style="padding: 20px; border-top: 3px solid #B45309; font-size: 18px; font-weight: 700; line-height: 1.3; color: #FFFFFF; text-align: right;" class="dark-text dark-border sm-text-base">Total:</td>
-                          <td style="padding: 20px; border-top: 3px solid #B45309; font-size: 18px; font-weight: 700; line-height: 1.3; color: #FFFFFF; text-align: right;" class="dark-text dark-border sm-text-base">{{total}}</td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Shipping & Billing Info -->
-                      <table style="width: 100%; margin-top: 40px;" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="width: 50%; padding-right: 16px; vertical-align: top;" class="sm-w-full sm-block sm-px-0 sm-stack">
-                            <div style="background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%); padding: 24px; border-radius: 12px; border: 2px solid #B45309; margin-bottom: 16px;" class="sm-mb-4">
-                              <h3 style="margin: 0; font-size: 18px; font-weight: 700; line-height: 1.3; color: #4C1D95; text-align: center;" class="dark-text sm-text-base">📦 Shipping Address</h3>
-                              <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 1.6; color: #6B21A8; text-align: center;" class="dark-text sm-text-sm">
-                                {{shippingAddress.name}}<br>
-                                {{shippingAddress.street}}<br>
-                                {{#if shippingAddress.street2}}{{shippingAddress.street2}}<br>{{/if}}
-                                {{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br>
-                                {{shippingAddress.country}}
-                              </p>
-                            </div>
-                          </td>
-                          <td style="width: 50%; padding-left: 16px; vertical-align: top;" class="sm-w-full sm-block sm-px-0 sm-stack sm-mt-4">
-                            <div style="background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%); padding: 24px; border-radius: 12px; border: 2px solid #B45309;" class="sm-mb-4">
-                              <h3 style="margin: 0; font-size: 18px; font-weight: 700; line-height: 1.3; color: #4C1D95; text-align: center;" class="dark-text sm-text-base">💳 Billing Address</h3>
-                              <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 1.6; color: #6B21A8; text-align: center;" class="dark-text sm-text-sm">
-                                {{billingAddress.name}}<br>
-                                {{billingAddress.street}}<br>
-                                {{#if billingAddress.street2}}{{billingAddress.street2}}<br>{{/if}}
-                                {{billingAddress.city}}, {{billingAddress.state}} {{billingAddress.zip}}<br>
-                                {{billingAddress.country}}
-                              </p>
-                            </div>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Estimated Delivery with Blessing -->
-                      <table style="width: 100%; margin-top: 40px; background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 100%); border-radius: 12px; box-shadow: 0 8px 20px rgba(76, 29, 149, 0.2);" class="dark-bg dark-border" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 32px; text-align: center;" class="sm-p-6">
-                            <h3 style="margin: 0; font-size: 20px; font-weight: 700; line-height: 1.3; color: #FFFFFF;" class="dark-text sm-text-lg">🚚 Blessed Delivery Date</h3>
-                            <p style="margin: 0; margin-top: 12px; font-size: 18px; line-height: 1.4; color: #FEF7ED; font-weight: 600;" class="dark-text sm-text-base">
-                              {{estimatedDelivery}}
-                            </p>
-                            <p style="margin: 0; margin-top: 16px; font-size: 14px; line-height: 1.5; color: #EDE9FE; font-style: italic;" class="dark-text sm-text-sm">
-                              "The Lord will watch over your coming and going" - Psalm 121:8
-                            </p>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Order Tracking Button with Sacred Styling -->
-                      <table style="width: 100%; margin-top: 40px;" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="text-align: center;">
-                            <a href="{{trackOrderUrl}}" style="display: inline-block; background: linear-gradient(135deg, #B45309 0%, #4C1D95 100%); color: #FFFFFF; font-size: 18px; font-weight: 700; line-height: 1.2; text-decoration: none; text-align: center; padding: 20px 40px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 16px rgba(180, 83, 9, 0.3); transition: all 0.3s ease;" class="dark-button sm-btn-full sm-text-base">
-                              ✨ Track Your Blessed Order
-                            </a>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Return Policy with Christian Touch -->
-                      <div style="margin-top: 40px; padding: 24px; background: linear-gradient(135deg, #FEF7ED 0%, #EDE9FE 100%); border-radius: 12px; border: 1px solid #B45309; text-align: center;" class="sm-p-4">
-                        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #6B21A8;" class="dark-text sm-text-sm">
-                          🔄 <strong>Faithful Return Policy:</strong> If you need to return an item, please visit our <a href="{{returnsUrl}}" style="color: #4C1D95; text-decoration: underline; font-weight: 600;" class="dark-text">returns page</a> within 30 days of delivery. We believe in making things right with grace and understanding.
-                        </p>
-                      </div>
-                      
-                      <div style="margin-top: 32px; text-align: center; padding: 24px; background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 100%); border-radius: 12px;" class="sm-p-4">
-                        <p style="margin: 0; font-size: 18px; line-height: 1.5; color: #FFFFFF; font-weight: 600;" class="dark-text sm-text-base">
-                          💌 Questions about your order? We're here to help with love and care.
-                        </p>
-                        <p style="margin: 0; margin-top: 12px; font-size: 16px; line-height: 1.5; color: #FEF7ED;" class="dark-text sm-text-sm">
-                          Contact our faithful support team at <a href="mailto:{{supportEmail}}" style="color: #FEF7ED; text-decoration: underline; font-weight: 600;" class="dark-text">{{supportEmail}}</a>
-                        </p>
-                      </div>
-                      
-                      <div style="margin-top: 32px; text-align: center;">
-                        <p style="margin: 0; font-size: 18px; line-height: 1.5; color: #4C1D95; font-weight: 600;" class="dark-text sm-text-base">
-                          Thank you for choosing GodWear - where faith meets fashion! 🙏
-                        </p>
-                        <p style="margin: 0; margin-top: 8px; font-size: 16px; line-height: 1.5; color: #6B21A8; font-style: italic;" class="dark-text sm-text-sm">
-                          Blessings and gratitude,<br>
-                          <strong>The GodWear Family</strong>
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <!-- Footer with Christian Branding -->
-            <tr>
-              <td class="dark-bg dark-border" style="background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 100%); border-top: 3px solid #B45309; padding: 32px 24px; text-align: center; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;" class="sm-p-6">
-                <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #FFFFFF; font-weight: 600;" class="dark-text sm-text-sm">
-                  &copy; {{currentYear}} GodWear - Faith Meets Fashion. All rights reserved.
-                </p>
-                <div style="margin: 16px 0; padding: 16px; background: rgba(254, 247, 237, 0.1); border-radius: 8px;">
-                  <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #FEF7ED; font-style: italic;" class="dark-text sm-text-sm">
-                    "Let your light shine before others" - Matthew 5:16
-                  </p>
-                </div>
-                <p style="margin: 0; margin-top: 16px; font-size: 14px; line-height: 1.5; color: #EDE9FE;" class="dark-text sm-text-sm">
-                  <a href="{{unsubscribeUrl}}" style="color: #FEF7ED; text-decoration: underline;" class="dark-text">Unsubscribe</a> •
-                  <a href="{{privacyUrl}}" style="color: #FEF7ED; text-decoration: underline;" class="dark-text">Privacy Policy</a> •
-                  <a href="{{termsUrl}}" style="color: #FEF7ED; text-decoration: underline;" class="dark-text">Terms of Service</a>
-                </p>
-                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 1.5; color: #EDE9FE;" class="dark-text sm-text-sm">
-                  GodWear Inc. - Spreading Faith Through Fashion<br>
-                  📍 123 Faith Street, Blessed City, BC V1A 2B3, Canada
-                </p>
-              </td>
-            </tr>
-            <!-- Spacer -->
-            <tr>
-              <td style="height: 32px;"></td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
+      
+      <!-- Order Totals with Gold Glassmorphism -->
+      <div class="gold-glass-highlight">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span class="silver-accent">Subtotal:</span>
+          <span class="refined-text" style="font-weight: 600;">{{subtotal}}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span class="silver-accent">Shipping:</span>
+          <span class="refined-text" style="font-weight: 600;">{{shipping}}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span class="silver-accent">Tax:</span>
+          <span class="refined-text" style="font-weight: 600;">{{tax}}</span>
+        </div>
+        {{#if discount}}
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span class="silver-accent">Blessing Discount:</span>
+          <span class="gold-gradient" style="font-weight: 700;">-{{discount}}</span>
+        </div>
+        {{/if}}
+        <div class="frosted-divider" style="margin: 16px 0;"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="elegant-heading" style="font-size: 20px;">Total:</span>
+          <span class="gold-gradient" style="font-size: 24px; font-weight: 700;">{{total}}</span>
+        </div>
+      </div>
+
+      <!-- Shipping & Billing Addresses -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 32px 0;">
+        <div class="silver-glass-card">
+          <h3 class="elegant-heading" style="font-size: 18px; margin: 0 0 16px 0; text-align: center;">
+            📦 Shipping Address
+          </h3>
+          <div class="refined-text" style="text-align: center; line-height: 1.6;">
+            {{shippingAddress.name}}<br>
+            {{shippingAddress.street}}<br>
+            {{#if shippingAddress.street2}}{{shippingAddress.street2}}<br>{{/if}}
+            {{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br>
+            {{shippingAddress.country}}
+          </div>
+        </div>
+        
+        <div class="silver-glass-card">
+          <h3 class="elegant-heading" style="font-size: 18px; margin: 0 0 16px 0; text-align: center;">
+            💳 Billing Address
+          </h3>
+          <div class="refined-text" style="text-align: center; line-height: 1.6;">
+            {{billingAddress.name}}<br>
+            {{billingAddress.street}}<br>
+            {{#if billingAddress.street2}}{{billingAddress.street2}}<br>{{/if}}
+            {{billingAddress.city}}, {{billingAddress.state}} {{billingAddress.zip}}<br>
+            {{billingAddress.country}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Estimated Delivery -->
+      <div class="gold-glass-highlight" style="text-align: center;">
+        <h3 class="elegant-heading" style="font-size: 20px; margin: 0 0 12px 0;">
+          🚚 Blessed Delivery Date
+        </h3>
+        <div class="gold-gradient" style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">
+          {{estimatedDelivery}}
+        </div>
+        <div class="faith-blessing" style="margin: 0;">
+          "The Lord will watch over your coming and going" - Psalm 121:8
+        </div>
+      </div>
+
+      <!-- Track Order Button -->
+      <div style="text-align: center; margin: 32px 0;">
+        <a href="{{trackOrderUrl}}" class="glass-button" style="font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">
+          ✨ Track Your Blessed Order
+        </a>
+      </div>
+
+      <!-- Return Policy -->
+      <div class="silver-glass-card" style="text-align: center;">
+        <p class="refined-text" style="margin: 0;">
+          🔄 <strong>Faithful Return Policy:</strong> If you need to return an item, please visit our 
+          <a href="{{returnsUrl}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: 600;">returns page</a> 
+          within 30 days of delivery. We believe in making things right with grace and understanding.
+        </p>
+      </div>
+
+      <!-- Support Contact -->
+      <div class="gold-glass-highlight" style="text-align: center;">
+        <p class="elegant-heading" style="font-size: 18px; margin: 0 0 12px 0;">
+          💌 Questions about your order? We're here to help with love and care.
+        </p>
+        <p class="refined-text" style="margin: 0;">
+          Contact our faithful support team at 
+          <a href="mailto:{{supportEmail}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: 600;">{{supportEmail}}</a>
+        </p>
+      </div>
+
+      <!-- Closing Message -->
+      <div style="text-align: center; margin: 32px 0;">
+        <p class="elegant-heading gold-gradient" style="font-size: 20px; margin: 0 0 8px 0;">
+          Thank you for choosing GodWear - where faith meets fashion! 🙏
+        </p>
+        <p class="refined-text" style="margin: 0; font-style: italic;">
+          Blessings and gratitude,<br>
+          <strong>The GodWear Family</strong>
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div class="silver-glass-card" style="text-align: center; margin-top: 40px;">
+        <p class="refined-text" style="margin: 0 0 16px 0; font-weight: 600;">
+          &copy; {{currentYear}} GodWear - Faith Meets Fashion. All rights reserved.
+        </p>
+        <div class="faith-blessing" style="margin: 16px 0;">
+          "Let your light shine before others" - Matthew 5:16
+        </div>
+        <p class="silver-accent" style="margin: 0 0 12px 0; font-size: 14px;">
+          <a href="{{unsubscribeUrl}}" style="color: var(--dark-silver); text-decoration: underline;">Unsubscribe</a> •
+          <a href="{{privacyUrl}}" style="color: var(--dark-silver); text-decoration: underline;">Privacy Policy</a> •
+          <a href="{{termsUrl}}" style="color: var(--dark-silver); text-decoration: underline;">Terms of Service</a>
+        </p>
+        <p class="silver-accent" style="margin: 0; font-size: 14px;">
+          GodWear Inc. - Spreading Faith Through Fashion<br>
+          📍 123 Faith Street, Blessed City, BC V1A 2B3, Canada
+        </p>
+      </div>
+      
+    </div> <!-- End glass-container -->
+    
   </div>
 </body>
 </html>
