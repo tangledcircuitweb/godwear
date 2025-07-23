@@ -1,4 +1,6 @@
 // Quick test to verify MailerSend API authentication
+require('dotenv').config();
+
 const API_KEY = process.env.MAILERSEND_API_KEY;
 const BASE_URL = "https://api.mailersend.com/v1";
 
