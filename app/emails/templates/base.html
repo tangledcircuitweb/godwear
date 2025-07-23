@@ -8,324 +8,513 @@
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
   <!--[if mso]>
   <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
-  <style>/* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
-:root {
-  --pure-white: #FFFFFF;
-  --warm-white: #FEFEFE;
-  --soft-white: #F8F9FA;
-  --elegant-gold: #D4AF37;
-  --rich-gold: #B8860B;
-  --light-gold: #F7E98E;
-  --platinum-silver: #E5E4E2;
-  --sterling-silver: #C0C0C0;
-  --dark-silver: #A9A9A9;
-  --charcoal: #36454F;
-  --deep-navy: #2C3E50;
-  --glass-white: rgba(255, 255, 255, 0.25);
-  --glass-gold: rgba(212, 175, 55, 0.15);
-  --glass-silver: rgba(192, 192, 192, 0.2);
-}
-
-/* Modern Glassmorphism Base */
-body {
-  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(135deg, 
-    var(--soft-white) 0%, 
-    var(--platinum-silver) 25%, 
-    var(--warm-white) 50%, 
-    var(--light-gold) 75%, 
-    var(--pure-white) 100%);
-  background-attachment: fixed;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-}
-
-/* Glassmorphism Container */
-.glass-container {
-  background: var(--glass-white);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  padding: 32px;
-  margin: 20px auto;
-  max-width: 600px;
-}
-
-/* Elegant Gold Accent */
-.gold-gradient {
-  background: linear-gradient(135deg, 
-    var(--elegant-gold) 0%, 
-    var(--rich-gold) 50%, 
-    var(--light-gold) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 600;
-}
-
-/* Silver Glassmorphism Card */
-.silver-glass-card {
-  background: var(--glass-silver);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(192, 192, 192, 0.3);
-  border-radius: 16px;
-  padding: 24px;
-  margin: 16px 0;
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-/* Gold Glassmorphism Highlight */
-.gold-glass-highlight {
-  background: var(--glass-gold);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  border-radius: 12px;
-  padding: 16px;
-  margin: 12px 0;
-  box-shadow: 
-    0 2px 8px rgba(212, 175, 55, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Elegant Typography */
-.elegant-heading {
-  color: var(--charcoal);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-.refined-text {
-  color: var(--deep-navy);
-  font-weight: 400;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
-}
-
-.silver-accent {
-  color: var(--dark-silver);
-  font-weight: 500;
-}
-
-/* Modern Button with Glassmorphism */
-.glass-button {
-  background: var(--glass-white);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid var(--elegant-gold);
-  border-radius: 50px;
-  padding: 14px 32px;
-  color: var(--charcoal);
-  text-decoration: none;
-  font-weight: 600;
-  display: inline-block;
-  transition: all 0.3s ease;
-  box-shadow: 
-    0 4px 16px rgba(212, 175, 55, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-.glass-button:hover {
-  background: var(--glass-gold);
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 24px rgba(212, 175, 55, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-/* Frosted Divider */
-.frosted-divider {
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    var(--sterling-silver) 50%, 
-    transparent 100%);
-  margin: 32px 0;
-  opacity: 0.6;
-}
-
-/* Faith Message with Glassmorphism */
-.faith-blessing {
-  background: var(--glass-white);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  font-style: italic;
-  color: var(--deep-navy);
-  font-size: 15px;
-  margin: 24px 0;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Mobile Responsive Design */
-@media screen and (max-width: 600px) {
-  .glass-container {
-    margin: 10px;
-    padding: 20px;
-    border-radius: 16px;
-  }
-  
-  .silver-glass-card,
-  .gold-glass-highlight {
-    padding: 16px;
-    border-radius: 12px;
-  }
-  
-  .elegant-heading {
-    font-size: 20px !important;
-  }
-  
-  .gold-gradient {
-    font-size: 24px !important;
-  }
-  
-  .glass-button {
-    padding: 12px 24px;
-    font-size: 14px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  /* Stack grid layouts on mobile */
-  div[style*="display: grid"] {
-    display: block !important;
-  }
-  
-  div[style*="grid-template-columns"] > div {
-    margin-bottom: 16px;
-  }
-  
-  div[style*="display: flex"] {
-    flex-direction: column !important;
-    gap: 8px !important;
-  }
-}
-
-/* Enhanced Glassmorphism Effects for Modern Browsers */
-@supports (backdrop-filter: blur(20px)) {
-  .glass-container {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-  }
-  
-  .silver-glass-card {
-    background: rgba(229, 228, 226, 0.25);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-  }
-  
-  .gold-glass-highlight {
-    background: rgba(212, 175, 55, 0.2);
-    backdrop-filter: blur(15px) saturate(200%);
-    -webkit-backdrop-filter: blur(15px) saturate(200%);
-  }
-}
-
-/* Fallback for browsers without backdrop-filter support */
-@supports not (backdrop-filter: blur(20px)) {
-  .glass-container {
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  }
-  
-  .silver-glass-card {
-    background: rgba(229, 228, 226, 0.9);
-  }
-  
-  .gold-glass-highlight {
-    background: rgba(212, 175, 55, 0.3);
-  }
-}
-</style>
   <![endif]-->
   <title>{{title}}</title>
   <style>
-    /* Base styles */
+    /* GodWear Dual-Theme Glassmorphism - Light Mode Default with Dark Mode Support */
+    :root {
+      /* Light Mode Colors (Default) */
+      --pure-white: #FFFFFF;
+      --warm-white: #FEFEFE;
+      --soft-white: #F8F9FA;
+      --elegant-gold: #D4AF37;
+      --rich-gold: #B8860B;
+      --light-gold: #F7E98E;
+      --platinum-silver: #E5E4E2;
+      --sterling-silver: #C0C0C0;
+      --dark-silver: #A9A9A9;
+      --charcoal: #36454F;
+      --deep-navy: #2C3E50;
+      
+      /* Light Mode Glassmorphism (Default) */
+      --glass-white: rgba(255, 255, 255, 0.8);
+      --glass-gold: rgba(212, 175, 55, 0.2);
+      --glass-silver: rgba(192, 192, 192, 0.3);
+      
+      /* Light Mode Text Colors (Default) */
+      --text-primary: #2C3E50;
+      --text-secondary: #36454F;
+      --text-accent: #D4AF37;
+      --text-muted: #6B7280;
+      
+      /* Light Mode Background Colors (Default) */
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F8F9FA;
+      --bg-accent: #D4AF37;
+    }
+
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      word-break: break-word;
+      -webkit-font-smoothing: antialiased;
+      font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      /* Light mode background by default */
+      background: linear-gradient(135deg, 
+        #F8F9FA 0%, 
+        #E5E4E2 25%, 
+        #FEFEFE 50%, 
+        #F7E98E 75%, 
+        #FFFFFF 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      /* Default text color for light mode */
+      color: var(--text-primary);
+    }
+
+    /* Email client compatibility */
+    table {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    /* Light Mode Glassmorphism (Default) */
+    .glass-container {
+      background: var(--glass-white);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 20px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      padding: 32px;
+      margin: 20px auto;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    /* Silver Glassmorphism Card - Light Mode Default */
+    .silver-glass-card {
+      background: var(--glass-silver);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(192, 192, 192, 0.4);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 16px 0;
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      color: var(--text-primary);
+    }
+
+    /* Gold Glassmorphism Highlight - Light Mode Default */
+    .gold-glass-highlight {
+      background: var(--glass-gold);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      box-shadow: 
+        0 2px 8px rgba(212, 175, 55, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      color: var(--text-primary);
+    }
+
+    /* Modern Button with Dual-Theme Support */
+    .glass-button {
+      background: var(--glass-white);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid var(--elegant-gold);
+      border-radius: 50px;
+      padding: 16px 32px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 4px 16px rgba(212, 175, 55, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .glass-button:hover {
+      background: var(--glass-gold);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 8px 24px rgba(212, 175, 55, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    /* Typography - Light Mode Default */
+    .elegant-heading {
+      color: var(--text-secondary);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin: 0 0 16px 0;
+    }
+
+    .refined-text {
+      color: var(--text-primary);
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      margin: 0 0 16px 0;
+    }
+
+    .silver-accent {
+      color: var(--dark-silver);
+      font-weight: 500;
+    }
+
+    /* Faith Message with Dual-Theme Support */
+    .faith-blessing {
+      background: var(--glass-white);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      font-style: italic;
+      color: var(--text-primary);
+      font-size: 15px;
+      margin: 24px 0 0 0;
+      box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    /* Enhanced Glassmorphism Effects for Modern Browsers */
+    @supports (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(25px) saturate(180%);
+        -webkit-backdrop-filter: blur(25px) saturate(180%);
+      }
+      
+      .silver-glass-card {
+        background: rgba(229, 228, 226, 0.4);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+      }
+      
+      .gold-glass-highlight {
+        background: rgba(212, 175, 55, 0.25);
+        backdrop-filter: blur(15px) saturate(200%);
+        -webkit-backdrop-filter: blur(15px) saturate(200%);
+      }
+    }
+
+    /* Fallback for browsers without backdrop-filter support */
+    @supports not (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      }
+      
+      .silver-glass-card {
+        background: rgba(229, 228, 226, 0.9);
+      }
+      
+      .gold-glass-highlight {
+        background: rgba(212, 175, 55, 0.3);
+      }
+    }
+
+    /* Dark Mode Support - Only for devices that support it */
     @media (prefers-color-scheme: dark) {
-      .dark-mode { background-color: #121212 !important; color: #ffffff !important; }
-      .dark-text { color: #ffffff !important; }
-      .dark-bg { background-color: #1e1e1e !important; }
-      .dark-button { background-color: #4f46e5 !important; color: #ffffff !important; }
-      .dark-border { border-color: #2e2e2e !important; }
-      .dark-divider { border-top-color: #2e2e2e !important; }
+      :root {
+        /* Dark Mode Text Colors */
+        --text-primary: #E5E7EB;
+        --text-secondary: #F3F4F6;
+        --text-accent: #F7E98E;
+        --text-muted: #9CA3AF;
+        
+        /* Dark Mode Background Colors */
+        --bg-primary: #1F2937;
+        --bg-secondary: #111827;
+        --bg-accent: #D4AF37;
+        
+        /* Dark Mode Glassmorphism */
+        --glass-white: rgba(31, 41, 55, 0.8);
+        --glass-gold: rgba(212, 175, 55, 0.3);
+        --glass-silver: rgba(75, 85, 99, 0.4);
+      }
+      
+      body {
+        background: linear-gradient(135deg, 
+          #111827 0%, 
+          #1F2937 25%, 
+          #374151 50%, 
+          #4B5563 75%, 
+          #6B7280 100%);
+        color: var(--text-primary);
+      }
+      
+      .glass-container {
+        background: var(--glass-white);
+        border: 1px solid rgba(75, 85, 99, 0.5);
+        box-shadow: 
+          0 8px 32px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+      
+      .silver-glass-card {
+        background: var(--glass-silver);
+        border: 1px solid rgba(75, 85, 99, 0.6);
+        color: var(--text-primary);
+        box-shadow: 
+          0 4px 16px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+      
+      .gold-glass-highlight {
+        background: var(--glass-gold);
+        border: 1px solid rgba(212, 175, 55, 0.6);
+        color: var(--text-primary);
+        box-shadow: 
+          0 2px 8px rgba(212, 175, 55, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+      
+      .glass-button {
+        background: var(--glass-white);
+        color: var(--text-secondary);
+        border: 2px solid var(--text-accent);
+        box-shadow: 
+          0 4px 16px rgba(212, 175, 55, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+      
+      .glass-button:hover {
+        background: var(--glass-gold);
+        box-shadow: 
+          0 8px 24px rgba(212, 175, 55, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      }
+      
+      .faith-blessing {
+        background: var(--glass-white);
+        border: 1px solid rgba(75, 85, 99, 0.6);
+        color: var(--text-primary);
+        box-shadow: 
+          0 4px 12px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
     }
-    
+
+    /* Mobile Responsive Design */
     @media screen and (max-width: 600px) {
-      .sm-w-full { width: 100% !important; }
-      .sm-px-4 { padding-left: 16px !important; padding-right: 16px !important; }
-      .sm-py-8 { padding-top: 32px !important; padding-bottom: 32px !important; }
-      .sm-text-sm { font-size: 14px !important; }
-      .sm-text-lg { font-size: 18px !important; }
+      body {
+        padding: 0 !important;
+      }
+      
+      .email-wrapper {
+        width: 100% !important;
+        padding: 10px !important;
+      }
+      
+      .email-container {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      
+      .glass-container {
+        margin: 10px !important;
+        padding: 20px !important;
+        border-radius: 16px !important;
+        width: calc(100% - 20px) !important;
+      }
+      
+      .silver-glass-card,
+      .gold-glass-highlight {
+        padding: 16px !important;
+        border-radius: 12px !important;
+        margin: 12px 0 !important;
+      }
+      
+      .elegant-heading {
+        font-size: 20px !important;
+        line-height: 1.3 !important;
+      }
+      
+      .refined-text {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+      }
+      
+      .glass-button {
+        padding: 12px 24px !important;
+        font-size: 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        display: block !important;
+        margin: 16px 0 !important;
+      }
+      
+      .faith-blessing {
+        padding: 16px !important;
+        font-size: 14px !important;
+        margin: 16px 0 !important;
+      }
+      
+      /* Mobile table fixes */
+      .mobile-full-width {
+        width: 100% !important;
+      }
+      
+      .mobile-padding {
+        padding: 16px !important;
+      }
+      
+      .mobile-text-center {
+        text-align: center !important;
+      }
+      
+      .mobile-stack {
+        display: block !important;
+        width: 100% !important;
+      }
+      
+      /* Hide desktop spacers on mobile */
+      .desktop-spacer {
+        display: none !important;
+      }
+      
+      /* Mobile-specific spacing */
+      .mobile-spacer {
+        height: 16px !important;
+      }
     }
+
+    /* Utility classes for responsive design */
+    .text-center { text-align: center; }
+    .text-left { text-align: left; }
+    .text-right { text-align: right; }
+    .full-width { width: 100%; }
+    .no-margin { margin: 0; }
+    .no-padding { padding: 0; }
   </style>
 </head>
-<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased;">
-  <!-- Email wrapper -->
-  <div style="display: none;">{{preheader}}</div>
-  <div role="article" aria-roledescription="email" aria-label="{{title}}" lang="en">
-    <table style="width: 100%; font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;" cellpadding="0" cellspacing="0" role="presentation">
+<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); color: #2C3E50;">
+  <!-- Preheader text -->
+  <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+    {{preheader}}
+  </div>
+  
+  <!-- Email wrapper with dual-theme background -->
+  <div role="article" aria-roledescription="email" aria-label="{{title}}" lang="en" class="email-wrapper" style="background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); padding: 20px 0; min-height: 100vh;">
+    
+    <!-- Main email table -->
+    <table style="width: 100%; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
-        <td align="center" style="padding: 24px 0;">
-          <!-- Email container -->
-          <table class="sm-w-full" style="width: 600px;" cellpadding="0" cellspacing="0" role="presentation">
-            <!-- Header -->
+        <td align="center" style="padding: 0;">
+          
+          <!-- Email container with dual-theme glassmorphism -->
+          <table class="email-container mobile-full-width" style="width: 600px; max-width: 600px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6); margin: 0 auto;" cellpadding="0" cellspacing="0" role="presentation">
+            
+            <!-- Header section -->
             <tr>
-              <td class="dark-bg" style="background-color: #ffffff; padding: 24px; text-align: center; border-top-left-radius: 4px; border-top-right-radius: 4px;">
-                <img src="{{logoUrl}}" width="150" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle;">
-              </td>
-            </tr>
-            <!-- Body -->
-            <tr>
-              <td class="dark-bg" style="background-color: #ffffff;">
+              <td class="mobile-padding" style="background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 32px; text-align: center; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
                 <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
-                    <td class="sm-px-4 sm-py-8" style="padding: 40px 48px; text-align: left;">
-                      <!-- Email content -->
+                    <td align="center">
+                      <img src="{{logoUrl}}" width="150" alt="GodWear" style="border: 0; max-width: 100%; height: auto; vertical-align: middle; display: block;">
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            
+            <!-- Main content section -->
+            <tr>
+              <td class="mobile-padding" style="padding: 40px 48px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td style="text-align: left; color: #2C3E50; font-size: 16px; line-height: 1.6;">
+                      <!-- Email content placeholder -->
                       {{content}}
                     </td>
                   </tr>
                 </table>
               </td>
             </tr>
-            <!-- Footer -->
+            
+            <!-- Footer section -->
             <tr>
-              <td class="dark-bg dark-border" style="background-color: #ffffff; border-top: 1px solid #e5e7eb; padding: 24px; text-align: center; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;">
-                <p style="margin: 0; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  &copy; {{currentYear}} GodWear. All rights reserved.
-                </p>
-                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  <a href="{{unsubscribeUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Unsubscribe</a> •
-                  <a href="{{privacyUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Privacy Policy</a> •
-                  <a href="{{termsUrl}}" style="color: #6b7280; text-decoration: underline;" class="dark-text">Terms of Service</a>
-                </p>
-                <p style="margin: 0; margin-top: 12px; font-size: 14px; line-height: 24px; color: #6b7280;" class="dark-text">
-                  GodWear Inc., 123 Fashion Street, New York, NY 10001
-                </p>
+              <td class="mobile-padding" style="background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-top: 1px solid rgba(255, 255, 255, 0.3); padding: 32px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td align="center">
+                      <!-- Copyright -->
+                      <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5; color: #6b7280; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        &copy; {{currentYear}} GodWear. All rights reserved.
+                      </p>
+                      
+                      <!-- Links -->
+                      <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5; color: #6b7280; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        <a href="{{unsubscribeUrl}}" style="color: #D4AF37; text-decoration: underline; font-weight: 500;">Unsubscribe</a>
+                        <span style="color: #A9A9A9; margin: 0 8px;">•</span>
+                        <a href="{{privacyUrl}}" style="color: #D4AF37; text-decoration: underline; font-weight: 500;">Privacy Policy</a>
+                        <span style="color: #A9A9A9; margin: 0 8px;">•</span>
+                        <a href="{{termsUrl}}" style="color: #D4AF37; text-decoration: underline; font-weight: 500;">Terms of Service</a>
+                      </p>
+                      
+                      <!-- Address -->
+                      <p style="margin: 0; font-size: 13px; line-height: 1.4; color: #A9A9A9; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        GodWear Inc., 123 Fashion Street, New York, NY 10001
+                      </p>
+                      
+                      <!-- Faith blessing -->
+                      <div class="faith-blessing" style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 16px; padding: 20px; text-align: center; font-style: italic; color: #2C3E50; font-size: 15px; margin: 24px 0 0 0; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);">
+                        "Let your light shine before others, that they may see your good deeds and glorify your Father in heaven." - Matthew 5:16
+                      </div>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
-            <!-- Spacer -->
-            <tr>
-              <td style="height: 24px;"></td>
-            </tr>
+            
           </table>
+          
+          <!-- Bottom spacer -->
+          <div class="desktop-spacer" style="height: 24px; line-height: 24px;">&nbsp;</div>
+          <div class="mobile-spacer" style="height: 16px; line-height: 16px; display: none;">&nbsp;</div>
+          
         </td>
       </tr>
     </table>
   </div>
+
+  <!-- MSO fallback styles -->
+  <!--[if mso]>
+  <style>
+    .glass-container,
+    .silver-glass-card,
+    .gold-glass-highlight,
+    .faith-blessing {
+      background: #FFFFFF !important;
+      border: 1px solid #E5E4E2 !important;
+    }
+    .glass-button {
+      background: #D4AF37 !important;
+      color: #FFFFFF !important;
+    }
+  </style>
+  <![endif]-->
 </body>
 </html>

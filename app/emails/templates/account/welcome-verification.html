@@ -8,442 +8,574 @@
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
   <!--[if mso]>
   <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
-  <style>/* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
-:root {
-  --pure-white: #FFFFFF;
-  --warm-white: #FEFEFE;
-  --soft-white: #F8F9FA;
-  --elegant-gold: #D4AF37;
-  --rich-gold: #B8860B;
-  --light-gold: #F7E98E;
-  --platinum-silver: #E5E4E2;
-  --sterling-silver: #C0C0C0;
-  --dark-silver: #A9A9A9;
-  --charcoal: #36454F;
-  --deep-navy: #2C3E50;
-  --glass-white: rgba(255, 255, 255, 0.25);
-  --glass-gold: rgba(212, 175, 55, 0.15);
-  --glass-silver: rgba(192, 192, 192, 0.2);
-}
-
-/* Modern Glassmorphism Base */
-body {
-  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(135deg, 
-    var(--soft-white) 0%, 
-    var(--platinum-silver) 25%, 
-    var(--warm-white) 50%, 
-    var(--light-gold) 75%, 
-    var(--pure-white) 100%);
-  background-attachment: fixed;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-}
-
-/* Glassmorphism Container */
-.glass-container {
-  background: var(--glass-white);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  padding: 32px;
-  margin: 20px auto;
-  max-width: 600px;
-}
-
-/* Elegant Gold Accent */
-.gold-gradient {
-  background: linear-gradient(135deg, 
-    var(--elegant-gold) 0%, 
-    var(--rich-gold) 50%, 
-    var(--light-gold) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 600;
-}
-
-/* Silver Glassmorphism Card */
-.silver-glass-card {
-  background: var(--glass-silver);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(192, 192, 192, 0.3);
-  border-radius: 16px;
-  padding: 24px;
-  margin: 16px 0;
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-/* Gold Glassmorphism Highlight */
-.gold-glass-highlight {
-  background: var(--glass-gold);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  border-radius: 12px;
-  padding: 16px;
-  margin: 12px 0;
-  box-shadow: 
-    0 2px 8px rgba(212, 175, 55, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Elegant Typography */
-.elegant-heading {
-  color: var(--charcoal);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-.refined-text {
-  color: var(--deep-navy);
-  font-weight: 400;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
-}
-
-.silver-accent {
-  color: var(--dark-silver);
-  font-weight: 500;
-}
-
-/* Modern Button with Glassmorphism */
-.glass-button {
-  background: var(--glass-white);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid var(--elegant-gold);
-  border-radius: 50px;
-  padding: 14px 32px;
-  color: var(--charcoal);
-  text-decoration: none;
-  font-weight: 600;
-  display: inline-block;
-  transition: all 0.3s ease;
-  box-shadow: 
-    0 4px 16px rgba(212, 175, 55, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-.glass-button:hover {
-  background: var(--glass-gold);
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 24px rgba(212, 175, 55, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-/* Frosted Divider */
-.frosted-divider {
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    var(--sterling-silver) 50%, 
-    transparent 100%);
-  margin: 32px 0;
-  opacity: 0.6;
-}
-
-/* Faith Message with Glassmorphism */
-.faith-blessing {
-  background: var(--glass-white);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  font-style: italic;
-  color: var(--deep-navy);
-  font-size: 15px;
-  margin: 24px 0;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Mobile Responsive Design */
-@media screen and (max-width: 600px) {
-  .glass-container {
-    margin: 10px;
-    padding: 20px;
-    border-radius: 16px;
-  }
-  
-  .silver-glass-card,
-  .gold-glass-highlight {
-    padding: 16px;
-    border-radius: 12px;
-  }
-  
-  .elegant-heading {
-    font-size: 20px !important;
-  }
-  
-  .gold-gradient {
-    font-size: 24px !important;
-  }
-  
-  .glass-button {
-    padding: 12px 24px;
-    font-size: 14px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  /* Stack grid layouts on mobile */
-  div[style*="display: grid"] {
-    display: block !important;
-  }
-  
-  div[style*="grid-template-columns"] > div {
-    margin-bottom: 16px;
-  }
-  
-  div[style*="display: flex"] {
-    flex-direction: column !important;
-    gap: 8px !important;
-  }
-}
-
-/* Enhanced Glassmorphism Effects for Modern Browsers */
-@supports (backdrop-filter: blur(20px)) {
-  .glass-container {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-  }
-  
-  .silver-glass-card {
-    background: rgba(229, 228, 226, 0.25);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-  }
-  
-  .gold-glass-highlight {
-    background: rgba(212, 175, 55, 0.2);
-    backdrop-filter: blur(15px) saturate(200%);
-    -webkit-backdrop-filter: blur(15px) saturate(200%);
-  }
-}
-
-/* Fallback for browsers without backdrop-filter support */
-@supports not (backdrop-filter: blur(20px)) {
-  .glass-container {
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  }
-  
-  .silver-glass-card {
-    background: rgba(229, 228, 226, 0.9);
-  }
-  
-  .gold-glass-highlight {
-    background: rgba(212, 175, 55, 0.3);
-  }
-}
-</style>
   <![endif]-->
   <title>Sacred Welcome to GodWear - Verify Your Blessed Email</title>
   <style>
-    /* Christian Brand Colors */
+    /* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
     :root {
-      --deep-purple: #4C1D95;
-      --sacred-gold: #B45309;
-      --cream: #FEF7ED;
-      --royal-purple: #6B21A8;
+      --pure-white: #FFFFFF;
+      --warm-white: #FEFEFE;
+      --soft-white: #F8F9FA;
+      --elegant-gold: #D4AF37;
+      --rich-gold: #B8860B;
+      --light-gold: #F7E98E;
+      --platinum-silver: #E5E4E2;
+      --sterling-silver: #C0C0C0;
+      --dark-silver: #A9A9A9;
+      --charcoal: #36454F;
+      --deep-navy: #2C3E50;
+      --glass-white: rgba(255, 255, 255, 0.25);
+      --glass-gold: rgba(212, 175, 55, 0.15);
+      --glass-silver: rgba(192, 192, 192, 0.2);
     }
-    
-    /* Base styles with Christian typography */
-    body, table, td, p, h1, h2, h3, h4, h5, h6 {
-      font-family: Georgia, 'Times New Roman', serif;
+
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
     }
-    
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      word-break: break-word;
+      -webkit-font-smoothing: antialiased;
+      font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, 
+        #F8F9FA 0%, 
+        #E5E4E2 25%, 
+        #FEFEFE 50%, 
+        #F7E98E 75%, 
+        #FFFFFF 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    /* Email client compatibility */
+    table {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    /* Glassmorphism Container */
+    .glass-container {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      padding: 32px;
+      margin: 20px auto;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    /* Silver Glassmorphism Card */
+    .silver-glass-card {
+      background: rgba(192, 192, 192, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(192, 192, 192, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 16px 0;
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    /* Gold Glassmorphism Highlight */
+    .gold-glass-highlight {
+      background: rgba(212, 175, 55, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      box-shadow: 
+        0 2px 8px rgba(212, 175, 55, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    /* Welcome verification specific styles */
+    .verification-header {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #F7E98E 100%);
+      padding: 32px;
+      text-align: center;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .verification-alert {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      color: #FFFFFF;
+      text-align: center;
+    }
+
+    .benefits-section {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      color: #FFFFFF;
+    }
+
+    /* Modern Button with Glassmorphism */
+    .glass-button {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid #D4AF37;
+      border-radius: 50px;
+      padding: 16px 32px;
+      color: #36454F;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 4px 16px rgba(212, 175, 55, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .glass-button:hover {
+      background: rgba(212, 175, 55, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 8px 24px rgba(212, 175, 55, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    /* Typography */
+    .elegant-heading {
+      color: #36454F;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin: 0 0 16px 0;
+    }
+
+    .refined-text {
+      color: #2C3E50;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      margin: 0 0 16px 0;
+    }
+
+    .blessing-text {
+      font-style: italic;
+      color: #FFFFFF;
+      text-align: center;
+      font-size: 16px;
+      margin: 16px 0 0 0;
+      opacity: 0.9;
+    }
+
+    .verification-link {
+      color: #D4AF37;
+      word-break: break-all;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    /* Benefits list styling */
+    .benefit-item {
+      margin: 16px 0;
+      padding-left: 32px;
+      position: relative;
+      color: #FFFFFF;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .benefit-icon {
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #F7E98E;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    /* Dark mode support */
     @media (prefers-color-scheme: dark) {
-      .dark-mode { background-color: #2D1B69 !important; color: #FEF7ED !important; }
-      .dark-text { color: #FEF7ED !important; }
-      .dark-bg { background-color: var(--charcoal) !important; }
-      .dark-button { background-color: var(--elegant-gold) !important; color: #FEF7ED !important; }
-      .dark-border { border-color: var(--deep-navy) !important; }
-      .dark-divider { border-top-color: var(--deep-navy) !important; }
-      .dark-table-row { background-color: var(--charcoal) !important; }
-      .dark-table-header { background-color: var(--deep-navy) !important; color: #FEF7ED !important; }
-      .dark-alert { background-color: var(--deep-navy) !important; }
+      .dark-mode { 
+        background-color: #121212 !important; 
+        color: #ffffff !important; 
+      }
+      .dark-text { 
+        color: #ffffff !important; 
+      }
+      .dark-bg { 
+        background-color: #1e1e1e !important; 
+      }
     }
-    
+
+    /* Enhanced Glassmorphism Effects for Modern Browsers */
+    @supports (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(25px) saturate(180%);
+        -webkit-backdrop-filter: blur(25px) saturate(180%);
+      }
+      
+      .silver-glass-card {
+        background: rgba(229, 228, 226, 0.25);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+      }
+      
+      .gold-glass-highlight {
+        background: rgba(212, 175, 55, 0.2);
+        backdrop-filter: blur(15px) saturate(200%);
+        -webkit-backdrop-filter: blur(15px) saturate(200%);
+      }
+    }
+
+    /* Fallback for browsers without backdrop-filter support */
+    @supports not (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      }
+      
+      .silver-glass-card {
+        background: rgba(229, 228, 226, 0.9);
+      }
+      
+      .gold-glass-highlight {
+        background: rgba(212, 175, 55, 0.3);
+      }
+    }
+
+    /* Mobile Responsive Design */
     @media screen and (max-width: 600px) {
-      .sm-w-full { width: 100% !important; }
-      .sm-px-4 { padding-left: 16px !important; padding-right: 16px !important; }
-      .sm-py-8 { padding-top: 32px !important; padding-bottom: 32px !important; }
-      .sm-text-sm { font-size: 14px !important; }
-      .sm-text-lg { font-size: 18px !important; }
-      .sm-hidden { display: none !important; }
-      .sm-block { display: block !important; }
-      .sm-inline-block { display: inline-block !important; }
-      .sm-center { text-align: center !important; }
+      body {
+        padding: 0 !important;
+      }
+      
+      .email-wrapper {
+        width: 100% !important;
+        padding: 10px !important;
+      }
+      
+      .email-container {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      
+      .verification-header {
+        padding: 24px 20px !important;
+        border-radius: 16px 16px 0 0 !important;
+      }
+      
+      .verification-alert,
+      .benefits-section,
+      .silver-glass-card,
+      .gold-glass-highlight {
+        padding: 16px !important;
+        margin: 16px 0 !important;
+        border-radius: 12px !important;
+      }
+      
+      .elegant-heading {
+        font-size: 20px !important;
+        line-height: 1.3 !important;
+      }
+      
+      .refined-text {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+      }
+      
+      .glass-button {
+        padding: 14px 24px !important;
+        font-size: 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        display: block !important;
+        margin: 16px 0 !important;
+      }
+      
+      .blessing-text {
+        font-size: 14px !important;
+      }
+      
+      .verification-link {
+        font-size: 12px !important;
+        line-height: 1.3 !important;
+      }
+      
+      .benefit-item {
+        font-size: 14px !important;
+        padding-left: 28px !important;
+        margin: 12px 0 !important;
+      }
+      
+      .benefit-icon {
+        font-size: 16px !important;
+      }
+      
+      /* Mobile table fixes */
+      .mobile-full-width {
+        width: 100% !important;
+      }
+      
+      .mobile-padding {
+        padding: 16px !important;
+      }
+      
+      .mobile-stack {
+        display: block !important;
+        width: 100% !important;
+      }
+      
+      /* Hide desktop spacers on mobile */
+      .desktop-spacer {
+        display: none !important;
+      }
+      
+      /* Mobile-specific spacing */
+      .mobile-spacer {
+        height: 16px !important;
+      }
     }
+
+    /* Utility classes */
+    .text-center { text-align: center; }
+    .text-left { text-align: left; }
+    .full-width { width: 100%; }
+    .no-margin { margin: 0; }
   </style>
 </head>
 <body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased;">
-  <!-- Email wrapper -->
-  <div style="display: none;">Sacred welcome to GodWear! Verify your blessed email to join our faith community. "Welcome one another as Christ has welcomed you" - Romans 15:7</div>
-  <div role="article" aria-roledescription="email" aria-label="Sacred Welcome to GodWear - Verify Your Blessed Email" lang="en">
-    <table style="width: 100%; font-family: Georgia, 'Times New Roman', serif;" cellpadding="0" cellspacing="0" role="presentation">
+  <!-- Preheader text -->
+  <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+    Sacred welcome to GodWear! Verify your blessed email to join our faith community. "Welcome one another as Christ has welcomed you" - Romans 15:7
+  </div>
+  
+  <!-- Email wrapper with glassmorphism background -->
+  <div role="article" aria-roledescription="email" aria-label="Sacred Welcome to GodWear - Verify Your Blessed Email" lang="en" class="email-wrapper" style="background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); padding: 20px 0; min-height: 100vh;">
+    
+    <!-- Main email table -->
+    <table style="width: 100%; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
-        <td align="center" style="padding: 24px 0;">
-          <!-- Email container -->
-          <table class="sm-w-full" style="width: 600px;" cellpadding="0" cellspacing="0" role="presentation">
-            <!-- Sacred Header -->
+        <td align="center" style="padding: 0;">
+          
+          <!-- Email container with glassmorphism -->
+          <table class="email-container mobile-full-width" style="width: 600px; max-width: 600px; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4); margin: 0 auto;" cellpadding="0" cellspacing="0" role="presentation">
+            
+            <!-- Header section with verification gradient -->
             <tr>
-              <td class="dark-bg" class="gold-glass-highlight">
-                <img src="{{logoUrl}}" width="150" alt="GodWear - Faith-Inspired Fashion" style="border: 0; max-width: 100%; vertical-align: middle;">
-              </td>
-            </tr>
-            <!-- Sacred Hero Section -->
-            <tr>
-              <td class="dark-bg" class="gold-glass-highlight">
-                <div class="gold-gradient">
-                  <h2 style="margin: 0; font-size: 32px; font-weight: bold; color: #FEF7ED; line-height: 40px;" class="dark-text sm-text-lg">
-                    🙏 Sacred Welcome! 🙏
-                  </h2>
-                  <p style="margin: 16px 0 0 0; font-size: 18px; color: #FEF7ED; line-height: 26px; font-style: italic;" class="dark-text">
-                    "Welcome one another as Christ has welcomed you, for the glory of God."
-                  </p>
-                  <p style="margin: 8px 0 0 0; font-size: 14px; color: #FEF7ED; font-weight: bold;" class="dark-text">
-                    - Romans 15:7
-                  </p>
-                </div>
-              </td>
-            </tr>
-            <!-- Sacred Body -->
-            <tr>
-              <td class="dark-bg" class="gold-gradient">
+              <td class="verification-header mobile-padding" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #F7E98E 100%); padding: 32px; text-align: center; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.2);">
                 <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
-                    <td class="sm-px-4 sm-py-8" style="padding: 40px 48px; text-align: left;">
-                      <!-- Email content -->
-                      <h1 style="margin: 0; font-size: 28px; font-weight: bold; line-height: 36px; color: var(--charcoal); text-align: center;" class="dark-text sm-text-lg">💙 Sacred Welcome to GodWear! 💙</h1>
-                      
-                      <p style="margin: 0; margin-top: 24px; font-size: 18px; line-height: 28px; color: var(--charcoal);" class="dark-text">
-                        Blessed {{firstName}}, 💝
+                    <td align="center">
+                      <img src="{{logoUrl}}" width="150" alt="GodWear - Faith-Inspired Fashion" style="border: 0; max-width: 100%; height: auto; vertical-align: middle; display: block;">
+                      <h2 class="elegant-heading" style="margin: 24px 0 0 0; font-size: 32px; font-weight: 700; line-height: 1.2; color: #FFFFFF; text-align: center;">
+                        🙏 Sacred Welcome! 🙏
+                      </h2>
+                      <p class="blessing-text" style="color: #FFFFFF; font-size: 18px; margin: 16px 0 0 0; font-style: italic; opacity: 0.9;">
+                        "Welcome one another as Christ has welcomed you, for the glory of God."
                       </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 26px; color: var(--deep-navy);" class="dark-text">
-                        Thank you for creating a sacred account with GodWear! We're blessed and excited to welcome you into our Christian community of believers who seek to glorify God through faith-inspired fashion.
-                      </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 26px; color: var(--deep-navy);" class="dark-text">
-                        To begin your blessed journey with us, please verify your sacred email address by clicking the holy button below:
-                      </p>
-                      
-                      <!-- Sacred Verify Button -->
-                      <table style="width: 100%; margin-top: 32px;" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="text-align: center;">
-                            <a href="{{verificationUrl}}" class="gold-glass-highlight" class="dark-button sm-w-full">
-                              🙏 Verify Sacred Email 🙏
-                            </a>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Sacred Link Fallback -->
-                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 26px; color: var(--charcoal);" class="dark-text">
-                        If the blessed button doesn't work, copy and paste this sacred link into your browser:
-                      </p>
-                      <p style="margin: 0; margin-top: 8px; font-size: 14px; line-height: 22px; color: var(--elegant-gold); word-break: break-all; font-weight: bold;" class="dark-text">
-                        {{verificationUrl}}
-                      </p>
-                      
-                      <!-- Sacred Expiration Notice -->
-                      <table class="gold-gradient" class="dark-alert" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 20px;">
-                            <p style="margin: 0; font-size: 16px; line-height: 24px; color: #FEF7ED; text-align: center;" class="dark-text">
-                              <strong>⏰ Sacred Timing Notice ⏰</strong>
-                            </p>
-                            <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
-                              This blessed verification link will expire in {{expiresInMinutes}} minutes ({{expiresAt}}), as God's timing is perfect. If the link expires, you can request a new sacred verification email from your account settings. Trust in His perfect timing for all things.
-                            </p>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Sacred Benefits Section -->
-                      <h2 style="margin: 0; margin-top: 32px; font-size: 22px; font-weight: bold; line-height: 30px; color: var(--charcoal); text-align: center;" class="dark-text">💙 Your Sacred GodWear Blessings 💙</h2>
-                      
-                      <table class="gold-glass-highlight" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 24px;">
-                            <ul style="margin: 0; padding-left: 24px; list-style: none;">
-                              <li style="margin: 12px 0; font-size: 16px; line-height: 26px; color: #FEF7ED; position: relative; padding-left: 24px;" class="dark-text">
-                                <span style="position: absolute; left: 0; color: var(--elegant-gold); font-weight: bold;">✨</span>
-                                <strong style="color: var(--elegant-gold);">Sacred Quality</strong>: Faith-inspired fabrics designed for comfort, durability, and righteousness
-                              </li>
-                              <li style="margin: 12px 0; font-size: 16px; line-height: 26px; color: #FEF7ED; position: relative; padding-left: 24px;" class="dark-text">
-                                <span style="position: absolute; left: 0; color: var(--elegant-gold); font-weight: bold;">🙏</span>
-                                <strong style="color: var(--elegant-gold);">Blessed Shipping</strong>: Free sacred delivery on all orders over $75 - God's abundance flows
-                              </li>
-                              <li style="margin: 12px 0; font-size: 16px; line-height: 26px; color: #FEF7ED; position: relative; padding-left: 24px;" class="dark-text">
-                                <span style="position: absolute; left: 0; color: var(--elegant-gold); font-weight: bold;">💝</span>
-                                <strong style="color: var(--elegant-gold);">Holy Access</strong>: Early access to new collections and limited sacred editions
-                              </li>
-                              <li style="margin: 12px 0; font-size: 16px; line-height: 26px; color: #FEF7ED; position: relative; padding-left: 24px;" class="dark-text">
-                                <span style="position: absolute; left: 0; color: var(--elegant-gold); font-weight: bold;">👑</span>
-                                <strong style="color: var(--elegant-gold);">Divine Rewards</strong>: Earn blessed points with every purchase - treasures in heaven and earth
-                              </li>
-                            </ul>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 26px; color: var(--deep-navy);" class="dark-text">
-                        If you have any questions or need blessed assistance, please <a href="mailto:{{supportEmail}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: bold;" class="dark-text">contact our sacred support team</a>. We're here to serve you with Christian love and care. 💝
-                      </p>
-                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 26px; color: var(--charcoal); text-align: center;" class="dark-text">
-                        🙏 <strong>Clothed in righteousness, walking in faith</strong> 🙏<br>
-                        <em style="color: var(--deep-navy);">Welcome to our blessed family!</em><br>
-                        <strong style="color: var(--elegant-gold);">The GodWear Family</strong> 💙
+                      <p style="margin: 8px 0 0 0; font-size: 14px; color: #FFFFFF; font-weight: 600; opacity: 0.8;">
+                        - Romans 15:7
                       </p>
                     </td>
                   </tr>
                 </table>
               </td>
             </tr>
-            <!-- Sacred Footer -->
+            
+            <!-- Main content section -->
             <tr>
-              <td class="dark-bg dark-border" class="gold-glass-highlight">
-                <p style="margin: 0; font-size: 16px; line-height: 24px; color: #FEF7ED; font-weight: bold;" class="dark-text">
-                  🙏 Clothed in righteousness, walking in faith 🙏
-                </p>
-                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
-                  &copy; {{currentYear}} GodWear - Faith-Inspired Fashion. All rights reserved under God's grace.
-                </p>
-                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
-                  <a href="{{privacyUrl}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: bold;" class="dark-text">Privacy Policy</a> •
-                  <a href="{{termsUrl}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: bold;" class="dark-text">Terms of Service</a>
-                </p>
-                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED; font-style: italic;" class="dark-text">
-                  💙 GodWear Inc., 123 Faith Avenue, Blessed City, NY 10001 💙<br>
-                  <em>"Welcome one another as Christ has welcomed you" - Romans 15:7</em>
-                </p>
+              <td class="mobile-padding" style="padding: 40px 48px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td style="text-align: left; color: #2C3E50; font-size: 16px; line-height: 1.6;">
+                      
+                      <!-- Welcome heading -->
+                      <h1 class="elegant-heading" style="margin: 0; font-size: 28px; font-weight: 700; line-height: 1.2; color: #36454F; text-align: center;">
+                        💙 Sacred Welcome to GodWear! 💙
+                      </h1>
+                      
+                      <!-- Personal greeting -->
+                      <p class="refined-text" style="margin: 24px 0 0 0; font-size: 18px; line-height: 1.6; color: #36454F;">
+                        Blessed {{firstName}}, 💝
+                      </p>
+                      
+                      <!-- Welcome message -->
+                      <p class="refined-text" style="margin: 16px 0; font-size: 16px; line-height: 1.6; color: #2C3E50;">
+                        Thank you for creating a sacred account with GodWear! We're blessed and excited to welcome you into our Christian community of believers who seek to glorify God through faith-inspired fashion.
+                      </p>
+                      
+                      <p class="refined-text" style="margin: 16px 0; font-size: 16px; line-height: 1.6; color: #2C3E50;">
+                        To begin your blessed journey with us, please verify your sacred email address by clicking the holy button below:
+                      </p>
+                      
+                      <!-- Verification Button -->
+                      <table style="width: 100%; margin: 32px 0;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="text-align: center;">
+                            <a href="{{verificationUrl}}" class="glass-button" style="background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 2px solid #D4AF37; border-radius: 50px; padding: 16px 32px; color: #36454F; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.7); text-align: center; font-size: 16px;">
+                              🙏 Verify Sacred Email 🙏
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Link Fallback -->
+                      <p class="refined-text" style="margin: 32px 0 0 0; font-size: 16px; line-height: 1.6; color: #36454F;">
+                        If the blessed button doesn't work, copy and paste this sacred link into your browser:
+                      </p>
+                      <p class="verification-link" style="margin: 8px 0; color: #D4AF37; word-break: break-all; font-weight: 600; font-size: 14px; line-height: 1.4;">
+                        {{verificationUrl}}
+                      </p>
+                      
+                      <!-- Expiration Notice -->
+                      <div class="verification-alert" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); border-radius: 12px; padding: 24px; margin: 24px 0; color: #FFFFFF; text-align: center;">
+                        <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #FFFFFF; font-weight: 600;">
+                          <strong>⏰ Sacred Timing Notice ⏰</strong>
+                        </p>
+                        <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 1.5; color: #FFFFFF; opacity: 0.9;">
+                          This blessed verification link will expire in {{expiresInMinutes}} minutes ({{expiresAt}}), as God's timing is perfect. If the link expires, you can request a new sacred verification email from your account settings. Trust in His perfect timing for all things.
+                        </p>
+                      </div>
+                      
+                      <!-- Benefits Section -->
+                      <h2 class="elegant-heading" style="margin: 32px 0 0 0; font-size: 22px; font-weight: 700; line-height: 1.3; color: #36454F; text-align: center;">
+                        💙 Your Sacred GodWear Blessings 💙
+                      </h2>
+                      
+                      <div class="benefits-section" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); border-radius: 12px; padding: 24px; margin: 24px 0; color: #FFFFFF;">
+                        <div class="benefit-item" style="margin: 16px 0; padding-left: 32px; position: relative; color: #FFFFFF; font-size: 16px; line-height: 1.5;">
+                          <span class="benefit-icon" style="position: absolute; left: 0; top: 0; color: #F7E98E; font-weight: bold; font-size: 18px;">✨</span>
+                          <strong style="color: #F7E98E;">Sacred Quality</strong>: Faith-inspired fabrics designed for comfort, durability, and righteousness
+                        </div>
+                        <div class="benefit-item" style="margin: 16px 0; padding-left: 32px; position: relative; color: #FFFFFF; font-size: 16px; line-height: 1.5;">
+                          <span class="benefit-icon" style="position: absolute; left: 0; top: 0; color: #F7E98E; font-weight: bold; font-size: 18px;">🙏</span>
+                          <strong style="color: #F7E98E;">Blessed Shipping</strong>: Free sacred delivery on all orders over $75 - God's abundance flows
+                        </div>
+                        <div class="benefit-item" style="margin: 16px 0; padding-left: 32px; position: relative; color: #FFFFFF; font-size: 16px; line-height: 1.5;">
+                          <span class="benefit-icon" style="position: absolute; left: 0; top: 0; color: #F7E98E; font-weight: bold; font-size: 18px;">💝</span>
+                          <strong style="color: #F7E98E;">Holy Access</strong>: Early access to new collections and limited sacred editions
+                        </div>
+                        <div class="benefit-item" style="margin: 16px 0; padding-left: 32px; position: relative; color: #FFFFFF; font-size: 16px; line-height: 1.5;">
+                          <span class="benefit-icon" style="position: absolute; left: 0; top: 0; color: #F7E98E; font-weight: bold; font-size: 18px;">👑</span>
+                          <strong style="color: #F7E98E;">Divine Rewards</strong>: Earn blessed points with every purchase - treasures in heaven and earth
+                        </div>
+                      </div>
+                      
+                      <!-- Support Section -->
+                      <p class="refined-text" style="margin: 32px 0 0 0; font-size: 16px; line-height: 1.6; color: #2C3E50;">
+                        If you have any questions or need blessed assistance, please <a href="mailto:{{supportEmail}}" style="color: #D4AF37; text-decoration: underline; font-weight: 600;">contact our sacred support team</a>. We're here to serve you with Christian love and care. 💝
+                      </p>
+                      
+                      <!-- Closing Message -->
+                      <div style="margin-top: 24px; text-align: center;">
+                        <p class="elegant-heading" style="margin: 0; font-size: 16px; line-height: 1.5; color: #36454F; font-weight: 600;">
+                          🙏 <strong>Clothed in righteousness, walking in faith</strong> 🙏
+                        </p>
+                        <p class="refined-text" style="margin: 8px 0 0 0; font-size: 16px; line-height: 1.5; color: #2C3E50; font-style: italic;">
+                          <em>Welcome to our blessed family!</em>
+                        </p>
+                        <p style="margin: 8px 0 0 0; font-size: 16px; line-height: 1.5; color: #D4AF37; font-weight: 600;">
+                          <strong>The GodWear Family</strong> 💙
+                        </p>
+                      </div>
+                      
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
-            <!-- Spacer -->
+            
+            <!-- Footer section -->
             <tr>
-              <td style="height: 24px;"></td>
+              <td class="mobile-padding" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); border-top: 1px solid rgba(255, 255, 255, 0.2); padding: 32px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td align="center">
+                      <!-- Faith message -->
+                      <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #FFFFFF; font-weight: 600; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        🙏 Clothed in righteousness, walking in faith 🙏
+                      </p>
+                      
+                      <!-- Copyright -->
+                      <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 1.5; color: #FFFFFF; opacity: 0.9; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        &copy; {{currentYear}} GodWear - Faith-Inspired Fashion. All rights reserved under God's grace.
+                      </p>
+                      
+                      <!-- Links -->
+                      <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 1.5; color: #FFFFFF; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        <a href="{{privacyUrl}}" style="color: #FFFFFF; text-decoration: underline; font-weight: 500; opacity: 0.9;">Privacy Policy</a>
+                        <span style="color: #FFFFFF; margin: 0 8px; opacity: 0.7;">•</span>
+                        <a href="{{termsUrl}}" style="color: #FFFFFF; text-decoration: underline; font-weight: 500; opacity: 0.9;">Terms of Service</a>
+                      </p>
+                      
+                      <!-- Address and blessing -->
+                      <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 1.5; color: #FFFFFF; font-style: italic; opacity: 0.8; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        💙 GodWear Inc., 123 Faith Avenue, Blessed City, NY 10001 💙<br>
+                        <em>"Welcome one another as Christ has welcomed you" - Romans 15:7</em>
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
             </tr>
+            
           </table>
+          
+          <!-- Bottom spacer -->
+          <div class="desktop-spacer" style="height: 24px; line-height: 24px;">&nbsp;</div>
+          <div class="mobile-spacer" style="height: 16px; line-height: 16px; display: none;">&nbsp;</div>
+          
         </td>
       </tr>
     </table>
   </div>
+
+  <!-- MSO fallback styles -->
+  <!--[if mso]>
+  <style>
+    .glass-container,
+    .silver-glass-card,
+    .gold-glass-highlight,
+    .verification-alert,
+    .benefits-section {
+      background: #FFFFFF !important;
+      border: 1px solid #E5E4E2 !important;
+    }
+    .glass-button {
+      background: #D4AF37 !important;
+      color: #FFFFFF !important;
+    }
+    .verification-header {
+      background: #D4AF37 !important;
+    }
+  </style>
+  <![endif]-->
 </body>
 </html>
