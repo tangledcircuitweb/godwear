@@ -11,9 +11,8 @@
   <![endif]-->
   <title>Your Blessed Order Has Been Delivered - #{{orderNumber}} | GodWear</title>
   <style>
-    /* GodWear Dual-Theme Glassmorphism - Light Mode Default with Dark Mode Support */
+    /* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
     :root {
-      /* Light Mode Colors (Default) */
       --pure-white: #FFFFFF;
       --warm-white: #FEFEFE;
       --soft-white: #F8F9FA;
@@ -25,41 +24,9 @@
       --dark-silver: #A9A9A9;
       --charcoal: #36454F;
       --deep-navy: #2C3E50;
-      
-      /* Light Mode Glassmorphism (Default) */
-      --glass-white: rgba(255, 255, 255, 0.8);
-      --glass-gold: rgba(212, 175, 55, 0.2);
-      --glass-silver: rgba(192, 192, 192, 0.3);
-      
-      /* Light Mode Text Colors (Default) */
-      --text-primary: #2C3E50;
-      --text-secondary: #36454F;
-      --text-accent: #D4AF37;
-      --text-muted: #6B7280;
-      
-      /* Light Mode Background Colors (Default) */
-      --bg-primary: #FFFFFF;
-      --bg-secondary: #F8F9FA;
-      --bg-accent: #D4AF37;
-    }
-
-    /* Dark Mode Enhancement */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        /* Enhanced Dark Mode Glassmorphism */
-        --glass-white: rgba(255, 255, 255, 0.9);
-        --glass-gold: rgba(212, 175, 55, 0.3);
-        --glass-silver: rgba(192, 192, 192, 0.4);
-        
-        /* Keep text readable - dark text on light backgrounds */
-        --text-primary: #2C3E50;
-        --text-secondary: #36454F;
-        --text-accent: #B8860B;
-        
-        /* Enhanced backgrounds for dark mode */
-        --bg-primary: #FFFFFF;
-        --bg-secondary: #F8F9FA;
-      }
+      --glass-white: rgba(255, 255, 255, 0.25);
+      --glass-gold: rgba(212, 175, 55, 0.15);
+      --glass-silver: rgba(192, 192, 192, 0.2);
     }
 
     /* Reset and base styles */
@@ -74,8 +41,14 @@
       word-break: break-word;
       -webkit-font-smoothing: antialiased;
       font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%);
-      color: var(--text-primary);
+      background: linear-gradient(135deg, 
+        #F8F9FA 0%, 
+        #E5E4E2 25%, 
+        #FEFEFE 50%, 
+        #F7E98E 75%, 
+        #FFFFFF 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
     }
 
     /* Email container styles */
@@ -83,9 +56,11 @@
       background: var(--glass-white);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
       overflow: hidden;
     }
 
@@ -99,7 +74,7 @@
 
     /* Main content area */
     .main-content {
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       padding: 40px 48px;
@@ -190,7 +165,7 @@
 
     /* Typography */
     .elegant-heading {
-      color: var(--text-primary);
+      color: var(--charcoal);
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.2;
@@ -198,7 +173,7 @@
     }
 
     .refined-text {
-      color: var(--text-primary);
+      color: var(--deep-navy);
       font-weight: 400;
       line-height: 1.6;
       letter-spacing: 0.01em;
@@ -220,7 +195,7 @@
     .delivery-table td:last-child {
       text-align: right;
       font-weight: 600;
-      color: #2C3E50;
+      color: var(--charcoal);
     }
 
     /* Mobile Responsive Design */
