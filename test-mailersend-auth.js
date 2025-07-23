@@ -1,6 +1,11 @@
 // Quick test to verify MailerSend API authentication
-const API_KEY = "REMOVED_API_KEY";
+const API_KEY = process.env.MAILERSEND_API_KEY;
 const BASE_URL = "https://api.mailersend.com/v1";
+
+if (!API_KEY) {
+  console.log("❌ MAILERSEND_API_KEY environment variable not set");
+  process.exit(1);
+}
 
 async function testAuth() {
   try {
