@@ -8,491 +8,600 @@
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
   <!--[if mso]>
   <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
-  <style>/* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
-:root {
-  --pure-white: #FFFFFF;
-  --warm-white: #FEFEFE;
-  --soft-white: #F8F9FA;
-  --elegant-gold: #D4AF37;
-  --rich-gold: #B8860B;
-  --light-gold: #F7E98E;
-  --platinum-silver: #E5E4E2;
-  --sterling-silver: #C0C0C0;
-  --dark-silver: #A9A9A9;
-  --charcoal: #36454F;
-  --deep-navy: #2C3E50;
-  --glass-white: rgba(255, 255, 255, 0.25);
-  --glass-gold: rgba(212, 175, 55, 0.15);
-  --glass-silver: rgba(192, 192, 192, 0.2);
-}
-
-/* Modern Glassmorphism Base */
-body {
-  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(135deg, 
-    var(--soft-white) 0%, 
-    var(--platinum-silver) 25%, 
-    var(--warm-white) 50%, 
-    var(--light-gold) 75%, 
-    var(--pure-white) 100%);
-  background-attachment: fixed;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-}
-
-/* Glassmorphism Container */
-.glass-container {
-  background: var(--glass-white);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  padding: 32px;
-  margin: 20px auto;
-  max-width: 600px;
-}
-
-/* Elegant Gold Accent */
-.gold-gradient {
-  background: linear-gradient(135deg, 
-    var(--elegant-gold) 0%, 
-    var(--rich-gold) 50%, 
-    var(--light-gold) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 600;
-}
-
-/* Silver Glassmorphism Card */
-.silver-glass-card {
-  background: var(--glass-silver);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(192, 192, 192, 0.3);
-  border-radius: 16px;
-  padding: 24px;
-  margin: 16px 0;
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-/* Gold Glassmorphism Highlight */
-.gold-glass-highlight {
-  background: var(--glass-gold);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  border-radius: 12px;
-  padding: 16px;
-  margin: 12px 0;
-  box-shadow: 
-    0 2px 8px rgba(212, 175, 55, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Elegant Typography */
-.elegant-heading {
-  color: var(--charcoal);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-.refined-text {
-  color: var(--deep-navy);
-  font-weight: 400;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
-}
-
-.silver-accent {
-  color: var(--dark-silver);
-  font-weight: 500;
-}
-
-/* Modern Button with Glassmorphism */
-.glass-button {
-  background: var(--glass-white);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid var(--elegant-gold);
-  border-radius: 50px;
-  padding: 14px 32px;
-  color: var(--charcoal);
-  text-decoration: none;
-  font-weight: 600;
-  display: inline-block;
-  transition: all 0.3s ease;
-  box-shadow: 
-    0 4px 16px rgba(212, 175, 55, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-.glass-button:hover {
-  background: var(--glass-gold);
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 24px rgba(212, 175, 55, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-/* Frosted Divider */
-.frosted-divider {
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    var(--sterling-silver) 50%, 
-    transparent 100%);
-  margin: 32px 0;
-  opacity: 0.6;
-}
-
-/* Faith Message with Glassmorphism */
-.faith-blessing {
-  background: var(--glass-white);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  font-style: italic;
-  color: var(--deep-navy);
-  font-size: 15px;
-  margin: 24px 0;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Mobile Responsive Design */
-@media screen and (max-width: 600px) {
-  .glass-container {
-    margin: 10px;
-    padding: 20px;
-    border-radius: 16px;
-  }
-  
-  .silver-glass-card,
-  .gold-glass-highlight {
-    padding: 16px;
-    border-radius: 12px;
-  }
-  
-  .elegant-heading {
-    font-size: 20px !important;
-  }
-  
-  .gold-gradient {
-    font-size: 24px !important;
-  }
-  
-  .glass-button {
-    padding: 12px 24px;
-    font-size: 14px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  /* Stack grid layouts on mobile */
-  div[style*="display: grid"] {
-    display: block !important;
-  }
-  
-  div[style*="grid-template-columns"] > div {
-    margin-bottom: 16px;
-  }
-  
-  div[style*="display: flex"] {
-    flex-direction: column !important;
-    gap: 8px !important;
-  }
-}
-
-/* Enhanced Glassmorphism Effects for Modern Browsers */
-@supports (backdrop-filter: blur(20px)) {
-  .glass-container {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-  }
-  
-  .silver-glass-card {
-    background: rgba(229, 228, 226, 0.25);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-  }
-  
-  .gold-glass-highlight {
-    background: rgba(212, 175, 55, 0.2);
-    backdrop-filter: blur(15px) saturate(200%);
-    -webkit-backdrop-filter: blur(15px) saturate(200%);
-  }
-}
-
-/* Fallback for browsers without backdrop-filter support */
-@supports not (backdrop-filter: blur(20px)) {
-  .glass-container {
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  }
-  
-  .silver-glass-card {
-    background: rgba(229, 228, 226, 0.9);
-  }
-  
-  .gold-glass-highlight {
-    background: rgba(212, 175, 55, 0.3);
-  }
-}
-</style>
   <![endif]-->
-  <title>Sacred Shipment - Your Blessed Order is on the Way!</title>
+  <title>Sacred Shipping Notification - Your Order is On Its Way | GodWear</title>
   <style>
-    /* Christian Brand Colors */
+    /* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
     :root {
-      --deep-purple: #4C1D95;
-      --sacred-gold: #B45309;
-      --cream: #FEF7ED;
-      --royal-purple: #6B21A8;
+      --pure-white: #FFFFFF;
+      --warm-white: #FEFEFE;
+      --soft-white: #F8F9FA;
+      --elegant-gold: #D4AF37;
+      --rich-gold: #B8860B;
+      --light-gold: #F7E98E;
+      --platinum-silver: #E5E4E2;
+      --sterling-silver: #C0C0C0;
+      --dark-silver: #A9A9A9;
+      --charcoal: #36454F;
+      --deep-navy: #2C3E50;
+      --glass-white: rgba(255, 255, 255, 0.25);
+      --glass-gold: rgba(212, 175, 55, 0.15);
+      --glass-silver: rgba(192, 192, 192, 0.2);
     }
-    
-    /* Base styles with Christian typography */
-    body, table, td, p, h1, h2, h3, h4, h5, h6 {
-      font-family: Georgia, 'Times New Roman', serif;
+
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
     }
-    
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      word-break: break-word;
+      -webkit-font-smoothing: antialiased;
+      font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, 
+        #F8F9FA 0%, 
+        #E5E4E2 25%, 
+        #FEFEFE 50%, 
+        #F7E98E 75%, 
+        #FFFFFF 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    /* Email client compatibility */
+    table {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    /* Glassmorphism Container */
+    .glass-container {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      padding: 32px;
+      margin: 20px auto;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    /* Elegant Gold Accent */
+    .gold-gradient {
+      background: linear-gradient(135deg, 
+        #D4AF37 0%, 
+        #B8860B 50%, 
+        #F7E98E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+
+    /* Silver Glassmorphism Card */
+    .silver-glass-card {
+      background: rgba(192, 192, 192, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(192, 192, 192, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 16px 0;
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    /* Gold Glassmorphism Highlight */
+    .gold-glass-highlight {
+      background: rgba(212, 175, 55, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      box-shadow: 
+        0 2px 8px rgba(212, 175, 55, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    /* Shipping Notification specific styles */
+    .shipping-header {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #F7E98E 100%);
+      padding: 32px;
+      text-align: center;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .shipping-blessing-box {
+      background: rgba(212, 175, 55, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      text-align: center;
+      box-shadow: 
+        0 2px 8px rgba(212, 175, 55, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    .feature-card {
+      background: rgba(192, 192, 192, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(192, 192, 192, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 12px 0;
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    .tracking-info {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      color: #FFFFFF;
+    }
+
+    .shipping-progress {
+      background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      color: #FFFFFF;
+      text-align: center;
+    }
+
+    /* Modern Button with Glassmorphism */
+    .glass-button {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid #D4AF37;
+      border-radius: 50px;
+      padding: 16px 32px;
+      color: #36454F;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 4px 16px rgba(212, 175, 55, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .glass-button:hover {
+      background: rgba(212, 175, 55, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 8px 24px rgba(212, 175, 55, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .primary-button {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+      color: #FFFFFF;
+      text-decoration: none;
+      padding: 18px 36px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 18px;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Typography */
+    .elegant-heading {
+      color: #36454F;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin: 0 0 16px 0;
+    }
+
+    .refined-text {
+      color: #2C3E50;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      margin: 0 0 16px 0;
+    }
+
+    .blessing-text {
+      font-style: italic;
+      color: #FFFFFF;
+      text-align: center;
+      font-size: 16px;
+      margin: 16px 0 0 0;
+      opacity: 0.9;
+    }
+
+    /* Dark mode support */
     @media (prefers-color-scheme: dark) {
-      .dark-mode { background-color: #2D1B69 !important; color: #FEF7ED !important; }
-      .dark-text { color: #FEF7ED !important; }
-      .dark-bg { background-color: var(--charcoal) !important; }
-      .dark-button { background-color: var(--elegant-gold) !important; color: #FEF7ED !important; }
-      .dark-border { border-color: var(--deep-navy) !important; }
-      .dark-divider { border-top-color: var(--deep-navy) !important; }
-      .dark-table-row { background-color: var(--charcoal) !important; }
-      .dark-table-header { background-color: var(--deep-navy) !important; color: #FEF7ED !important; }
-      .dark-info { background-color: var(--deep-navy) !important; }
+      .dark-mode { 
+        background-color: #121212 !important; 
+        color: #ffffff !important; 
+      }
+      .dark-text { 
+        color: #ffffff !important; 
+      }
+      .dark-bg { 
+        background-color: #1e1e1e !important; 
+      }
     }
-    
+
+    /* Enhanced Glassmorphism Effects for Modern Browsers */
+    @supports (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(25px) saturate(180%);
+        -webkit-backdrop-filter: blur(25px) saturate(180%);
+      }
+      
+      .silver-glass-card,
+      .feature-card {
+        background: rgba(229, 228, 226, 0.25);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+      }
+      
+      .gold-glass-highlight,
+      .shipping-blessing-box {
+        background: rgba(212, 175, 55, 0.2);
+        backdrop-filter: blur(15px) saturate(200%);
+        -webkit-backdrop-filter: blur(15px) saturate(200%);
+      }
+    }
+
+    /* Fallback for browsers without backdrop-filter support */
+    @supports not (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      }
+      
+      .silver-glass-card,
+      .feature-card {
+        background: rgba(229, 228, 226, 0.9);
+      }
+      
+      .gold-glass-highlight,
+      .shipping-blessing-box {
+        background: rgba(212, 175, 55, 0.3);
+      }
+    }
+
+    /* Mobile Responsive Design */
     @media screen and (max-width: 600px) {
-      .sm-w-full { width: 100% !important; }
-      .sm-px-4 { padding-left: 16px !important; padding-right: 16px !important; }
-      .sm-py-8 { padding-top: 32px !important; padding-bottom: 32px !important; }
-      .sm-text-sm { font-size: 14px !important; }
-      .sm-text-lg { font-size: 18px !important; }
-      .sm-hidden { display: none !important; }
-      .sm-block { display: block !important; }
-      .sm-inline-block { display: inline-block !important; }
-      .sm-center { text-align: center !important; }
+      body {
+        padding: 0 !important;
+      }
+      
+      .email-wrapper {
+        width: 100% !important;
+        padding: 10px !important;
+      }
+      
+      .glass-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 10px auto !important;
+        padding: 20px !important;
+      }
+      
+      .shipping-header {
+        padding: 24px 20px !important;
+        border-radius: 16px 16px 0 0 !important;
+      }
+      
+      .elegant-heading {
+        font-size: 24px !important;
+      }
+      
+      .refined-text {
+        font-size: 15px !important;
+      }
+      
+      .glass-button,
+      .primary-button {
+        width: 100% !important;
+        padding: 16px !important;
+        margin: 16px 0 !important;
+      }
+      
+      .silver-glass-card,
+      .feature-card,
+      .gold-glass-highlight,
+      .shipping-blessing-box {
+        padding: 16px !important;
+        margin: 12px 0 !important;
+      }
+
+      .tracking-info,
+      .shipping-progress {
+        padding: 20px !important;
+      }
+
+      .tracking-number {
+        word-break: break-all !important;
+        font-size: 14px !important;
+      }
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased;">
-  <!-- Email wrapper -->
-  <div style="display: none;">Sacred shipment notification - your blessed GodWear order is on the way! "He will direct your paths" - Proverbs 3:6</div>
-  <div role="article" aria-roledescription="email" aria-label="Sacred Shipment - Your Blessed Order is on the Way!" lang="en">
-    <table style="width: 100%; font-family: Georgia, 'Times New Roman', serif;" cellpadding="0" cellspacing="0" role="presentation">
+<body>
+  <div style="display: none;">Sacred shipping notification - Your blessed order is on its way! "He makes my feet like the feet of a deer" - Psalm 18:33 📦</div>
+  
+  <div class="email-wrapper" style="background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); padding: 20px 0; min-height: 100vh;">
+    <table style="width: 100%; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
-        <td align="center" style="padding: 24px 0;">
-          <!-- Email container -->
-          <table class="sm-w-full" style="width: 600px;" cellpadding="0" cellspacing="0" role="presentation">
-            <!-- Sacred Header -->
-            <tr>
-              <td class="dark-bg" class="gold-glass-highlight">
-                <img src="{{logoUrl}}" width="150" alt="GodWear - Faith-Inspired Fashion" style="border: 0; max-width: 100%; vertical-align: middle;">
-              </td>
-            </tr>
-            <!-- Sacred Body -->
-            <tr>
-              <td class="dark-bg" class="gold-gradient">
+        <td align="center" style="padding: 0;">
+          
+          <!-- Glass Container -->
+          <div class="glass-container">
+            
+            <!-- Shipping Header -->
+            <div class="shipping-header">
+              <img src="{{logoUrl}}" width="120" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle; margin-bottom: 16px;">
+              <div style="font-size: 48px; margin-bottom: 12px;">📦</div>
+              <h1 style="margin: 0; font-size: 32px; font-weight: bold; color: #FFFFFF; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                Sacred Shipping Notification
+              </h1>
+              <p class="blessing-text">
+                "He makes my feet like the feet of a deer" - Psalm 18:33
+              </p>
+            </div>
+            
+            <!-- Main Content -->
+            <div style="padding: 0;">
+              
+              <!-- Shipping Blessing Box -->
+              <div class="shipping-blessing-box">
+                <h2 class="elegant-heading" style="font-size: 24px; text-align: center; margin-bottom: 8px;">
+                  🚚 Your Order is On Its Way! 🚚
+                </h2>
+                <p class="refined-text" style="text-align: center; margin: 0;">
+                  Your blessed package has been shipped with divine care.
+                </p>
+              </div>
+              
+              <!-- Greeting -->
+              <h1 class="elegant-heading" style="font-size: 28px; text-align: center;">
+                🎉 Great News! Your Package Has Shipped! ✨
+              </h1>
+              
+              <p class="refined-text" style="font-size: 18px; font-weight: 600;">
+                Blessed {{firstName}}, 💝
+              </p>
+              
+              <p class="refined-text">
+                Wonderful news! Your sacred order #{{orderNumber}} has been carefully packaged and shipped with divine protection. Your blessed items are now on their way to you, carried with the same care that the Lord carries us on our journey.
+              </p>
+              
+              <!-- Shipping Progress -->
+              <div class="shipping-progress">
+                <h3 style="margin: 0 0 16px 0; font-size: 20px; font-weight: bold; color: #FFFFFF;">
+                  📍 Sacred Journey Progress
+                </h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">
+                  <div style="text-align: center; flex: 1;">
+                    <div style="width: 20px; height: 20px; background: #FFFFFF; border-radius: 50%; margin: 0 auto 8px auto;"></div>
+                    <p style="margin: 0; font-size: 12px; color: #FFFFFF;">Order Placed</p>
+                  </div>
+                  <div style="flex: 1; height: 2px; background: #FFFFFF; margin: 0 8px;"></div>
+                  <div style="text-align: center; flex: 1;">
+                    <div style="width: 20px; height: 20px; background: #FFFFFF; border-radius: 50%; margin: 0 auto 8px auto;"></div>
+                    <p style="margin: 0; font-size: 12px; color: #FFFFFF;">Processing</p>
+                  </div>
+                  <div style="flex: 1; height: 2px; background: #FFFFFF; margin: 0 8px;"></div>
+                  <div style="text-align: center; flex: 1;">
+                    <div style="width: 20px; height: 20px; background: #F59E0B; border-radius: 50%; margin: 0 auto 8px auto; box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);"></div>
+                    <p style="margin: 0; font-size: 12px; color: #FFFFFF; font-weight: bold;">Shipped</p>
+                  </div>
+                  <div style="flex: 1; height: 2px; background: rgba(255, 255, 255, 0.3); margin: 0 8px;"></div>
+                  <div style="text-align: center; flex: 1;">
+                    <div style="width: 20px; height: 20px; background: rgba(255, 255, 255, 0.3); border-radius: 50%; margin: 0 auto 8px auto;"></div>
+                    <p style="margin: 0; font-size: 12px; color: rgba(255, 255, 255, 0.7);">Delivered</p>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Tracking Information */
+              <div class="tracking-info">
+                <h3 style="margin: 0 0 16px 0; font-size: 20px; font-weight: bold; color: #FFFFFF; text-align: center;">
+                  📦 Sacred Tracking Information
+                </h3>
                 <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
-                    <td class="sm-px-4 sm-py-8" style="padding: 40px 48px; text-align: left;">
-                      <!-- Email content -->
-                      <h1 style="margin: 0; font-size: 28px; font-weight: bold; line-height: 36px; color: var(--charcoal); text-align: center;" class="dark-text sm-text-lg">🙏 Your Sacred Order Has Shipped! 🙏</h1>
-                      
-                      <div class="gold-gradient">
-                        <p style="margin: 0; font-size: 16px; font-style: italic; color: #FEF7ED; line-height: 24px;">
-                          "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight."
-                        </p>
-                        <p style="margin: 8px 0 0 0; font-size: 14px; color: #FEF7ED; font-weight: bold;">
-                          - Proverbs 3:5-6
-                        </p>
-                      </div>
-                      
-                      <p style="margin: 0; margin-top: 24px; font-size: 18px; line-height: 28px; color: var(--charcoal);" class="dark-text">
-                        Blessed {{firstName}}, 💝
-                      </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 26px; color: var(--deep-navy);" class="dark-text">
-                        Blessed news! Your sacred order is on its divine journey to you. We've packed your faith-inspired items with Christian love and care, and handed them over to {{carrier}} for safe delivery. Just as the Lord directs our paths, He will guide your package safely to you!
-                      </p>
-                      
-                      <!-- Sacred Order Information -->
-                      <table class="gold-glass-highlight" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 24px;">
-                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">💙 Sacred Order Information 💙</h2>
-                            <table style="width: 100%; margin-top: 16px; background-color: #FEF7ED; border-radius: 6px; padding: 16px;" cellpadding="0" cellspacing="0" role="presentation">
-                              <tr>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--charcoal); font-weight: bold;" class="dark-text">🔢 Sacred Order:</td>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--elegant-gold); text-align: right; font-weight: bold;" class="dark-text">#{{orderNumber}}</td>
-                              </tr>
-                              <tr>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--charcoal); font-weight: bold;" class="dark-text">📅 Blessed Date:</td>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--elegant-gold); text-align: right; font-weight: bold;" class="dark-text">{{orderDate}}</td>
-                              </tr>
-                              <tr>
-                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: var(--charcoal); font-weight: bold;" class="dark-text">🚚 Sacred Shipped:</td>
-                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: var(--elegant-gold); text-align: right; font-weight: bold;" class="dark-text">{{shippedDate}}</td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Sacred Tracking Information -->
-                      <table class="gold-gradient" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 24px; text-align: center;">
-                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED;" class="dark-text">📦 Sacred Tracking Information 📦</h2>
-                            <table style="width: 100%; margin-top: 16px; background-color: #FEF7ED; border-radius: 6px; padding: 16px;" cellpadding="0" cellspacing="0" role="presentation">
-                              <tr>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--charcoal); font-weight: bold;" class="dark-text">🚛 Holy Carrier:</td>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--elegant-gold); text-align: right; font-weight: bold;" class="dark-text">{{carrier}}</td>
-                              </tr>
-                              <tr>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--charcoal); font-weight: bold;" class="dark-text">📋 Blessed Tracking:</td>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--elegant-gold); text-align: right; font-weight: bold;" class="dark-text">{{trackingNumber}}</td>
-                              </tr>
-                              <tr>
-                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: var(--charcoal); font-weight: bold;" class="dark-text">🙏 Divine Delivery:</td>
-                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: var(--elegant-gold); text-align: right; font-weight: bold;" class="dark-text">{{estimatedDelivery}}</td>
-                              </tr>
-                            </table>
-                            <table style="width: 100%; margin-top: 20px;" cellpadding="0" cellspacing="0" role="presentation">
-                              <tr>
-                                <td style="text-align: center;">
-                                  <a href="{{trackingUrl}}" class="gold-gradient" class="dark-button sm-w-full">
-                                    🙏 Track Sacred Package 🙏
-                                  </a>
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Sacred Items Shipped -->
-                      <h2 style="margin: 0; margin-top: 32px; font-size: 20px; font-weight: bold; line-height: 28px; color: var(--charcoal); text-align: center;" class="dark-text">💙 Blessed Items Shipped 💙</h2>
-                      
-                      {{#each items}}
-                      <table class="gold-glass-highlight" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 20px;">
-                            <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
-                              <tr>
-                                <td style="width: 80px; padding-right: 20px; vertical-align: top;" class="sm-hidden">
-                                  <img src="{{imageUrl}}" width="80" alt="{{name}}" style="border: 0; border-radius: 6px; max-width: 100%; vertical-align: middle; border: 2px solid #B45309;">
-                                </td>
-                                <td style="vertical-align: top;">
-                                  <h3 style="margin: 0; font-size: 18px; font-weight: bold; line-height: 24px; color: #FEF7ED;" class="dark-text">{{name}}</h3>
-                                  <p style="margin: 4px 0 0 0; font-size: 14px; line-height: 20px; color: var(--elegant-gold); font-weight: bold;" class="dark-text">{{variant}}</p>
-                                  <p style="margin: 8px 0 0 0; font-size: 14px; line-height: 20px; color: #FEF7ED;" class="dark-text">Sacred Quantity: {{quantity}}</p>
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      {{/each}}
-                      
-                      <!-- Sacred Partial Shipment -->
-                      {{#if isPartialShipment}}
-                      <table class="gold-gradient" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 24px;">
-                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">📦 Sacred Partial Shipment 📦</h2>
-                            <p style="margin: 16px 0 0 0; font-size: 16px; line-height: 26px; color: #FEF7ED;" class="dark-text">
-                              This is a blessed partial shipment. The following sacred items will be shipped separately with divine timing:
-                            </p>
-                            <ul style="margin: 16px 0 0 20px; padding: 0; color: #FEF7ED;" class="dark-text">
-                              {{#each remainingItems}}
-                              <li style="margin: 8px 0; font-size: 16px; line-height: 24px;">{{name}} ({{quantity}})</li>
-                              {{/each}}
-                            </ul>
-                            <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
-                              We'll notify you with Christian love when these blessed items ship. God's timing is perfect in all things.
-                            </p>
-                          </td>
-                        </tr>
-                      </table>
-                      {{/if}}
-                      
-                      <!-- Sacred Shipping Address -->
-                      <table class="gold-glass-highlight" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 24px;">
-                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">🏠 Sacred Shipping Address 🏠</h2>
-                            <div style="margin-top: 16px; padding: 16px; background-color: #FEF7ED; border-radius: 6px; text-align: center;">
-                              <p style="margin: 0; font-size: 16px; line-height: 24px; color: var(--charcoal); font-weight: bold;" class="dark-text">
-                                {{shippingAddress.name}}<br>
-                                {{shippingAddress.street}}<br>
-                                {{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br>
-                                {{shippingAddress.country}}
-                              </p>
-                            </div>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 26px; color: var(--deep-navy);" class="dark-text">
-                        You can view your blessed order details anytime by visiting <a href="{{orderUrl}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: bold;" class="dark-text">your sacred account</a>. We're here to serve you with Christian love throughout your faith journey.
-                      </p>
-                      
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 26px; color: var(--deep-navy);" class="dark-text">
-                        If you have any questions about your blessed shipment, please contact our sacred customer service team at <a href="mailto:{{supportEmail}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: bold;" class="dark-text">{{supportEmail}}</a>. We're here to serve you with divine care and Christian love.
-                      </p>
-                      
-                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 26px; color: var(--charcoal); text-align: center;" class="dark-text">
-                        🙏 <strong>Clothed in righteousness, walking in faith</strong> 🙏<br>
-                        <em style="color: var(--deep-navy);">With Christian gratitude and blessings,</em><br>
-                        <strong style="color: var(--elegant-gold);">The GodWear Family</strong> 💙
-                      </p>
-                    </td>
+                    <td style="padding: 8px 0; color: #FFFFFF; font-weight: bold;">Holy Carrier:</td>
+                    <td style="padding: 8px 0; color: #FFFFFF; text-align: right;">{{carrier}}</td>
                   </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #FFFFFF; font-weight: bold;">Blessed Tracking:</td>
+                    <td class="tracking-number" style="padding: 8px 0; color: #FFFFFF; text-align: right; font-family: monospace;">{{trackingNumber}}</td>
+                  </tr>
+                  {{#if shippedDate}}
+                  <tr>
+                    <td style="padding: 8px 0; color: #FFFFFF; font-weight: bold;">Ship Date:</td>
+                    <td style="padding: 8px 0; color: #FFFFFF; text-align: right;">{{shippedDate}}</td>
+                  </tr>
+                  {{/if}}
+                  {{#if estimatedDelivery}}
+                  <tr>
+                    <td style="padding: 8px 0; color: #FFFFFF; font-weight: bold;">Divine Delivery:</td>
+                    <td style="padding: 8px 0; color: #FFFFFF; text-align: right; font-weight: bold;">{{estimatedDelivery}}</td>
+                  </tr>
+                  {{/if}}
                 </table>
-              </td>
-            </tr>
-            <!-- Sacred Footer -->
-            <tr>
-              <td class="dark-bg dark-border" class="gold-glass-highlight">
-                <p style="margin: 0; font-size: 16px; line-height: 24px; color: #FEF7ED; font-weight: bold;" class="dark-text">
-                  🙏 Clothed in righteousness, walking in faith 🙏
+              </div>
+              
+              <!-- Primary Tracking Button -->
+              <div style="text-align: center; margin: 32px 0;">
+                <a href="{{trackingUrl}}" class="primary-button">
+                  🙏 Track Sacred Package 📦
+                </a>
+              </div>
+              
+              <!-- Shipping Address -->
+              {{#if shippingAddress}}
+              <div class="gold-glass-highlight">
+                <h3 style="margin: 0 0 16px 0; font-size: 20px; font-weight: bold; color: #36454F; text-align: center;">
+                  🏠 Sacred Shipping Address
+                </h3>
+                <div style="background: rgba(255, 255, 255, 0.5); border-radius: 8px; padding: 16px; text-align: center;">
+                  <p style="margin: 0; font-size: 16px; color: #36454F; font-weight: bold; line-height: 1.6;">
+                    {{shippingAddress.name}}<br>
+                    {{shippingAddress.street}}<br>
+                    {{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br>
+                    {{shippingAddress.country}}
+                  </p>
+                </div>
+              </div>
+              {{/if}}
+              
+              <!-- Shipped Items -->
+              {{#if items}}
+              <div class="feature-card">
+                <h3 class="elegant-heading" style="font-size: 18px; margin-bottom: 16px; text-align: center;">
+                  📦 Shipped Items
+                </h3>
+                {{#each items}}
+                <div style="display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(192, 192, 192, 0.3);">
+                  <img src="{{this.imageUrl}}" width="60" alt="{{this.name}}" style="border: 0; border-radius: 8px; margin-right: 16px;">
+                  <div style="flex: 1;">
+                    <div style="font-weight: bold; color: #36454F; margin-bottom: 4px;">{{this.name}}</div>
+                    {{#if this.variant}}
+                    <div style="color: #2C3E50; font-size: 14px; margin-bottom: 2px;">{{this.variant}}</div>
+                    {{/if}}
+                    <div style="color: #D4AF37; font-size: 12px;">Qty: {{this.quantity}}</div>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+              {{/if}}
+              
+              <!-- Delivery Tips */
+              <div class="silver-glass-card">
+                <h3 class="elegant-heading" style="font-size: 18px; margin-bottom: 16px;">
+                  💝 Sacred Delivery Tips
+                </h3>
+                <ul style="margin: 0; padding-left: 20px; color: #2C3E50; line-height: 1.6;">
+                  <li style="margin-bottom: 8px;">Keep an eye on your tracking information for real-time updates</li>
+                  <li style="margin-bottom: 8px;">Ensure someone is available to receive your blessed package</li>
+                  <li style="margin-bottom: 8px;">Check with neighbors if you miss the delivery</li>
+                  <li style="margin-bottom: 8px;">Contact the carrier directly for delivery preferences</li>
+                  <li style="margin-bottom: 0;">Reach out to us if you have any concerns about your shipment</li>
+                </ul>
+              </div>
+              
+              <!-- Alternative Actions -->
+              <div style="text-align: center; margin: 32px 0;">
+                <div style="margin-bottom: 16px;">
+                  <a href="{{orderUrl}}" class="glass-button">
+                    📋 View Order Details
+                  </a>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                  <a href="{{shopUrl}}" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">🛍️ Continue Shopping</a>
+                  <a href="{{supportEmail}}" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">💬 Need Help?</a>
+                </div>
+              </div>
+              
+              <!-- Support Information -->
+              <div style="text-align: center; margin: 32px 0;">
+                <p class="refined-text">
+                  If you have any questions about your shipment or need assistance, please don't hesitate to 
+                  <a href="mailto:{{supportEmail}}" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">contact our faithful support team</a>. 
+                  We're here to serve you with Christian love throughout your delivery journey! 💝
                 </p>
-                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
-                  &copy; {{currentYear}} GodWear - Faith-Inspired Fashion. All rights reserved under God's grace.
+                
+                <p style="margin: 24px 0 0 0; font-size: 18px; line-height: 1.6; color: #36454F; font-weight: bold;">
+                  🙏 <strong>Clothed in righteousness, walking in faith</strong> 🙏<br>
+                  <span class="gold-gradient">With Christian blessings and swift delivery,</span><br>
+                  <span style="font-style: italic;">The GodWear Shipping Team ✨</span>
                 </p>
-                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED; font-style: italic;" class="dark-text">
-                  💙 GodWear Inc., 123 Faith Avenue, Blessed City, NY 10001 💙<br>
-                  <em>"He will direct your paths" - Proverbs 3:6</em><br>
-                  This sacred email was sent to notify you about your blessed shipment.
+              </div>
+              
+              <!-- Scripture Footer -->
+              <div class="gold-glass-highlight" style="text-align: center; padding: 24px;">
+                <p style="margin: 0; font-size: 16px; color: #2C3E50; font-style: italic; line-height: 1.6;">
+                  "He makes my feet like the feet of a deer; he causes me to stand on the heights."
                 </p>
-              </td>
-            </tr>
-            <!-- Spacer -->
-            <tr>
-              <td style="height: 24px;"></td>
-            </tr>
-          </table>
+                <p style="margin: 8px 0 0 0; font-size: 14px; color: #36454F; font-weight: bold;">
+                  - Psalm 18:33
+                </p>
+              </div>
+              
+            </div>
+            
+          </div>
+          
         </td>
       </tr>
     </table>
   </div>
+
+  <!-- MSO fallback styles -->
+  <!--[if mso]>
+  <style>
+    .glass-container,
+    .silver-glass-card,
+    .gold-glass-highlight,
+    .shipping-blessing-box,
+    .feature-card {
+      background: #FFFFFF !important;
+      border: 1px solid #E5E4E2 !important;
+    }
+    .glass-button {
+      background: #D4AF37 !important;
+      color: #FFFFFF !important;
+    }
+    .primary-button {
+      background: #D4AF37 !important;
+    }
+    .shipping-header {
+      background: #D4AF37 !important;
+    }
+    .tracking-info {
+      background: #059669 !important;
+    }
+    .shipping-progress {
+      background: #3B82F6 !important;
+    }
+  </style>
+  <![endif]-->
 </body>
 </html>
