@@ -9,11 +9,10 @@
   <!--[if mso]>
   <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
   <![endif]-->
-  <title>Sacred Account {{updateTypeDisplay}} Update - GodWear</title>
+  <title>Sacred Account Update - GodWear</title>
   <style>
-    /* GodWear Dual-Theme Glassmorphism - Light Mode Default with Dark Mode Support */
+    /* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
     :root {
-      /* Light Mode Colors (Default) */
       --pure-white: #FFFFFF;
       --warm-white: #FEFEFE;
       --soft-white: #F8F9FA;
@@ -25,41 +24,9 @@
       --dark-silver: #A9A9A9;
       --charcoal: #36454F;
       --deep-navy: #2C3E50;
-      
-      /* Light Mode Glassmorphism (Default) */
-      --glass-white: rgba(255, 255, 255, 0.8);
-      --glass-gold: rgba(212, 175, 55, 0.2);
-      --glass-silver: rgba(192, 192, 192, 0.3);
-      
-      /* Light Mode Text Colors (Default) */
-      --text-primary: #2C3E50;
-      --text-secondary: #36454F;
-      --text-accent: #D4AF37;
-      --text-muted: #6B7280;
-      
-      /* Light Mode Background Colors (Default) */
-      --bg-primary: #FFFFFF;
-      --bg-secondary: #F8F9FA;
-      --bg-accent: #D4AF37;
-    }
-
-    /* Dark Mode Enhancement */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        /* Enhanced Dark Mode Glassmorphism */
-        --glass-white: rgba(255, 255, 255, 0.9);
-        --glass-gold: rgba(212, 175, 55, 0.3);
-        --glass-silver: rgba(192, 192, 192, 0.4);
-        
-        /* Keep text readable - dark text on light backgrounds */
-        --text-primary: #2C3E50;
-        --text-secondary: #36454F;
-        --text-accent: #B8860B;
-        
-        /* Enhanced backgrounds for dark mode */
-        --bg-primary: #FFFFFF;
-        --bg-secondary: #F8F9FA;
-      }
+      --glass-white: rgba(255, 255, 255, 0.25);
+      --glass-gold: rgba(212, 175, 55, 0.15);
+      --glass-silver: rgba(192, 192, 192, 0.2);
     }
 
     /* Reset and base styles */
@@ -74,123 +41,164 @@
       word-break: break-word;
       -webkit-font-smoothing: antialiased;
       font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%);
-      color: var(--text-primary);
+      background: linear-gradient(135deg, 
+        #F8F9FA 0%, 
+        #E5E4E2 25%, 
+        #FEFEFE 50%, 
+        #F7E98E 75%, 
+        #FFFFFF 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
     }
 
-    /* Email container styles */
-    .email-container {
-      background: var(--glass-white);
+    /* Email client compatibility */
+    table {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    /* Glassmorphism Container */
+    .glass-container {
+      background: rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-      overflow: hidden;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      padding: 32px;
+      margin: 20px auto;
+      max-width: 600px;
+      width: 100%;
     }
 
-    /* Header styles */
-    .account-update-header {
+    /* Elegant Gold Accent */
+    .gold-gradient {
+      background: linear-gradient(135deg, 
+        #D4AF37 0%, 
+        #B8860B 50%, 
+        #F7E98E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+
+    /* Silver Glassmorphism Card */
+    .silver-glass-card {
+      background: rgba(192, 192, 192, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(192, 192, 192, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 16px 0;
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    /* Gold Glassmorphism Highlight */
+    .gold-glass-highlight {
+      background: rgba(212, 175, 55, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      box-shadow: 
+        0 2px 8px rgba(212, 175, 55, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    /* Account Update specific styles */
+    .security-header {
       background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #F7E98E 100%);
       padding: 32px;
       text-align: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* Security icon section */
-    .security-icon-section {
-      background: var(--glass-gold);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 24px;
-      text-align: center;
-    }
-
-    /* Main content area */
-    .main-content {
-      background: rgba(255, 255, 255, 0.4);
+    .update-blessing-box {
+      background: rgba(212, 175, 55, 0.15);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      padding: 40px 48px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      text-align: center;
+      box-shadow: 
+        0 2px 8px rgba(212, 175, 55, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
     }
 
-    /* Action buttons */
-    .action-button {
+    .feature-card {
+      background: rgba(192, 192, 192, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(192, 192, 192, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 12px 0;
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    .security-section {
       background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
-      border: none;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      color: #FFFFFF;
+    }
+
+    /* Modern Button with Glassmorphism */
+    .glass-button {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid #D4AF37;
       border-radius: 50px;
       padding: 16px 32px;
-      color: #FFFFFF;
+      color: #36454F;
       text-decoration: none;
       font-weight: 600;
-      font-size: 16px;
       display: inline-block;
-      text-align: center;
-      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
       transition: all 0.3s ease;
-      margin: 8px 0;
+      box-shadow: 
+        0 4px 16px rgba(212, 175, 55, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      text-align: center;
+      font-size: 16px;
     }
 
-    .action-button:hover {
+    .glass-button:hover {
+      background: rgba(212, 175, 55, 0.15);
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
-    }
-
-    /* Alert boxes */
-    .security-alert {
-      background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 24px 0;
-      color: #FFFFFF;
-      text-align: center;
-    }
-
-    .info-alert {
-      background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 24px 0;
-      color: #FFFFFF;
-      text-align: center;
-    }
-
-    /* Scripture quote */
-    .scripture-quote {
-      background: var(--glass-gold);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 24px 0;
-      text-align: center;
-      font-style: italic;
-    }
-
-    /* Update details card */
-    .update-details {
-      background: var(--glass-gold);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 24px 0;
-    }
-
-    /* Footer styles */
-    .email-footer {
-      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
-      padding: 32px;
-      text-align: center;
-      color: #FFFFFF;
+      box-shadow: 
+        0 8px 24px rgba(212, 175, 55, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
     }
 
     /* Typography */
     .elegant-heading {
-      color: var(--text-primary);
+      color: #36454F;
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.2;
@@ -198,29 +206,75 @@
     }
 
     .refined-text {
-      color: var(--text-primary);
+      color: #2C3E50;
       font-weight: 400;
       line-height: 1.6;
       letter-spacing: 0.01em;
       margin: 0 0 16px 0;
     }
 
-    /* Update details table */
-    .details-table {
-      width: 100%;
-      border-collapse: collapse;
+    .blessing-text {
+      font-style: italic;
+      color: #FFFFFF;
+      text-align: center;
+      font-size: 16px;
+      margin: 16px 0 0 0;
+      opacity: 0.9;
     }
 
-    .details-table td {
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-      vertical-align: top;
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .dark-mode { 
+        background-color: #121212 !important; 
+        color: #ffffff !important; 
+      }
+      .dark-text { 
+        color: #ffffff !important; 
+      }
+      .dark-bg { 
+        background-color: #1e1e1e !important; 
+      }
     }
 
-    .details-table td:last-child {
-      text-align: right;
-      font-weight: 600;
-      color: #2C3E50;
+    /* Enhanced Glassmorphism Effects for Modern Browsers */
+    @supports (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(25px) saturate(180%);
+        -webkit-backdrop-filter: blur(25px) saturate(180%);
+      }
+      
+      .silver-glass-card,
+      .feature-card {
+        background: rgba(229, 228, 226, 0.25);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+      }
+      
+      .gold-glass-highlight,
+      .update-blessing-box {
+        background: rgba(212, 175, 55, 0.2);
+        backdrop-filter: blur(15px) saturate(200%);
+        -webkit-backdrop-filter: blur(15px) saturate(200%);
+      }
+    }
+
+    /* Fallback for browsers without backdrop-filter support */
+    @supports not (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      }
+      
+      .silver-glass-card,
+      .feature-card {
+        background: rgba(229, 228, 226, 0.9);
+      }
+      
+      .gold-glass-highlight,
+      .update-blessing-box {
+        background: rgba(212, 175, 55, 0.3);
+      }
     }
 
     /* Mobile Responsive Design */
@@ -230,460 +284,210 @@
       }
       
       .email-wrapper {
+        width: 100% !important;
         padding: 10px !important;
       }
       
-      .email-container {
+      .glass-container {
         width: 100% !important;
         max-width: 100% !important;
-        border-radius: 16px !important;
+        margin: 10px auto !important;
+        padding: 20px !important;
       }
       
-      .account-update-header {
+      .security-header {
         padding: 24px 20px !important;
         border-radius: 16px 16px 0 0 !important;
       }
       
-      .security-icon-section {
-        padding: 20px !important;
-      }
-      
-      .main-content {
-        padding: 24px 20px !important;
-      }
-      
-      .security-alert,
-      .info-alert,
-      .scripture-quote,
-      .update-details {
-        padding: 16px !important;
-        margin: 16px 0 !important;
-        border-radius: 12px !important;
-      }
-      
       .elegant-heading {
-        font-size: 20px !important;
-        line-height: 1.3 !important;
+        font-size: 24px !important;
       }
       
       .refined-text {
-        font-size: 14px !important;
-        line-height: 1.5 !important;
+        font-size: 15px !important;
       }
       
-      .action-button {
-        padding: 14px 24px !important;
-        font-size: 14px !important;
+      .glass-button {
         width: 100% !important;
-        box-sizing: border-box !important;
-        display: block !important;
+        padding: 16px !important;
+        margin: 16px 0 !important;
+      }
+      
+      .silver-glass-card,
+      .feature-card,
+      .gold-glass-highlight,
+      .update-blessing-box {
+        padding: 16px !important;
         margin: 12px 0 !important;
       }
-      
-      .email-footer {
-        padding: 24px 20px !important;
-        border-radius: 0 0 16px 16px !important;
-      }
-      
-      /* Mobile details table - stack vertically */
-      .details-table {
-        display: block !important;
-      }
-      
-      .details-table tr {
-        display: block !important;
-        margin-bottom: 12px !important;
-        padding-bottom: 12px !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
-      }
-      
-      .details-table td {
-        display: block !important;
-        text-align: left !important;
-        padding: 2px 0 !important;
-        border: none !important;
-      }
-      
-      .details-table td:last-child {
-        text-align: left !important;
-        font-weight: 600 !important;
-        margin-top: 4px !important;
-      }
-      
-      /* Mobile table fixes */
-      .mobile-full-width {
-        width: 100% !important;
-      }
-      
-      .mobile-padding {
-        padding: 16px !important;
-      }
-      
-      /* Hide desktop spacers on mobile */
-      .desktop-spacer {
-        display: none !important;
-      }
-      
-      .mobile-spacer {
-        height: 16px !important;
-        line-height: 16px !important;
-      }
     }
-
-    /* Utility classes */
-    .text-center { text-align: center; }
-    .text-left { text-align: left; }
-    .full-width { width: 100%; }
-    .no-margin { margin: 0; }
   </style>
 </head>
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  padding: 32px;
-  margin: 20px auto;
-  max-width: 600px;
-}
-
-/* Elegant Gold Accent */
-.gold-gradient {
-  background: linear-gradient(135deg, 
-    var(--elegant-gold) 0%, 
-    var(--rich-gold) 50%, 
-    var(--light-gold) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 600;
-}
-
-/* Silver Glassmorphism Card */
-.silver-glass-card {
-  background: var(--glass-silver);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(192, 192, 192, 0.3);
-  border-radius: 16px;
-  padding: 24px;
-  margin: 16px 0;
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-/* Gold Glassmorphism Highlight */
-.gold-glass-highlight {
-  background: var(--glass-gold);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  border-radius: 12px;
-  padding: 16px;
-  margin: 12px 0;
-  box-shadow: 
-    0 2px 8px rgba(212, 175, 55, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Elegant Typography */
-.elegant-heading {
-  color: var(--charcoal);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-.refined-text {
-  color: var(--deep-navy);
-  font-weight: 400;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
-}
-
-.silver-accent {
-  color: var(--dark-silver);
-  font-weight: 500;
-}
-
-/* Modern Button with Glassmorphism */
-.glass-button {
-  background: var(--glass-white);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid var(--elegant-gold);
-  border-radius: 50px;
-  padding: 14px 32px;
-  color: var(--charcoal);
-  text-decoration: none;
-  font-weight: 600;
-  display: inline-block;
-  transition: all 0.3s ease;
-  box-shadow: 
-    0 4px 16px rgba(212, 175, 55, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-.glass-button:hover {
-  background: var(--glass-gold);
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 24px rgba(212, 175, 55, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-/* Frosted Divider */
-.frosted-divider {
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    var(--sterling-silver) 50%, 
-    transparent 100%);
-  margin: 32px 0;
-  opacity: 0.6;
-}
-
-/* Faith Message with Glassmorphism */
-.faith-blessing {
-  background: var(--glass-white);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  font-style: italic;
-  color: var(--deep-navy);
-  font-size: 15px;
-  margin: 24px 0;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Mobile Responsive Design */
-@media screen and (max-width: 600px) {
-  .glass-container {
-    margin: 10px;
-    padding: 20px;
-    border-radius: 16px;
-  }
+<body>
+  <div style="display: none;">Sacred account update notification. "The Lord will watch over your coming and going" - Psalm 121:8 🛡️</div>
   
-  .silver-glass-card,
-  .gold-glass-highlight {
-    padding: 16px;
-    border-radius: 12px;
-  }
-  
-  .elegant-heading {
-    font-size: 20px !important;
-  }
-  
-  .gold-gradient {
-    font-size: 24px !important;
-  }
-  
-  .glass-button {
-    padding: 12px 24px;
-    font-size: 14px;
-    width: 100%;
-body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); color: #2C3E50;">
-  <!-- Preheader text -->
-  <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
-    Sacred account {{updateTypeDisplay}} update notification. "The Lord will watch over your coming and going" - Psalm 121:8
-  </div>
-  
-  <!-- Email wrapper with dual-theme background -->
-  <div role="article" aria-roledescription="email" aria-label="Sacred Account {{updateTypeDisplay}} Update - GodWear" lang="en" class="email-wrapper" style="background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); padding: 20px 0; min-height: 100vh;">
-    
-    <!-- Main email table -->
-    <table style="width: 100%; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;" cellpadding="0" cellspacing="0" role="presentation">
+  <div class="email-wrapper" style="background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); padding: 20px 0; min-height: 100vh;">
+    <table style="width: 100%; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center" style="padding: 0;">
           
-          <!-- Email container with dual-theme glassmorphism -->
-          <table class="email-container mobile-full-width" style="width: 600px; max-width: 600px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6); margin: 0 auto;" cellpadding="0" cellspacing="0" role="presentation">
+          <!-- Glass Container -->
+          <div class="glass-container">
             
-            <!-- Header section -->
-            <tr>
-              <td class="account-update-header mobile-padding" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #F7E98E 100%); padding: 32px; text-align: center; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+            <!-- Security Header -->
+            <div class="security-header">
+              <img src="{{logoUrl}}" width="120" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle; margin-bottom: 16px;">
+              <div style="font-size: 48px; margin-bottom: 12px;">🛡️</div>
+              <h1 style="margin: 0; font-size: 32px; font-weight: bold; color: #FFFFFF; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                Sacred Account Update
+              </h1>
+              <p class="blessing-text">
+                "The Lord will watch over your coming and going" - Psalm 121:8
+              </p>
+            </div>
+            
+            <!-- Main Content -->
+            <div style="padding: 0;">
+              
+              <!-- Update Blessing Box -->
+              <div class="update-blessing-box">
+                <h2 class="elegant-heading" style="font-size: 24px; text-align: center; margin-bottom: 8px;">
+                  ℹ️ Account Update Notification
+                </h2>
+                <p class="refined-text" style="text-align: center; margin: 0;">
+                  Your {{updateType}} has been successfully updated with divine protection.
+                </p>
+              </div>
+              
+              <!-- Greeting -->
+              <h1 class="elegant-heading" style="font-size: 28px; text-align: center;">
+                🙏 Account Successfully Updated! ✨
+              </h1>
+              
+              <p class="refined-text" style="font-size: 18px; font-weight: 600;">
+                Blessed {{firstName}}, 💝
+              </p>
+              
+              <p class="refined-text">
+                We're writing with sacred care to let you know that your blessed GodWear account {{updateType}} was recently updated. Just as the Lord watches over us, we watch over your account with divine protection.
+              </p>
+              
+              <!-- Update Details Card -->
+              <div class="silver-glass-card">
+                <h3 class="elegant-heading" style="font-size: 20px; text-align: center; margin-bottom: 16px;">
+                  📋 Update Details
+                </h3>
+                
                 <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
-                    <td align="center">
-                      <img src="{{logoUrl}}" width="150" alt="GodWear - Faith-Inspired Fashion" style="border: 0; max-width: 100%; height: auto; vertical-align: middle; display: block;">
-                    </td>
+                    <td style="padding: 8px 0; color: #2C3E50; font-weight: bold;">Update Type:</td>
+                    <td style="padding: 8px 0; color: #36454F; text-align: right;">{{updateType}}</td>
                   </tr>
-                </table>
-              </td>
-            </tr>
-            
-            <!-- Security icon section -->
-            <tr>
-              <td class="security-icon-section mobile-padding" style="background: rgba(212, 175, 55, 0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.3); padding: 24px; text-align: center;">
-                <div style="font-size: 48px; margin-bottom: 12px;">🛡️</div>
-                <h2 class="elegant-heading" style="margin: 0; font-size: 24px; font-weight: 700; color: #36454F; text-align: center;">Sacred Account {{updateTypeDisplay}} Update</h2>
-              </td>
-            </tr>
-            
-            <!-- Main content section -->
-            <tr>
-              <td class="main-content mobile-padding" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 40px 48px;">
-                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  {{#if oldValue}}
                   <tr>
-                    <td style="text-align: left; color: #2C3E50; font-size: 16px; line-height: 1.6;">
-                      
-                      <!-- Scripture quote -->
-                      <div class="scripture-quote" style="background: rgba(212, 175, 55, 0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 12px; padding: 20px; margin: 0 0 24px 0; text-align: center; font-style: italic;">
-                        <p style="margin: 0; font-size: 16px; color: #2C3E50; line-height: 1.5;">
-                          "The Lord will watch over your coming and going both now and forevermore."
-                        </p>
-                        <p style="margin: 8px 0 0 0; font-size: 14px; color: #36454F; font-weight: 600;">
-                          - Psalm 121:8
-                        </p>
-                      </div>
-                      
-                      <!-- Info alert -->
-                      <div class="info-alert" style="background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%); border-radius: 12px; padding: 20px; margin: 24px 0; color: #FFFFFF; text-align: center;">
-                        <p style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600;">
-                          ℹ️ Account Update Notification
-                        </p>
-                        <p style="margin: 0; font-size: 14px; line-height: 1.5;">
-                          Your {{updateTypeDisplay}} has been successfully updated with divine protection.
-                        </p>
-                      </div>
-                      
-                      <!-- Greeting -->
-                      <p class="refined-text" style="margin: 0 0 16px 0; font-size: 18px; line-height: 1.6; color: #2C3E50; font-weight: 600;">
-                        Blessed {{firstName}}, 💝
-                      </p>
-                      
-                      <!-- Main message -->
-                      <p class="refined-text" style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #2C3E50;">
-                        We're writing with sacred care to let you know that your blessed GodWear account {{updateTypeDisplay}} was recently updated. Just as the Lord watches over us, we watch over your account with divine protection.
-                      </p>
-                      
-                      <!-- Update details -->
-                      <div class="update-details" style="background: rgba(212, 175, 55, 0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 12px; padding: 20px; margin: 24px 0;">
-                        <p style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600; color: #2C3E50; text-align: center;">
-                          💙 Sacred Update Details 💙
-                        </p>
-                        <div style="background: rgba(255, 255, 255, 0.6); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-                          <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #2C3E50; font-weight: 500;">
-                            {{updateDetails}}
-                          </p>
-                        </div>
-                        <table class="details-table" style="width: 100%; border-collapse: collapse;">
-                          <tr>
-                            <td style="padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); color: #36454F; font-weight: 500;">🕐 Sacred Time:</td>
-                            <td style="padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); text-align: right; font-weight: 600; color: #2C3E50;">{{timestamp}}</td>
-                          </tr>
-                          <tr>
-                            <td style="padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); color: #36454F; font-weight: 500;">🌐 Holy IP Address:</td>
-                            <td style="padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); text-align: right; font-weight: 600; color: #2C3E50;">{{ipAddress}}</td>
-                          </tr>
-                          <tr>
-                            <td style="padding: 8px 0; color: #36454F; font-weight: 500;">📱 Blessed Device:</td>
-                            <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #2C3E50;">{{device}}</td>
-                          </tr>
-                        </table>
-                      </div>
-                      
-                      <!-- Security alert -->
-                      <div class="security-alert" style="background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%); border-radius: 12px; padding: 20px; margin: 24px 0; color: #FFFFFF; text-align: center;">
-                        <p style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600;">
-                          🛡️ Sacred Security Notice 🛡️
-                        </p>
-                        <p style="margin: 0; font-size: 14px; line-height: 1.5;">
-                          <strong>If you didn't make this blessed change</strong>, someone may have gained access to your sacred account. Please contact our holy support team immediately to secure your account with divine protection.
-                        </p>
-                      </div>
-                      
-                      <!-- Action buttons -->
-                      <table style="width: 100%; margin: 32px 0;" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="text-align: center;">
-                            <a href="{{accountSettingsUrl}}" class="action-button" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); border: none; border-radius: 50px; padding: 16px 32px; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block; text-align: center; box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3); margin: 8px 0;">
-                              🙏 Manage Sacred Settings 🙏
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style="text-align: center;">
-                            <a href="{{supportUrl}}" class="action-button" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); border: none; border-radius: 50px; padding: 16px 32px; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block; text-align: center; box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3); margin: 8px 0;">
-                              💝 Contact Sacred Support 💝
-                            </a>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Security recommendation -->
-                      <p class="refined-text" style="margin: 32px 0 0 0; font-size: 16px; line-height: 1.6; color: #2C3E50;">
-                        We take the sacred security of your account seriously and will notify you of any important changes to your blessed account. Your digital sanctuary is protected with divine care and Christian love.
-                      </p>
-                      
-                      <!-- Closing -->
-                      <div style="margin-top: 32px; text-align: center; padding: 20px; background: rgba(212, 175, 55, 0.1); border-radius: 12px;">
-                        <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #36454F; font-weight: 600;">
-                          🙏 Clothed in righteousness, walking in faith 🙏
-                        </p>
-                        <p style="margin: 8px 0 0 0; font-size: 14px; line-height: 1.5; color: #2C3E50; font-style: italic;">
-                          With Christian blessings and protection,
-                        </p>
-                        <p style="margin: 4px 0 0 0; font-size: 16px; line-height: 1.5; color: #D4AF37; font-weight: 600;">
-                          The GodWear Sacred Security Team 💙
-                        </p>
-                      </div>
-                      
-                    </td>
+                    <td style="padding: 8px 0; color: #2C3E50; font-weight: bold;">Previous Value:</td>
+                    <td style="padding: 8px 0; color: #36454F; text-align: right; text-decoration: line-through; opacity: 0.7;">{{oldValue}}</td>
                   </tr>
-                </table>
-              </td>
-            </tr>
-            
-            <!-- Footer section -->
-            <tr>
-              <td class="email-footer mobile-padding" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); padding: 32px; text-align: center; color: #FFFFFF; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
-                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  {{/if}}
+                  {{#if newValue}}
                   <tr>
-                    <td align="center">
-                      
-                      <!-- Copyright -->
-                      <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5; color: #FFFFFF; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
-                        &copy; {{currentYear}} GodWear - Faith-Inspired Fashion. All rights reserved under God's grace.
-                      </p>
-                      
-                      <!-- Links -->
-                      <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5; color: #FFFFFF; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
-                        <a href="{{privacyUrl}}" style="color: #FEF7ED; text-decoration: underline; font-weight: 500;">Privacy Policy</a>
-                        <span style="color: #FEF7ED; margin: 0 8px;">•</span>
-                        <a href="{{termsUrl}}" style="color: #FEF7ED; text-decoration: underline; font-weight: 500;">Terms of Service</a>
-                      </p>
-                      
-                      <!-- Address -->
-                      <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.4; color: #FEF7ED; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
-                        💙 GodWear Inc., 123 Faith Avenue, Blessed City, NY 10001 💙
-                      </p>
-                      
-                      <!-- Faith blessing -->
-                      <div style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 12px; padding: 16px; text-align: center; font-style: italic; color: #FFFFFF; font-size: 14px; margin: 16px 0 0 0;">
-                        "Let your light shine before others, that they may see your good deeds and glorify your Father in heaven." - Matthew 5:16
-                      </div>
-                      
-                    </td>
+                    <td style="padding: 8px 0; color: #2C3E50; font-weight: bold;">New Value:</td>
+                    <td style="padding: 8px 0; color: #D4AF37; text-align: right; font-weight: bold;">{{newValue}}</td>
+                  </tr>
+                  {{/if}}
+                  <tr>
+                    <td style="padding: 8px 0; color: #2C3E50; font-weight: bold;">Update Date:</td>
+                    <td style="padding: 8px 0; color: #36454F; text-align: right;">{{updateDate}}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #2C3E50; font-weight: bold;">Update Time:</td>
+                    <td style="padding: 8px 0; color: #36454F; text-align: right;">{{updateTime}}</td>
                   </tr>
                 </table>
-              </td>
-            </tr>
+              </div>
+              
+              <!-- Security Message -->
+              <p class="refined-text">
+                If you didn't make this change, please contact our faithful support team immediately. We take the security of your blessed account very seriously and are here to protect you with Christian love and care.
+              </p>
+              
+              <!-- Security Tips -->
+              <div class="feature-card">
+                <h3 class="elegant-heading" style="font-size: 18px; margin-bottom: 16px;">
+                  🔒 Sacred Security Reminders
+                </h3>
+                <ul style="margin: 0; padding-left: 20px; color: #2C3E50; line-height: 1.6;">
+                  <li style="margin-bottom: 8px;">Keep your password strong and unique, like your faith</li>
+                  <li style="margin-bottom: 8px;">Never share your account details with others</li>
+                  <li style="margin-bottom: 8px;">Log out from shared or public devices</li>
+                  <li style="margin-bottom: 0;">Contact us immediately if you notice any suspicious activity</li>
+                </ul>
+              </div>
+              
+              <!-- Action Button -->
+              <div style="text-align: center; margin: 32px 0;">
+                <a href="mailto:{{supportEmail}}" class="glass-button">
+                  📧 Contact Support Team
+                </a>
+              </div>
+              
+              <!-- Support Information -->
+              <div style="text-align: center; margin: 32px 0;">
+                <p class="refined-text">
+                  If you have any questions or concerns about this account update, please don't hesitate to 
+                  <a href="mailto:{{supportEmail}}" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">contact our faithful support team</a>. 
+                  We're here to serve you with Christian love! 💝
+                </p>
+                
+                <p style="margin: 24px 0 0 0; font-size: 18px; line-height: 1.6; color: #36454F; font-weight: bold;">
+                  May God's blessings be upon you! 🙏<br>
+                  <span class="gold-gradient">Grace & Peace,</span><br>
+                  <span style="font-style: italic;">The GodWear Security Team ✨</span>
+                </p>
+              </div>
+              
+              <!-- Scripture Footer -->
+              <div class="gold-glass-highlight" style="text-align: center; padding: 24px;">
+                <p style="margin: 0; font-size: 16px; color: #2C3E50; font-style: italic; line-height: 1.6;">
+                  "The Lord will keep you from all harm—he will watch over your life; the Lord will watch over your coming and going both now and forevermore."
+                </p>
+                <p style="margin: 8px 0 0 0; font-size: 14px; color: #36454F; font-weight: bold;">
+                  - Psalm 121:7-8
+                </p>
+              </div>
+              
+            </div>
             
-          </table>
-          
-          <!-- Bottom spacer -->
-          <div class="desktop-spacer" style="height: 24px; line-height: 24px;">&nbsp;</div>
-          <div class="mobile-spacer" style="height: 16px; line-height: 16px; display: none;">&nbsp;</div>
+          </div>
           
         </td>
       </tr>
     </table>
-    
   </div>
+
+  <!-- MSO fallback styles -->
+  <!--[if mso]>
+  <style>
+    .glass-container,
+    .silver-glass-card,
+    .gold-glass-highlight,
+    .update-blessing-box,
+    .feature-card {
+      background: #FFFFFF !important;
+      border: 1px solid #E5E4E2 !important;
+    }
+    .glass-button {
+      background: #D4AF37 !important;
+      color: #FFFFFF !important;
+    }
+    .security-header {
+      background: #D4AF37 !important;
+    }
+    .security-section {
+      background: #D4AF37 !important;
+    }
+  </style>
+  <![endif]-->
 </body>
 </html>
