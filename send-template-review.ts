@@ -27,127 +27,212 @@ interface Template {
   name: string;
   file: string;
   subject: string;
+  enabled: boolean;
 }
+
+// 🎛️ TEMPLATE SEND CONTROLS - Set to true/false to control which emails to send
+const TEMPLATE_CONTROLS = {
+  // Account Templates (7 templates)
+  welcome: false,
+  welcomeVerification: false,
+  emailVerification: false,
+  passwordReset: false,
+  passwordChanged: false,
+  accountUpdate: false,
+  
+  // Order Templates (8 templates)
+  orderConfirmation: true, // 🔍 TESTING: Only sending order confirmation to fix consistency
+  shippingNotification: false,
+  deliveryOutForDelivery: false,
+  deliveryDelivered: false,
+  partialShipment: false,
+  giftOrderConfirmation: false,
+  orderCancellation: false,
+  
+  // Marketing Templates (3 templates)
+  productReview: false,
+  orderFollowup: false,
+  abandonedCart: false,
+  
+  // Security Templates (2 templates)
+  securityPasswordReset: false,
+  securityEmailVerification: false,
+  
+  // Transactional Templates (2 templates)
+  transactionalOrderConfirmation: false,
+  transactionalShippingNotification: false
+};
 
 async function sendAllCompletedTemplatesForReview(): Promise<void> {
   try {
-    console.log('🎉 Starting COMPLETE template collection review email send...');
-    console.log('📧 Sending: ALL 22 COMPLETED TEMPLATES WITH CONSISTENT GLASSMORPHISM THEME!');
+    console.log('🎉 Starting SELECTIVE template collection review email send...');
+    console.log('🎛️ Using boolean controls to send only enabled templates');
     console.log('🎨 Theme: White, Silver, Gold Glassmorphism');
     console.log('📱 Mobile: Fully Responsive');
     console.log('✨ Branding: Christian Faith-Inspired');
     
-    const templates: Template[] = [
+    const allTemplates: Template[] = [
       // Account Templates (7 templates)
       {
         name: 'welcome',
         file: 'processed-welcome.html',
-        subject: 'GodWear Complete Collection - Welcome (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Welcome (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.welcome
       },
       {
         name: 'welcome-verification',
         file: 'processed-welcome-verification.html',
-        subject: 'GodWear Complete Collection - Welcome Verification (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Welcome Verification (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.welcomeVerification
       },
       {
         name: 'email-verification',
         file: 'processed-email-verification.html',
-        subject: 'GodWear Complete Collection - Email Verification (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Email Verification (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.emailVerification
       },
       {
         name: 'password-reset',
         file: 'processed-password-reset.html',
-        subject: 'GodWear Complete Collection - Password Reset (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Password Reset (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.passwordReset
       },
       {
         name: 'password-changed',
         file: 'processed-password-changed.html',
-        subject: 'GodWear Complete Collection - Password Changed (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Password Changed (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.passwordChanged
       },
       {
         name: 'account-update',
         file: 'processed-account-update.html',
-        subject: 'GodWear Complete Collection - Account Update (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Account Update (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.accountUpdate
       },
       
       // Order Templates (8 templates)
       {
         name: 'order-confirmation',
         file: 'processed-order-confirmation.html',
-        subject: 'GodWear Complete Collection - Order Confirmation (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Order Confirmation (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.orderConfirmation
       },
       {
         name: 'shipping-notification',
         file: 'processed-shipping-notification.html',
-        subject: 'GodWear Complete Collection - Shipping Notification (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Shipping Notification (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.shippingNotification
       },
       {
         name: 'delivery-out_for_delivery',
         file: 'processed-delivery-out_for_delivery.html',
-        subject: 'GodWear Complete Collection - Out for Delivery (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Out for Delivery (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.deliveryOutForDelivery
       },
       {
         name: 'delivery-delivered', 
         file: 'processed-delivery-delivered.html',
-        subject: 'GodWear Complete Collection - Delivered (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Delivered (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.deliveryDelivered
       },
       {
         name: 'partial-shipment',
         file: 'processed-partial-shipment.html', 
-        subject: 'GodWear Complete Collection - Partial Shipment (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Partial Shipment (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.partialShipment
       },
       {
         name: 'gift-order-confirmation',
         file: 'processed-gift-order-confirmation.html',
-        subject: 'GodWear Complete Collection - Gift Order Confirmation (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Gift Order Confirmation (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.giftOrderConfirmation
       },
       {
         name: 'order-cancellation',
         file: 'processed-order-cancellation.html',
-        subject: 'GodWear Complete Collection - Order Cancellation (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Order Cancellation (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.orderCancellation
       },
       
       // Marketing Templates (3 templates)
       {
         name: 'product-review',
         file: 'processed-product-review.html',
-        subject: 'GodWear Complete Collection - Product Review (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Product Review (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.productReview
       },
       {
         name: 'order-followup',
         file: 'processed-order-followup.html',
-        subject: 'GodWear Complete Collection - Order Follow-up (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Order Follow-up (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.orderFollowup
       },
       {
         name: 'abandoned-cart',
         file: 'processed-abandoned-cart.html',
-        subject: 'GodWear Complete Collection - Abandoned Cart (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Abandoned Cart (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.abandonedCart
       },
       
       // Security Templates (2 templates)
       {
         name: 'security-password-reset',
         file: 'processed-password-reset.html',
-        subject: 'GodWear Complete Collection - Security Password Reset (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Security Password Reset (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.securityPasswordReset
       },
       {
         name: 'security-email-verification',
         file: 'processed-email-verification.html',
-        subject: 'GodWear Complete Collection - Security Email Verification (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Security Email Verification (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.securityEmailVerification
       },
       
       // Transactional Templates (2 templates)
       {
         name: 'transactional-order-confirmation',
         file: 'processed-order-confirmation.html',
-        subject: 'GodWear Complete Collection - Transactional Order Confirmation (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Transactional Order Confirmation (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.transactionalOrderConfirmation
       },
       {
         name: 'transactional-shipping-notification',
         file: 'processed-shipping-notification.html',
-        subject: 'GodWear Complete Collection - Transactional Shipping Notification (Glassmorphism Theme)'
+        subject: 'GodWear Complete Collection - Transactional Shipping Notification (Glassmorphism Theme)',
+        enabled: TEMPLATE_CONTROLS.transactionalShippingNotification
       }
     ];
+    
+    // Filter templates based on enabled status
+    const templates = allTemplates.filter(template => template.enabled);
+    const disabledTemplates = allTemplates.filter(template => !template.enabled);
+    
+    console.log('');
+    console.log('📊 TEMPLATE STATUS SUMMARY:');
+    console.log(`✅ Enabled templates: ${templates.length}`);
+    console.log(`❌ Disabled templates: ${disabledTemplates.length}`);
+    console.log(`📧 Total templates available: ${allTemplates.length}`);
+    
+    if (templates.length === 0) {
+      console.log('');
+      console.log('⚠️  NO TEMPLATES ENABLED!');
+      console.log('💡 Set template controls to true in TEMPLATE_CONTROLS to enable sending');
+      return;
+    }
+    
+    console.log('');
+    console.log('🎯 ENABLED TEMPLATES TO SEND:');
+    templates.forEach((template, index) => {
+      console.log(`   ${index + 1}. ${template.name}`);
+    });
+    
+    if (disabledTemplates.length > 0) {
+      console.log('');
+      console.log('⏸️  DISABLED TEMPLATES (will be skipped):');
+      disabledTemplates.forEach((template, index) => {
+        console.log(`   ${index + 1}. ${template.name}`);
+      });
+    }
     
     // Get MailerSend API key from environment
     const apiKey = process.env.MAILERSEND_API_KEY;
@@ -226,40 +311,69 @@ async function sendAllCompletedTemplatesForReview(): Promise<void> {
     
     
     console.log('');
-    console.log('🎉 ALL 22 TEMPLATES PROCESSED AND SENT!');
-    console.log('📧 Check njordrenterprises@gmail.com for the COMPLETE email template collection');
+    console.log(`🎉 ${templates.length} SELECTED TEMPLATES PROCESSED AND SENT!`);
+    console.log('📧 Check njordrenterprises@gmail.com for the selected email templates');
     console.log('');
-    console.log('📋 ACCOUNT TEMPLATES SENT (7):');
-    console.log('   1. Welcome - User onboarding with glassmorphism theme');
-    console.log('   2. Welcome Verification - Welcome verification with security');
-    console.log('   3. Email Verification - Account verification with clear CTA');
-    console.log('   4. Password Reset - Secure password reset with safety tips');
-    console.log('   5. Password Changed - Security confirmation with device details');
-    console.log('   6. Account Update - Account change notifications with security alerts');
-    console.log('');
-    console.log('📋 ORDER TEMPLATES SENT (8):');
-    console.log('   7. Order Confirmation - Complex order details with product tables');
-    console.log('   8. Shipping Notification - Tracking information with carrier details');
-    console.log('   9. Out for Delivery - Delivery timeline with progress indicators');
-    console.log('   10. Delivered - Delivery confirmation with review prompts');
-    console.log('   11. Partial Shipment - Clear shipped/remaining item separation');
-    console.log('   12. Gift Order Confirmation - Gift messaging with special styling');
-    console.log('   13. Order Cancellation - Cancellation details with refund information');
-    console.log('');
-    console.log('📋 MARKETING TEMPLATES SENT (3):');
-    console.log('   14. Product Review - Interactive star rating system');
-    console.log('   15. Order Follow-up - Product recommendations with grid layout');
-    console.log('   16. Abandoned Cart - Cart recovery with item display');
-    console.log('');
-    console.log('📋 SECURITY TEMPLATES SENT (2):');
-    console.log('   17. Security Password Reset - Enhanced security messaging');
-    console.log('   18. Security Email Verification - Verification with security tips');
-    console.log('');
-    console.log('📋 TRANSACTIONAL TEMPLATES SENT (2):');
-    console.log('   19. Transactional Order Confirmation - Order details with pricing');
-    console.log('   20. Transactional Shipping Notification - Shipping progress tracking');
-    console.log('');
-    console.log('🔧 ALL TEMPLATES FEATURE:');
+    
+    // Dynamic summary based on what was actually sent
+    const sentTemplates = templates.map(t => t.name);
+    const accountTemplates = sentTemplates.filter(name => 
+      ['welcome', 'welcome-verification', 'email-verification', 'password-reset', 'password-changed', 'account-update'].includes(name)
+    );
+    const orderTemplates = sentTemplates.filter(name => 
+      ['order-confirmation', 'shipping-notification', 'delivery-out_for_delivery', 'delivery-delivered', 'partial-shipment', 'gift-order-confirmation', 'order-cancellation'].includes(name)
+    );
+    const marketingTemplates = sentTemplates.filter(name => 
+      ['product-review', 'order-followup', 'abandoned-cart'].includes(name)
+    );
+    const securityTemplates = sentTemplates.filter(name => 
+      ['security-password-reset', 'security-email-verification'].includes(name)
+    );
+    const transactionalTemplates = sentTemplates.filter(name => 
+      ['transactional-order-confirmation', 'transactional-shipping-notification'].includes(name)
+    );
+    
+    if (accountTemplates.length > 0) {
+      console.log(`📋 ACCOUNT TEMPLATES SENT (${accountTemplates.length}):`);
+      accountTemplates.forEach((name, index) => {
+        console.log(`   ${index + 1}. ${name} - Account management with glassmorphism theme`);
+      });
+      console.log('');
+    }
+    
+    if (orderTemplates.length > 0) {
+      console.log(`📋 ORDER TEMPLATES SENT (${orderTemplates.length}):`);
+      orderTemplates.forEach((name, index) => {
+        console.log(`   ${index + 1}. ${name} - Order processing with glassmorphism theme`);
+      });
+      console.log('');
+    }
+    
+    if (marketingTemplates.length > 0) {
+      console.log(`📋 MARKETING TEMPLATES SENT (${marketingTemplates.length}):`);
+      marketingTemplates.forEach((name, index) => {
+        console.log(`   ${index + 1}. ${name} - Marketing engagement with glassmorphism theme`);
+      });
+      console.log('');
+    }
+    
+    if (securityTemplates.length > 0) {
+      console.log(`📋 SECURITY TEMPLATES SENT (${securityTemplates.length}):`);
+      securityTemplates.forEach((name, index) => {
+        console.log(`   ${index + 1}. ${name} - Security notifications with glassmorphism theme`);
+      });
+      console.log('');
+    }
+    
+    if (transactionalTemplates.length > 0) {
+      console.log(`📋 TRANSACTIONAL TEMPLATES SENT (${transactionalTemplates.length}):`);
+      transactionalTemplates.forEach((name, index) => {
+        console.log(`   ${index + 1}. ${name} - Transactional messaging with glassmorphism theme`);
+      });
+      console.log('');
+    }
+    
+    console.log('🔧 ALL SENT TEMPLATES FEATURE:');
     console.log('• ✅ Consistent white, silver, gold glassmorphism theme');
     console.log('• ✅ Mobile-first responsive design with card-based layouts');
     console.log('• ✅ Enhanced glassmorphism effects with backdrop-filter');
@@ -269,12 +383,12 @@ async function sendAllCompletedTemplatesForReview(): Promise<void> {
     console.log('• ✅ Professional typography and visual hierarchy');
     console.log('• ✅ MSO fallback styles for Outlook compatibility');
     console.log('');
-    console.log('🎊 COMPLETE GODWEAR EMAIL TEMPLATE COLLECTION SENT! 🎊');
+    console.log(`🎊 ${templates.length} SELECTED GODWEAR EMAIL TEMPLATES SENT! 🎊`);
     
   } catch (error) {
     console.error('❌ Error sending template reviews:', error);
   }
 }
 
-// Run the script to send ALL 22 completed templates
+// Run the script to send selected templates based on TEMPLATE_CONTROLS
 sendAllCompletedTemplatesForReview();
