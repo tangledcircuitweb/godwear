@@ -9,7 +9,7 @@
   <!--[if mso]>
   <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
   <![endif]-->
-  <title>Blessed Gift Order Confirmation - #{{orderNumber}} | GodWear</title>
+  <title>Blessed Gift Order Confirmation - #GW-2025-006 | GodWear</title>
   <style>
     /* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
     :root {
@@ -260,7 +260,7 @@
   </style>
 </head>
 <body>
-  <div style="display: none;">Your blessed gift order #{{orderNumber}} has been confirmed. "Every good and perfect gift is from above" - James 1:17 🎁</div>
+  <div style="display: none;">Your blessed gift order #GW-2025-006 has been confirmed. "Every good and perfect gift is from above" - James 1:17 🎁</div>
   
   <div role="article" aria-roledescription="email" aria-label="Gift Order Confirmation" lang="en">
     <table style="width: 100%; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;" cellpadding="0" cellspacing="0" role="presentation">
@@ -273,7 +273,7 @@
             <!-- Header -->
             <tr>
               <td class="gift-header">
-                <img src="{{logoUrl}}" width="120" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle; margin-bottom: 16px;">
+                <img src="https://godwear.com/logo.png" width="120" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle; margin-bottom: 16px;">
                 <h1 style="margin: 0; font-size: 32px; font-weight: bold; color: #FFFFFF; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
                   🎁 BLESSED GIFT ORDER 🎁
                 </h1>
@@ -293,7 +293,7 @@
                 </h1>
                 
                 <p class="body-text">
-                  Blessings, {{name}}! 🌟
+                  Blessings, Sarah Grace! 🌟
                 </p>
                 
                 <p class="body-text">
@@ -306,7 +306,7 @@
                     💝 Your Sacred Gift Message 💝
                   </h2>
                   <p style="margin: 0; font-size: 18px; line-height: 1.6; color: var(--deep-navy); font-style: italic;">
-                    "{{giftMessage}}"
+                    "May this blessed apparel remind you of God's endless love and grace. Wear it with joy and share His light with the world! 🙏✨"
                   </p>
                   <p style="margin: 12px 0 0 0; font-size: 14px; color: var(--charcoal); opacity: 0.8;">
                     Sent with Christian love and blessings 💕
@@ -319,15 +319,15 @@
                   <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                     <tr>
                       <td style="padding: 8px 0; color: var(--deep-navy); font-weight: bold;">Order Number:</td>
-                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right;">{{orderNumber}}</td>
+                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right;">GW-2025-006</td>
                     </tr>
                     <tr>
                       <td style="padding: 8px 0; color: var(--deep-navy); font-weight: bold;">Order Date:</td>
-                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right;">{{orderDate}}</td>
+                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right;">January 23, 2025</td>
                     </tr>
                     <tr>
                       <td style="padding: 8px 0; color: var(--deep-navy); font-weight: bold;">Gift Recipient:</td>
-                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right;">{{giftRecipient}}</td>
+                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right;">Emily Johnson</td>
                     </tr>
                   </table>
                 </div>
@@ -354,26 +354,45 @@
                     </tr>
                   </thead>
                   <tbody class="desktop-table">
-                    {{#each items}}
+                    
                     <tr style="background: var(--glass-white);">
                       <td style="padding: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
                         <div style="display: flex; align-items: center;">
-                          <img src="{{this.imageUrl}}" width="60" alt="{{this.name}}" style="border: 0; border-radius: 8px; margin-right: 16px;">
+                          <img src="https://godwear.com/images/faith-over-fear-tshirt.jpg" width="60" alt="Faith Over Fear T-Shirt" style="border: 0; border-radius: 8px; margin-right: 16px;">
                           <div>
-                            <div style="font-weight: bold; color: var(--charcoal); margin-bottom: 4px;">{{this.name}}</div>
-                            <div style="color: var(--deep-navy); font-size: 14px; margin-bottom: 2px;">{{this.variant}}</div>
-                            <div style="color: var(--elegant-gold); font-size: 12px;">SKU: {{this.sku}}</div>
+                            <div style="font-weight: bold; color: var(--charcoal); margin-bottom: 4px;">Faith Over Fear T-Shirt</div>
+                            <div style="color: var(--deep-navy); font-size: 14px; margin-bottom: 2px;">Size: Medium, Color: White</div>
+                            <div style="color: var(--elegant-gold); font-size: 12px;">SKU: FOF-TS-M-W</div>
                           </div>
                         </div>
                       </td>
                       <td style="padding: 16px; text-align: center; font-weight: bold; color: var(--charcoal); border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
-                        {{this.quantity}}
+                        1
                       </td>
                       <td style="padding: 16px; text-align: right; font-weight: bold; color: var(--charcoal); border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
-                        ${{this.price}}
+                        $29.99
                       </td>
                     </tr>
-                    {{/each}}
+                    
+                    <tr style="background: var(--glass-white);">
+                      <td style="padding: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+                        <div style="display: flex; align-items: center;">
+                          <img src="https://godwear.com/images/blessed-hoodie.jpg" width="60" alt="Blessed Beyond Measure Hoodie" style="border: 0; border-radius: 8px; margin-right: 16px;">
+                          <div>
+                            <div style="font-weight: bold; color: var(--charcoal); margin-bottom: 4px;">Blessed Beyond Measure Hoodie</div>
+                            <div style="color: var(--deep-navy); font-size: 14px; margin-bottom: 2px;">Size: Small, Color: Light Pink</div>
+                            <div style="color: var(--elegant-gold); font-size: 12px;">SKU: BBM-HD-S-LP</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td style="padding: 16px; text-align: center; font-weight: bold; color: var(--charcoal); border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+                        1
+                      </td>
+                      <td style="padding: 16px; text-align: right; font-weight: bold; color: var(--charcoal); border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+                        $49.99
+                      </td>
+                    </tr>
+                    
                   </tbody>
                 </table>
                 
@@ -386,22 +405,37 @@
                     }
                   </style>
                   <div class="mobile-cards">
-                    {{#each items}}
+                    
                     <div class="product-card">
                       <div class="product-mobile">
-                        <img src="{{this.imageUrl}}" class="product-image" width="80" alt="{{this.name}}" style="border: 0; border-radius: 8px; display: block; margin: 0 auto 12px auto;">
+                        <img src="https://godwear.com/images/faith-over-fear-tshirt.jpg" class="product-image" width="80" alt="Faith Over Fear T-Shirt" style="border: 0; border-radius: 8px; display: block; margin: 0 auto 12px auto;">
                         <div class="product-details">
-                          <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold; color: var(--charcoal);">{{this.name}}</h3>
-                          <p style="margin: 0 0 4px 0; font-size: 14px; color: var(--deep-navy);">{{this.variant}}</p>
-                          <p style="margin: 0 0 12px 0; font-size: 12px; color: var(--elegant-gold);">SKU: {{this.sku}}</p>
+                          <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold; color: var(--charcoal);">Faith Over Fear T-Shirt</h3>
+                          <p style="margin: 0 0 4px 0; font-size: 14px; color: var(--deep-navy);">Size: Medium, Color: White</p>
+                          <p style="margin: 0 0 12px 0; font-size: 12px; color: var(--elegant-gold);">SKU: FOF-TS-M-W</p>
                           <div class="product-meta">
-                            <span style="font-weight: bold; color: var(--charcoal);">Qty: {{this.quantity}}</span>
-                            <span style="font-weight: bold; color: var(--charcoal); font-size: 16px;">${{this.price}}</span>
+                            <span style="font-weight: bold; color: var(--charcoal);">Qty: 1</span>
+                            <span style="font-weight: bold; color: var(--charcoal); font-size: 16px;">$29.99</span>
                           </div>
                         </div>
                       </div>
                     </div>
-                    {{/each}}
+                    
+                    <div class="product-card">
+                      <div class="product-mobile">
+                        <img src="https://godwear.com/images/blessed-hoodie.jpg" class="product-image" width="80" alt="Blessed Beyond Measure Hoodie" style="border: 0; border-radius: 8px; display: block; margin: 0 auto 12px auto;">
+                        <div class="product-details">
+                          <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold; color: var(--charcoal);">Blessed Beyond Measure Hoodie</h3>
+                          <p style="margin: 0 0 4px 0; font-size: 14px; color: var(--deep-navy);">Size: Small, Color: Light Pink</p>
+                          <p style="margin: 0 0 12px 0; font-size: 12px; color: var(--elegant-gold);">SKU: BBM-HD-S-LP</p>
+                          <div class="product-meta">
+                            <span style="font-weight: bold; color: var(--charcoal);">Qty: 1</span>
+                            <span style="font-weight: bold; color: var(--charcoal); font-size: 16px;">$49.99</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
                   </div>
                 </div>
                 <!--<![endif]-->
@@ -411,19 +445,19 @@
                   <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                     <tr>
                       <td style="padding: 8px 0; color: var(--deep-navy);">Subtotal:</td>
-                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right; font-weight: bold;">${{subtotal}}</td>
+                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right; font-weight: bold;">$79.98</td>
                     </tr>
                     <tr>
                       <td style="padding: 8px 0; color: var(--deep-navy);">Shipping:</td>
-                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right; font-weight: bold;">${{shipping}}</td>
+                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right; font-weight: bold;">$9.99</td>
                     </tr>
                     <tr>
                       <td style="padding: 8px 0; color: var(--deep-navy);">Tax:</td>
-                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right; font-weight: bold;">${{tax}}</td>
+                      <td style="padding: 8px 0; color: var(--charcoal); text-align: right; font-weight: bold;">$7.20</td>
                     </tr>
                     <tr style="border-top: 2px solid var(--elegant-gold);">
                       <td style="padding: 12px 0 8px 0; color: var(--charcoal); font-size: 18px; font-weight: bold;">Total:</td>
-                      <td style="padding: 12px 0 8px 0; color: var(--charcoal); text-align: right; font-size: 18px; font-weight: bold;">${{total}}</td>
+                      <td style="padding: 12px 0 8px 0; color: var(--charcoal); text-align: right; font-size: 18px; font-weight: bold;">$97.17</td>
                     </tr>
                   </table>
                 </div>
@@ -441,17 +475,17 @@
                     🏠 Gift Delivery Address
                   </h3>
                   <p style="margin: 0; color: var(--deep-navy); line-height: 1.6;">
-                    {{shippingAddress.name}}<br>
-                    {{shippingAddress.street}}<br>
-                    {{#if shippingAddress.street2}}{{shippingAddress.street2}}<br>{{/if}}
-                    {{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zipCode}}<br>
-                    {{shippingAddress.country}}
+                    Emily Johnson<br>
+                    456 Grace Street<br>
+                    
+                    Los Angeles, CA 90210<br>
+                    United States
                   </p>
                 </div>
                 
                 <!-- Action Button -->
                 <div style="text-align: center; margin: 32px 0;">
-                  <a href="{{trackOrderUrl}}" class="action-button">
+                  <a href="https://godwear.com/orders/GW-2025-006" class="action-button">
                     🔍 Track Your Sacred Gift 📦
                   </a>
                 </div>
@@ -460,7 +494,7 @@
                 <div style="text-align: center; margin: 32px 0;">
                   <p class="body-text">
                     If you have any questions about your blessed gift order, please 
-                    <a href="mailto:{{supportEmail}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: bold;">contact our faithful support team</a>. 
+                    <a href="mailto:blessings@godwear.com" style="color: var(--elegant-gold); text-decoration: underline; font-weight: bold;">contact our faithful support team</a>. 
                     We're here to serve you with Christian love! 💝
                   </p>
                   
@@ -488,10 +522,10 @@
             <tr>
               <td style="padding: 24px; text-align: center; background: var(--glass-silver); border-top: 1px solid rgba(255, 255, 255, 0.3);">
                 <p style="margin: 0; font-size: 12px; color: var(--charcoal); line-height: 1.5;">
-                  © {{currentYear}} GodWear. All rights reserved.<br>
-                  <a href="{{unsubscribeUrl}}" style="color: var(--elegant-gold); text-decoration: underline;">Unsubscribe</a> | 
-                  <a href="{{privacyUrl}}" style="color: var(--elegant-gold); text-decoration: underline;">Privacy Policy</a> | 
-                  <a href="{{termsUrl}}" style="color: var(--elegant-gold); text-decoration: underline;">Terms of Service</a>
+                  © 2025 GodWear. All rights reserved.<br>
+                  <a href="https://godwear.com/unsubscribe" style="color: var(--elegant-gold); text-decoration: underline;">Unsubscribe</a> | 
+                  <a href="https://godwear.com/privacy" style="color: var(--elegant-gold); text-decoration: underline;">Privacy Policy</a> | 
+                  <a href="https://godwear.com/terms" style="color: var(--elegant-gold); text-decoration: underline;">Terms of Service</a>
                 </p>
               </td>
             </tr>

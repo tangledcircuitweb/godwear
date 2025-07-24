@@ -467,7 +467,7 @@
             
             <!-- Cart Header -->
             <div class="cart-header">
-              <img src="{{logoUrl}}" width="120" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle; margin-bottom: 16px;">
+              <img src="https://godwear.com/logo.png" width="120" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle; margin-bottom: 16px;">
               <div style="font-size: 48px; margin-bottom: 12px;">🛒</div>
               <h1 style="margin: 0; font-size: 32px; font-weight: bold; color: #FFFFFF; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
                 Your Sacred Cart Awaits
@@ -496,7 +496,7 @@
               </h1>
               
               <p class="refined-text" style="font-size: 18px; font-weight: 600;">
-                Dear {{firstName}}, 💝
+                Dear Rachel, 💝
               </p>
               
               <p class="refined-text">
@@ -504,24 +504,24 @@
               </p>
               
               <!-- Cart Items -->
-              {{#if cartItems}}
+              
               <div class="silver-glass-card">
                 <h3 class="elegant-heading" style="font-size: 22px; text-align: center; margin-bottom: 20px;">
                   🛒 Your Sacred Selection
                 </h3>
                 
                 <div class="cart-items-container">
-                  {{#each cartItems}}
+                  
                   <!--[if !mso]><!-->
                   <div class="cart-item">
-                    <img src="{{this.imageUrl}}" alt="{{this.name}}" class="cart-item-image">
+                    <img src="https://godwear.com/products/grace-tee.jpg" alt="Grace T-Shirt" class="cart-item-image">
                     <div class="cart-item-details">
-                      <div class="cart-item-name">{{this.name}}</div>
+                      <div class="cart-item-name">Grace T-Shirt</div>
                       {{#if this.variant}}
-                      <div class="cart-item-variant">{{this.variant}}</div>
-                      {{/if}}
-                      <div class="cart-item-quantity">Quantity: {{this.quantity}}</div>
-                      <div class="cart-item-price">${{this.price}}</div>
+                      <div class="cart-item-variant">Size: Medium, Color: White</div>
+                      
+                      <div class="cart-item-quantity">Quantity: 2</div>
+                      <div class="cart-item-price">$29.99</div>
                     </div>
                   </div>
                   <!--<![endif]-->
@@ -531,23 +531,23 @@
                   <table style="width: 100%; margin-bottom: 16px; padding: 16px; border: 1px solid #E5E4E2; border-radius: 8px;" cellpadding="0" cellspacing="0" role="presentation">
                     <tr>
                       <td style="width: 80px; padding-right: 16px; vertical-align: top;">
-                        <img src="{{this.imageUrl}}" width="80" alt="{{this.name}}" style="border: 0; border-radius: 8px;">
+                        <img src="https://godwear.com/products/grace-tee.jpg" width="80" alt="Grace T-Shirt" style="border: 0; border-radius: 8px;">
                       </td>
                       <td style="vertical-align: top;">
-                        <h4 style="margin: 0 0 4px 0; font-size: 18px; font-weight: bold; color: #36454F;">{{this.name}}</h4>
+                        <h4 style="margin: 0 0 4px 0; font-size: 18px; font-weight: bold; color: #36454F;">Grace T-Shirt</h4>
                         {{#if this.variant}}
-                        <p style="margin: 0 0 4px 0; font-size: 14px; color: #2C3E50;">{{this.variant}}</p>
-                        {{/if}}
-                        <p style="margin: 0 0 8px 0; font-size: 14px; color: #D4AF37; font-weight: 600;">Quantity: {{this.quantity}}</p>
-                        <p style="margin: 0; font-size: 18px; font-weight: bold; color: #36454F;">${{this.price}}</p>
+                        <p style="margin: 0 0 4px 0; font-size: 14px; color: #2C3E50;">Size: Medium, Color: White</p>
+                        
+                        <p style="margin: 0 0 8px 0; font-size: 14px; color: #D4AF37; font-weight: 600;">Quantity: 2</p>
+                        <p style="margin: 0; font-size: 18px; font-weight: bold; color: #36454F;">$29.99</p>
                       </td>
                     </tr>
                   </table>
                   <![endif]-->
-                  {{/each}}
+                  
                 </div>
               </div>
-              {{/if}}
+              
               
               <!-- Cart Total -->
               {{#if cartTotal}}
@@ -556,13 +556,13 @@
                   💰 Cart Total
                 </h3>
                 <p style="margin: 0; font-size: 28px; font-weight: bold; color: #FFFFFF;">
-                  ${{cartTotal}}
+                  $79.97
                 </p>
                 <p style="margin: 8px 0 0 0; font-size: 14px; color: #FFFFFF; opacity: 0.9;">
                   Free shipping on orders over $50!
                 </p>
               </div>
-              {{/if}}
+              
               
               <!-- Urgency Section -->
               {{#if urgency}}
@@ -577,13 +577,13 @@
                 <p style="margin: 8px 0 0 0; font-size: 18px; font-weight: bold; color: #FFFFFF;">
                   Save {{urgency.discount}} with code: <strong>{{urgency.code}}</strong>
                 </p>
-                {{/if}}
+                
               </div>
-              {{/if}}
+              
               
               <!-- Primary CTA Button -->
               <div style="text-align: center; margin: 32px 0;">
-                <a href="{{cartUrl}}" class="primary-button">
+                <a href="https://godwear.com/cart" class="primary-button">
                   ✨ Complete Your Faith Journey
                 </a>
               </div>
@@ -604,13 +604,13 @@
               <!-- Alternative Actions -->
               <div style="text-align: center; margin: 32px 0;">
                 <div style="margin-bottom: 16px;">
-                  <a href="{{shopUrl}}" class="glass-button">
+                  <a href="https://godwear.com/shop" class="glass-button">
                     🛍️ Continue Shopping
                   </a>
                 </div>
                 <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
                   <a href="{{wishlistUrl}}" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">💖 Save to Wishlist</a>
-                  <a href="{{supportEmail}}" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">💬 Need Help?</a>
+                  <a href="support@godwear.com" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">💬 Need Help?</a>
                 </div>
               </div>
               
@@ -618,7 +618,7 @@
               <div style="text-align: center; margin: 32px 0;">
                 <p class="refined-text">
                   If you have any questions about your cart or need assistance, please don't hesitate to 
-                  <a href="mailto:{{supportEmail}}" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">contact our faithful support team</a>. 
+                  <a href="mailto:support@godwear.com" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">contact our faithful support team</a>. 
                   We're here to serve you with Christian love! 💝
                 </p>
                 

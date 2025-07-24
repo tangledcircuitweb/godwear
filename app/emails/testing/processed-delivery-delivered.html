@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="utf-8">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <!--[if mso]>
+  <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
+  <![endif]-->
+  <title>Your Blessed Order Has Been Delivered - #GW-2025-004 | GodWear</title>
+  <style>
+    /* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
+    :root {
+      --pure-white: #FFFFFF;
+      --warm-white: #FEFEFE;
+      --soft-white: #F8F9FA;
+      --elegant-gold: #D4AF37;
+      --rich-gold: #B8860B;
+      --light-gold: #F7E98E;
+      --platinum-silver: #E5E4E2;
+      --sterling-silver: #C0C0C0;
+      --dark-silver: #A9A9A9;
+      --charcoal: #36454F;
+      --deep-navy: #2C3E50;
+      --glass-white: rgba(255, 255, 255, 0.25);
+      --glass-gold: rgba(212, 175, 55, 0.15);
+      --glass-silver: rgba(192, 192, 192, 0.2);
+    }
+
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      word-break: break-word;
+      -webkit-font-smoothing: antialiased;
+      font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, 
+        #F8F9FA 0%, 
+        #E5E4E2 25%, 
+        #FEFEFE 50%, 
+        #F7E98E 75%, 
+        #FFFFFF 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    /* Email container styles */
+    .email-container {
+      background: var(--glass-white);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      overflow: hidden;
+    }
+
+    /* Header styles */
+    .delivery-header {
+      background: linear-gradient(135deg, #059669 0%, #047857 50%, #10B981 100%);
+      padding: 32px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Main content area */
+    .main-content {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 40px 48px;
+    }
+
+    /* Delivery status card */
+    .delivery-status {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+      color: #FFFFFF;
+      text-align: center;
+    }
+
+    /* Delivery confirmation card */
+    .delivery-confirmation {
+      background: var(--glass-gold);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+
+    /* Tracking details card */
+    .tracking-details {
+      background: var(--glass-gold);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+
+    /* Review prompt card */
+    .review-prompt {
+      background: rgba(59, 130, 246, 0.15);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+
+    /* Action buttons */
+    .action-button {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+      border: none;
+      border-radius: 50px;
+      padding: 16px 32px;
+      color: #FFFFFF;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      display: inline-block;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+      transition: all 0.3s ease;
+      margin: 8px 0;
+    }
+
+    .action-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Review button - special styling */
+    .review-button {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+    }
+
+    .review-button:hover {
+      box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
+    }
+
+    /* Footer styles */
+    .email-footer {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+      padding: 32px;
+      text-align: center;
+      color: #FFFFFF;
+    }
+
+    /* Typography */
+    .elegant-heading {
+      color: var(--charcoal);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin: 0 0 16px 0;
+    }
+
+    .refined-text {
+      color: var(--deep-navy);
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      margin: 0 0 16px 0;
+    }
+
+    /* Delivery details table */
+    .delivery-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .delivery-table td {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      vertical-align: top;
+    }
+
+    .delivery-table td:last-child {
+      text-align: right;
+      font-weight: 600;
+      color: var(--charcoal);
+    }
+
+    /* Mobile Responsive Design */
+    @media screen and (max-width: 600px) {
+      body {
+        padding: 0 !important;
+        font-size: 14px !important;
+      }
+      
+      .email-wrapper {
+        padding: 8px !important;
+      }
+      
+      .email-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 16px !important;
+        margin: 0 !important;
+      }
+      
+      .delivery-header {
+        padding: 20px 16px !important;
+        border-radius: 16px 16px 0 0 !important;
+      }
+      
+      .delivery-header h1 {
+        font-size: 22px !important;
+        line-height: 1.3 !important;
+        margin-bottom: 12px !important;
+      }
+      
+      .delivery-header p {
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+      }
+      
+      .main-content {
+        padding: 20px 16px !important;
+      }
+      
+      .delivery-status {
+        padding: 16px !important;
+        margin: 16px 0 !important;
+        border-radius: 12px !important;
+      }
+      
+      .delivery-status h2 {
+        font-size: 18px !important;
+        line-height: 1.3 !important;
+        margin-bottom: 8px !important;
+      }
+      
+      .delivery-status div {
+        padding: 12px !important;
+        margin: 12px 0 !important;
+      }
+      
+      .delivery-status p {
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+      }
+      
+      .delivery-confirmation,
+      .tracking-details,
+      .review-prompt {
+        padding: 16px !important;
+        margin: 16px 0 !important;
+        border-radius: 12px !important;
+      }
+      
+      .delivery-confirmation h2,
+      .tracking-details h2,
+      .review-prompt h2 {
+        font-size: 18px !important;
+        line-height: 1.3 !important;
+        margin-bottom: 12px !important;
+      }
+      
+      .elegant-heading {
+        font-size: 20px !important;
+        line-height: 1.3 !important;
+      }
+      
+      .refined-text {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+        margin-bottom: 12px !important;
+      }
+      
+      /* Mobile delivery table - enhanced stacking */
+      .delivery-table {
+        display: block !important;
+        width: 100% !important;
+      }
+      
+      .delivery-table tr {
+        display: block !important;
+        margin-bottom: 16px !important;
+        padding: 12px !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        border-radius: 8px !important;
+        border: none !important;
+      }
+      
+      .delivery-table tr:last-child {
+        margin-bottom: 0 !important;
+      }
+      
+      .delivery-table td {
+        display: block !important;
+        text-align: left !important;
+        padding: 4px 0 !important;
+        border: none !important;
+        width: 100% !important;
+      }
+      
+      .delivery-table td:first-child {
+        font-size: 13px !important;
+        color: #36454F !important;
+        font-weight: 500 !important;
+        margin-bottom: 4px !important;
+      }
+      
+      .delivery-table td:last-child {
+        text-align: left !important;
+        font-weight: 700 !important;
+        font-size: 16px !important;
+        color: #2C3E50 !important;
+        margin-top: 0 !important;
+      }
+      
+      /* Action buttons - full width mobile */
+      .action-button {
+        padding: 16px 20px !important;
+        font-size: 15px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        display: block !important;
+        margin: 16px 0 !important;
+        text-align: center !important;
+        border-radius: 12px !important;
+      }
+      
+      /* Mobile support info */
+      .support-info {
+        padding: 16px !important;
+        margin: 16px 0 !important;
+        border-radius: 12px !important;
+      }
+      
+      .support-info p {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+      }
+      
+      /* Mobile closing section */
+      .closing-section {
+        padding: 16px !important;
+        margin: 20px 0 !important;
+        border-radius: 12px !important;
+      }
+      
+      .closing-section p {
+        font-size: 16px !important;
+        line-height: 1.4 !important;
+        margin-bottom: 8px !important;
+      }
+      
+      .email-footer {
+        padding: 20px 16px !important;
+        border-radius: 0 0 16px 16px !important;
+      }
+      
+      .email-footer p {
+        font-size: 13px !important;
+        line-height: 1.4 !important;
+        margin-bottom: 12px !important;
+      }
+      
+      /* Mobile address formatting */
+      .footer-address {
+        font-size: 12px !important;
+        line-height: 1.5 !important;
+        margin-bottom: 12px !important;
+        word-break: break-word !important;
+      }
+      
+      /* Mobile faith blessing */
+      .faith-blessing {
+        padding: 12px !important;
+        margin: 12px 0 0 0 !important;
+        border-radius: 8px !important;
+        font-size: 13px !important;
+        line-height: 1.4 !important;
+      }
+      
+      /* Mobile table fixes */
+      .mobile-full-width {
+        width: 100% !important;
+      }
+      
+      .mobile-padding {
+        padding: 16px !important;
+      }
+      
+      /* Hide desktop spacers on mobile */
+      .desktop-spacer {
+        display: none !important;
+      }
+      
+      .mobile-spacer {
+        height: 12px !important;
+        line-height: 12px !important;
+        display: block !important;
+      }
+      
+      /* Mobile logo sizing */
+      .mobile-logo {
+        width: 120px !important;
+        max-width: 120px !important;
+        height: auto !important;
+        margin-bottom: 12px !important;
+      }
+    }
+
+    /* Utility classes */
+    .text-center { text-align: center; }
+    .text-left { text-align: left; }
+    .full-width { width: 100%; }
+    .no-margin { margin: 0; }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); color: #2C3E50;">
+  <!-- Preheader text -->
+  <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+    Your blessed order #GW-2025-004 has been delivered! Give thanks in all circumstances - 1 Thessalonians 5:18
+  </div>
+  
+  <!-- Email wrapper with dual-theme background -->
+  <div role="article" aria-roledescription="email" aria-label="Your Blessed Order Has Been Delivered - #GW-2025-004" lang="en" class="email-wrapper" style="background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); padding: 20px 0; min-height: 100vh;">
+    
+    <!-- Main email table -->
+    <table style="width: 100%; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;" cellpadding="0" cellspacing="0" role="presentation">
+      <tr>
+        <td align="center" style="padding: 0;">
+          
+          <!-- Email container with dual-theme glassmorphism -->
+          <table class="email-container mobile-full-width" style="width: 600px; max-width: 600px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6); margin: 0 auto;" cellpadding="0" cellspacing="0" role="presentation">
+            
+            <!-- Header section -->
+            <tr>
+              <td class="delivery-header mobile-padding" style="background: linear-gradient(135deg, #059669 0%, #047857 50%, #10B981 100%); padding: 32px; text-align: center; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td align="center">
+                      <img src="https://godwear.com/logo.png" width="150" alt="GodWear - Faith-Inspired Fashion" class="mobile-logo" style="border: 0; max-width: 100%; height: auto; vertical-align: middle; display: block; margin-bottom: 16px;">
+                      <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #FFFFFF; text-align: center;">
+                        🎉 Your Blessed Order Has Been Delivered! ✨
+                      </h1>
+                      <p style="margin: 8px 0 0 0; font-size: 16px; color: #F0FDF4; font-style: italic;">
+                        "Give thanks in all circumstances, for this is God's will for you in Christ Jesus." - 1 Thessalonians 5:18
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            
+            <!-- Main content section -->
+            <tr>
+              <td class="main-content mobile-padding" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 40px 48px;">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td style="text-align: left; color: #2C3E50; font-size: 16px; line-height: 1.6;">
+                      
+                      <!-- Greeting -->
+                      <p class="refined-text" style="margin: 0 0 16px 0; font-size: 18px; line-height: 1.6; color: #2C3E50; font-weight: 600;">
+                        Praise God, Sarah! 🌟
+                      </p>
+                      
+                      <!-- Main message -->
+                      <p class="refined-text" style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #2C3E50;">
+                        Wonderful news! Your blessed order #GW-2025-004 has been delivered safely by God's grace. We give thanks for His faithfulness in bringing your sacred items to you in His perfect timing.
+                      </p>
+                      
+                      <!-- Delivery status -->
+                      <div class="delivery-status" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); border-radius: 12px; padding: 20px; margin: 24px 0; color: #FFFFFF; text-align: center;">
+                        <h2 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 700; color: #FFFFFF;">
+                          🎉 Sacred Delivery Status: Delivered ✨
+                        </h2>
+                        <div style="background: rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 16px; margin: 16px 0;">
+                          <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #FFFFFF; text-align: center;">
+                            Your blessed order has been delivered successfully!
+                          </p>
+                        </div>
+                        <p style="margin: 0; font-size: 14px; color: #F0FDF4; font-style: italic;">
+                          Delivered with God's perfect timing and love 💕
+                        </p>
+                      </div>
+                      
+                      <!-- Delivery confirmation details -->
+                      <div class="delivery-confirmation" style="background: rgba(212, 175, 55, 0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 12px; padding: 20px; margin: 24px 0;">
+                        <h2 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 700; color: #2C3E50; text-align: center;">
+                          📦 Sacred Delivery Confirmation ✨
+                        </h2>
+                        <table class="delivery-table" style="width: 100%; border-collapse: collapse;">
+                          
+                          <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); color: #36454F; font-weight: 500;">📍 Blessed Location:</td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); text-align: right; font-weight: 600; color: #2C3E50;">Front porch</td>
+                          </tr>
+                          
+                          
+                          <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); color: #36454F; font-weight: 500;">🕐 Sacred Time:</td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); text-align: right; font-weight: 600; color: #D4AF37; font-size: 18px;">2:30 PM</td>
+                          </tr>
+                          
+                          
+                          <tr>
+                            <td style="padding: 8px 0; color: #36454F; font-weight: 500;">📅 Blessed Date:</td>
+                            <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #D4AF37; font-size: 18px;">January 23, 2025</td>
+                          </tr>
+                          
+                        </table>
+                      </div>
+                      
+                      <!-- Tracking details -->
+                      <div class="tracking-details" style="background: rgba(212, 175, 55, 0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 12px; padding: 20px; margin: 24px 0;">
+                        <h2 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 700; color: #2C3E50; text-align: center;">
+                          ✨ Sacred Tracking Information ✨
+                        </h2>
+                        <table class="delivery-table" style="width: 100%; border-collapse: collapse;">
+                          <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); color: #36454F; font-weight: 500;">📦 Faithful Carrier:</td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); text-align: right; font-weight: 600; color: #2C3E50;">UPS</td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 8px 0; color: #36454F; font-weight: 500;">🔢 Tracking Number:</td>
+                            <td style="padding: 8px 0; text-align: right; font-weight: 600; color: #2C3E50;">1Z999AA1234567890</td>
+                          </tr>
+                        </table>
+                      </div>
+                      
+                      <!-- Action buttons -->
+                      <table style="width: 100%; margin: 32px 0;" cellpadding="0" cellspacing="0" role="presentation">
+                        
+                        <tr>
+                          <td style="text-align: center;">
+                            <a href="https://ups.com/proof/1Z999AA1234567890" class="action-button" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); border: none; border-radius: 50px; padding: 16px 32px; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block; text-align: center; box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3); margin: 8px 0;">
+                              📋 View Sacred Proof of Delivery ✨
+                            </a>
+                          </td>
+                        </tr>
+                        
+                        <tr>
+                          <td style="text-align: center;">
+                            <a href="https://godwear.com/orders/GW-2025-004" class="action-button" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); border: none; border-radius: 50px; padding: 16px 32px; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block; text-align: center; box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3); margin: 8px 0;">
+                              📋 View Sacred Order Details ✨
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Review prompt -->
+                      <div class="review-prompt" style="background: rgba(59, 130, 246, 0.15); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 20px; margin: 24px 0;">
+                        <h2 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 700; color: #2C3E50; text-align: center;">
+                          🌟 How was your blessed experience? 🌟
+                        </h2>
+                        <p style="margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #2C3E50; text-align: center;">
+                          We'd love to hear your testimony! Please take a moment to share your sacred experience and help others discover God's goodness through your review.
+                        </p>
+                        <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                          <tr>
+                            <td style="text-align: center;">
+                              <a href="https://godwear.com/orders/GW-2025-004/review" class="action-button review-button" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); border: none; border-radius: 50px; padding: 16px 32px; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block; text-align: center; box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3); margin: 8px 0;">
+                                ✍️ Share Your Sacred Testimony 🙏
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                      
+                      <!-- Support info -->
+                      <div class="support-info" style="background: rgba(212, 175, 55, 0.1); border-radius: 12px; padding: 20px; margin: 24px 0;">
+                        <p style="margin: 0 0 12px 0; font-size: 16px; line-height: 1.6; color: #2C3E50;">
+                          If you have any questions about your blessed delivery, please <a href="mailto:blessings@godwear.com" style="color: #D4AF37; text-decoration: underline; font-weight: 600;">contact our faithful support team</a>. We're here to serve you with Christian love! 💝
+                        </p>
+                      </div>
+                      
+                      <!-- Closing -->
+                      <div class="closing-section" style="margin-top: 32px; text-align: center; padding: 20px; background: rgba(212, 175, 55, 0.1); border-radius: 12px;">
+                        <p style="margin: 0; font-size: 18px; line-height: 1.5; color: #36454F; font-weight: 600;">
+                          Thank you for choosing GodWear! 🙏
+                        </p>
+                        <p style="margin: 8px 0 0 0; font-size: 16px; line-height: 1.5; color: #D4AF37; font-weight: 600;">
+                          Blessings & Grace,
+                        </p>
+                        <p style="margin: 4px 0 0 0; font-size: 16px; line-height: 1.5; color: #2C3E50; font-style: italic;">
+                          The GodWear Family ✨
+                        </p>
+                      </div>
+                      
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            
+            <!-- Footer section -->
+            <tr>
+              <td class="email-footer mobile-padding" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); padding: 32px; text-align: center; color: #FFFFFF; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td align="center">
+                      
+                      <!-- Copyright -->
+                      <p style="margin: 0 0 16px 0; font-size: 16px; line-height: 1.5; color: #FFFFFF; font-weight: 600;">
+                        ✨ &copy; 2025 GodWear - Faith-Inspired Fashion ✨
+                      </p>
+                      
+                      <!-- Tagline -->
+                      <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5; color: #FEF7ED; font-style: italic;">
+                        "Clothed in righteousness, walking in faith" 🙏
+                      </p>
+                      
+                      <!-- Links -->
+                      <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5; color: #FFFFFF; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        <a href="https://godwear.com/unsubscribe" style="color: #FEF7ED; text-decoration: underline; font-weight: 500;">Unsubscribe</a>
+                        <span style="color: #FEF7ED; margin: 0 8px;">•</span>
+                        <a href="https://godwear.com/privacy" style="color: #FEF7ED; text-decoration: underline; font-weight: 500;">Privacy Policy</a>
+                        <span style="color: #FEF7ED; margin: 0 8px;">•</span>
+                        <a href="https://godwear.com/terms" style="color: #FEF7ED; text-decoration: underline; font-weight: 500;">Terms of Service</a>
+                      </p>
+                      
+                      <!-- Address -->
+                      <p class="footer-address" style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.4; color: #FEF7ED; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        GodWear Inc.<br>
+                        123 Faith Street<br>
+                        New York, NY 10001
+                      </p>
+                      
+                      <!-- Faith blessing -->
+                      <div class="faith-blessing" style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 12px; padding: 16px; text-align: center; font-style: italic; color: #FFFFFF; font-size: 14px; margin: 16px 0 0 0;">
+                        "Give thanks in all circumstances, for this is God's will for you in Christ Jesus." - 1 Thessalonians 5:18
+                      </div>
+                      
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            
+          </table>
+          
+          <!-- Bottom spacer -->
+          <div class="desktop-spacer" style="height: 24px; line-height: 24px;">&nbsp;</div>
+          <div class="mobile-spacer" style="height: 12px; line-height: 12px; display: none;">&nbsp;</div>
+          
+        </td>
+      </tr>
+    </table>
+    
+  </div>
+</body>
+</html>

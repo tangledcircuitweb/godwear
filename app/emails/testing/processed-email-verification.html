@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="utf-8">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <!--[if mso]>
+  <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
+  <![endif]-->
+  <title>Sacred Email Verification - GodWear</title>
+  <style>
+    /* GodWear Dual-Theme Glassmorphism - Light Mode Default with Dark Mode Support */
+    :root {
+      /* Light Mode Colors (Default) */
+      --pure-white: #FFFFFF;
+      --warm-white: #FEFEFE;
+      --soft-white: #F8F9FA;
+      --elegant-gold: #D4AF37;
+      --rich-gold: #B8860B;
+      --light-gold: #F7E98E;
+      --platinum-silver: #E5E4E2;
+      --sterling-silver: #C0C0C0;
+      --dark-silver: #A9A9A9;
+      --charcoal: #36454F;
+      --deep-navy: #2C3E50;
+      
+      /* Light Mode Glassmorphism (Default) */
+      --glass-white: rgba(255, 255, 255, 0.8);
+      --glass-gold: rgba(212, 175, 55, 0.2);
+      --glass-silver: rgba(192, 192, 192, 0.3);
+      
+      /* Light Mode Text Colors (Default) */
+      --text-primary: #2C3E50;
+      --text-secondary: #36454F;
+      --text-accent: #D4AF37;
+      --text-muted: #6B7280;
+      
+      /* Light Mode Background Colors (Default) */
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F8F9FA;
+      --bg-accent: #D4AF37;
+    }
+
+    /* Dark Mode Enhancement */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        /* Enhanced Dark Mode Glassmorphism */
+        --glass-white: rgba(255, 255, 255, 0.9);
+        --glass-gold: rgba(212, 175, 55, 0.3);
+        --glass-silver: rgba(192, 192, 192, 0.4);
+        
+        /* Keep text readable - dark text on light backgrounds */
+        --text-primary: #2C3E50;
+        --text-secondary: #36454F;
+        --text-accent: #B8860B;
+        
+        /* Enhanced backgrounds for dark mode */
+        --bg-primary: #FFFFFF;
+        --bg-secondary: #F8F9FA;
+      }
+    }
+
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      word-break: break-word;
+      -webkit-font-smoothing: antialiased;
+      font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%);
+      color: var(--text-primary);
+    }
+
+    /* Email container styles */
+    .email-container {
+      background: var(--glass-white);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      overflow: hidden;
+    }
+
+    /* Header styles */
+    .verification-header {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #F7E98E 100%);
+      padding: 32px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Security icon section */
+    .security-icon-section {
+      background: var(--glass-gold);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 24px;
+      text-align: center;
+    }
+
+    /* Main content area */
+    .main-content {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 40px 48px;
+    }
+
+    /* Verification button */
+    .verification-button {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+      border: none;
+      border-radius: 50px;
+      padding: 16px 32px;
+      color: #FFFFFF;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      display: inline-block;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .verification-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Alert boxes */
+    .verification-alert {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+      color: #FFFFFF;
+      text-align: center;
+    }
+
+    /* Scripture quote */
+    .scripture-quote {
+      background: var(--glass-gold);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* Footer styles */
+    .email-footer {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+      padding: 32px;
+      text-align: center;
+      color: #FFFFFF;
+    }
+
+    /* Typography */
+    .elegant-heading {
+      color: var(--text-primary);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin: 0 0 16px 0;
+    }
+
+    .refined-text {
+      color: var(--text-primary);
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      margin: 0 0 16px 0;
+    }
+
+    /* Mobile Responsive Design */
+    @media screen and (max-width: 600px) {
+      body {
+        padding: 0 !important;
+      }
+      
+      .email-wrapper {
+        padding: 10px !important;
+      }
+      
+      .email-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 16px !important;
+      }
+      
+      .verification-header {
+        padding: 24px 20px !important;
+        border-radius: 16px 16px 0 0 !important;
+      }
+      
+      .security-icon-section {
+        padding: 20px !important;
+      }
+      
+      .main-content {
+        padding: 24px 20px !important;
+      }
+      
+      .verification-alert,
+      .scripture-quote {
+        padding: 16px !important;
+        margin: 16px 0 !important;
+        border-radius: 12px !important;
+      }
+      
+      .elegant-heading {
+        font-size: 20px !important;
+        line-height: 1.3 !important;
+      }
+      
+      .refined-text {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+      }
+      
+      .verification-button {
+        padding: 14px 24px !important;
+        font-size: 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        display: block !important;
+        margin: 16px 0 !important;
+      }
+      
+      .email-footer {
+        padding: 24px 20px !important;
+        border-radius: 0 0 16px 16px !important;
+      }
+      
+      /* Mobile table fixes */
+      .mobile-full-width {
+        width: 100% !important;
+      }
+      
+      .mobile-padding {
+        padding: 16px !important;
+      }
+      
+      /* Hide desktop spacers on mobile */
+      .desktop-spacer {
+        display: none !important;
+      }
+      
+      .mobile-spacer {
+        height: 16px !important;
+        line-height: 16px !important;
+      }
+    }
+
+    /* Utility classes */
+    .text-center { text-align: center; }
+    .text-left { text-align: left; }
+    .full-width { width: 100%; }
+    .no-margin { margin: 0; }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); color: #2C3E50;">
+  <!-- Preheader text -->
+  <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+    Sacred email verification to complete your blessed GodWear account. "Let your light shine before others" - Matthew 5:16
+  </div>
+  
+  <!-- Email wrapper with dual-theme background -->
+  <div role="article" aria-roledescription="email" aria-label="Sacred Email Verification - GodWear" lang="en" class="email-wrapper" style="background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); padding: 20px 0; min-height: 100vh;">
+    
+    <!-- Main email table -->
+    <table style="width: 100%; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;" cellpadding="0" cellspacing="0" role="presentation">
+      <tr>
+        <td align="center" style="padding: 0;">
+          
+          <!-- Email container with dual-theme glassmorphism -->
+          <table class="email-container mobile-full-width" style="width: 600px; max-width: 600px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6); margin: 0 auto;" cellpadding="0" cellspacing="0" role="presentation">
+            
+            <!-- Header section -->
+            <tr>
+              <td class="verification-header mobile-padding" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #F7E98E 100%); padding: 32px; text-align: center; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td align="center">
+                      <img src="https://godwear.com/logo.png" width="150" alt="GodWear - Faith-Inspired Fashion" style="border: 0; max-width: 100%; height: auto; vertical-align: middle; display: block;">
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            
+            <!-- Security icon section -->
+            <tr>
+              <td class="security-icon-section mobile-padding" style="background: rgba(212, 175, 55, 0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.3); padding: 24px; text-align: center;">
+                <div style="font-size: 48px; margin-bottom: 12px;">🛡️</div>
+                <h2 class="elegant-heading" style="margin: 0; font-size: 24px; font-weight: 700; color: #36454F; text-align: center;">Sacred Email Verification</h2>
+              </td>
+            </tr>
+            
+            <!-- Main content section -->
+            <tr>
+              <td class="main-content mobile-padding" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 40px 48px;">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td style="text-align: left; color: #2C3E50; font-size: 16px; line-height: 1.6;">
+                      
+                      <!-- Scripture quote -->
+                      <div class="scripture-quote" style="background: rgba(212, 175, 55, 0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 12px; padding: 20px; margin: 0 0 24px 0; text-align: center; font-style: italic;">
+                        <p style="margin: 0; font-size: 16px; color: #2C3E50; line-height: 1.5;">
+                          "In the same way, let your light shine before others, that they may see your good deeds and glorify your Father in heaven."
+                        </p>
+                        <p style="margin: 8px 0 0 0; font-size: 14px; color: #36454F; font-weight: 600;">
+                          - Matthew 5:16
+                        </p>
+                      </div>
+                      
+                      <!-- Greeting -->
+                      <p class="refined-text" style="margin: 0 0 16px 0; font-size: 18px; line-height: 1.6; color: #2C3E50; font-weight: 600;">
+                        Blessed Sarah, 💝
+                      </p>
+                      
+                      <!-- Main message -->
+                      <p class="refined-text" style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #2C3E50;">
+                        Please verify your sacred email address by clicking the blessed button below. This holy step helps us keep your account secure and allows you to receive important notifications about your faith journey with GodWear. Let your light shine in our Christian community!
+                      </p>
+                      
+                      <!-- Verification button -->
+                      <table style="width: 100%; margin: 32px 0;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="text-align: center;">
+                            <a href="https://godwear.com/verify-email/xyz789abc123" class="verification-button" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); border: none; border-radius: 50px; padding: 16px 32px; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block; text-align: center; box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);">
+                              🙏 Verify Sacred Email 🙏
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      <!-- Link fallback -->
+                      <p class="refined-text" style="margin: 32px 0 8px 0; font-size: 16px; line-height: 1.6; color: #2C3E50;">
+                        If the blessed button doesn't work, copy and paste this sacred link into your browser:
+                      </p>
+                      <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.4; color: #D4AF37; word-break: break-all; font-weight: 600; padding: 12px; background: rgba(212, 175, 55, 0.1); border-radius: 8px;">
+                        https://godwear.com/verify-email/xyz789abc123
+                      </p>
+                      
+                      <!-- Expiration notice -->
+                      <div class="verification-alert" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); border-radius: 12px; padding: 20px; margin: 24px 0; color: #FFFFFF; text-align: center;">
+                        <p style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600;">
+                          ⏰ Sacred Timing Notice ⏰
+                        </p>
+                        <p style="margin: 0; font-size: 14px; line-height: 1.5;">
+                          This blessed verification link will expire in {{expiresInMinutes}} minutes ({{expiresAt}}), as God's timing is perfect. If the link expires, you can request a new sacred verification email from your account settings.
+                        </p>
+                      </div>
+                      
+                      <!-- Support message -->
+                      <p class="refined-text" style="margin: 32px 0 0 0; font-size: 16px; line-height: 1.6; color: #2C3E50;">
+                        If you didn't create a blessed account with GodWear, please ignore this email or <a href="{{supportUrl}}" style="color: #D4AF37; text-decoration: underline; font-weight: 600;">contact our sacred support team</a> if you have concerns. We protect your digital sanctuary with Christian love and care. 💝
+                      </p>
+                      
+                      <!-- Closing -->
+                      <div style="margin-top: 32px; text-align: center; padding: 20px; background: rgba(212, 175, 55, 0.1); border-radius: 12px;">
+                        <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #36454F; font-weight: 600;">
+                          🙏 Clothed in righteousness, walking in faith 🙏
+                        </p>
+                        <p style="margin: 8px 0 0 0; font-size: 14px; line-height: 1.5; color: #2C3E50; font-style: italic;">
+                          With Christian blessings and welcome,
+                        </p>
+                        <p style="margin: 4px 0 0 0; font-size: 16px; line-height: 1.5; color: #D4AF37; font-weight: 600;">
+                          The GodWear Family 💙
+                        </p>
+                      </div>
+                      
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            
+            <!-- Footer section -->
+            <tr>
+              <td class="email-footer mobile-padding" style="background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%); padding: 32px; text-align: center; color: #FFFFFF; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td align="center">
+                      
+                      <!-- Copyright -->
+                      <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5; color: #FFFFFF; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        &copy; 2025 GodWear - Faith-Inspired Fashion. All rights reserved under God's grace.
+                      </p>
+                      
+                      <!-- Links -->
+                      <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5; color: #FFFFFF; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        <a href="https://godwear.com/privacy" style="color: #FEF7ED; text-decoration: underline; font-weight: 500;">Privacy Policy</a>
+                        <span style="color: #FEF7ED; margin: 0 8px;">•</span>
+                        <a href="https://godwear.com/terms" style="color: #FEF7ED; text-decoration: underline; font-weight: 500;">Terms of Service</a>
+                      </p>
+                      
+                      <!-- Address -->
+                      <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.4; color: #FEF7ED; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;">
+                        💙 GodWear Inc., 123 Faith Avenue, Blessed City, NY 10001 💙
+                      </p>
+                      
+                      <!-- Faith blessing -->
+                      <div style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 12px; padding: 16px; text-align: center; font-style: italic; color: #FFFFFF; font-size: 14px; margin: 16px 0 0 0;">
+                        "Let your light shine before others, that they may see your good deeds and glorify your Father in heaven." - Matthew 5:16
+                      </div>
+                      
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            
+          </table>
+          
+          <!-- Bottom spacer -->
+          <div class="desktop-spacer" style="height: 24px; line-height: 24px;">&nbsp;</div>
+          <div class="mobile-spacer" style="height: 16px; line-height: 16px; display: none;">&nbsp;</div>
+          
+        </td>
+      </tr>
+    </table>
+    
+  </div>
+</body>
+</html>
