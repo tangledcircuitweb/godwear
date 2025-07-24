@@ -8,494 +8,621 @@
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
   <!--[if mso]>
   <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
-  <style>/* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
-:root {
-  --pure-white: #FFFFFF;
-  --warm-white: #FEFEFE;
-  --soft-white: #F8F9FA;
-  --elegant-gold: #D4AF37;
-  --rich-gold: #B8860B;
-  --light-gold: #F7E98E;
-  --platinum-silver: #E5E4E2;
-  --sterling-silver: #C0C0C0;
-  --dark-silver: #A9A9A9;
-  --charcoal: #36454F;
-  --deep-navy: #2C3E50;
-  --glass-white: rgba(255, 255, 255, 0.25);
-  --glass-gold: rgba(212, 175, 55, 0.15);
-  --glass-silver: rgba(192, 192, 192, 0.2);
-}
-
-/* Modern Glassmorphism Base */
-body {
-  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(135deg, 
-    var(--soft-white) 0%, 
-    var(--platinum-silver) 25%, 
-    var(--warm-white) 50%, 
-    var(--light-gold) 75%, 
-    var(--pure-white) 100%);
-  background-attachment: fixed;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-}
-
-/* Glassmorphism Container */
-.glass-container {
-  background: var(--glass-white);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  padding: 32px;
-  margin: 20px auto;
-  max-width: 600px;
-}
-
-/* Elegant Gold Accent */
-.gold-gradient {
-  background: linear-gradient(135deg, 
-    var(--elegant-gold) 0%, 
-    var(--rich-gold) 50%, 
-    var(--light-gold) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 600;
-}
-
-/* Silver Glassmorphism Card */
-.silver-glass-card {
-  background: var(--glass-silver);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(192, 192, 192, 0.3);
-  border-radius: 16px;
-  padding: 24px;
-  margin: 16px 0;
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-/* Gold Glassmorphism Highlight */
-.gold-glass-highlight {
-  background: var(--glass-gold);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  border-radius: 12px;
-  padding: 16px;
-  margin: 12px 0;
-  box-shadow: 
-    0 2px 8px rgba(212, 175, 55, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Elegant Typography */
-.elegant-heading {
-  color: var(--charcoal);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-}
-
-.refined-text {
-  color: var(--deep-navy);
-  font-weight: 400;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
-}
-
-.silver-accent {
-  color: var(--dark-silver);
-  font-weight: 500;
-}
-
-/* Modern Button with Glassmorphism */
-.glass-button {
-  background: var(--glass-white);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid var(--elegant-gold);
-  border-radius: 50px;
-  padding: 14px 32px;
-  color: var(--charcoal);
-  text-decoration: none;
-  font-weight: 600;
-  display: inline-block;
-  transition: all 0.3s ease;
-  box-shadow: 
-    0 4px 16px rgba(212, 175, 55, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-.glass-button:hover {
-  background: var(--glass-gold);
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 24px rgba(212, 175, 55, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-/* Frosted Divider */
-.frosted-divider {
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    var(--sterling-silver) 50%, 
-    transparent 100%);
-  margin: 32px 0;
-  opacity: 0.6;
-}
-
-/* Faith Message with Glassmorphism */
-.faith-blessing {
-  background: var(--glass-white);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  font-style: italic;
-  color: var(--deep-navy);
-  font-size: 15px;
-  margin: 24px 0;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Mobile Responsive Design */
-@media screen and (max-width: 600px) {
-  .glass-container {
-    margin: 10px;
-    padding: 20px;
-    border-radius: 16px;
-  }
-  
-  .silver-glass-card,
-  .gold-glass-highlight {
-    padding: 16px;
-    border-radius: 12px;
-  }
-  
-  .elegant-heading {
-    font-size: 20px !important;
-  }
-  
-  .gold-gradient {
-    font-size: 24px !important;
-  }
-  
-  .glass-button {
-    padding: 12px 24px;
-    font-size: 14px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  /* Stack grid layouts on mobile */
-  div[style*="display: grid"] {
-    display: block !important;
-  }
-  
-  div[style*="grid-template-columns"] > div {
-    margin-bottom: 16px;
-  }
-  
-  div[style*="display: flex"] {
-    flex-direction: column !important;
-    gap: 8px !important;
-  }
-}
-
-/* Enhanced Glassmorphism Effects for Modern Browsers */
-@supports (backdrop-filter: blur(20px)) {
-  .glass-container {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-  }
-  
-  .silver-glass-card {
-    background: rgba(229, 228, 226, 0.25);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-  }
-  
-  .gold-glass-highlight {
-    background: rgba(212, 175, 55, 0.2);
-    backdrop-filter: blur(15px) saturate(200%);
-    -webkit-backdrop-filter: blur(15px) saturate(200%);
-  }
-}
-
-/* Fallback for browsers without backdrop-filter support */
-@supports not (backdrop-filter: blur(20px)) {
-  .glass-container {
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  }
-  
-  .silver-glass-card {
-    background: rgba(229, 228, 226, 0.9);
-  }
-  
-  .gold-glass-highlight {
-    background: rgba(212, 175, 55, 0.3);
-  }
-}
-</style>
   <![endif]-->
-  <title>Sacred Order Follow-up - How was your blessed experience?</title>
+  <title>Sacred Order Follow-up - Continue Your Faith Journey | GodWear</title>
   <style>
-    /* Christian Brand Colors */
+    /* GodWear Elegant Glassmorphism - White, Gold & Silver Palette */
     :root {
-      --deep-purple: #4C1D95;
-      --sacred-gold: #B45309;
-      --cream: #FEF7ED;
-      --royal-purple: #6B21A8;
+      --pure-white: #FFFFFF;
+      --warm-white: #FEFEFE;
+      --soft-white: #F8F9FA;
+      --elegant-gold: #D4AF37;
+      --rich-gold: #B8860B;
+      --light-gold: #F7E98E;
+      --platinum-silver: #E5E4E2;
+      --sterling-silver: #C0C0C0;
+      --dark-silver: #A9A9A9;
+      --charcoal: #36454F;
+      --deep-navy: #2C3E50;
+      --glass-white: rgba(255, 255, 255, 0.25);
+      --glass-gold: rgba(212, 175, 55, 0.15);
+      --glass-silver: rgba(192, 192, 192, 0.2);
     }
-    
-    /* Base styles with Christian typography */
-    body, table, td, p, h1, h2, h3, h4, h5, h6 {
-      font-family: Georgia, 'Times New Roman', serif;
+
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
     }
-    
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      word-break: break-word;
+      -webkit-font-smoothing: antialiased;
+      font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, 
+        #F8F9FA 0%, 
+        #E5E4E2 25%, 
+        #FEFEFE 50%, 
+        #F7E98E 75%, 
+        #FFFFFF 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    /* Email client compatibility */
+    table {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    /* Glassmorphism Container */
+    .glass-container {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      padding: 32px;
+      margin: 20px auto;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    /* Elegant Gold Accent */
+    .gold-gradient {
+      background: linear-gradient(135deg, 
+        #D4AF37 0%, 
+        #B8860B 50%, 
+        #F7E98E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+
+    /* Silver Glassmorphism Card */
+    .silver-glass-card {
+      background: rgba(192, 192, 192, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(192, 192, 192, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 16px 0;
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    /* Gold Glassmorphism Highlight */
+    .gold-glass-highlight {
+      background: rgba(212, 175, 55, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      box-shadow: 
+        0 2px 8px rgba(212, 175, 55, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    /* Order Follow-up specific styles */
+    .followup-header {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #F7E98E 100%);
+      padding: 32px;
+      text-align: center;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .followup-blessing-box {
+      background: rgba(212, 175, 55, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      text-align: center;
+      box-shadow: 
+        0 2px 8px rgba(212, 175, 55, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    .feature-card {
+      background: rgba(192, 192, 192, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(192, 192, 192, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 12px 0;
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    .order-summary {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+      color: #FFFFFF;
+    }
+
+    /* Product Grid System */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .product-card {
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .product-image {
+      width: 100%;
+      max-width: 150px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Modern Button with Glassmorphism */
+    .glass-button {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid #D4AF37;
+      border-radius: 50px;
+      padding: 16px 32px;
+      color: #36454F;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 4px 16px rgba(212, 175, 55, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .glass-button:hover {
+      background: rgba(212, 175, 55, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 8px 24px rgba(212, 175, 55, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .product-button {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+      color: #FFFFFF;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+    }
+
+    .product-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Typography */
+    .elegant-heading {
+      color: #36454F;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin: 0 0 16px 0;
+    }
+
+    .refined-text {
+      color: #2C3E50;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      margin: 0 0 16px 0;
+    }
+
+    .blessing-text {
+      font-style: italic;
+      color: #FFFFFF;
+      text-align: center;
+      font-size: 16px;
+      margin: 16px 0 0 0;
+      opacity: 0.9;
+    }
+
+    /* Dark mode support */
     @media (prefers-color-scheme: dark) {
-      .dark-mode { background-color: #2D1B69 !important; color: #FEF7ED !important; }
-      .dark-text { color: #FEF7ED !important; }
-      .dark-bg { background-color: var(--charcoal) !important; }
-      .dark-button { background-color: var(--elegant-gold) !important; color: #FEF7ED !important; }
-      .dark-border { border-color: var(--deep-navy) !important; }
-      .dark-divider { border-top-color: var(--deep-navy) !important; }
-      .dark-table-row { background-color: var(--charcoal) !important; }
-      .dark-table-header { background-color: var(--deep-navy) !important; color: #FEF7ED !important; }
-      .dark-discount { background-color: var(--deep-navy) !important; border-color: var(--elegant-gold) !important; }
+      .dark-mode { 
+        background-color: #121212 !important; 
+        color: #ffffff !important; 
+      }
+      .dark-text { 
+        color: #ffffff !important; 
+      }
+      .dark-bg { 
+        background-color: #1e1e1e !important; 
+      }
     }
-    
+
+    /* Enhanced Glassmorphism Effects for Modern Browsers */
+    @supports (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(25px) saturate(180%);
+        -webkit-backdrop-filter: blur(25px) saturate(180%);
+      }
+      
+      .silver-glass-card,
+      .feature-card {
+        background: rgba(229, 228, 226, 0.25);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+      }
+      
+      .gold-glass-highlight,
+      .followup-blessing-box {
+        background: rgba(212, 175, 55, 0.2);
+        backdrop-filter: blur(15px) saturate(200%);
+        -webkit-backdrop-filter: blur(15px) saturate(200%);
+      }
+
+      .product-card {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
+      }
+    }
+
+    /* Fallback for browsers without backdrop-filter support */
+    @supports not (backdrop-filter: blur(20px)) {
+      .glass-container {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      }
+      
+      .silver-glass-card,
+      .feature-card {
+        background: rgba(229, 228, 226, 0.9);
+      }
+      
+      .gold-glass-highlight,
+      .followup-blessing-box {
+        background: rgba(212, 175, 55, 0.3);
+      }
+
+      .product-card {
+        background: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    /* Mobile Responsive Design */
     @media screen and (max-width: 600px) {
-      .sm-w-full { width: 100% !important; }
-      .sm-px-4 { padding-left: 16px !important; padding-right: 16px !important; }
-      .sm-py-8 { padding-top: 32px !important; padding-bottom: 32px !important; }
-      .sm-text-sm { font-size: 14px !important; }
-      .sm-text-lg { font-size: 18px !important; }
-      .sm-hidden { display: none !important; }
-      .sm-block { display: block !important; }
-      .sm-inline-block { display: inline-block !important; }
-      .sm-center { text-align: center !important; }
+      body {
+        padding: 0 !important;
+      }
+      
+      .email-wrapper {
+        width: 100% !important;
+        padding: 10px !important;
+      }
+      
+      .glass-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 10px auto !important;
+        padding: 20px !important;
+      }
+      
+      .followup-header {
+        padding: 24px 20px !important;
+        border-radius: 16px 16px 0 0 !important;
+      }
+      
+      .elegant-heading {
+        font-size: 24px !important;
+      }
+      
+      .refined-text {
+        font-size: 15px !important;
+      }
+      
+      .glass-button {
+        width: 100% !important;
+        padding: 16px !important;
+        margin: 16px 0 !important;
+      }
+      
+      .silver-glass-card,
+      .feature-card,
+      .gold-glass-highlight,
+      .followup-blessing-box {
+        padding: 16px !important;
+        margin: 12px 0 !important;
+      }
+
+      .order-summary {
+        padding: 20px !important;
+      }
+
+      /* Mobile Product Grid */
+      .product-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+      }
+
+      .product-card {
+        padding: 16px !important;
+      }
+
+      .product-image {
+        max-width: 120px !important;
+      }
+
+      .product-button {
+        width: 100% !important;
+        padding: 12px !important;
+        margin-top: 12px !important;
+      }
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased;">
-  <!-- Email wrapper -->
-  <div style="display: none;">Sacred order follow-up: How was your blessed GodWear experience? "Give thanks in all circumstances" - 1 Thessalonians 5:18</div>
-  <div role="article" aria-roledescription="email" aria-label="Sacred Order Follow-up - How was your blessed experience?" lang="en">
-    <table style="width: 100%; font-family: Georgia, 'Times New Roman', serif;" cellpadding="0" cellspacing="0" role="presentation">
+<body>
+  <div style="display: none;">Sacred order follow-up - Continue your faith journey with blessed recommendations. "Be strong and courageous" - Joshua 1:9 🙏</div>
+  
+  <div class="email-wrapper" style="background: linear-gradient(135deg, #F8F9FA 0%, #E5E4E2 25%, #FEFEFE 50%, #F7E98E 75%, #FFFFFF 100%); padding: 20px 0; min-height: 100vh;">
+    <table style="width: 100%; font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
-        <td align="center" style="padding: 24px 0;">
-          <!-- Email container -->
-          <table class="sm-w-full" style="width: 600px;" cellpadding="0" cellspacing="0" role="presentation">
-            <!-- Sacred Header -->
-            <tr>
-              <td class="dark-bg" class="gold-glass-highlight">
-                <img src="{{logoUrl}}" width="150" alt="GodWear - Faith-Inspired Fashion" style="border: 0; max-width: 100%; vertical-align: middle;">
-              </td>
-            </tr>
-            <!-- Sacred Body -->
-            <tr>
-              <td class="dark-bg" class="gold-gradient">
+        <td align="center" style="padding: 0;">
+          
+          <!-- Glass Container -->
+          <div class="glass-container">
+            
+            <!-- Follow-up Header -->
+            <div class="followup-header">
+              <img src="{{logoUrl}}" width="120" alt="GodWear" style="border: 0; max-width: 100%; vertical-align: middle; margin-bottom: 16px;">
+              <div style="font-size: 48px; margin-bottom: 12px;">🙏</div>
+              <h1 style="margin: 0; font-size: 32px; font-weight: bold; color: #FFFFFF; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                Continue Your Faith Journey
+              </h1>
+              <p class="blessing-text">
+                "Be strong and courageous" - Joshua 1:9
+              </p>
+            </div>
+            
+            <!-- Main Content -->
+            <div style="padding: 0;">
+              
+              <!-- Follow-up Blessing Box -->
+              <div class="followup-blessing-box">
+                <h2 class="elegant-heading" style="font-size: 24px; text-align: center; margin-bottom: 8px;">
+                  💝 Thank You for Your Sacred Order! 💝
+                </h2>
+                <p class="refined-text" style="text-align: center; margin: 0;">
+                  We hope you're blessed by your recent purchase from GodWear.
+                </p>
+              </div>
+              
+              <!-- Greeting -->
+              <h1 class="elegant-heading" style="font-size: 28px; text-align: center;">
+                ✨ How Are You Enjoying Your Purchase? 🙏
+              </h1>
+              
+              <p class="refined-text" style="font-size: 18px; font-weight: 600;">
+                Blessed {{firstName}}, 💝
+              </p>
+              
+              <p class="refined-text">
+                We hope your recent GodWear purchase is bringing you joy and strengthening your faith walk! As you continue to clothe yourself in righteousness, we wanted to share some blessed recommendations that might inspire your spiritual journey.
+              </p>
+              
+              <!-- Order Summary -->
+              {{#if orderSummary}}
+              <div class="order-summary">
+                <h3 style="margin: 0 0 16px 0; font-size: 20px; font-weight: bold; color: #FFFFFF; text-align: center;">
+                  📦 Your Recent Sacred Order
+                </h3>
                 <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
                   <tr>
-                    <td class="sm-px-4 sm-py-8" style="padding: 40px 48px; text-align: left;">
-                      <!-- Email content -->
-                      <h1 style="margin: 0; font-size: 28px; font-weight: bold; line-height: 36px; color: var(--charcoal); text-align: center;" class="dark-text sm-text-lg">🙏 How was your blessed experience? 🙏</h1>
-                      
-                      <div class="gold-gradient">
-                        <p style="margin: 0; font-size: 16px; font-style: italic; color: #FEF7ED; line-height: 24px;">
-                          "Rejoice always, pray continually, give thanks in all circumstances; for this is God's will for you in Christ Jesus."
-                        </p>
-                        <p style="margin: 8px 0 0 0; font-size: 14px; color: #FEF7ED; font-weight: bold;">
-                          - 1 Thessalonians 5:16-18
-                        </p>
-                      </div>
-                      
-                      <p style="margin: 0; margin-top: 24px; font-size: 18px; line-height: 28px; color: var(--charcoal);" class="dark-text">
-                        Blessed {{firstName}}, 💝
-                      </p>
-                      <p style="margin: 0; margin-top: 16px; font-size: 16px; line-height: 26px; color: var(--deep-navy);" class="dark-text">
-                        Thank you for your recent blessed purchase from GodWear! We pray you're being blessed by your new faith-inspired items and that they're helping you walk in righteousness. We'd love to hear how God has used these sacred pieces in your life!
-                      </p>
-                      
-                      <!-- Sacred Order Details -->
-                      <table class="gold-glass-highlight" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 24px;">
-                            <h2 style="margin: 0; font-size: 20px; font-weight: bold; line-height: 28px; color: #FEF7ED; text-align: center;" class="dark-text">💙 Sacred Order Details 💙</h2>
-                            <table style="width: 100%; margin-top: 16px; background-color: #FEF7ED; border-radius: 6px; padding: 16px;" cellpadding="0" cellspacing="0" role="presentation">
-                              <tr>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--charcoal); font-weight: bold;" class="dark-text">🔢 Sacred Order:</td>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--elegant-gold); text-align: right; font-weight: bold;" class="dark-text">#{{orderNumber}}</td>
-                              </tr>
-                              <tr>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--charcoal); font-weight: bold;" class="dark-text">📅 Blessed Date:</td>
-                                <td style="padding-bottom: 8px; font-size: 16px; line-height: 24px; color: var(--elegant-gold); text-align: right; font-weight: bold;" class="dark-text">{{orderDate}}</td>
-                              </tr>
-                              <tr>
-                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: var(--charcoal); font-weight: bold;" class="dark-text">🚚 Holy Delivery:</td>
-                                <td style="padding-bottom: 0; font-size: 16px; line-height: 24px; color: var(--elegant-gold); text-align: right; font-weight: bold;" class="dark-text">{{deliveryDate}}</td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- Sacred Items -->
-                      <h2 style="margin: 0; margin-top: 32px; font-size: 20px; font-weight: bold; line-height: 28px; color: var(--charcoal); text-align: center;" class="dark-text">💙 Your Blessed Items 💙</h2>
-                      {{#each items}}
-                      <table class="gold-glass-highlight" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 20px;">
-                            <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
-                              <tr>
-                                <td style="width: 80px; padding-right: 20px; vertical-align: top;" class="sm-hidden">
-                                  <img src="{{imageUrl}}" width="80" alt="{{name}}" style="border: 0; border-radius: 6px; max-width: 100%; vertical-align: middle; border: 2px solid #B45309;">
-                                </td>
-                                <td style="vertical-align: top;">
-                                  <h3 style="margin: 0; font-size: 18px; font-weight: bold; line-height: 24px; color: #FEF7ED;" class="dark-text">{{name}}</h3>
-                                  <p style="margin: 4px 0 0 0; font-size: 14px; line-height: 20px; color: var(--elegant-gold); font-weight: bold;" class="dark-text">{{variant}}</p>
-                                  <p style="margin: 8px 0 0 0; font-size: 16px; font-weight: bold; line-height: 24px; color: #FEF7ED;" class="dark-text">{{price}}</p>
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      {{/each}}
-                      
-                      <!-- Sacred Review Button -->
-                      <table style="width: 100%; margin-top: 32px;" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="text-align: center;">
-                            <a href="{{reviewUrl}}" class="gold-glass-highlight" class="dark-button sm-w-full">
-                              🙏 Share Sacred Testimony 🙏
-                            </a>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 26px; color: var(--deep-navy); text-align: center;" class="dark-text">
-                        Your blessed feedback helps us improve our sacred products and services. We'd love to hear about your faith journey with these items!
-                      </p>
-                      
-                      <!-- Divine Discount Section -->
-                      {{#if discount}}
-                      <table class="gold-gradient" class="dark-discount" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 24px; text-align: center;">
-                            <h2 style="margin: 0; font-size: 22px; font-weight: bold; line-height: 30px; color: #FEF7ED;" class="dark-text">🎁 Divine Blessing Just For You 🎁</h2>
-                            <p style="margin: 16px 0 0 0; font-size: 16px; line-height: 26px; color: #FEF7ED;" class="dark-text">
-                              As a sacred thank you for your faithful purchase, enjoy <strong>{{discount}}% off</strong> your next blessed order!
-                            </p>
-                            <div class="gold-gradient">
-                              <span style="font-size: 24px; font-weight: bold; color: var(--charcoal); font-family: Georgia, serif;">{{discountCode}}</span>
-                            </div>
-                            <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
-                              Use this blessed code at checkout before {{discountExpiryDate}}
-                            </p>
-                            <table style="width: 100%; margin-top: 20px;" cellpadding="0" cellspacing="0" role="presentation">
-                              <tr>
-                                <td style="text-align: center;">
-                                  <a href="{{orderUrl}}" class="gold-gradient" class="dark-button sm-w-full">
-                                    💝 Shop Sacred Collection 💝
-                                  </a>
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      {{/if}}
-                      
-                      <!-- Sacred Recommendations -->
-                      {{#if recommendations.length}}
-                      <h2 style="margin: 0; margin-top: 32px; font-size: 20px; font-weight: bold; line-height: 28px; color: var(--charcoal); text-align: center;" class="dark-text">💙 You Might Also Be Blessed By 💙</h2>
-                      {{#each recommendations}}
-                      <table class="gold-glass-highlight" cellpadding="0" cellspacing="0" role="presentation">
-                        <tr>
-                          <td style="padding: 20px;">
-                            <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
-                              <tr>
-                                <td style="width: 100px; padding-right: 20px; vertical-align: top;" class="sm-hidden">
-                                  <img src="{{imageUrl}}" width="100" alt="{{name}}" style="border: 0; border-radius: 6px; max-width: 100%; vertical-align: middle; border: 2px solid #B45309;">
-                                </td>
-                                <td style="vertical-align: top;">
-                                  <h3 style="margin: 0; font-size: 18px; font-weight: bold; line-height: 24px; color: #FEF7ED;" class="dark-text">{{name}}</h3>
-                                  <p style="margin: 8px 0 0 0; font-size: 16px; font-weight: bold; line-height: 24px; color: var(--elegant-gold);" class="dark-text">{{price}}</p>
-                                  <table style="margin-top: 12px;" cellpadding="0" cellspacing="0" role="presentation">
-                                    <tr>
-                                      <td>
-                                        <a href="{{url}}" class="gold-gradient">View Sacred Details</a>
-                                      </td>
-                                    </tr>
-                                  </table>
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      {{/each}}
-                      {{/if}}
-                      
-                      <p style="margin: 0; margin-top: 32px; font-size: 16px; line-height: 26px; color: var(--deep-navy);" class="dark-text">
-                        If you have any questions about your blessed order, please contact our sacred customer service team at <a href="mailto:{{supportEmail}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: bold;" class="dark-text">{{supportEmail}}</a>. We're here to serve you with Christian love and care.
-                      </p>
-                      
-                      <p style="margin: 0; margin-top: 24px; font-size: 16px; line-height: 26px; color: var(--charcoal); text-align: center;" class="dark-text">
-                        🙏 <strong>Clothed in righteousness, walking in faith</strong> 🙏<br>
-                        <em style="color: var(--deep-navy);">With Christian gratitude and blessings,</em><br>
-                        <strong style="color: var(--elegant-gold);">The GodWear Family</strong> 💙
-                      </p>
-                    </td>
+                    <td style="padding: 8px 0; color: #FFFFFF; font-weight: bold;">Order Number:</td>
+                    <td style="padding: 8px 0; color: #FFFFFF; text-align: right;">{{orderSummary.orderNumber}}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #FFFFFF; font-weight: bold;">Order Date:</td>
+                    <td style="padding: 8px 0; color: #FFFFFF; text-align: right;">{{orderSummary.orderDate}}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #FFFFFF; font-weight: bold;">Total Items:</td>
+                    <td style="padding: 8px 0; color: #FFFFFF; text-align: right;">{{orderSummary.itemCount}}</td>
                   </tr>
                 </table>
-              </td>
-            </tr>
-            <!-- Sacred Footer -->
-            <tr>
-              <td class="dark-bg dark-border" class="gold-glass-highlight">
-                <p style="margin: 0; font-size: 16px; line-height: 24px; color: #FEF7ED; font-weight: bold;" class="dark-text">
-                  🙏 Clothed in righteousness, walking in faith 🙏
+              </div>
+              {{/if}}
+              
+              <!-- Product Recommendations -->
+              {{#if recommendations}}
+              <div class="silver-glass-card">
+                <h3 class="elegant-heading" style="font-size: 22px; text-align: center; margin-bottom: 20px;">
+                  💙 You Might Also Be Blessed By 💙
+                </h3>
+                <p class="refined-text" style="text-align: center; margin-bottom: 24px;">
+                  Continue your faith journey with these sacred selections:
                 </p>
-                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
-                  &copy; {{currentYear}} GodWear - Faith-Inspired Fashion. All rights reserved under God's grace.
+                
+                <!-- Product Grid -->
+                <!--[if !mso]><!-->
+                <div class="product-grid">
+                  {{#each recommendations}}
+                  <div class="product-card">
+                    <img src="{{this.imageUrl}}" alt="{{this.name}}" class="product-image">
+                    <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold; color: #36454F;">{{this.name}}</h4>
+                    <p style="margin: 0 0 8px 0; font-size: 14px; color: #2C3E50; line-height: 1.4;">{{this.description}}</p>
+                    <p style="margin: 0 0 12px 0; font-size: 18px; font-weight: bold; color: #D4AF37;">${{this.price}}</p>
+                    <a href="{{this.url}}" class="product-button">View Sacred Details</a>
+                  </div>
+                  {{/each}}
+                </div>
+                <!--<![endif]-->
+                
+                <!-- MSO Fallback for Outlook -->
+                <!--[if mso]>
+                <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                  {{#each recommendations}}
+                  <tr>
+                    <td style="padding: 16px; border-bottom: 1px solid #E5E4E2;">
+                      <table style="width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+                        <tr>
+                          <td style="width: 120px; padding-right: 16px; vertical-align: top;">
+                            <img src="{{this.imageUrl}}" width="120" alt="{{this.name}}" style="border: 0; border-radius: 8px;">
+                          </td>
+                          <td style="vertical-align: top;">
+                            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold; color: #36454F;">{{this.name}}</h4>
+                            <p style="margin: 0 0 8px 0; font-size: 14px; color: #2C3E50;">{{this.description}}</p>
+                            <p style="margin: 0 0 12px 0; font-size: 18px; font-weight: bold; color: #D4AF37;">${{this.price}}</p>
+                            <a href="{{this.url}}" style="background: #D4AF37; color: #FFFFFF; text-decoration: none; padding: 8px 16px; border-radius: 4px; font-weight: bold;">View Details</a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  {{/each}}
+                </table>
+                <![endif]-->
+              </div>
+              {{/if}}
+              
+              <!-- Faith Journey Tips -->
+              <div class="feature-card">
+                <h3 class="elegant-heading" style="font-size: 18px; margin-bottom: 16px;">
+                  ✨ Ways to Strengthen Your Faith Walk
+                </h3>
+                <ul style="margin: 0; padding-left: 20px; color: #2C3E50; line-height: 1.6;">
+                  <li style="margin-bottom: 8px;">Wear your faith-inspired clothing as a daily reminder of God's love</li>
+                  <li style="margin-bottom: 8px;">Share your testimony with others about how GodWear impacts your faith</li>
+                  <li style="margin-bottom: 8px;">Use your clothing as conversation starters about Christ</li>
+                  <li style="margin-bottom: 0;">Join our faith community on social media for daily inspiration</li>
+                </ul>
+              </div>
+              
+              <!-- Action Buttons -->
+              <div style="text-align: center; margin: 32px 0;">
+                <div style="margin-bottom: 16px;">
+                  <a href="{{shopUrl}}" class="glass-button">
+                    🛍️ Continue Shopping
+                  </a>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                  <a href="{{reviewUrl}}" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">⭐ Leave a Review</a>
+                  <a href="{{socialUrl}}" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">📱 Follow Us</a>
+                </div>
+              </div>
+              
+              <!-- Support Information -->
+              <div style="text-align: center; margin: 32px 0;">
+                <p class="refined-text">
+                  If you have any questions about your blessed order, please don't hesitate to 
+                  <a href="mailto:{{supportEmail}}" style="color: #D4AF37; text-decoration: underline; font-weight: bold;">contact our sacred customer service team</a>. 
+                  We're here to serve you with Christian love and care! 💝
                 </p>
-                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED;" class="dark-text">
-                  <a href="{{unsubscribeUrl}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: bold;" class="dark-text">Unsubscribe</a> •
-                  <a href="{{privacyUrl}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: bold;" class="dark-text">Privacy Policy</a> •
-                  <a href="{{termsUrl}}" style="color: var(--elegant-gold); text-decoration: underline; font-weight: bold;" class="dark-text">Terms of Service</a>
+                
+                <p style="margin: 24px 0 0 0; font-size: 18px; line-height: 1.6; color: #36454F; font-weight: bold;">
+                  🙏 <strong>Clothed in righteousness, walking in faith</strong> 🙏<br>
+                  <span class="gold-gradient">With Christian gratitude and blessings,</span><br>
+                  <span style="font-style: italic;">The GodWear Family ✨</span>
                 </p>
-                <p style="margin: 16px 0 0 0; font-size: 14px; line-height: 22px; color: #FEF7ED; font-style: italic;" class="dark-text">
-                  💙 GodWear Inc., 123 Faith Avenue, Blessed City, NY 10001 💙<br>
-                  <em>"Give thanks in all circumstances" - 1 Thessalonians 5:18</em>
+              </div>
+              
+              <!-- Scripture Footer -->
+              <div class="gold-glass-highlight" style="text-align: center; padding: 24px;">
+                <p style="margin: 0; font-size: 16px; color: #2C3E50; font-style: italic; line-height: 1.6;">
+                  "Have I not commanded you? Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go."
                 </p>
-              </td>
-            </tr>
-            <!-- Spacer -->
-            <tr>
-              <td style="height: 24px;"></td>
-            </tr>
-          </table>
+                <p style="margin: 8px 0 0 0; font-size: 14px; color: #36454F; font-weight: bold;">
+                  - Joshua 1:9
+                </p>
+              </div>
+              
+            </div>
+            
+          </div>
+          
         </td>
       </tr>
     </table>
   </div>
+
+  <!-- MSO fallback styles -->
+  <!--[if mso]>
+  <style>
+    .glass-container,
+    .silver-glass-card,
+    .gold-glass-highlight,
+    .followup-blessing-box,
+    .feature-card,
+    .product-card {
+      background: #FFFFFF !important;
+      border: 1px solid #E5E4E2 !important;
+    }
+    .glass-button {
+      background: #D4AF37 !important;
+      color: #FFFFFF !important;
+    }
+    .followup-header {
+      background: #D4AF37 !important;
+    }
+    .order-summary {
+      background: #059669 !important;
+    }
+    .product-button {
+      background: #D4AF37 !important;
+    }
+  </style>
+  <![endif]-->
 </body>
 </html>
