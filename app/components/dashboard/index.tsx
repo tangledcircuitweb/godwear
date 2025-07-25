@@ -4,8 +4,6 @@
  * This file exports components for building dashboards.
  */
 
-import React from "react";
-
 // Re-export all dashboard components
 export * from "./metric-card";
 export * from "./line-chart";
@@ -14,10 +12,10 @@ export * from "./pie-chart";
 export * from "./data-table";
 export * from "./alert";
 
-// Export default dashboard layout
-export default function Dashboard({ children }: { children: React.ReactNode }) {
+// Dashboard layout component for HonoX
+export function Dashboard({ children }: { children: any }) {
   return (
-    <div className="p-6">
+    <div class="p-6">
       {children}
     </div>
   );

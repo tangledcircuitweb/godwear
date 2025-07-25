@@ -1,11 +1,153 @@
 import { z } from "zod";
-import { BaseEmailService, EmailResult, EmailStatus, RawEmailOptions, ResendOptions, TemplatedEmailOptions } from "./email-service";
+import { BaseEmailService } from "./email-service";
 import { TransactionalEmailService } from "./transactional-email-service";
 import type { ServiceDependencies, ServiceHealthStatus } from "../../services/base";
 
 // ============================================================================
+// LOCAL SCHEMAS - AI-First file-local approach
+// ============================================================================
+
+/**
+ * Local email recipient schema for this service
+ */
+const LocalEmailRecipientSchema = z.object({
+  email: z.string().email(),
+  name: z.string().optional(),
+});
+
+/**
+ * Local email attachment schema for this service
+ */
+const LocalEmailAttachmentSchema = z.object({
+  filename: z.string(),
+  content: z.union([z.string(), z.instanceof(Buffer)], {}),
+  contentType: z.string().optional(),
+  disposition: z.enum(["attachment", "inline"], {}).optional(),
+  id: z.string().optional(),
+});
+
+/**
+ * Local raw email options schema for this service
+ */
+const LocalRawEmailOptionsSchema = z.object({
+  recipient: LocalEmailRecipientSchema,
+  cc: z.array(LocalEmailRecipientSchema).optional(),
+  bcc: z.array(LocalEmailRecipientSchema).optional(),
+  subject: z.string(),
+  html: z.string(),
+  text: z.string(),
+  attachments: z.array(LocalEmailAttachmentSchema).optional(),
+  tags: z.array(z.string()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+  replyTo: LocalEmailRecipientSchema.optional(),
+  idempotencyKey: z.string().optional(),
+});
+
+/**
+ * Local templated email options schema for this service
+ */
+const LocalTemplatedEmailOptionsSchema = z.object({
+  recipient: LocalEmailRecipientSchema,
+  cc: z.array(LocalEmailRecipientSchema).optional(),
+  bcc: z.array(LocalEmailRecipientSchema).optional(),
+  subject: z.string(),
+  templateName: z.string(),
+  data: z.record(z.string(), z.unknown()),
+  attachments: z.array(LocalEmailAttachmentSchema).optional(),
+  tags: z.array(z.string()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+  replyTo: LocalEmailRecipientSchema.optional(),
+  idempotencyKey: z.string().optional(),
+});
+
+/**
+ * Local email result schema for this service
+ */
+const LocalEmailResultSchema = z.object({
+  success: z.boolean(),
+  timestamp: z.string(),
+  provider: z.string(),
+  recipient: z.string(),
+  subject: z.string(),
+  messageId: z.string().optional(),
+  error: z.string().optional(),
+  templateName: z.string().optional(),
+  status: z.string().optional(),
+});
+
+/**
+ * Local email status schema for this service
+ */
+const LocalEmailStatusSchema = z.object({
+  id: z.string(),
+  status: z.enum([
+    "queued", 
+    "scheduled", 
+    "sending", 
+    "sent", 
+    "delivered", 
+    "failed", 
+    "bounced", 
+    "rejected", 
+    "cancelled"
+  ], {}),
+  recipient: z.string(),
+  subject: z.string(),
+  scheduledFor: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+});
+
+/**
+ * Local resend options schema for this service
+ */
+const LocalResendOptionsSchema = z.object({
+  maxAttempts: z.number().int().positive().default(3),
+  delay: z.number().int().nonnegative().default(1000),
+  backoff: z.enum(["linear", "exponential"], {}).default("exponential"),
+});
+
+// Type inference for local schemas
+type LocalEmailRecipient = z.infer<typeof LocalEmailRecipientSchema>;
+type LocalEmailAttachment = z.infer<typeof LocalEmailAttachmentSchema>;
+type LocalRawEmailOptions = z.infer<typeof LocalRawEmailOptionsSchema>;
+type LocalTemplatedEmailOptions = z.infer<typeof LocalTemplatedEmailOptionsSchema>;
+type LocalEmailResult = z.infer<typeof LocalEmailResultSchema>;
+type LocalEmailStatus = z.infer<typeof LocalEmailStatusSchema>;
+type LocalResendOptions = z.infer<typeof LocalResendOptionsSchema>;
+
+// ============================================================================
 // LOCAL SCHEMAS
 // ============================================================================
+
+/**
+ * Local environment schema for this service - AI-First file-local approach
+ * Each file defines its own environment validation schema
+ */
+const LocalEnvironmentSchema = z.object({
+  EMAIL_QUEUE_MAX_CONCURRENT: z.string().optional(),
+  EMAIL_QUEUE_RATE_CRITICAL: z.string().optional(),
+  EMAIL_QUEUE_RATE_HIGH: z.string().optional(),
+  EMAIL_QUEUE_RATE_MEDIUM: z.string().optional(),
+  EMAIL_QUEUE_RATE_LOW: z.string().optional(),
+  EMAIL_INTERVAL_CRITICAL: z.string().optional(),
+  EMAIL_INTERVAL_HIGH: z.string().optional(),
+  EMAIL_INTERVAL_MEDIUM: z.string().optional(),
+  EMAIL_INTERVAL_LOW: z.string().optional(),
+  EMAIL_INTERVAL_TESTING: z.string().optional(),
+  EMAIL_QUEUE_RETRY_DELAYS: z.string().optional(),
+  EMAIL_QUEUE_PERSISTENCE_KEY: z.string().optional(),
+  EMAIL_QUEUE_MAX_SIZE: z.string().optional(),
+  EMAIL_QUEUE_BATCH_SIZE: z.string().optional(),
+  EMAIL_QUEUE_PROCESSING_INTERVAL: z.string().optional(),
+  EMAIL_QUEUE_CLEANUP_INTERVAL: z.string().optional(),
+  EMAIL_QUEUE_MAX_AGE: z.string().optional(),
+  EMAIL_QUEUE_PRIORITY_BOOST_RETRY: z.string().optional(),
+  EMAIL_QUEUE_PRIORITY_BOOST_WAIT: z.string().optional(),
+  EMAIL_TESTING_MODE: z.string().optional(),
+  EMAIL_DOMAIN_THROTTLES: z.string().optional(),
+});
+
+type LocalEnvironment = z.infer<typeof LocalEnvironmentSchema>;
 
 /**
  * Email priority enum
@@ -49,7 +191,12 @@ const QueueOptionsSchema = z.object({
     high: z.number().int().nonnegative().default(10),    // 10 per second
     medium: z.number().int().nonnegative().default(5),   // 5 per second
     low: z.number().int().nonnegative().default(2),      // 2 per second
-  }).default({}),
+  }).default({
+    critical: 0,
+    high: 10,
+    medium: 5,
+    low: 2
+  }),
   // Configurable timing intervals between emails (in milliseconds)
   emailIntervals: z.object({
     critical: z.number().int().nonnegative().default(0),     // No delay for critical emails
@@ -57,7 +204,13 @@ const QueueOptionsSchema = z.object({
     medium: z.number().int().nonnegative().default(60000),  // 60 seconds between medium priority emails
     low: z.number().int().nonnegative().default(60000),     // 60 seconds between low priority emails
     testing: z.number().int().nonnegative().default(60000), // 60 seconds for testing mode
-  }).default({}),
+  }).default({
+    critical: 0,
+    high: 60000,
+    medium: 60000,
+    low: 60000,
+    testing: 60000
+  }),
   retryDelays: z.array(z.number().int().nonnegative()).default([1000, 5000, 15000, 60000]),
   persistenceKey: z.string().optional(),
   // Enhanced scheduling and rate limiting options
@@ -69,7 +222,10 @@ const QueueOptionsSchema = z.object({
   priorityBoost: z.object({
     retryCount: z.number().nonnegative().default(0.1), // Priority boost per retry
     waitTime: z.number().nonnegative().default(0.01),  // Priority boost per minute waiting
-  }).default({}),
+  }).default({
+    retryCount: 0.1,
+    waitTime: 0.01
+  }),
   // Testing mode configuration
   testingMode: z.boolean().default(false), // When true, uses testing intervals
 });
@@ -191,13 +347,13 @@ class RateLimiter {
  * Enhanced email queue service for scheduling and rate limiting
  */
 export class EnhancedEmailQueueService extends BaseEmailService {
-  readonly serviceName = "enhanced-email-queue-service";
-  private emailService: TransactionalEmailService;
+  override readonly serviceName = "enhanced-email-queue-service";
+  private emailService!: TransactionalEmailService;
   private queue: QueueItem[] = [];
-  private options: QueueOptions;
+  private options!: QueueOptions;
   private processing = false;
   private activeCount = 0;
-  private rateLimiter: RateLimiter;
+  private rateLimiter!: RateLimiter;
   private processingInterval: NodeJS.Timeout | null = null;
   private cleanupInterval: NodeJS.Timeout | null = null;
   private persistenceInterval: NodeJS.Timeout | null = null;
@@ -214,42 +370,46 @@ export class EnhancedEmailQueueService extends BaseEmailService {
     domainDelayed: 0,
   };
 
+  constructor() {
+    super();
+  }
+
   /**
    * Initialize the email queue service
    */
   override initialize(dependencies: ServiceDependencies): void {
     super.initialize(dependencies);
 
-    // Parse queue options from environment
+    // Parse queue options from environment using AI-First file-local approach
     this.options = QueueOptionsSchema.parse({
-      maxConcurrent: Number(this.env.EMAIL_QUEUE_MAX_CONCURRENT || 5),
+      maxConcurrent: Number(this.env['EMAIL_QUEUE_MAX_CONCURRENT'] || 5),
       rateLimit: {
-        critical: Number(this.env.EMAIL_QUEUE_RATE_CRITICAL || 0),
-        high: Number(this.env.EMAIL_QUEUE_RATE_HIGH || 10),
-        medium: Number(this.env.EMAIL_QUEUE_RATE_MEDIUM || 5),
-        low: Number(this.env.EMAIL_QUEUE_RATE_LOW || 2),
+        critical: Number(this.env['EMAIL_QUEUE_RATE_CRITICAL'] || 0),
+        high: Number(this.env['EMAIL_QUEUE_RATE_HIGH'] || 10),
+        medium: Number(this.env['EMAIL_QUEUE_RATE_MEDIUM'] || 5),
+        low: Number(this.env['EMAIL_QUEUE_RATE_LOW'] || 2),
       },
       emailIntervals: {
-        critical: Number(this.env.EMAIL_INTERVAL_CRITICAL || 0),
-        high: Number(this.env.EMAIL_INTERVAL_HIGH || 60000),
-        medium: Number(this.env.EMAIL_INTERVAL_MEDIUM || 60000),
-        low: Number(this.env.EMAIL_INTERVAL_LOW || 60000),
-        testing: Number(this.env.EMAIL_INTERVAL_TESTING || 60000),
+        critical: Number(this.env['EMAIL_INTERVAL_CRITICAL'] || 0),
+        high: Number(this.env['EMAIL_INTERVAL_HIGH'] || 60000),
+        medium: Number(this.env['EMAIL_INTERVAL_MEDIUM'] || 60000),
+        low: Number(this.env['EMAIL_INTERVAL_LOW'] || 60000),
+        testing: Number(this.env['EMAIL_INTERVAL_TESTING'] || 60000),
       },
-      retryDelays: this.env.EMAIL_QUEUE_RETRY_DELAYS
-        ? JSON.parse(this.env.EMAIL_QUEUE_RETRY_DELAYS)
+      retryDelays: this.env['EMAIL_QUEUE_RETRY_DELAYS']
+        ? JSON.parse(this.env['EMAIL_QUEUE_RETRY_DELAYS'])
         : [1000, 5000, 15000, 60000],
-      persistenceKey: this.env.EMAIL_QUEUE_PERSISTENCE_KEY,
-      maxQueueSize: Number(this.env.EMAIL_QUEUE_MAX_SIZE || 1000),
-      batchSize: Number(this.env.EMAIL_QUEUE_BATCH_SIZE || 10),
-      processingInterval: Number(this.env.EMAIL_QUEUE_PROCESSING_INTERVAL || 1000),
-      cleanupInterval: Number(this.env.EMAIL_QUEUE_CLEANUP_INTERVAL || 60000),
-      maxAge: Number(this.env.EMAIL_QUEUE_MAX_AGE || 7 * 24 * 60 * 60 * 1000),
+      persistenceKey: this.env['EMAIL_QUEUE_PERSISTENCE_KEY'],
+      maxQueueSize: Number(this.env['EMAIL_QUEUE_MAX_SIZE'] || 1000),
+      batchSize: Number(this.env['EMAIL_QUEUE_BATCH_SIZE'] || 10),
+      processingInterval: Number(this.env['EMAIL_QUEUE_PROCESSING_INTERVAL'] || 1000),
+      cleanupInterval: Number(this.env['EMAIL_QUEUE_CLEANUP_INTERVAL'] || 60000),
+      maxAge: Number(this.env['EMAIL_QUEUE_MAX_AGE'] || 7 * 24 * 60 * 60 * 1000),
       priorityBoost: {
-        retryCount: Number(this.env.EMAIL_QUEUE_PRIORITY_BOOST_RETRY || 0.1),
-        waitTime: Number(this.env.EMAIL_QUEUE_PRIORITY_BOOST_WAIT || 0.01),
+        retryCount: Number(this.env['EMAIL_QUEUE_PRIORITY_BOOST_RETRY'] || 0.1),
+        waitTime: Number(this.env['EMAIL_QUEUE_PRIORITY_BOOST_WAIT'] || 0.01),
       },
-      testingMode: this.env.EMAIL_TESTING_MODE === "true",
+      testingMode: this.env['EMAIL_TESTING_MODE'] === "true",
     });
 
     // Initialize the email service
@@ -277,10 +437,10 @@ export class EnhancedEmailQueueService extends BaseEmailService {
       this.cleanupQueue();
     }, this.options.cleanupInterval);
 
-    // Configure domain throttling from environment
-    if (this.env.EMAIL_DOMAIN_THROTTLES) {
+    // Configure domain throttling from environment using AI-First approach
+    if (this.env['EMAIL_DOMAIN_THROTTLES']) {
       try {
-        const throttles = JSON.parse(this.env.EMAIL_DOMAIN_THROTTLES);
+        const throttles = JSON.parse(this.env['EMAIL_DOMAIN_THROTTLES']);
         Object.entries(throttles).forEach(([domain, limit]) => {
           this.setDomainThrottle(domain, Number(limit));
         });
@@ -297,9 +457,9 @@ export class EnhancedEmailQueueService extends BaseEmailService {
    * Send a raw email (enqueues for processing)
    */
   async sendRawEmail(
-    options: RawEmailOptions,
+    options: LocalRawEmailOptions,
     enqueueOptions?: Partial<EnqueueOptions>
-  ): Promise<EmailResult> {
+  ): Promise<LocalEmailResult> {
     const opts = EnqueueOptionsSchema.parse({
       ...enqueueOptions,
       priority: enqueueOptions?.priority || "medium",
@@ -314,7 +474,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
           error: "Email queue is full",
           timestamp: new Date().toISOString(),
           provider: "queue",
-          recipient: this.getRecipientEmail(options.to),
+          recipient: options.recipient.email,
           subject: options.subject,
           status: "rejected",
         };
@@ -329,7 +489,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
           error: "Duplicate email with same idempotency key",
           timestamp: new Date().toISOString(),
           provider: "queue",
-          recipient: this.getRecipientEmail(options.to),
+          recipient: options.recipient.email,
           subject: options.subject,
           status: "rejected",
         };
@@ -338,7 +498,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
     }
 
     // Extract recipient domain for domain-based throttling
-    const recipientEmail = this.getRecipientEmail(options.to);
+    const recipientEmail = options.recipient.email;
     const recipientDomain = recipientEmail.split("@")[1];
 
     const queueItem: QueueItem = {
@@ -391,9 +551,9 @@ export class EnhancedEmailQueueService extends BaseEmailService {
    * Send a templated email (enqueues for processing)
    */
   async sendTemplatedEmail(
-    options: TemplatedEmailOptions,
+    options: LocalTemplatedEmailOptions,
     enqueueOptions?: Partial<EnqueueOptions>
-  ): Promise<EmailResult> {
+  ): Promise<LocalEmailResult> {
     const opts = EnqueueOptionsSchema.parse({
       ...enqueueOptions,
       priority: enqueueOptions?.priority || "medium",
@@ -408,7 +568,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
           error: "Email queue is full",
           timestamp: new Date().toISOString(),
           provider: "queue",
-          recipient: this.getRecipientEmail(options.to),
+          recipient: options.recipient.email,
           subject: options.subject,
           status: "rejected",
         };
@@ -423,7 +583,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
           error: "Duplicate email with same idempotency key",
           timestamp: new Date().toISOString(),
           provider: "queue",
-          recipient: this.getRecipientEmail(options.to),
+          recipient: options.recipient.email,
           subject: options.subject,
           status: "rejected",
         };
@@ -432,7 +592,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
     }
 
     // Extract recipient domain for domain-based throttling
-    const recipientEmail = this.getRecipientEmail(options.to);
+    const recipientEmail = options.recipient.email;
     const recipientDomain = recipientEmail.split("@")[1];
 
     const queueItem: QueueItem = {
@@ -485,19 +645,19 @@ export class EnhancedEmailQueueService extends BaseEmailService {
    * Schedule an email for future delivery
    */
   async scheduleEmail(
-    options: RawEmailOptions | TemplatedEmailOptions,
+    options: LocalRawEmailOptions | LocalTemplatedEmailOptions,
     scheduledFor: Date | number,
     enqueueOptions?: Partial<Omit<EnqueueOptions, "scheduledFor">>
-  ): Promise<EmailResult> {
+  ): Promise<LocalEmailResult> {
     const isRaw = "html" in options || "text" in options;
 
     if (isRaw) {
-      return this.sendRawEmail(options as RawEmailOptions, {
+      return this.sendRawEmail(options as LocalRawEmailOptions, {
         ...enqueueOptions,
         scheduledFor,
       });
     } else {
-      return this.sendTemplatedEmail(options as TemplatedEmailOptions, {
+      return this.sendTemplatedEmail(options as LocalTemplatedEmailOptions, {
         ...enqueueOptions,
         scheduledFor,
       });
@@ -507,7 +667,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
   /**
    * Resend an email
    */
-  async resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult> {
+  async resendEmail(emailId: string, options?: LocalResendOptions): Promise<LocalEmailResult> {
     try {
       // Validate options if provided
       const validatedOptions = options ? ResendOptionsSchema.parse(options) : undefined;
@@ -581,7 +741,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
   /**
    * Get email status
    */
-  async getEmailStatus(emailId: string): Promise<EmailStatus> {
+  async getEmailStatus(emailId: string): Promise<LocalEmailStatus> {
     try {
       // Find the email in the queue
       const queueItem = this.queue.find(item => item.id === emailId);
@@ -650,7 +810,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
   /**
    * Cancel a scheduled email
    */
-  async cancelEmail(emailId: string): Promise<EmailResult> {
+  async cancelEmail(emailId: string): Promise<LocalEmailResult> {
     try {
       // Find the email in the queue
       const queueItemIndex = this.queue.findIndex(item => item.id === emailId);

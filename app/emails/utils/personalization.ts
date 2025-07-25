@@ -1,3 +1,55 @@
+import { z } from "zod";
+
+// ============================================================================
+// LOCAL SCHEMAS - AI-First file-local approach
+// ============================================================================
+
+/**
+ * Purchase history item schema for this utility
+ */
+const PurchaseHistoryItemSchema = z.object({
+  productId: z.string(),
+  id: z.string(),
+  // Add other properties as needed
+}).passthrough(); // Allow additional properties
+
+/**
+ * Available product schema for this utility
+ */
+const AvailableProductSchema = z.object({
+  id: z.string(),
+  productId: z.string().optional(),
+  categories: z.array(z.string()).optional(),
+  category: z.string().optional(),
+  brands: z.array(z.string()).optional(),
+  brand: z.string().optional(),
+  price: z.number().optional(),
+  priceRange: z.object({
+    min: z.number(),
+    max: z.number(),
+  }).optional(),
+}).passthrough(); // Allow additional properties
+
+/**
+ * User preferences schema for this utility
+ */
+const UserPreferencesSchema = z.record(z.string(), z.unknown());
+
+/**
+ * Email data schema for subject line generation
+ */
+const EmailDataSchema = z.object({
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  orderNumber: z.string().optional(),
+  discount: z.number().optional(),
+}).passthrough(); // Allow additional properties
+
+type PurchaseHistoryItem = z.infer<typeof PurchaseHistoryItemSchema>;
+type AvailableProduct = z.infer<typeof AvailableProductSchema>;
+type UserPreferences = z.infer<typeof UserPreferencesSchema>;
+type EmailData = z.infer<typeof EmailDataSchema>;
+
 /**
  * Personalization utilities for email templates
  */
@@ -25,18 +77,18 @@ export function generateGreeting(name: string, locale: string = "en-US"): string
  */
 export function generateRecommendations(
   userId: string,
-  preferences: Record<string, any>,
-  purchaseHistory: Record<string, any>[],
-  availableProducts: Record<string, any>[],
+  preferences: UserPreferences,
+  purchaseHistory: PurchaseHistoryItem[],
+  availableProducts: AvailableProduct[],
   count: number = 3
-): Record<string, any>[] {
+): AvailableProduct[] {
   // This is a simplified implementation
   // In a real system, this would use a recommendation algorithm
   
   // Filter out products the user has already purchased
-  const purchasedProductIds = purchaseHistory.map((purchase) => purchase.productId);
+  const purchasedProductIds = purchaseHistory.map((purchase) => purchase['productId']);
   const candidateProducts = availableProducts.filter(
-    (product) => !purchasedProductIds.includes(product.id)
+    (product) => !purchasedProductIds.includes(product['id'])
   );
 
   // Sort by relevance to user preferences (simplified)
@@ -44,19 +96,19 @@ export function generateRecommendations(
     let score = 0;
     
     // Score based on category preference
-    if (preferences.categories?.includes(product.category)) {
+    if (preferences['categories']?.includes(product['category'])) {
       score += 10;
     }
     
     // Score based on brand preference
-    if (preferences.brands?.includes(product.brand)) {
+    if (preferences['brands']?.includes(product['brand'])) {
       score += 5;
     }
     
     // Score based on price range
     if (
-      preferences.priceRange?.min <= product.price &&
-      preferences.priceRange?.max >= product.price
+      preferences['priceRange']?.min <= product['price'] &&
+      preferences['priceRange']?.max >= product['price']
     ) {
       score += 3;
     }
@@ -129,22 +181,22 @@ export function formatName(firstName: string, lastName?: string): string {
  */
 export function generateSubjectLine(
   templateType: string,
-  data: Record<string, any>
+  data: EmailData
 ): string {
   switch (templateType) {
     case "welcome":
-      return `Welcome to GodWear, ${formatName(data.firstName, data.lastName)}!`;
+      return `Welcome to GodWear, ${formatName(data['firstName'], data['lastName'])}!`;
     
     case "order-confirmation":
-      return `Order Confirmed: #${data.orderNumber} - Thank You!`;
+      return `Order Confirmed: #${data['orderNumber']} - Thank You!`;
     
     case "shipping-notification":
-      return `Your Order #${data.orderNumber} Has Shipped!`;
+      return `Your Order #${data['orderNumber']} Has Shipped!`;
     
     case "abandoned-cart":
-      return data.discount
-        ? `${formatName(data.firstName, data.lastName)}, Save ${data.discount}% on Items in Your Cart`
-        : `${formatName(data.firstName, data.lastName)}, Complete Your GodWear Purchase`;
+      return data['discount']
+        ? `${formatName(data['firstName'], data['lastName'])}, Save ${data['discount']}% on Items in Your Cart`
+        : `${formatName(data['firstName'], data['lastName'])}, Complete Your GodWear Purchase`;
     
     case "password-reset":
       return "Reset Your GodWear Password";

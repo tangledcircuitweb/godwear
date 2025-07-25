@@ -178,7 +178,7 @@ export interface EmailAnalyticsService extends BaseService {
  * Base email analytics service implementation
  */
 export abstract class BaseEmailAnalyticsService implements EmailAnalyticsService {
-  readonly serviceName = "email-analytics-service";
+  abstract readonly serviceName: string;
   protected env: Record<string, any> = {};
   protected logger?: ServiceDependencies["logger"];
 

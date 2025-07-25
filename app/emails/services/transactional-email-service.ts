@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { BaseEmailService, EmailResult, TemplatedEmailOptions } from "./email-service";
+import { BaseEmailService } from "./email-service";
+import type { EmailResult, TemplatedEmailOptions } from "./email-service";
 import { MailerSendService } from "./mailersend-service";
 import { TestEmailService } from "./test-service";
 import { addTrackingData } from "../utils/tracking";
@@ -9,6 +10,20 @@ import type { ServiceDependencies, ServiceHealthStatus } from "../../services/ba
 // ============================================================================
 // LOCAL SCHEMAS
 // ============================================================================
+
+/**
+ * Local environment schema for this service - AI-First file-local approach
+ * Each file defines its own environment validation schema
+ */
+const LocalEnvironmentSchema = z.object({
+  EMAIL_MAX_RETRIES: z.string().optional(),
+  EMAIL_RETRY_INITIAL_DELAY: z.string().optional(),
+  EMAIL_RETRY_MAX_DELAY: z.string().optional(),
+  EMAIL_RETRY_FACTOR: z.string().optional(),
+  EMAIL_TEST_MODE: z.string().optional(),
+});
+
+type LocalEnvironment = z.infer<typeof LocalEnvironmentSchema>;
 
 /**
  * Welcome email options schema
@@ -219,9 +234,13 @@ interface RetryConfig {
  * Transactional email service with specialized methods for each email type
  */
 export class TransactionalEmailService extends BaseEmailService {
-  readonly serviceName = "transactional-email-service";
-  private emailService: BaseEmailService;
-  private retryConfig: RetryConfig;
+  override readonly serviceName = "transactional-email-service";
+  private emailService!: BaseEmailService;
+  private retryConfig!: RetryConfig;
+
+  constructor() {
+    super();
+  }
 
   /**
    * Initialize the transactional email service
@@ -229,16 +248,16 @@ export class TransactionalEmailService extends BaseEmailService {
   override initialize(dependencies: ServiceDependencies): void {
     super.initialize(dependencies);
 
-    // Configure retry settings
+    // Configure retry settings using AI-First file-local approach
     this.retryConfig = {
-      maxRetries: Number(this.env.EMAIL_MAX_RETRIES || 3),
-      initialDelay: Number(this.env.EMAIL_RETRY_INITIAL_DELAY || 1000),
-      maxDelay: Number(this.env.EMAIL_RETRY_MAX_DELAY || 10000),
-      factor: Number(this.env.EMAIL_RETRY_FACTOR || 2),
+      maxRetries: Number(this.env['EMAIL_MAX_RETRIES'] || 3),
+      initialDelay: Number(this.env['EMAIL_RETRY_INITIAL_DELAY'] || 1000),
+      maxDelay: Number(this.env['EMAIL_RETRY_MAX_DELAY'] || 10000),
+      factor: Number(this.env['EMAIL_RETRY_FACTOR'] || 2),
     };
 
     // Initialize the appropriate email service based on environment
-    if (this.env.EMAIL_TEST_MODE === "true") {
+    if (this.env['EMAIL_TEST_MODE'] === "true") {
       this.emailService = new TestEmailService();
     } else {
       this.emailService = new MailerSendService();

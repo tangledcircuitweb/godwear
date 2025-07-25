@@ -1,21 +1,40 @@
-import { BaseEmailService, EmailResult, RawEmailOptions, TemplatedEmailOptions } from "./email-service";
+import { z } from "zod";
+import { BaseEmailService } from "./email-service";
+import type { EmailResult, RawEmailOptions, TemplatedEmailOptions } from "./email-service";
 import type { ServiceHealthStatus } from "../../services/base";
 import { renderTemplate } from "../utils/template-engine";
+
+// ============================================================================
+// LOCAL SCHEMAS - AI-First file-local approach
+// ============================================================================
+
+/**
+ * Local environment schema for this service
+ */
+const LocalEnvironmentSchema = z.object({
+  TEST_EMAIL_TEMPLATE_DIR: z.string().optional(),
+});
+
+type LocalEnvironment = z.infer<typeof LocalEnvironmentSchema>;
 
 /**
  * Test email service for development
  * Logs emails instead of sending them
  */
 export class TestEmailService extends BaseEmailService {
-  readonly serviceName = "test-email-service";
-  private templateDir: string;
+  override readonly serviceName = "test-email-service";
+  private templateDir!: string;
+
+  constructor() {
+    super();
+  }
 
   /**
    * Initialize the test email service
    */
   override initialize(dependencies: Parameters<BaseEmailService["initialize"]>[0]): void {
     super.initialize(dependencies);
-    this.templateDir = this.env.TEST_EMAIL_TEMPLATE_DIR || "/app/emails/templates";
+    this.templateDir = this.env['TEST_EMAIL_TEMPLATE_DIR'] || "/app/emails/templates";
   }
 
   /**

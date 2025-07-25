@@ -4,9 +4,8 @@
  * A component for displaying tabular data.
  */
 
-import React from "react";
-
-export interface DataTableColumn {
+// Define interfaces locally (following AI-first principles)
+interface DataTableColumn {
   /**
    * Key for the column (property name in data objects)
    */
@@ -20,10 +19,10 @@ export interface DataTableColumn {
   /**
    * Optional render function for custom cell rendering
    */
-  render?: (value: any, row: any) => React.ReactNode;
+  render?: (value: any, row: any) => any;
 }
 
-export interface DataTableProps {
+interface DataTableProps {
   /**
    * Data for the table
    */
@@ -36,30 +35,30 @@ export interface DataTableProps {
 }
 
 /**
- * Data Table Component
+ * Data Table Component for HonoX
  */
 export function DataTable({ data = [], columns }: DataTableProps) {
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
           <tr>
             {columns.map((column) => (
               <th
                 key={column.key}
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
                 {column.header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody class="bg-white divide-y divide-gray-200">
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex} className={rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+            <tr key={rowIndex} class={rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"}>
               {columns.map((column) => (
-                <td key={column.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td key={column.key} class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {column.render
                     ? column.render(row[column.key], row)
                     : row[column.key]}
@@ -69,7 +68,7 @@ export function DataTable({ data = [], columns }: DataTableProps) {
           ))}
           {data.length === 0 && (
             <tr>
-              <td colSpan={columns.length} className="px-6 py-4 text-center text-sm text-gray-500">
+              <td colSpan={columns.length} class="px-6 py-4 text-center text-sm text-gray-500">
                 No data available
               </td>
             </tr>

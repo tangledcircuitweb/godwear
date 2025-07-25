@@ -1,10 +1,116 @@
 import { z } from "zod";
-import { BaseEmailService, EmailResult, EmailStatus, RawEmailOptions, ResendOptions, TemplatedEmailOptions } from "./email-service";
+import { BaseEmailService } from "./email-service";
 import type { ServiceDependencies, ServiceHealthStatus } from "../../services/base";
 
 // ============================================================================
-// LOCAL SCHEMAS
+// LOCAL SCHEMAS - AI-First file-local approach
 // ============================================================================
+
+/**
+ * Local email recipient schema for this service
+ */
+const LocalEmailRecipientSchema = z.object({
+  email: z.string().email(),
+  name: z.string().optional(),
+});
+
+/**
+ * Local email attachment schema for this service
+ */
+const LocalEmailAttachmentSchema = z.object({
+  filename: z.string(),
+  content: z.union([z.string(), z.instanceof(Buffer)], {}),
+  contentType: z.string().optional(),
+  disposition: z.enum(["attachment", "inline"], {}).optional(),
+  id: z.string().optional(),
+});
+
+/**
+ * Local raw email options schema for this service
+ */
+const LocalRawEmailOptionsSchema = z.object({
+  recipient: LocalEmailRecipientSchema,
+  cc: z.array(LocalEmailRecipientSchema).optional(),
+  bcc: z.array(LocalEmailRecipientSchema).optional(),
+  subject: z.string(),
+  html: z.string(),
+  text: z.string(),
+  attachments: z.array(LocalEmailAttachmentSchema).optional(),
+  tags: z.array(z.string()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+  replyTo: LocalEmailRecipientSchema.optional(),
+});
+
+/**
+ * Local templated email options schema for this service
+ */
+const LocalTemplatedEmailOptionsSchema = z.object({
+  recipient: LocalEmailRecipientSchema,
+  cc: z.array(LocalEmailRecipientSchema).optional(),
+  bcc: z.array(LocalEmailRecipientSchema).optional(),
+  subject: z.string(),
+  templateName: z.string(),
+  data: z.record(z.string(), z.unknown()),
+  attachments: z.array(LocalEmailAttachmentSchema).optional(),
+  tags: z.array(z.string()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+  replyTo: LocalEmailRecipientSchema.optional(),
+});
+
+/**
+ * Local email result schema for this service
+ */
+const LocalEmailResultSchema = z.object({
+  success: z.boolean(),
+  timestamp: z.string(),
+  provider: z.string(),
+  recipient: z.string(),
+  subject: z.string(),
+  messageId: z.string().optional(),
+  error: z.string().optional(),
+  templateName: z.string().optional(),
+  status: z.string().optional(),
+});
+
+/**
+ * Local email status schema for this service
+ */
+const LocalEmailStatusSchema = z.object({
+  id: z.string(),
+  status: z.enum([
+    "queued", 
+    "scheduled", 
+    "sending", 
+    "sent", 
+    "delivered", 
+    "failed", 
+    "bounced", 
+    "rejected", 
+    "cancelled"
+  ], {}),
+  recipient: z.string(),
+  subject: z.string(),
+  scheduledFor: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+});
+
+/**
+ * Local resend options schema for this service
+ */
+const LocalResendOptionsSchema = z.object({
+  maxAttempts: z.number().int().positive().default(3),
+  delay: z.number().int().nonnegative().default(1000),
+  backoff: z.enum(["linear", "exponential"], {}).default("exponential"),
+});
+
+// Type inference for local schemas
+type LocalEmailRecipient = z.infer<typeof LocalEmailRecipientSchema>;
+type LocalEmailAttachment = z.infer<typeof LocalEmailAttachmentSchema>;
+type LocalRawEmailOptions = z.infer<typeof LocalRawEmailOptionsSchema>;
+type LocalTemplatedEmailOptions = z.infer<typeof LocalTemplatedEmailOptionsSchema>;
+type LocalEmailResult = z.infer<typeof LocalEmailResultSchema>;
+type LocalEmailStatus = z.infer<typeof LocalEmailStatusSchema>;
+type LocalResendOptions = z.infer<typeof LocalResendOptionsSchema>;
 
 /**
  * Email priority enum
@@ -60,7 +166,7 @@ export type QueueOptions = z.infer<typeof QueueOptionsSchema>;
  * Email queue service for managing email sending with priorities and rate limiting
  */
 export class EmailQueueService extends BaseEmailService {
-  readonly serviceName = "email-queue-service";
+  override readonly serviceName = "email-queue-service";
   
   private emailService: BaseEmailService;
   private queue: QueueItem[] = [];
@@ -78,7 +184,7 @@ export class EmailQueueService extends BaseEmailService {
   /**
    * Initialize the queue service
    */
-  initialize(dependencies: ServiceDependencies): void {
+  override initialize(dependencies: ServiceDependencies): void {
     super.initialize(dependencies);
     this.emailService.initialize(dependencies);
     
@@ -231,7 +337,7 @@ export class EmailQueueService extends BaseEmailService {
       }
       
       // Send the email
-      let result: EmailResult;
+      let result: LocalEmailResult;
       
       if (item.type === "raw") {
         result = await this.emailService.sendRawEmail(item.options.data);
@@ -278,7 +384,7 @@ export class EmailQueueService extends BaseEmailService {
    */
   private addToQueue(
     type: "raw" | "templated",
-    options: RawEmailOptions | TemplatedEmailOptions,
+    options: LocalRawEmailOptions | LocalTemplatedEmailOptions,
     priority: EmailPriority = "medium",
     scheduledFor?: Date
   ): string {
@@ -307,7 +413,7 @@ export class EmailQueueService extends BaseEmailService {
   /**
    * Send a raw email (queued)
    */
-  async sendRawEmail(options: RawEmailOptions, priority: EmailPriority = "medium"): Promise<EmailResult> {
+  async sendRawEmail(options: LocalRawEmailOptions, priority: EmailPriority = "medium"): Promise<LocalEmailResult> {
     const queueId = this.addToQueue("raw", options, priority);
     
     // For immediate processing, we could wait for the result
@@ -317,10 +423,7 @@ export class EmailQueueService extends BaseEmailService {
       messageId: queueId,
       timestamp: new Date().toISOString(),
       provider: this.serviceName,
-      recipient: typeof options.to === "string" ? options.to : 
-        Array.isArray(options.to) ? 
-          (typeof options.to[0] === "string" ? options.to[0] : options.to[0].email) : 
-          options.to.email,
+      recipient: options.recipient.email,
       subject: options.subject,
       status: "queued",
     };
@@ -329,7 +432,7 @@ export class EmailQueueService extends BaseEmailService {
   /**
    * Send a templated email (queued)
    */
-  async sendTemplatedEmail(options: TemplatedEmailOptions, priority: EmailPriority = "medium"): Promise<EmailResult> {
+  async sendTemplatedEmail(options: LocalTemplatedEmailOptions, priority: EmailPriority = "medium"): Promise<LocalEmailResult> {
     const queueId = this.addToQueue("templated", options, priority);
     
     return {
@@ -337,10 +440,7 @@ export class EmailQueueService extends BaseEmailService {
       messageId: queueId,
       timestamp: new Date().toISOString(),
       provider: this.serviceName,
-      recipient: typeof options.to === "string" ? options.to : 
-        Array.isArray(options.to) ? 
-          (typeof options.to[0] === "string" ? options.to[0] : options.to[0].email) : 
-          options.to.email,
+      recipient: options.recipient.email,
       subject: options.subject,
       templateName: options.templateName,
       status: "queued",
@@ -350,14 +450,14 @@ export class EmailQueueService extends BaseEmailService {
   /**
    * Resend an email
    */
-  async resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult> {
+  async resendEmail(emailId: string, options?: LocalResendOptions): Promise<LocalEmailResult> {
     return this.emailService.resendEmail(emailId, options);
   }
 
   /**
    * Get email status
    */
-  async getEmailStatus(emailId: string): Promise<EmailStatus> {
+  async getEmailStatus(emailId: string): Promise<LocalEmailStatus> {
     // Check if it's a queue item
     const queueItem = this.queue.find(item => item.id === emailId);
     
@@ -385,7 +485,7 @@ export class EmailQueueService extends BaseEmailService {
   /**
    * Cancel a scheduled email
    */
-  async cancelEmail(emailId: string): Promise<EmailResult> {
+  async cancelEmail(emailId: string): Promise<LocalEmailResult> {
     const queueItem = this.queue.find(item => item.id === emailId);
     
     if (queueItem && queueItem.status === "pending") {

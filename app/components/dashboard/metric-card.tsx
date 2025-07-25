@@ -4,9 +4,8 @@
  * A card for displaying a metric with a title, value, and optional subtitle.
  */
 
-import React from "react";
-
-export interface MetricCardProps {
+// Define props interface locally (following AI-first principles)
+interface MetricCardProps {
   /**
    * Title of the metric
    */
@@ -34,7 +33,7 @@ export interface MetricCardProps {
 }
 
 /**
- * Metric Card Component
+ * Metric Card Component for HonoX
  */
 export function MetricCard({ title, value, subtitle, status, size = "medium" }: MetricCardProps) {
   // Determine status color
@@ -71,10 +70,10 @@ export function MetricCard({ title, value, subtitle, status, size = "medium" }: 
   }[size];
   
   return (
-    <div className={`bg-white rounded-lg shadow ${sizeClasses}`}>
-      <h3 className={titleClasses}>{title}</h3>
-      <p className={`${valueClasses} ${status ? statusColor : ""}`}>{value}</p>
-      {subtitle && <p className={subtitleClasses}>{subtitle}</p>}
+    <div class={`bg-white rounded-lg shadow ${sizeClasses}`}>
+      <h3 class={titleClasses}>{title}</h3>
+      <p class={`${valueClasses} ${status ? statusColor : ""}`}>{value}</p>
+      {subtitle && <p class={subtitleClasses}>{subtitle}</p>}
     </div>
   );
 }

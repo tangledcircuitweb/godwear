@@ -132,6 +132,53 @@ export const cloudflareBindingsSchema = z.object({
   SENDGRID_API_KEY: z.string().optional(),
   // MailerSend Configuration (current email service)
   MAILERSEND_API_KEY: z.string().optional(),
+  MAILERSEND_FROM_EMAIL: z.string().optional(),
+  MAILERSEND_FROM_NAME: z.string().optional(),
+  MAILERSEND_BASE_URL: z.string().optional(),
+  MAILERSEND_TEMPLATE_DIR: z.string().optional(),
+  // Base Application URLs and Assets
+  BASE_URL: z.string().optional(),
+  LOGO_URL: z.string().optional(),
+  SUPPORT_EMAIL: z.string().optional(),
+  SECURITY_IMAGE_URL: z.string().optional(),
+  SHIPPING_IMAGE_URL: z.string().optional(),
+  // Email Queue Configuration
+  EMAIL_QUEUE_MAX_CONCURRENT: z.string().optional(),
+  EMAIL_QUEUE_RATE_CRITICAL: z.string().optional(),
+  EMAIL_QUEUE_RATE_HIGH: z.string().optional(),
+  EMAIL_QUEUE_RATE_MEDIUM: z.string().optional(),
+  EMAIL_QUEUE_RATE_LOW: z.string().optional(),
+  EMAIL_QUEUE_RETRY_DELAY: z.string().optional(),
+  EMAIL_QUEUE_MAX_RETRIES: z.string().optional(),
+  EMAIL_QUEUE_BATCH_SIZE: z.string().optional(),
+  // Enhanced Email Queue Configuration
+  EMAIL_INTERVAL_CRITICAL: z.string().optional(),
+  EMAIL_INTERVAL_HIGH: z.string().optional(),
+  EMAIL_INTERVAL_MEDIUM: z.string().optional(),
+  EMAIL_INTERVAL_LOW: z.string().optional(),
+  EMAIL_INTERVAL_TESTING: z.string().optional(),
+  EMAIL_QUEUE_RETRY_DELAYS: z.string().optional(),
+  EMAIL_QUEUE_PERSISTENCE_KEY: z.string().optional(),
+  EMAIL_QUEUE_MAX_SIZE: z.string().optional(),
+  EMAIL_QUEUE_PROCESSING_INTERVAL: z.string().optional(),
+  EMAIL_QUEUE_CLEANUP_INTERVAL: z.string().optional(),
+  EMAIL_QUEUE_MAX_AGE: z.string().optional(),
+  EMAIL_QUEUE_PRIORITY_BOOST_RETRY: z.string().optional(),
+  EMAIL_QUEUE_PRIORITY_BOOST_WAIT: z.string().optional(),
+  EMAIL_TESTING_MODE: z.string().optional(),
+  EMAIL_DOMAIN_THROTTLES: z.string().optional(),
+  // Transactional Email Configuration
+  EMAIL_MAX_RETRIES: z.string().optional(),
+  EMAIL_RETRY_INITIAL_DELAY: z.string().optional(),
+  EMAIL_RETRY_MAX_DELAY: z.string().optional(),
+  EMAIL_RETRY_FACTOR: z.string().optional(),
+  EMAIL_TEST_MODE: z.string().optional(),
+  // Test Configuration
+  TEST_EMAIL: z.string().optional(),
+  TEST_EMAIL_TEMPLATE_DIR: z.string().optional(),
+  // Service Type Configuration
+  EMAIL_SERVICE_TYPE: z.string().optional(),
+  EMAIL_ANALYTICS_SERVICE_TYPE: z.string().optional(),
   // Environment
   NODE_ENV: z.string().optional(),
   // Domain Configuration

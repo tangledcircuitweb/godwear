@@ -153,7 +153,7 @@ export interface EmailService extends BaseService {
  * Abstract base class for email service implementations
  */
 export abstract class BaseEmailService implements EmailService {
-  readonly serviceName = "email-service";
+  abstract readonly serviceName: string;
   protected env: Record<string, any> = {};
   protected logger?: ServiceDependencies["logger"];
 

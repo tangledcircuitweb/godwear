@@ -35,30 +35,24 @@ export function createEmailHandlers(services: Services) {
         if (emailRequest.type === "raw") {
           // Handle raw email
           result = await email.sendRawEmail({
-            to: emailRequest.to,
+            recipient: emailRequest.to,
             cc: emailRequest.cc,
             bcc: emailRequest.bcc,
             subject: emailRequest.subject,
             html: emailRequest.html,
             text: emailRequest.text,
             attachments: emailRequest.attachments,
-            priority: emailRequest.priority,
-            scheduledFor: emailRequest.scheduledFor,
-            idempotencyKey: emailRequest.idempotencyKey,
             metadata: emailRequest.metadata,
           });
         } else {
           // Handle templated email
           result = await email.sendTemplatedEmail({
-            to: emailRequest.to,
+            recipient: emailRequest.to,
             cc: emailRequest.cc,
             bcc: emailRequest.bcc,
             subject: emailRequest.subject,
             templateName: emailRequest.templateName,
-            templateData: emailRequest.templateData,
-            priority: emailRequest.priority,
-            scheduledFor: emailRequest.scheduledFor,
-            idempotencyKey: emailRequest.idempotencyKey,
+            data: emailRequest.templateData,
             metadata: emailRequest.metadata,
           });
         }
@@ -98,16 +92,13 @@ export function createEmailHandlers(services: Services) {
               if (emailRequest.type === "raw") {
                 // Handle raw email
                 return await email.sendRawEmail({
-                  to: emailRequest.to,
+                  recipient: emailRequest.to,
                   cc: emailRequest.cc,
                   bcc: emailRequest.bcc,
                   subject: emailRequest.subject,
                   html: emailRequest.html,
                   text: emailRequest.text,
                   attachments: emailRequest.attachments,
-                  priority: emailRequest.priority,
-                  scheduledFor: emailRequest.scheduledFor,
-                  idempotencyKey: emailRequest.idempotencyKey,
                   metadata: {
                     ...emailRequest.metadata,
                     batchId: actualBatchId,
@@ -116,15 +107,12 @@ export function createEmailHandlers(services: Services) {
               } else {
                 // Handle templated email
                 return await email.sendTemplatedEmail({
-                  to: emailRequest.to,
+                  recipient: emailRequest.to,
                   cc: emailRequest.cc,
                   bcc: emailRequest.bcc,
                   subject: emailRequest.subject,
                   templateName: emailRequest.templateName,
-                  templateData: emailRequest.templateData,
-                  priority: emailRequest.priority,
-                  scheduledFor: emailRequest.scheduledFor,
-                  idempotencyKey: emailRequest.idempotencyKey,
+                  data: emailRequest.templateData,
                   metadata: {
                     ...emailRequest.metadata,
                     batchId: actualBatchId,

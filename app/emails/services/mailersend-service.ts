@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { BaseEmailService, EmailResult, RawEmailOptions, TemplatedEmailOptions } from "./email-service";
+import { BaseEmailService } from "./email-service";
+import type { EmailResult, RawEmailOptions, TemplatedEmailOptions } from "./email-service";
 import type { ServiceHealthStatus } from "../../services/base";
 import { renderTemplate } from "../utils/template-engine";
 
@@ -38,7 +39,7 @@ type MailerSendConfig = z.infer<typeof MailerSendConfigSchema>;
  * MailerSend email service implementation
  */
 export class MailerSendService extends BaseEmailService {
-  readonly serviceName = "mailersend-service";
+  override readonly serviceName = "mailersend-service";
   private config!: MailerSendConfig;
 
   /**
@@ -47,14 +48,14 @@ export class MailerSendService extends BaseEmailService {
   override initialize(dependencies: Parameters<BaseEmailService["initialize"]>[0]): void {
     super.initialize(dependencies);
 
-    // Extract configuration from environment variables
+    // Extract configuration from environment variables using AI-First file-local approach
     try {
       this.config = MailerSendConfigSchema.parse({
-        apiKey: this.env.MAILERSEND_API_KEY,
-        fromEmail: this.env.MAILERSEND_FROM_EMAIL,
-        fromName: this.env.MAILERSEND_FROM_NAME,
-        baseUrl: this.env.MAILERSEND_BASE_URL,
-        templateDir: this.env.MAILERSEND_TEMPLATE_DIR,
+        apiKey: this.env['MAILERSEND_API_KEY'],
+        fromEmail: this.env['MAILERSEND_FROM_EMAIL'],
+        fromName: this.env['MAILERSEND_FROM_NAME'],
+        baseUrl: this.env['MAILERSEND_BASE_URL'],
+        templateDir: this.env['MAILERSEND_TEMPLATE_DIR'],
       });
     } catch (error) {
       this.logger?.error("Failed to initialize MailerSend service", error as Error);

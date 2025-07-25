@@ -5,7 +5,7 @@ import type { ServiceHealthStatus } from "../../services/base";
  * In-memory implementation of email analytics service for development and testing
  */
 export class InMemoryEmailAnalyticsService extends BaseEmailAnalyticsService {
-  readonly serviceName = "in-memory-email-analytics-service";
+  override readonly serviceName = "in-memory-email-analytics-service";
   private events: EmailEvent[] = [];
 
   /**
