@@ -1079,19 +1079,14 @@ export class EnhancedEmailQueueService extends BaseEmailService {
           this.stats.failed++;
           
           // Log failure
-          this.logger?.error("Email sending failed permanently", {
-            id: item.id,
-            attempts: item.attempts,
-            error: result.error,
-          });
+          this.logger?.error(`Email sending failed permanently for ${item.id} after ${item.attempts} attempts`, 
+            new Error(result.error || "Email sending failed permanently"));
         }
       }
     } catch (error) {
       // Handle unexpected errors
-      this.logger?.error("Unexpected error processing email", {
-        id: item.id,
-        error: error instanceof Error ? error.message : "Unknown error",
-      });
+      this.logger?.error(`Unexpected error processing email ${item.id}`, 
+        error instanceof Error ? error : new Error(typeof error === 'string' ? error : "Unknown error"));
       
       // Check if we should retry
       if (item.attempts < item.maxAttempts) {

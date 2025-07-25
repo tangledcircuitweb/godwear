@@ -123,9 +123,13 @@ export class OrderConfirmationEmail {
       // Format payment method
       const paymentMethod = this.formatPaymentMethod(validatedRequest.paymentDetails);
       
-      // Prepare items with image URLs
+      // Prepare items with image URLs and ensure required properties
       const items = validatedRequest.items.map(item => ({
-        ...item,
+        name: item.name,
+        variant: item.variant || "Standard", // Provide default for required field
+        sku: item.sku,
+        quantity: item.quantity,
+        price: item.price,
         imageUrl: item.imageUrl || `${this.baseUrl}/images/products/${item.productId}.jpg`,
       }));
       
@@ -201,9 +205,13 @@ export class OrderConfirmationEmail {
       // Format payment method
       const paymentMethod = this.formatPaymentMethod(validatedRequest.paymentDetails);
       
-      // Prepare items with image URLs
+      // Prepare items with image URLs and ensure required properties
       const items = validatedRequest.items.map(item => ({
-        ...item,
+        name: item.name,
+        variant: item.variant || "Standard", // Provide default for required field
+        sku: item.sku,
+        quantity: item.quantity,
+        price: item.price,
         imageUrl: item.imageUrl || `${this.baseUrl}/images/products/${item.productId}.jpg`,
       }));
       
@@ -301,9 +309,13 @@ export class OrderConfirmationEmail {
       // Format payment method
       const paymentMethod = this.formatPaymentMethod(validatedBase.paymentDetails);
       
-      // Prepare items with image URLs
+      // Prepare items with image URLs and ensure required properties
       const items = validatedBase.items.map(item => ({
-        ...item,
+        name: item.name,
+        variant: item.variant || "Standard", // Provide default for required field
+        sku: item.sku,
+        quantity: item.quantity,
+        price: item.price,
         imageUrl: item.imageUrl || `${this.baseUrl}/images/products/${item.productId}.jpg`,
       }));
       

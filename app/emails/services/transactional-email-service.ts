@@ -104,6 +104,11 @@ const PasswordResetEmailOptionsSchema = z.object({
   ipAddress: z.string(),
   device: z.string(),
   timestamp: z.string().datetime(),
+  expiresAt: z.string().datetime(),
+  expiresInMinutes: z.number().int().positive(),
+  tokenHash: z.string(),
+  supportUrl: z.string().url(),
+  helpUrl: z.string().url(),
   privacyUrl: z.string().url(),
   termsUrl: z.string().url(),
   campaignId: z.string().optional(),
@@ -685,11 +690,7 @@ export class TransactionalEmailService extends BaseEmailService {
     }
     
     // All retries failed, log and return error
-    this.logger?.error(`Email sending failed after ${this.retryConfig.maxRetries} attempts`, {
-      error: lastError?.message,
-      recipient: options.recipient.email,
-      template: options.templateName,
-    });
+    this.logger?.error(`Email sending failed after ${this.retryConfig.maxRetries} attempts`, lastError || new Error("Maximum retry attempts reached"));
     
     return this.createErrorResult(
       lastError?.message || "Maximum retry attempts reached",

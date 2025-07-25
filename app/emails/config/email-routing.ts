@@ -85,8 +85,9 @@ export class EmailRoutingService {
 
     // In production, check allowed domains
     if (this.config.environment === "production") {
-      const emailDomain = originalEmail.split("@")[1];
-      if (this.config.allowedDomains.length > 0 && !this.config.allowedDomains.includes(emailDomain)) {
+      const emailParts = originalEmail.split("@");
+      const emailDomain = emailParts.length > 1 ? emailParts[1] : "";
+      if (this.config.allowedDomains.length > 0 && emailDomain && !this.config.allowedDomains.includes(emailDomain)) {
         // Route to test recipient if domain not allowed
         if (this.config.testRecipient) {
           return {

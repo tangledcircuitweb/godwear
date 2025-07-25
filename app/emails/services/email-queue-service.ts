@@ -269,7 +269,7 @@ export class EmailQueueService extends BaseEmailService {
         await Promise.allSettled(promises);
         
       } catch (error) {
-        this.logger?.error("Error in queue processing:", error);
+        this.logger?.error("Error in queue processing:", error instanceof Error ? error : new Error(String(error)));
         await new Promise(resolve => setTimeout(resolve, 5000));
       }
     }

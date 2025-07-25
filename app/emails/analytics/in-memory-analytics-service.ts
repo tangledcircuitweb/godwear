@@ -199,13 +199,13 @@ export class InMemoryEmailAnalyticsService extends BaseEmailAnalyticsService {
           
           switch (validatedQuery.groupBy) {
             case "day":
-              key = new Date(event.timestamp).toISOString().split("T")[0];
+              key = new Date(event.timestamp).toISOString().split("T")[0] || "unknown-day";
               break;
             case "week":
-              key = this.getWeekKey(new Date(event.timestamp));
+              key = this.getWeekKey(new Date(event.timestamp)) || "unknown-week";
               break;
             case "month":
-              key = new Date(event.timestamp).toISOString().substring(0, 7);
+              key = new Date(event.timestamp).toISOString().substring(0, 7) || "unknown-month";
               break;
             case "campaign":
               key = event.campaignId || "unknown";

@@ -185,7 +185,7 @@ export function generateSubjectLine(
 ): string {
   switch (templateType) {
     case "welcome":
-      return `Welcome to GodWear, ${formatName(data['firstName'], data['lastName'])}!`;
+      return `Welcome to GodWear, ${formatName(data['firstName'] || "", data['lastName'])}!`;
     
     case "order-confirmation":
       return `Order Confirmed: #${data['orderNumber']} - Thank You!`;
@@ -195,8 +195,8 @@ export function generateSubjectLine(
     
     case "abandoned-cart":
       return data['discount']
-        ? `${formatName(data['firstName'], data['lastName'])}, Save ${data['discount']}% on Items in Your Cart`
-        : `${formatName(data['firstName'], data['lastName'])}, Complete Your GodWear Purchase`;
+        ? `${formatName(data['firstName'] || "", data['lastName'])}, Save ${data['discount']}% on Items in Your Cart`
+        : `${formatName(data['firstName'] || "", data['lastName'])}, Complete Your GodWear Purchase`;
     
     case "password-reset":
       return "Reset Your GodWear Password";

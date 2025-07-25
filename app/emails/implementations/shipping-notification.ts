@@ -105,9 +105,12 @@ export class ShippingNotificationEmail {
       // Generate order URL
       const orderUrl = `${this.baseUrl}/orders/${validatedRequest.orderNumber}`;
       
-      // Prepare items with image URLs
+      // Prepare items with image URLs and ensure required properties
       const items = validatedRequest.items.map(item => ({
-        ...item,
+        name: item.name,
+        variant: item.variant || "Standard", // Provide default for required field
+        sku: item.sku,
+        quantity: item.quantity,
         imageUrl: item.imageUrl || `${this.baseUrl}/images/products/${item.productId}.jpg`,
       }));
       
@@ -172,9 +175,12 @@ export class ShippingNotificationEmail {
       // Generate order URL
       const orderUrl = `${this.baseUrl}/orders/${validatedRequest.orderNumber}`;
       
-      // Prepare shipped items with image URLs
+      // Prepare shipped items with image URLs and ensure required properties
       const shippedItems = validatedRequest.items.map(item => ({
-        ...item,
+        name: item.name,
+        variant: item.variant || "Standard", // Provide default for required field
+        sku: item.sku,
+        quantity: item.quantity,
         imageUrl: item.imageUrl || `${this.baseUrl}/images/products/${item.productId}.jpg`,
       }));
       
