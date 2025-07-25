@@ -17,7 +17,7 @@ export class EnhancedEmailService {
 
   constructor(env: any) {
     this.env = env;
-    this.mailerSendService = new MailerSendService(env);
+    this.mailerSendService = new MailerSendService();
     this.routingService = createEmailRoutingService(env);
   }
 

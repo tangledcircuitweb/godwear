@@ -41,7 +41,9 @@ export function createEmailService(options: EmailServiceFactoryOptions): BaseEma
   
   switch (type) {
     case "queue":
-      service = new EmailQueueService();
+      // Create a transactional service as the base for the queue
+      const baseService = new TransactionalEmailService();
+      service = new EmailQueueService(baseService);
       break;
     case "enhanced-queue":
       service = new EnhancedEmailQueueService();

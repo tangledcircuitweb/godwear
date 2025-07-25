@@ -670,7 +670,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
   async resendEmail(emailId: string, options?: LocalResendOptions): Promise<LocalEmailResult> {
     try {
       // Validate options if provided
-      const validatedOptions = options ? ResendOptionsSchema.parse(options) : undefined;
+      const validatedOptions = options ? LocalResendOptionsSchema.parse(options) : undefined;
       
       // Find the email in the queue
       const queueItem = this.queue.find(item => item.id === emailId);
@@ -1386,7 +1386,15 @@ export class EnhancedEmailQueueService extends BaseEmailService {
     failed: number;
     cancelled: number;
     byPriority: Record<EmailPriority, number>;
-    processingStats: typeof this.stats;
+    processingStats: {
+      processed: number;
+      successful: number;
+      failed: number;
+      retried: number;
+      cancelled: number;
+      rateDelayed: number;
+      domainDelayed: number;
+    };
   } {
     const stats = {
       total: this.queue.length,
