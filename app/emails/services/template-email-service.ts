@@ -253,7 +253,7 @@ export class TemplateEmailService {
 /**
  * Quick function to process a single template
  */
-export async function processTemplate(
+export async function processEmailTemplateQuick(
   templateType: string,
   templateName: string,
   recipientName: string,
@@ -299,7 +299,7 @@ export async function sendTemplateEmail(
 ): Promise<{ success: boolean; messageId?: string; error?: string }> {
   try {
     // Process template with mock data
-    const templateResult = await processTemplate(
+    const templateResult = await processEmailTemplateQuick(
       templateType,
       templateName,
       recipientName,

@@ -26,6 +26,42 @@ const LocalEnvironmentSchema = z.object({
 type LocalEnvironment = z.infer<typeof LocalEnvironmentSchema>;
 
 /**
+ * Local resend options schema for this service
+ */
+const LocalResendOptionsSchema = z.object({
+  updateRecipient: z.boolean().optional(),
+  newRecipient: z.object({
+    email: z.string().email({}),
+    name: z.string().optional(),
+  }).optional(),
+});
+
+/**
+ * Local email status schema for this service
+ */
+const LocalEmailStatusSchema = z.object({
+  id: z.string(),
+  status: z.enum([
+    "queued", 
+    "scheduled", 
+    "sending", 
+    "sent", 
+    "delivered", 
+    "failed", 
+    "bounced", 
+    "rejected", 
+    "cancelled"
+  ], {}),
+  recipient: z.string(),
+  subject: z.string(),
+  scheduledFor: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+});
+
+type LocalResendOptions = z.infer<typeof LocalResendOptionsSchema>;
+type LocalEmailStatus = z.infer<typeof LocalEmailStatusSchema>;
+
+/**
  * Welcome email options schema
  */
 const WelcomeEmailOptionsSchema = z.object({
@@ -675,7 +711,7 @@ export class TransactionalEmailService extends BaseEmailService {
   /**
    * Resend an email
    */
-  async resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult> {
+  async resendEmail(emailId: string, options?: LocalResendOptions): Promise<EmailResult> {
     try {
       // Delegate to the underlying email service
       return await this.emailService.resendEmail(emailId, options);
@@ -688,7 +724,7 @@ export class TransactionalEmailService extends BaseEmailService {
   /**
    * Get email status
    */
-  async getEmailStatus(emailId: string): Promise<EmailStatus> {
+  async getEmailStatus(emailId: string): Promise<LocalEmailStatus> {
     try {
       // Delegate to the underlying email service
       return await this.emailService.getEmailStatus(emailId);

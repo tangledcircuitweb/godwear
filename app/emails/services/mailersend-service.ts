@@ -5,8 +5,55 @@ import type { ServiceHealthStatus } from "../../services/base";
 import { renderTemplate } from "../utils/template-engine";
 
 // ============================================================================
-// LOCAL SCHEMAS
+// LOCAL SCHEMAS - AI-First file-local approach
 // ============================================================================
+
+/**
+ * Local resend options schema for this service
+ */
+const LocalResendOptionsSchema = z.object({
+  updateRecipient: z.boolean().optional(),
+  newRecipient: z.object({
+    email: z.string().email({}),
+    name: z.string().optional(),
+  }).optional(),
+});
+
+/**
+ * Local email result schema for this service
+ */
+const LocalEmailResultSchema = z.object({
+  success: z.boolean(),
+  timestamp: z.string(),
+  provider: z.string(),
+  recipient: z.string(),
+  subject: z.string(),
+  messageId: z.string().optional(),
+  error: z.string().optional(),
+  templateName: z.string().optional(),
+});
+
+/**
+ * Local email status schema for this service
+ */
+const LocalEmailStatusSchema = z.object({
+  id: z.string(),
+  status: z.enum([
+    "queued", 
+    "scheduled", 
+    "sending", 
+    "sent", 
+    "delivered", 
+    "failed", 
+    "bounced", 
+    "rejected", 
+    "cancelled"
+  ], {}),
+  recipient: z.string(),
+  subject: z.string(),
+  scheduledFor: z.string().optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+});
 
 /**
  * MailerSend API response schema
@@ -32,6 +79,9 @@ const MailerSendConfigSchema = z.object({
 // TYPE INFERENCE
 // ============================================================================
 
+type LocalResendOptions = z.infer<typeof LocalResendOptionsSchema>;
+type LocalEmailResult = z.infer<typeof LocalEmailResultSchema>;
+type LocalEmailStatus = z.infer<typeof LocalEmailStatusSchema>;
 type MailerSendResponse = z.infer<typeof MailerSendResponseSchema>;
 type MailerSendConfig = z.infer<typeof MailerSendConfigSchema>;
 
@@ -223,10 +273,10 @@ export class MailerSendService extends BaseEmailService {
   /**
    * Resend an email
    */
-  async resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult> {
+  async resendEmail(emailId: string, options?: LocalResendOptions): Promise<EmailResult> {
     try {
       // Validate options if provided
-      const validatedOptions = options ? ResendOptionsSchema.parse(options) : undefined;
+      const validatedOptions = options ? LocalResendOptionsSchema.parse(options) : undefined;
       
       // In a real implementation, we would call the MailerSend API to resend the email
       // For now, we'll simulate the response
@@ -257,7 +307,7 @@ export class MailerSendService extends BaseEmailService {
   /**
    * Get email status
    */
-  async getEmailStatus(emailId: string): Promise<EmailStatus> {
+  async getEmailStatus(emailId: string): Promise<LocalEmailStatus> {
     try {
       // In a real implementation, we would call the MailerSend API to get the email status
       // For now, we'll simulate the response

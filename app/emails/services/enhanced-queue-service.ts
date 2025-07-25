@@ -752,7 +752,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
       }
       
       // Map queue status to email status
-      let status: EmailStatus["status"];
+      let status: LocalEmailStatus["status"];
       switch (queueItem.status) {
         case "pending":
           status = queueItem.scheduledFor > Date.now() ? "scheduled" : "queued";
@@ -1016,7 +1016,7 @@ export class EnhancedEmailQueueService extends BaseEmailService {
       item.attempts++;
       this.stats.processed++;
       
-      let result: EmailResult;
+      let result: LocalEmailResult;
 
       if (item.type === "raw") {
         result = await this.emailService.sendRawEmail(item.options.data);
