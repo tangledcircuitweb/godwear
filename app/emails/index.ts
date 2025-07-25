@@ -2,6 +2,30 @@
 export * from "./services";
 export * from "./analytics";
 
+// Export types for external use
+export type { BaseEmailService } from "./services/email-service";
+export type { ServiceDependencies } from "../services/base";
+
+// Export common email types
+export type {
+  EmailRecipient,
+  EmailAttachment,
+  RawEmailOptions,
+  TemplatedEmailOptions,
+  EmailResult,
+  EmailPriority,
+  QueueItemStatus,
+} from "./services/email-service";
+
+// Export analytics types
+export type {
+  EmailEvent,
+  EmailEventType,
+  EmailMetrics,
+  EventQuery,
+  MetricFilters,
+} from "./analytics/in-memory-analytics-service";
+
 // Export default email service factory
 import { EmailQueueService } from "./services/email-queue-service";
 import { EnhancedEmailQueueService } from "./services/enhanced-queue-service";

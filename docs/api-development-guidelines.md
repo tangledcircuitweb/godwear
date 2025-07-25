@@ -1,33 +1,68 @@
 # API Development Guidelines
 
-This document outlines the standardized approach for developing APIs in the GodWear project, leveraging Zod v4 schemas with OpenAPI extensions for maximum modularity and AI-first design principles.
+This document outlines the standardized approach for developing APIs in the GodWear project, leveraging Zod v4 schemas with OpenAPI extensions and AI-First design principles established during the architectural improvements.
 
 ## Core Architecture
 
-### 1. Schema-First Development with Zod v4
+### 1. AI-First Schema Development with Zod v4
 
-All API endpoints must follow a schema-first approach using Zod v4 with OpenAPI extensions:
+All API endpoints must follow an AI-First, schema-first approach using Zod v4 with file-local schemas:
 
 ```typescript
-import { z } from '@hono/zod-openapi';
+import { z } from 'zod';
 
-// Define your data schemas with OpenAPI metadata
-const userSchema = z.object({
-  id: z.string().uuid({}).openapi({
-    example: '123e4567-e89b-12d3-a456-426614174000'
-  }),
-  name: z.string().min(1, {}).openapi({
-    example: 'John Doe'
-  }),
-  email: z.email({}).openapi({
-    example: 'john@example.com'
-  }),
-  role: z.enum(['user', 'admin'], {}).openapi({
-    example: 'user'
-  }),
+// File-local schema definition (complete self-containment)
+const LocalUserSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1),
+  email: z.string().email({}), // Zod v4 requires empty options
+  role: z.enum(['user', 'admin'], {}), // Zod v4 enum syntax
+  createdAt: z.string().datetime(),
 }, {});
 
-// Define request schemas
+// Local type inference
+type LocalUser = z.infer<typeof LocalUserSchema>;
+
+// Local API response schema with discriminated union
+const LocalUserResponseSchema = z.discriminatedUnion("success", [
+  z.object({
+    success: z.literal(true),
+    data: LocalUserSchema,
+    meta: z.object({
+      timestamp: z.string(),
+      requestId: z.string().optional(),
+    }),
+  }),
+  z.object({
+    success: z.literal(false),
+    error: z.object({
+      code: z.string(),
+      message: z.string(),
+      details: z.record(z.string(), z.unknown()).optional(),
+    }),
+  }),
+], {});
+```
+
+### 2. Environment Variable Access Pattern
+
+Follow the strict `env['PROPERTY']` pattern with local validation:
+
+```typescript
+// Local environment schema
+const LocalEnvSchema = z.object({
+  API_KEY: z.string().min(1),
+  BASE_URL: z.string().url(),
+  LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error'], {}),
+});
+
+// Usage in service
+const config = LocalEnvSchema.parse({
+  API_KEY: env['API_KEY'],
+  BASE_URL: env['BASE_URL'],
+  LOG_LEVEL: env['LOG_LEVEL'],
+});
+```
 const createUserRequestSchema = z.object({
   name: z.string().min(1, {}).openapi({
     example: 'John Doe'

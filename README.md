@@ -1,5 +1,7 @@
 # GodWear - HonoX Cloudflare Workers Application
 
+A modern, AI-First email service platform built with HonoX, Cloudflare Workers, and TypeScript. Features comprehensive email template processing, analytics, and queue management with strict type safety and file-local architecture patterns.
+
 ## Quick Start
 
 ```bash
@@ -12,6 +14,16 @@ npm run dev
 ```bash
 npm run deploy
 ```
+
+## Architecture Overview
+
+GodWear follows **AI-First design principles** with file-local schemas and complete self-containment:
+
+- **File-Local Schemas**: Each file defines its own Zod validation schemas for complete autonomy
+- **Environment Variable Access**: Strict `env['PROPERTY']` pattern with local type definitions
+- **Service Composition**: Queue services wrap base email services with proper dependency injection
+- **Type Safety**: exactOptionalPropertyTypes and strict null checks throughout
+- **HonoX Integration**: Server-side rendering with glassmorphism themes and mobile responsiveness
 
 ## Development
 

@@ -6,6 +6,22 @@ export type {
   AuthUser,
 } from "./auth/auth-service";
 
+// Email service exports
+export * from "../emails";
+export type {
+  BaseEmailService,
+  EmailRecipient,
+  EmailAttachment,
+  RawEmailOptions,
+  TemplatedEmailOptions,
+  EmailResult,
+  EmailPriority,
+  QueueItemStatus,
+  EmailEvent,
+  EmailEventType,
+  EmailMetrics,
+} from "../emails";
+
 // Service implementations
 export * from "./auth/auth-service";
 // Re-export commonly used types

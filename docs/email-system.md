@@ -1,33 +1,120 @@
 # GodWear Email System Documentation
 
-This document provides comprehensive documentation for the GodWear email system, including architecture, components, configuration, and usage guidelines.
+This document provides comprehensive documentation for the GodWear email system, including the AI-First architecture improvements, service composition patterns, and enhanced type safety implemented during the architectural overhaul.
 
 ## Table of Contents
 
 1. [Architecture Overview](#architecture-overview)
-2. [Email Services](#email-services)
-3. [Email Templates](#email-templates)
-4. [Email Implementations](#email-implementations)
-5. [Email Analytics](#email-analytics)
-6. [API Endpoints](#api-endpoints)
-7. [Queue and Scheduling](#queue-and-scheduling)
-8. [Testing](#testing)
-9. [Monitoring](#monitoring)
+2. [AI-First Design Principles](#ai-first-design-principles)
+3. [Email Services](#email-services)
+4. [Service Composition](#service-composition)
+5. [Email Templates](#email-templates)
+6. [Email Analytics](#email-analytics)
+7. [Queue Management](#queue-management)
+8. [Type Safety](#type-safety)
+9. [Testing Strategy](#testing-strategy)
 10. [Configuration](#configuration)
 11. [Best Practices](#best-practices)
 12. [Troubleshooting](#troubleshooting)
 
 ## Architecture Overview
 
-The GodWear email system is designed with a layered architecture to provide flexibility, reliability, and scalability:
+The GodWear email system follows AI-First design principles with enhanced service composition and strict type safety:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         API Endpoints                           │
+│                      HonoX API Layer                            │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐   │
+│  │   Email API     │ │  Analytics API  │ │   Health API    │   │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘   │
 └───────────────────────────────┬─────────────────────────────────┘
                                 │
 ┌───────────────────────────────▼─────────────────────────────────┐
 │                    Email Implementations                        │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐   │
+│  │ Account Security│ │ Order Emails    │ │ Marketing Emails│   │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘   │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │
+┌───────────────────────────────▼─────────────────────────────────┐
+│                      Service Layer                              │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐   │
+│  │ Enhanced Queue  │ │ Email Queue     │ │ Transactional   │   │
+│  │ Service         │ │ Service         │ │ Service         │   │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘   │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │
+┌───────────────────────────────▼─────────────────────────────────┐
+│                     Base Services                               │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐   │
+│  │ MailerSend      │ │ Test Service    │ │ Analytics       │   │
+│  │ Service         │ │                 │ │ Service         │   │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## AI-First Design Principles
+
+### File-Local Schema Architecture
+
+Each service file is completely self-contained with local Zod schemas:
+
+```typescript
+// app/emails/services/mailersend-service.ts
+
+// Local configuration schema
+const MailerSendConfigSchema = z.object({
+  apiKey: z.string().min(1),
+  fromEmail: z.string().email({}),
+  fromName: z.string().min(1),
+  webhookSecret: z.string().optional(),
+});
+
+// Local email options schema
+const LocalRawEmailOptionsSchema = z.object({
+  recipient: z.object({
+    email: z.string().email({}),
+    name: z.string().optional(),
+  }),
+  subject: z.string(),
+  html: z.string(),
+  text: z.string(),
+  // ... other options
+});
+
+// Local result schema
+const LocalEmailResultSchema = z.object({
+  success: z.boolean(),
+  messageId: z.string().optional(),
+  timestamp: z.string(),
+  provider: z.literal("mailersend"),
+  recipient: z.string(),
+  // ... other result fields
+});
+
+// Type inference
+type MailerSendConfig = z.infer<typeof MailerSendConfigSchema>;
+type LocalRawEmailOptions = z.infer<typeof LocalRawEmailOptionsSchema>;
+type LocalEmailResult = z.infer<typeof LocalEmailResultSchema>;
+```
+
+### Environment Variable Access Pattern
+
+Strict `env['PROPERTY']` pattern with local validation:
+
+```typescript
+// Environment access in service initialization
+override initialize(dependencies: ServiceDependencies): void {
+  super.initialize(dependencies);
+  
+  this.config = MailerSendConfigSchema.parse({
+    apiKey: this.env['MAILERSEND_API_KEY'],
+    fromEmail: this.env['MAILERSEND_FROM_EMAIL'],
+    fromName: this.env['MAILERSEND_FROM_NAME'],
+    webhookSecret: this.env['MAILERSEND_WEBHOOK_SECRET'],
+  });
+}
+```
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────┐ │
 │  │    Order    │  │  Shipping   │  │   Account   │  │Marketing│ │
 │  │Confirmation │  │Notification │  │  Security   │  │ Emails  │ │
