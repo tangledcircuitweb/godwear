@@ -100,12 +100,22 @@ export class EmailRoutingService {
     }
 
     // Return original email if no routing needed
-    return {
+    const result: {
+      email: string;
+      name?: string;
+      isRouted: boolean;
+      originalEmail: string;
+    } = {
       email: originalEmail,
-      name: originalName,
       isRouted: false,
       originalEmail,
     };
+    
+    if (originalName !== undefined) {
+      result.name = originalName;
+    }
+    
+    return result;
   }
 
   /**
@@ -189,12 +199,23 @@ export class EmailRoutingService {
     recipient?: string;
     environment: string;
   } {
-    return {
+    const recipient = this.config.overrideRecipient || this.config.testRecipient;
+    const result: {
+      active: boolean;
+      mode: string;
+      recipient?: string;
+      environment: string;
+    } = {
       active: this.isRoutingActive(),
       mode: this.config.testMode ? "test" : this.config.overrideAllEmails ? "override" : "normal",
-      recipient: this.config.overrideRecipient || this.config.testRecipient,
       environment: this.config.environment,
     };
+    
+    if (recipient !== undefined) {
+      result.recipient = recipient;
+    }
+    
+    return result;
   }
 }
 

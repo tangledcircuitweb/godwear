@@ -233,11 +233,16 @@ export class TemplateEmailService {
       throw new Error(result.error || 'Failed to process template');
     }
 
-    return {
+    const response: { html: string; text?: string; data: Record<string, any> } = {
       html: result.processedHtml,
-      text: result.processedText,
       data: result.templateData,
     };
+    
+    if (result.processedText !== undefined) {
+      response.text = result.processedText;
+    }
+    
+    return response;
   }
 }
 

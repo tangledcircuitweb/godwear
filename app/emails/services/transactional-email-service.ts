@@ -718,14 +718,19 @@ export class TransactionalEmailService extends BaseEmailService {
     // Get health of underlying email service
     const emailServiceHealth = await this.emailService.getHealth();
     
-    return {
+    const result: ServiceHealthStatus = {
       status: emailServiceHealth.status,
-      message: emailServiceHealth.message,
       details: {
         ...emailServiceHealth.details,
         retryConfig: this.retryConfig,
         provider: this.emailService.serviceName,
       },
     };
+    
+    if (emailServiceHealth.message !== undefined) {
+      result.message = emailServiceHealth.message;
+    }
+    
+    return result;
   }
 }

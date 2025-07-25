@@ -888,9 +888,8 @@ export class EnhancedEmailQueueService extends BaseEmailService {
       },
     };
     
-    return {
+    const result: ServiceHealthStatus = {
       status: emailServiceHealth.status,
-      message: emailServiceHealth.message,
       details: {
         ...emailServiceHealth.details,
         queue: queueStats,
@@ -900,6 +899,12 @@ export class EnhancedEmailQueueService extends BaseEmailService {
         provider: this.emailService.serviceName,
       },
     };
+    
+    if (emailServiceHealth.message !== undefined) {
+      result.message = emailServiceHealth.message;
+    }
+    
+    return result;
   }
 
   /**
