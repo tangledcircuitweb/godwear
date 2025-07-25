@@ -822,6 +822,11 @@ export class EnhancedEmailQueueService extends BaseEmailService {
       
       const queueItem = this.queue[queueItemIndex];
       
+      // Ensure queueItem exists (defensive programming)
+      if (!queueItem) {
+        throw new Error(`Queue item not found for email ID: ${emailId}`);
+      }
+      
       // Can only cancel pending emails
       if (queueItem.status !== "pending") {
         throw new Error(`Cannot cancel email with status: ${queueItem.status}`);
@@ -1049,8 +1054,13 @@ export class EnhancedEmailQueueService extends BaseEmailService {
         // Check if we should retry
         if (item.attempts < item.maxAttempts) {
           // Calculate next attempt time with exponential backoff
-          const delay = this.options.retryDelays[Math.min(item.attempts - 1, this.options.retryDelays.length - 1)];
-          item.nextAttempt = Date.now() + delay;
+          const delayIndex = Math.min(item.attempts - 1, this.options.retryDelays.length - 1);
+          const delay = this.options.retryDelays[delayIndex];
+          
+          // Ensure delay is defined, fallback to default if not
+          const safeDelay = delay !== undefined ? delay : 5000; // 5 second default
+          
+          item.nextAttempt = Date.now() + safeDelay;
           item.status = "pending";
           this.stats.retried++;
           
@@ -1086,8 +1096,13 @@ export class EnhancedEmailQueueService extends BaseEmailService {
       // Check if we should retry
       if (item.attempts < item.maxAttempts) {
         // Calculate next attempt time with exponential backoff
-        const delay = this.options.retryDelays[Math.min(item.attempts - 1, this.options.retryDelays.length - 1)];
-        item.nextAttempt = Date.now() + delay;
+        const delayIndex = Math.min(item.attempts - 1, this.options.retryDelays.length - 1);
+        const delay = this.options.retryDelays[delayIndex];
+        
+        // Ensure delay is defined, fallback to default if not
+        const safeDelay = delay !== undefined ? delay : 5000; // 5 second default
+        
+        item.nextAttempt = Date.now() + safeDelay;
         item.status = "pending";
         this.stats.retried++;
       } else {

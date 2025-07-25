@@ -36,7 +36,7 @@ export interface EmailAnalyticsServiceFactoryOptions {
 export function createEmailAnalyticsService(options: EmailAnalyticsServiceFactoryOptions): EmailAnalyticsService {
   const { type = "memory", dependencies } = options;
   
-  let service: EmailAnalyticsService;
+  let service!: EmailAnalyticsService; // Definite assignment assertion
   
   switch (type) {
     case "memory":
@@ -49,6 +49,7 @@ export function createEmailAnalyticsService(options: EmailAnalyticsServiceFactor
       throw new Error(`Unknown email analytics service type: ${type}`);
   }
   
-  service.initialize(dependencies);
+  // Initialize service if it has an initialize method
+  service.initialize?.(dependencies);
   return service;
 }
