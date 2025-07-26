@@ -260,8 +260,8 @@ export class ShippingNotificationEmail {
       const validatedRequest = DeliveryUpdateRequestSchema.parse(request);
       
       // Format estimated delivery date if provided
-      const updatedDeliveryDate = validatedRequest.updatedDeliveryDate 
-        ? this.formatDate(validatedRequest.updatedDeliveryDate)
+      const updatedDeliveryDate = validatedRequest['updatedDeliveryDate'] 
+        ? this.formatDate(validatedRequest['updatedDeliveryDate'])
         : undefined;
       
       // Generate order URL

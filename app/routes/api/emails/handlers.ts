@@ -230,11 +230,11 @@ export function createEmailHandlers(services: Services) {
         const deliveredAt = findEventTimestamp("delivered");
         const openedAt = findEventTimestamp("opened");
         const clickedAt = findEventTimestamp("clicked");
-        const failedAt = findEventTimestamp("bounced") || findEventTimestamp("failed");
+        const failedAt = findEventTimestamp("bounced");
         
         // Get failure reason if available
-        const failureEvent = eventsResult.events.find(e => e.eventType === "bounced" || e.eventType === "failed");
-        const failureReason = failureEvent?.metadata?.reason || failureEvent?.metadata?.error;
+        const failureEvent = eventsResult.events.find(e => e.eventType === "bounced");
+        const failureReason = failureEvent?.metadata?.['reason'] || failureEvent?.metadata?.['error'];
         
         return c.json(
           createApiResponse({

@@ -163,22 +163,22 @@ export class TestEmailService extends BaseEmailService {
       "=".repeat(80),
       `TEST EMAIL (${timestamp})`,
       "=".repeat(80),
-      `Type: ${emailData.type}`,
-      `To: ${emailData.recipient.email} ${emailData.recipient.name ? `(${emailData.recipient.name})` : ""}`,
-      emailData.cc?.length ? `CC: ${emailData.cc.map((r: any) => r.email).join(", ")}` : null,
-      emailData.bcc?.length ? `BCC: ${emailData.bcc.map((r: any) => r.email).join(", ")}` : null,
-      `Subject: ${emailData.subject}`,
-      emailData.templateName ? `Template: ${emailData.templateName}` : null,
-      emailData.attachments?.length ? `Attachments: ${emailData.attachments.join(", ")}` : null,
+      `Type: ${emailData['type']}`,
+      `To: ${emailData['recipient'].email} ${emailData['recipient'].name ? `(${emailData['recipient'].name})` : ""}`,
+      emailData['cc']?.length ? `CC: ${emailData['cc'].map((r: any) => r.email).join(", ")}` : null,
+      emailData['bcc']?.length ? `BCC: ${emailData['bcc'].map((r: any) => r.email).join(", ")}` : null,
+      `Subject: ${emailData['subject']}`,
+      emailData['templateName'] ? `Template: ${emailData['templateName']}` : null,
+      emailData['attachments']?.length ? `Attachments: ${emailData['attachments'].join(", ")}` : null,
       "-".repeat(80),
-      emailData.type === "templated" ? "Template Data:" : null,
-      emailData.type === "templated" ? JSON.stringify(emailData.data, null, 2) : null,
-      emailData.type === "templated" ? "-".repeat(80) : null,
+      emailData['type'] === "templated" ? "Template Data:" : null,
+      emailData['type'] === "templated" ? JSON.stringify(emailData['data'], null, 2) : null,
+      emailData['type'] === "templated" ? "-".repeat(80) : null,
       "Text Content:",
-      emailData.text,
+      emailData['text'],
       "-".repeat(80),
       "HTML Content:",
-      emailData.html,
+      emailData['html'],
       "=".repeat(80),
     ]
       .filter(Boolean)
@@ -189,9 +189,9 @@ export class TestEmailService extends BaseEmailService {
 
     // Log to service logger if available
     this.logger?.info("Test email sent", {
-      recipient: emailData.recipient.email,
-      subject: emailData.subject,
-      templateName: emailData.templateName,
+      recipient: emailData['recipient'].email,
+      subject: emailData['subject'],
+      templateName: emailData['templateName'],
     });
   }
 

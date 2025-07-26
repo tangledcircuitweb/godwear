@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BaseEmailService } from "./email-service";
+import { BaseEmailService, type ResendOptions, type EmailResult } from "./email-service";
 import { TransactionalEmailService } from "./transactional-email-service";
 import type { ServiceDependencies, ServiceHealthStatus } from "../../services/base";
 
@@ -510,16 +510,16 @@ export class EnhancedEmailQueueService extends BaseEmailService {
       maxAttempts: opts.maxAttempts,
       nextAttempt: Date.now(),
       createdAt: Date.now(),
-      scheduledFor: opts.scheduledFor
-        ? opts.scheduledFor instanceof Date
-          ? opts.scheduledFor.getTime()
-          : opts.scheduledFor
+      scheduledFor: opts['scheduledFor']
+        ? opts['scheduledFor'] instanceof Date
+          ? opts['scheduledFor'].getTime()
+          : opts['scheduledFor']
         : Date.now(),
       status: "pending",
       dynamicPriority: 0,
       recipientDomain,
       idempotencyKey: options.idempotencyKey,
-      tags: opts.tags || options.metadata?.tags as string[] || [],
+      tags: opts['tags'] || options.metadata?.['tags'] as string[] || [],
     };
 
     this.queue.push(queueItem);
@@ -604,16 +604,16 @@ export class EnhancedEmailQueueService extends BaseEmailService {
       maxAttempts: opts.maxAttempts,
       nextAttempt: Date.now(),
       createdAt: Date.now(),
-      scheduledFor: opts.scheduledFor
-        ? opts.scheduledFor instanceof Date
-          ? opts.scheduledFor.getTime()
-          : opts.scheduledFor
+      scheduledFor: opts['scheduledFor']
+        ? opts['scheduledFor'] instanceof Date
+          ? opts['scheduledFor'].getTime()
+          : opts['scheduledFor']
         : Date.now(),
       status: "pending",
       dynamicPriority: 0,
       recipientDomain,
       idempotencyKey: options.idempotencyKey,
-      tags: opts.tags || options.metadata?.tags as string[] || [],
+      tags: opts['tags'] || options.metadata?.['tags'] as string[] || [],
     };
 
     this.queue.push(queueItem);
@@ -667,17 +667,14 @@ export class EnhancedEmailQueueService extends BaseEmailService {
   /**
    * Resend an email
    */
-  async resendEmail(emailId: string, options?: LocalResendOptions): Promise<LocalEmailResult> {
+  override async resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult> {
     try {
-      // Validate options if provided
-      const validatedOptions = options ? LocalResendOptionsSchema.parse(options) : undefined;
-      
       // Find the email in the queue
       const queueItem = this.queue.find(item => item.id === emailId);
       
       if (!queueItem) {
         // If not in the queue, try to resend via the underlying email service
-        return await this.emailService.resendEmail(emailId, validatedOptions);
+        return await this.emailService.resendEmail(emailId, options);
       }
       
       // If the email is already completed or failed, create a new queue item
@@ -688,15 +685,15 @@ export class EnhancedEmailQueueService extends BaseEmailService {
           id: crypto.randomUUID(),
           attempts: 0,
           nextAttempt: Date.now(),
-          status: "pending",
+          status: "pending" as const,
         };
         
         // Update recipient if requested
-        if (validatedOptions?.updateRecipient && validatedOptions?.newRecipient) {
+        if (options?.updateRecipient && options?.newRecipient) {
           if (newItem.options.type === "raw") {
-            newItem.options.data.to = validatedOptions.newRecipient;
+            newItem.options.data.to = options.newRecipient;
           } else {
-            newItem.options.data.to = validatedOptions.newRecipient;
+            newItem.options.data.to = options.newRecipient;
           }
         }
         
@@ -714,27 +711,48 @@ export class EnhancedEmailQueueService extends BaseEmailService {
           messageId: newItem.id,
           timestamp: new Date().toISOString(),
           provider: "queue",
-          recipient: typeof validatedOptions?.newRecipient === "string" 
-            ? validatedOptions.newRecipient 
-            : validatedOptions?.newRecipient?.email || "unknown",
+          recipient: options?.newRecipient?.email || "unknown",
           subject: "Resent Email",
-          status: "queued",
         };
       }
       
-      // If the email is pending or processing, just return its status
+      // If the email is still pending or processing, reset it for retry
+      queueItem.attempts = 0;
+      queueItem.nextAttempt = Date.now();
+      queueItem.status = "pending";
+      
+      // Update recipient if requested
+      if (options?.updateRecipient && options?.newRecipient) {
+        if (queueItem.options.type === "raw") {
+          queueItem.options.data.to = options.newRecipient;
+        } else {
+          queueItem.options.data.to = options.newRecipient;
+        }
+      }
+      
+      // Save queue if persistence is enabled
+      if (this.options.persistenceKey) {
+        this.persistQueue();
+      }
+      
       return {
         success: true,
         messageId: queueItem.id,
         timestamp: new Date().toISOString(),
         provider: "queue",
-        recipient: "unknown", // We don't have easy access to the recipient here
-        subject: "Queued Email",
-        status: queueItem.status,
+        recipient: options?.newRecipient?.email || "unknown",
+        subject: "Resent Email",
       };
     } catch (error) {
-      this.logger?.error("Failed to resend email", error as Error);
-      throw error;
+      return {
+        success: false,
+        messageId: emailId,
+        timestamp: new Date().toISOString(),
+        provider: "queue",
+        recipient: "unknown",
+        subject: "Resent Email",
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
     }
   }
 

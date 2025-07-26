@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BaseEmailService } from "./email-service";
+import { BaseEmailService, type ResendOptions, type EmailResult } from "./email-service";
 import type { ServiceDependencies, ServiceHealthStatus } from "../../services/base";
 
 // ============================================================================
@@ -118,6 +118,11 @@ type LocalResendOptions = z.infer<typeof LocalResendOptionsSchema>;
 const EmailPriorityEnum = z.enum(["critical", "high", "medium", "low"], {});
 
 /**
+ * Queue item status enum
+ */
+const QueueItemStatusEnum = z.enum(["pending", "processing", "completed", "failed", "cancelled"], {});
+
+/**
  * Queue item schema
  */
 const QueueItemSchema = z.object({
@@ -133,7 +138,7 @@ const QueueItemSchema = z.object({
   nextAttempt: z.number().int().nonnegative(),
   createdAt: z.number().int().nonnegative(),
   scheduledFor: z.number().int().nonnegative(),
-  status: z.enum(["pending", "processing", "completed", "failed", "cancelled"], {}),
+  status: QueueItemStatusEnum,
   result: z.any().optional(),
   error: z.string().optional(),
 });
@@ -159,6 +164,7 @@ const QueueOptionsSchema = z.object({
 // ============================================================================
 
 export type EmailPriority = z.infer<typeof EmailPriorityEnum>;
+export type QueueItemStatus = z.infer<typeof QueueItemStatusEnum>;
 export type QueueItem = z.infer<typeof QueueItemSchema>;
 export type QueueOptions = z.infer<typeof QueueOptionsSchema>;
 
@@ -450,7 +456,9 @@ export class EmailQueueService extends BaseEmailService {
   /**
    * Resend an email
    */
-  async resendEmail(emailId: string, options?: LocalResendOptions): Promise<LocalEmailResult> {
+  override async resendEmail(emailId: string, options?: ResendOptions): Promise<EmailResult> {
+    // For queue service, we delegate to the underlying email service
+    // The queue-specific retry logic is handled internally by the queue processing
     return this.emailService.resendEmail(emailId, options);
   }
 

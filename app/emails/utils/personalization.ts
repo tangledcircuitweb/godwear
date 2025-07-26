@@ -33,7 +33,14 @@ const AvailableProductSchema = z.object({
 /**
  * User preferences schema for this utility
  */
-const UserPreferencesSchema = z.record(z.string(), z.unknown());
+const UserPreferencesSchema = z.object({
+  categories: z.array(z.string()).optional(),
+  brands: z.array(z.string()).optional(),
+  priceRange: z.object({
+    min: z.number(),
+    max: z.number(),
+  }).optional(),
+}).catchall(z.unknown()); // Allow additional properties
 
 /**
  * Email data schema for subject line generation
@@ -96,21 +103,24 @@ export function generateRecommendations(
     let score = 0;
     
     // Score based on category preference
-    if (preferences['categories']?.includes(product['category'])) {
+    const productCategory = product['category'];
+    if (preferences.categories && productCategory && preferences.categories.includes(productCategory)) {
       score += 10;
     }
     
     // Score based on brand preference
-    if (preferences['brands']?.includes(product['brand'])) {
+    const productBrand = product['brand'];
+    if (preferences.brands && productBrand && preferences.brands.includes(productBrand)) {
       score += 5;
     }
     
     // Score based on price range
-    if (
-      preferences['priceRange']?.min <= product['price'] &&
-      preferences['priceRange']?.max >= product['price']
-    ) {
-      score += 3;
+    const priceRange = preferences.priceRange;
+    const productPrice = product['price'];
+    if (priceRange && typeof productPrice === 'number') {
+      if (priceRange.min <= productPrice && priceRange.max >= productPrice) {
+        score += 3;
+      }
     }
     
     return {

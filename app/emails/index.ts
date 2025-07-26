@@ -13,18 +13,24 @@ export type {
   RawEmailOptions,
   TemplatedEmailOptions,
   EmailResult,
+} from "./services/email-service";
+
+// Export queue-specific types
+export type {
   EmailPriority,
   QueueItemStatus,
-} from "./services/email-service";
+} from "./services/email-queue-service";
 
 // Export analytics types
 export type {
   EmailEvent,
   EmailEventType,
-  EmailMetrics,
-  EventQuery,
-  MetricFilters,
-} from "./analytics/in-memory-analytics-service";
+  EmailAnalyticsMetrics,
+  EmailAnalyticsQuery,
+  EmailAnalyticsMetricsQuery,
+  EmailAnalyticsResult,
+  EmailAnalyticsMetricsResult,
+} from "./analytics/email-analytics-service";
 
 // Export default email service factory
 import { EmailQueueService } from "./services/email-queue-service";

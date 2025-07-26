@@ -227,7 +227,19 @@ export class EnhancedEmailService {
    * Test email connectivity
    */
   async testConnection(): Promise<{ success: boolean; error?: string }> {
-    return this.mailerSendService.testConnection();
+    try {
+      const health = await this.mailerSendService.getHealth();
+      const isHealthy = health.status === "healthy";
+      return {
+        success: isHealthy,
+        ...(isHealthy ? {} : { error: health.message }),
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Connection test failed",
+      };
+    }
   }
 
   /**

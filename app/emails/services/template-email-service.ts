@@ -134,7 +134,7 @@ export class TemplateEmailService {
     }
 
     // Override with recipient-specific data
-    baseData.name = request.recipientName;
+    baseData['name'] = request.recipientName;
     
     // Merge with any custom data provided
     if (request.customData) {

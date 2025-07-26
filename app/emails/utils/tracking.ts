@@ -129,9 +129,9 @@ export function addTrackingData(
   const processedData = { ...templateData };
   
   // Add tracking to common URLs
-  if (processedData.shopUrl) {
-    processedData.shopUrl = generateTrackingUrl(
-      addUtmParameters(processedData.shopUrl, "email", "email", templateName, "shop_button"),
+  if (processedData['shopUrl']) {
+    processedData['shopUrl'] = generateTrackingUrl(
+      addUtmParameters(processedData['shopUrl'], "email", "email", templateName, "shop_button"),
       emailId,
       userId,
       "shop_button",
@@ -139,9 +139,9 @@ export function addTrackingData(
     );
   }
   
-  if (processedData.cartUrl) {
-    processedData.cartUrl = generateTrackingUrl(
-      addUtmParameters(processedData.cartUrl, "email", "email", templateName, "cart_button"),
+  if (processedData['cartUrl']) {
+    processedData['cartUrl'] = generateTrackingUrl(
+      addUtmParameters(processedData['cartUrl'], "email", "email", templateName, "cart_button"),
       emailId,
       userId,
       "cart_button",
@@ -149,9 +149,9 @@ export function addTrackingData(
     );
   }
   
-  if (processedData.orderUrl) {
-    processedData.orderUrl = generateTrackingUrl(
-      addUtmParameters(processedData.orderUrl, "email", "email", templateName, "order_details"),
+  if (processedData['orderUrl']) {
+    processedData['orderUrl'] = generateTrackingUrl(
+      addUtmParameters(processedData['orderUrl'], "email", "email", templateName, "order_details"),
       emailId,
       userId,
       "order_details",
@@ -173,8 +173,8 @@ export function addTrackingData(
   });
   
   // Add tracking to recommendations
-  if (Array.isArray(processedData.recommendations)) {
-    processedData.recommendations = processedData.recommendations.map((item: any, index: number) => ({
+  if (Array.isArray(processedData['recommendations'])) {
+    processedData['recommendations'] = processedData['recommendations'].map((item: any, index: number) => ({
       ...item,
       url: generateTrackingUrl(
         addUtmParameters(item.url, "email", "recommendation", templateName, `rec_${index}`),

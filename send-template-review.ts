@@ -235,7 +235,7 @@ async function sendAllCompletedTemplatesForReview(): Promise<void> {
     }
     
     // Get MailerSend API key from environment
-    const apiKey = process.env.MAILERSEND_API_KEY;
+    const apiKey = process.env['MAILERSEND_API_KEY'];
     if (!apiKey) {
       console.log('❌ MAILERSEND_API_KEY not found in .env file');
       console.log('💡 Make sure .env file contains MAILERSEND_API_KEY');
@@ -259,7 +259,7 @@ async function sendAllCompletedTemplatesForReview(): Promise<void> {
         // Prepare email data
         const emailData: EmailData = {
           from: {
-            email: process.env.TEST_EMAIL || 'templates@godwear.ca',
+            email: process.env['TEST_EMAIL'] || 'templates@godwear.ca',
             name: 'GodWear Template Review'
           },
           to: [{
@@ -288,7 +288,7 @@ async function sendAllCompletedTemplatesForReview(): Promise<void> {
         
         if (response.ok) {
           try {
-            const result = await response.json();
+            const result = await response.json() as { message_id?: string };
             console.log(`   ✅ ${template.name} sent successfully!`);
             console.log(`   📧 Message ID: ${result.message_id || 'N/A'}`);
           } catch (jsonError) {

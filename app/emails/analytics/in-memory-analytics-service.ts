@@ -74,8 +74,8 @@ export class InMemoryEmailAnalyticsService extends BaseEmailAnalyticsService {
       
       // Convert dates to timestamps for comparison
       const startTimestamp = new Date(validatedQuery.startDate).getTime();
-      const endTimestamp = validatedQuery.endDate 
-        ? new Date(validatedQuery.endDate).getTime() 
+      const endTimestamp = validatedQuery['endDate'] 
+        ? new Date(validatedQuery['endDate']).getTime() 
         : Date.now();
       
       // Filter events based on query parameters
@@ -148,8 +148,8 @@ export class InMemoryEmailAnalyticsService extends BaseEmailAnalyticsService {
       
       // Convert dates to timestamps for comparison
       const startTimestamp = new Date(validatedQuery.startDate).getTime();
-      const endTimestamp = validatedQuery.endDate 
-        ? new Date(validatedQuery.endDate).getTime() 
+      const endTimestamp = validatedQuery['endDate'] 
+        ? new Date(validatedQuery['endDate']).getTime() 
         : Date.now();
       
       // Filter events based on query parameters

@@ -19,7 +19,7 @@ export type {
   QueueItemStatus,
   EmailEvent,
   EmailEventType,
-  EmailMetrics,
+  EmailAnalyticsMetrics,
 } from "../emails";
 
 // Service implementations

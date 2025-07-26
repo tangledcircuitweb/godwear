@@ -93,7 +93,7 @@ export async function renderTemplate(
     // Add current year to data if not present
     const templateData = {
       ...data,
-      currentYear: data.currentYear || new Date().getFullYear(),
+      currentYear: data['currentYear'] || new Date().getFullYear(),
     };
 
     // Determine template paths

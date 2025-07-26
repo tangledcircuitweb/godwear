@@ -15,7 +15,7 @@ async function sendSingleTemplate(): Promise<void> {
     console.log('📧 This should match all other GodWear templates exactly!');
     
     // Get MailerSend API key from environment
-    const apiKey = process.env.MAILERSEND_API_KEY;
+    const apiKey = process.env['MAILERSEND_API_KEY'];
     if (!apiKey) {
       console.log('❌ MAILERSEND_API_KEY not found in .env file');
       return;
@@ -34,7 +34,7 @@ async function sendSingleTemplate(): Promise<void> {
     // Prepare email data
     const emailData = {
       from: {
-        email: process.env.TEST_EMAIL || 'templates@godwear.ca',
+        email: process.env['TEST_EMAIL'] || 'templates@godwear.ca',
         name: 'GodWear Template Review - FIXED'
       },
       to: [{
@@ -63,7 +63,7 @@ async function sendSingleTemplate(): Promise<void> {
     
     if (response.ok) {
       try {
-        const result = await response.json();
+        const result = await response.json() as { message_id?: string };
         console.log('✅ FIXED account-update template sent successfully!');
         console.log(`📧 Message ID: ${result.message_id || 'N/A'}`);
       } catch (jsonError) {
