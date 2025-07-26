@@ -85,15 +85,21 @@ const LocalEnvironmentSchema = z.object({
 
 type LocalEnvironment = z.infer<typeof LocalEnvironmentSchema>;
 
-// Access environment variables using bracket notation (TypeScript strict mode)
+// Access environment variables based on the type structure
 class MyService extends BaseService {
   initialize(dependencies: ServiceDependencies) {
     // Validate local environment needs
     const localEnv = LocalEnvironmentSchema.parse(dependencies.env);
     
-    // Use bracket notation for index signature access
-    const apiKey = dependencies.env['MAILERSEND_API_KEY'];
-    const fromEmail = dependencies.env['MAILERSEND_FROM_EMAIL'];
+    // IMPORTANT: Environment variable access pattern depends on type structure:
+    
+    // ✅ For CloudflareBindings (typed interface) - use DOT notation
+    const apiKey = dependencies.env.MAILERSEND_API_KEY;
+    const fromEmail = dependencies.env.MAILERSEND_FROM_EMAIL;
+    
+    // ❌ For Record<string, unknown> (index signature) - use BRACKET notation
+    // const dynamicEnv: Record<string, unknown> = process.env;
+    // const apiKey = dynamicEnv['API_KEY'];
   }
 }
 ```
@@ -102,8 +108,33 @@ class MyService extends BaseService {
 - Each file is completely autonomous
 - No shared environment type dependencies
 - Runtime validation of environment variables per service
-- TypeScript strict mode compliance with bracket notation
+- TypeScript strict mode compliance with appropriate access patterns
 - Complete testability and isolation
+
+### Environment Variable Access Rules:
+
+**CRITICAL DISTINCTION**: The access pattern depends on the TypeScript type structure:
+
+1. **Typed Interfaces (CloudflareBindings)** - Use DOT notation:
+   ```typescript
+   // ✅ CORRECT - CloudflareBindings has defined properties
+   const apiKey = c.env.JWT_SECRET;
+   const dbConnection = c.env.DB;
+   ```
+
+2. **Index Signatures (Record types)** - Use BRACKET notation:
+   ```typescript
+   // ✅ CORRECT - Record requires bracket notation with strict mode
+   const dynamicEnv: Record<string, unknown> = process.env;
+   const apiKey = dynamicEnv['API_KEY'];
+   ```
+
+3. **Mixed/Unknown Types** - Use BRACKET notation for safety:
+   ```typescript
+   // ✅ SAFE - When unsure about type structure
+   const unknownEnv: any = someEnvironmentSource;
+   const apiKey = unknownEnv['API_KEY'];
+   ```
 
 ### Special Cases:
 
@@ -129,20 +160,27 @@ const validatedData = DataSchema.parse(externalData);
 ```typescript
 // tsconfig.json settings that affect our approach:
 {
-  "noPropertyAccessFromIndexSignature": true,  // Requires bracket notation
+  "noPropertyAccessFromIndexSignature": true,  // Requires bracket notation for index signatures
   "exactOptionalPropertyTypes": true,          // Strict optional handling
   "noUncheckedIndexedAccess": true            // Index access safety
 }
 ```
 
 **Implementation Rules:**
-1. **Environment Variables**: Always use bracket notation
+
+1. **Environment Variables**: Access pattern depends on type structure
    ```typescript
-   // ❌ WRONG - dot notation fails with strict mode
-   const apiKey = this.env.MAILERSEND_API_KEY;
+   // ✅ CORRECT - CloudflareBindings (typed interface) uses dot notation
+   const apiKey = c.env.JWT_SECRET;
+   const database = c.env.DB;
    
-   // ✅ CORRECT - bracket notation for index signatures
-   const apiKey = this.env['MAILERSEND_API_KEY'];
+   // ✅ CORRECT - Record/index signatures use bracket notation
+   const processEnv: Record<string, unknown> = process.env;
+   const nodeEnv = processEnv['NODE_ENV'];
+   
+   // ❌ WRONG - mixing patterns incorrectly
+   const apiKey = c.env['JWT_SECRET']; // Unnecessary brackets for typed interface
+   const nodeEnv = processEnv.NODE_ENV; // Missing brackets for index signature
    ```
 
 2. **Optional Properties**: Handle undefined explicitly
@@ -266,11 +304,11 @@ export class EmailService extends BaseService {
     // Validate environment variables this service needs
     const localEnv = LocalEnvironmentSchema.parse(dependencies.env);
     
-    // Use bracket notation for strict TypeScript compliance
+    // Use dot notation for CloudflareBindings (typed interface)
     this.config = EmailConfigSchema.parse({
-      apiKey: dependencies.env['MAILERSEND_API_KEY'],
-      fromEmail: dependencies.env['MAILERSEND_FROM_EMAIL'],
-      fromName: dependencies.env['MAILERSEND_FROM_NAME'],
+      apiKey: dependencies.env.MAILERSEND_API_KEY,
+      fromEmail: dependencies.env.MAILERSEND_FROM_EMAIL,
+      fromName: dependencies.env.MAILERSEND_FROM_NAME,
     });
   }
 }
