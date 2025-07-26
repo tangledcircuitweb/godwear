@@ -11,9 +11,20 @@ npm run dev
 
 ## Deployment
 
+For production deployment to godwear.ca:
+
+```bash
+npm run build
+wrangler pages deploy dist --branch production
+```
+
+For preview/development deployment:
+
 ```bash
 npm run deploy
 ```
+
+See [`docs/wrangler-deployment.md`](./docs/wrangler-deployment.md) for complete deployment procedures and troubleshooting.
 
 ## Architecture Overview
 
