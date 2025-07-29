@@ -4,10 +4,52 @@ interface AdminLayoutProps {
   title: string;
   children: ReactNode;
   currentPath?: string;
+  user?: {
+    name: string;
+    email: string;
+    picture?: string;
+  };
+  showBreadcrumbs?: boolean;
+  actions?: ReactNode;
 }
 
-export const AdminLayout: FC<AdminLayoutProps> = ({ title, children, currentPath = "" }) => {
+export const AdminLayout: FC<AdminLayoutProps> = ({ 
+  title, 
+  children, 
+  currentPath = "",
+  user,
+  showBreadcrumbs = true,
+  actions
+}) => {
   const isActive = (path: string) => currentPath === path ? "active" : "";
+
+  // Generate breadcrumbs from current path
+  const generateBreadcrumbs = () => {
+    if (!showBreadcrumbs || !currentPath) return null;
+    
+    const pathSegments = currentPath.split('/').filter(Boolean);
+    const breadcrumbs = [
+      { label: 'Admin', path: '/admin' }
+    ];
+    
+    if (pathSegments.length > 1) {
+      const section = pathSegments[1];
+      const sectionLabels: Record<string, string> = {
+        'email-dashboard': 'Email Dashboard',
+        'users': 'User Management',
+        'analytics': 'Analytics',
+        'settings': 'Settings'
+      };
+      
+      if (sectionLabels[section]) {
+        breadcrumbs.push({ label: sectionLabels[section], path: currentPath });
+      }
+    }
+    
+    return breadcrumbs;
+  };
+
+  const breadcrumbs = generateBreadcrumbs();
 
   return (
     <html lang="en">
@@ -111,9 +153,10 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ title, children, currentPath
             border-radius: 12px;
             transition: all 0.3s ease;
             font-weight: 500;
+            position: relative;
           }
 
-          .nav-link:hover, .nav-link.active {
+          .nav-link:hover {
             background: rgba(255, 255, 255, 0.4);
             color: #1e293b;
             transform: translateX(5px);
@@ -122,11 +165,38 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ title, children, currentPath
           .nav-link.active {
             background: rgba(255, 215, 0, 0.2);
             border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #1e293b;
+            transform: translateX(5px);
+          }
+
+          .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60%;
+            background: linear-gradient(135deg, #ffd700 0%, #f59e0b 100%);
+            border-radius: 0 2px 2px 0;
           }
 
           .nav-icon {
             margin-right: 0.75rem;
             font-size: 1.2rem;
+          }
+
+          .sidebar-footer {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            right: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #64748b;
           }
 
           .main-content {
@@ -149,16 +219,65 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ title, children, currentPath
             align-items: center;
           }
 
+          .header-left {
+            flex: 1;
+          }
+
           .header h1 {
             font-size: 2rem;
             font-weight: 600;
             color: #1e293b;
+            margin-bottom: 0.5rem;
+          }
+
+          .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #64748b;
+          }
+
+          .breadcrumb-link {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.3s ease;
+          }
+
+          .breadcrumb-link:hover {
+            color: #1e293b;
+          }
+
+          .breadcrumb-separator {
+            color: #94a3b8;
+          }
+
+          .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-right: 1rem;
           }
 
           .user-info {
             display: flex;
             align-items: center;
             gap: 1rem;
+          }
+
+          .user-details {
+            text-align: right;
+          }
+
+          .user-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.875rem;
+          }
+
+          .user-email {
+            font-size: 0.75rem;
+            color: #64748b;
           }
 
           .user-avatar {
@@ -171,6 +290,16 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ title, children, currentPath
             justify-content: center;
             color: #1e293b;
             font-weight: 600;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+          }
+
+          .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
           }
 
           .logout-btn {
@@ -200,11 +329,32 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ title, children, currentPath
             min-height: 500px;
           }
 
+          .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 200;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 0.5rem;
+            cursor: pointer;
+          }
+
           @media (max-width: 768px) {
             .sidebar {
               width: 100%;
               height: auto;
               position: relative;
+              transform: translateX(-100%);
+              transition: transform 0.3s ease;
+            }
+            
+            .sidebar.mobile-open {
+              transform: translateX(0);
+              position: fixed;
+              z-index: 150;
             }
             
             .main-content {
@@ -220,11 +370,55 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ title, children, currentPath
               gap: 1rem;
               text-align: center;
             }
+
+            .header-left {
+              order: 2;
+            }
+
+            .user-info {
+              order: 1;
+            }
+
+            .mobile-menu-toggle {
+              display: block;
+            }
+          }
+
+          /* Loading states */
+          .loading {
+            opacity: 0.6;
+            pointer-events: none;
+          }
+
+          /* Notification styles */
+          .notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+          }
+
+          @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
           }
         `}} />
       </head>
       <body>
         <div className="admin-container">
+          <button className="mobile-menu-toggle" onClick={() => {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar?.classList.toggle('mobile-open');
+          }}>
+            ☰
+          </button>
+
           <aside className="sidebar">
             <div className="logo">GodWear Admin</div>
             
@@ -262,13 +456,57 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ title, children, currentPath
                 </li>
               </ul>
             </nav>
+
+            <div className="sidebar-footer">
+              GodWear Admin v1.0<br />
+              © 2024 GodWear
+            </div>
           </aside>
 
           <main className="main-content">
             <header className="header">
-              <h1>{title}</h1>
+              <div className="header-left">
+                <h1>{title}</h1>
+                {breadcrumbs && (
+                  <nav className="breadcrumbs">
+                    {breadcrumbs.map((crumb, index) => (
+                      <span key={index}>
+                        {index > 0 && <span className="breadcrumb-separator">›</span>}
+                        {index === breadcrumbs.length - 1 ? (
+                          <span>{crumb.label}</span>
+                        ) : (
+                          <a href={crumb.path} className="breadcrumb-link">
+                            {crumb.label}
+                          </a>
+                        )}
+                      </span>
+                    ))}
+                  </nav>
+                )}
+              </div>
+
+              {actions && (
+                <div className="header-actions">
+                  {actions}
+                </div>
+              )}
+
               <div className="user-info">
-                <div className="user-avatar">A</div>
+                {user && (
+                  <>
+                    <div className="user-details">
+                      <div className="user-name">{user.name}</div>
+                      <div className="user-email">{user.email}</div>
+                    </div>
+                    <div className="user-avatar">
+                      {user.picture ? (
+                        <img src={user.picture} alt={user.name} />
+                      ) : (
+                        user.name.charAt(0).toUpperCase()
+                      )}
+                    </div>
+                  </>
+                )}
                 <a href="/api/auth/logout" className="logout-btn">Logout</a>
               </div>
             </header>
